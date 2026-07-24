@@ -1,8 +1,8 @@
 # Juss Ray
 
-## Founder & Chief Product Architect of Se’kret Bip
+## Founder & Chief Product Architect
 
-I build privacy-first products and the founder-controlled execution systems required to ship them responsibly.
+I build privacy-first products and the founder-controlled systems required to research, challenge, verify, ship, and reverse them responsibly.
 
 My GitHub is a living record of the work: focused commits, reviewable pull requests, tests, verified milestones, documented risk, and reversible decisions. A public claim does not become true because it sounds compelling. The evidence has to exist.
 
@@ -20,6 +20,8 @@ A privacy-first emotional growth and self-expression platform for teens and fami
 **Official site:** [sekretbip.net](https://sekretbip.net)  
 **Canonical active repository:** [jussray/Sekret-Bip](https://github.com/jussray/Sekret-Bip)
 
+Se’kret Bip is its own product. The other systems below support separate founder, publishing, commerce, and AI-workflow goals and must not be presented as Bip features unless exact product evidence proves an approved integration.
+
 ## Public repository map
 
 | Repository | Role | Authority |
@@ -30,11 +32,17 @@ A privacy-first emotional growth and self-expression platform for teens and fami
 | [do-not-use](https://github.com/jussray/do-not-use) | Preserved historical and prototype material | **Quarantined, not for development or deployment** |
 | [jussray](https://github.com/jussray/jussray) | This public founder profile and repository map | **Public front door** |
 
-## Broader build direction
+## Separate portfolio lanes in development
 
-Beyond the flagship product, I am developing private systems for story publishing, commerce, research, portfolio coordination, and founder-level automation. Their purpose is to turn AI-assisted execution into measurable opportunity for families, creators, young people, and local communities.
+These are distinct from Se’kret Bip and remain **in development** unless a public repository, live site, or verified artifact explicitly proves otherwise.
 
-Those systems remain **in development** unless a public repository, live site, or verified artifact explicitly proves otherwise. Public GitHub surfaces controlled evidence without exposing private prompts, credentials, database schemas, internal safety thresholds, proprietary scoring, unreleased architecture, or cloneable business logic.
+- **Chief AI:** a chief-of-staff intelligence layer that coordinates specialist analysis, challenges conclusions, and returns one founder-ready executive brief. It recommends; it does not merge, deploy, publish, spend, rotate secrets, or alter production data.
+- **Founder Control Room:** the evidence and execution-authority layer for approvals, repository truth, verification, release state, and rollback records.
+- **Story Engine:** a publishing system for transforming structured ideas and source material into books, documents, and creator-ready outputs.
+- **Commerce systems:** Juss Beautiful Hair and Untold Stories storefront work focused on vendor-backed products, creator commerce, and direct economic participation.
+- **Goalfix and PromptOS:** reusable operating contracts for efficient AI repair, evidence-based execution, and controlled prompt or agent behavior.
+
+Public GitHub surfaces controlled evidence without exposing private prompts, credentials, customer or teen data, database secrets, internal safety thresholds, proprietary scoring, unreleased architecture, or cloneable business logic.
 
 ## How I build
 
@@ -47,7 +55,7 @@ Those systems remain **in development** unless a public repository, live site, o
 
 ## Partnerships and support
 
-I am interested in aligned partnerships around teen wellbeing, privacy, responsible AI, family support, youth opportunity, creator development, and community economic growth.
+I am interested in aligned partnerships around teen wellbeing, privacy, responsible AI, family support, youth opportunity, creator development, commerce, and community economic growth.
 
 Sponsorship or support helps fund development. It does **not** grant ownership, licensing, resale rights, product control, endorsement rights, access to private systems, or rights to the Se’kret Bip name, characters, designs, code, or brand.
 
