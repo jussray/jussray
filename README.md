@@ -105,9 +105,12 @@ I am interested in aligned partnerships around teen wellbeing, privacy, responsi
 
 Sponsorship or support helps fund development. It does **not** grant ownership, licensing, resale rights, product control, endorsement rights, access to private systems, or rights to the Se’kret Bip name, characters, designs, code, or brand.
 
+**Support the work:** [Buy Me a Coffee](https://buymeacoffee.com/jussrayy)
+
 ## Connect
 
 - [LinkedIn](https://www.linkedin.com/in/juss-rayy-13ba691a1)
+- [Buy Me a Coffee](https://buymeacoffee.com/jussrayy)
 - [Facebook](https://www.facebook.com/share/1cH3mxVRpi/?mibextid=wwXIfr)
 - [GitHub](https://github.com/jussray)
 
