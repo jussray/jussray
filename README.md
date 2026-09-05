@@ -1,10 +1,25 @@
-# Juss Ray
+# Juss Rayy
 
-## Founder & Chief Product Architect
+## Founder · Product & Systems Architect
 
-I build privacy-first products and the founder-controlled systems required to research, challenge, verify, ship, and reverse them responsibly.
+I build human-centered products and founder-controlled systems that turn **intent into provable outcomes**.
 
-My GitHub is a living record of the work: focused commits, reviewable pull requests, tests, verified milestones, documented risk, and reversible decisions. A public claim does not become true because it sounds compelling. The evidence has to exist.
+This GitHub is the public record of that work: focused changes, reviewable decisions, tests, verified milestones, documented risk, and reversible moves. A claim does not become true because it sounds compelling. **The evidence has to exist.**
+
+> **Historical truth is immutable. Current truth must be re-observed.**
+
+## The signal
+
+Across my work, a small set of ideas repeats on purpose:
+
+- **Proof before claim.**
+- **Activity is not accomplishment.**
+- **Execution truth is not outcome truth.**
+- **Historical truth stays immutable; current truth gets re-observed.**
+- **Standardize the laws of trust. Customize how trust feels.**
+- **Founder intent → execution → evidence → outcome.**
+
+These are not slogans pasted onto unrelated projects. They are operating principles that show up in product behavior, release evidence, recovery design, agent authority, and how I decide whether something is actually done.
 
 ## Flagship product
 
@@ -22,36 +37,67 @@ A privacy-first emotional growth and self-expression platform for teens and fami
 
 Se’kret Bip is its own product. The other systems below support separate founder, publishing, commerce, and AI-workflow goals and must not be presented as Bip features unless exact product evidence proves an approved integration.
 
-## Public repository map
+## Public proof graph
 
-| Repository | Role | Authority |
+| Surface | Role | Authority |
 |---|---|---|
 | [Sekret-Bip](https://github.com/jussray/Sekret-Bip) | Active Se’kret Bip product development, documentation, tests, and release evidence | **Canonical product source of truth** |
 | [founder-control-room](https://github.com/jussray/founder-control-room) | Founder-gated approvals, change proposals, verification, evidence, and rollback | **Operational authority** |
+| [chief-ai-machine](https://github.com/jussray/chief-ai-machine) | Chief / Proof Mode / controlled AI execution work | **Product and execution-contract source** |
+| [promptos](https://github.com/jussray/promptos) | Prompt and agent operating contracts | **PromptOS source** |
 | [sekret-bip-demo](https://github.com/jussray/sekret-bip-demo) | Controlled public demonstration of selected concepts | **Showcase only, non-authoritative** |
 | [do-not-use](https://github.com/jussray/do-not-use) | Preserved historical and prototype material | **Quarantined, not for development or deployment** |
-| [jussray](https://github.com/jussray/jussray) | This public founder profile and repository map | **Public front door** |
+| [jussray](https://github.com/jussray/jussray) | This profile and public founder map | **Public identity front door** |
 
-## Separate portfolio lanes in development
+## Portfolio lanes
 
-These are distinct from Se’kret Bip and remain **in development** unless a public repository, live site, or verified artifact explicitly proves otherwise.
+These are distinct products and systems. Anything not backed by a public repository, live site, or verified artifact should be read as **in development**, not as a launch claim.
 
-- **Chief AI:** a chief-of-staff intelligence layer that coordinates specialist analysis, challenges conclusions, and returns one founder-ready executive brief. It recommends; it does not merge, deploy, publish, spend, rotate secrets, or alter production data.
-- **Founder Control Room:** the evidence and execution-authority layer for approvals, repository truth, verification, release state, and rollback records.
-- **Story Engine:** a publishing system for transforming structured ideas and source material into books, documents, and creator-ready outputs.
-- **Commerce systems:** Juss Beautiful Hair and Untold Stories storefront work focused on vendor-backed products, creator commerce, and direct economic participation.
-- **Goalfix and PromptOS:** reusable operating contracts for efficient AI repair, evidence-based execution, and controlled prompt or agent behavior.
+- **Chief AI** — a chief-of-staff intelligence layer that coordinates specialist analysis, challenges conclusions, and returns founder-ready decisions.
+- **Founder Control Room** — the evidence and execution-authority layer for approvals, repository truth, verification, release state, and rollback records.
+- **Story Engine** — a publishing system for turning structured ideas and source material into creator-ready outputs.
+- **Commerce systems** — Juss Beautiful Hair and Untold Stories storefront work focused on vendor-backed products, creator commerce, and direct economic participation.
+- **Goalfix + PromptOS** — reusable operating contracts for efficient AI repair, controlled execution, and evidence-based agent behavior.
 
-Public GitHub surfaces controlled evidence without exposing private prompts, credentials, customer or teen data, database secrets, internal safety thresholds, proprietary scoring, unreleased architecture, or cloneable business logic.
+## Juss Receipts
+
+When a meaningful build deserves a public record, I use the same compact evidence shape:
+
+```text
+REALITY
+What was actually true.
+
+BUILD
+What changed.
+
+PROOF
+What demonstrates it worked.
+
+LEARNED
+What changed in the model or decision.
+
+NEXT
+The next exact gate.
+```
+
+The point is not to publish constantly. The point is to leave **artifacts worth finding later**.
 
 ## How I build
 
-1. Preserve the founder’s original intent.
-2. Choose the smallest reversible change that fixes the real blocker.
-3. Separate repository, CI, deployment, database, browser, and device evidence.
-4. Require explicit founder approval for merges, deployments, publishing, visibility changes, licensing, deletion, and irreversible actions.
-5. Use focused tests and Playwright evidence for real UI or browser-flow claims.
-6. Report reality, fix, proof, risk, rollback, and the next exact gate.
+1. Preserve the original intent.
+2. Find the real blocker before changing the system.
+3. Choose the smallest reversible fix.
+4. Separate source, CI, deployment, runtime, browser, device, and outcome evidence.
+5. Require scoped authority for consequential actions.
+6. Use focused tests and Playwright evidence for real UI or browser-flow claims.
+7. Preserve historical proof while re-observing current truth.
+8. Report reality, build, proof, risk, rollback, and the next exact gate.
+
+## Public evidence boundaries
+
+Public GitHub surfaces controlled evidence without exposing private prompts, credentials, customer or teen data, database secrets, internal safety thresholds, proprietary scoring, unreleased architecture, or cloneable business logic.
+
+A green build is not automatically a live product. A deployment is not automatically the correct runtime. An executed action is not automatically a successful outcome. Claims stay bounded to the evidence plane that supports them.
 
 ## Partnerships and support
 
@@ -67,5 +113,6 @@ Sponsorship or support helps fund development. It does **not** grant ownership, 
 
 ---
 
+**Public founder identity:** Juss Rayy  
 **Copyright © 2024–2026 Juss Ray. All rights reserved.**  
 Public visibility does not grant permission to copy, modify, distribute, scrape, train AI models on, or create derivative or competing products from first-party materials. See [LICENSE](LICENSE).
