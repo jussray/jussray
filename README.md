@@ -45,7 +45,7 @@ Se’kret Bip is its own product. The other systems below support separate found
 | [founder-control-room](https://github.com/jussray/founder-control-room) | Founder-gated approvals, change proposals, verification, evidence, and rollback | **Operational authority** |
 | [chief-ai-machine](https://github.com/jussray/chief-ai-machine) | Chief / Proof Mode / controlled AI execution work | **Product and execution-contract source** |
 | [promptos](https://github.com/jussray/promptos) | Prompt and agent operating contracts | **PromptOS source** |
-| [StoryEngine / L99](https://github.com/jussray/StoryEngine) | L99 runtime and operations layer; Story Engine publishing remains a subsystem | **L99 source** |
+| [StoryEngine / L99](https://github.com/jussray/StoryEngine) | StoryEngine creator product powered by the L99 execution, provenance, recovery, and release runtime | **StoryEngine / L99 source** |
 | [sekret-bip-demo](https://github.com/jussray/sekret-bip-demo) | Controlled public demonstration of selected concepts | **Showcase only, non-authoritative** |
 | [do-not-use](https://github.com/jussray/do-not-use) | Preserved historical and prototype material | **Quarantined, not for development or deployment** |
 | [jussray](https://github.com/jussray/jussray) | This profile and public founder map | **Public identity front door** |
@@ -56,7 +56,7 @@ These are distinct products and systems. Anything not backed by a public reposit
 
 - **Chief AI** — a chief-of-staff intelligence layer that coordinates specialist analysis, challenges conclusions, and returns founder-ready decisions.
 - **Founder Control Room** — the evidence and execution-authority layer for approvals, repository truth, verification, release state, and rollback records.
-- **L99** — an AI runtime and operations layer for state integrity, provenance-safe reuse, recovery, shadow validation, and observable promotion controls. **Story Engine** remains a publishing subsystem within L99.
+- **StoryEngine / L99** — one creator-product architecture for writing, creating, preparing, publishing, distributing, and selling works. **StoryEngine** is the market-facing product; **L99** is the runtime that handles state integrity, provenance-safe reuse, recovery, orchestration, validation, and observable release controls.
 - **Commerce systems** — Juss Beautiful Hair and Untold Stories storefront work focused on vendor-backed products, creator commerce, and direct economic participation.
 - **Goalfix + PromptOS** — reusable operating contracts for efficient AI repair, controlled execution, and evidence-based agent behavior.
 
