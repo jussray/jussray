@@ -1,12 +1,24 @@
-name: Revenue page browser proof
+name: Public site browser proof
 
 on:
   push:
     branches: [main]
     paths:
       - 'docs/index.html'
+      - 'docs/profile/index.html'
       - 'README.md'
       - 'tests/revenue-page.spec.cjs'
+      - 'tests/profile-page.spec.cjs'
+      - 'playwright.config.cjs'
+      - '.github/workflows/revenue-page.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'docs/index.html'
+      - 'docs/profile/index.html'
+      - 'README.md'
+      - 'tests/revenue-page.spec.cjs'
+      - 'tests/profile-page.spec.cjs'
       - 'playwright.config.cjs'
       - '.github/workflows/revenue-page.yml'
   workflow_dispatch:
@@ -37,7 +49,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python3 -m http.server 4173 --bind 127.0.0.1 --directory docs >/tmp/revenue-page-http.log 2>&1 &
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory docs >/tmp/public-site-http.log 2>&1 &
           server_pid=$!
           trap 'kill "$server_pid" 2>/dev/null || true' EXIT
           for attempt in {1..20}; do
@@ -45,7 +57,7 @@ jobs:
               break
             fi
             if [[ "$attempt" == '20' ]]; then
-              cat /tmp/revenue-page-http.log
+              cat /tmp/public-site-http.log
               exit 1
             fi
             sleep 1
@@ -56,7 +68,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: revenue-page-playwright-${{ github.sha }}
+          name: public-site-playwright-${{ github.sha }}
           path: |
             playwright-report
             test-results
