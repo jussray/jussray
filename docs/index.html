@@ -3,67 +3,50 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Juss Picks + Call Offers</title>
-  <meta name="description" content="Juss Rayy recommendations, creator commerce, and verified call-offer experiments." />
+  <meta name="theme-color" content="#090a10" />
+  <title>Sajay Digital | Focused Fixes for Websites, Stores & AI Workflows</title>
+  <meta name="description" content="Sajay Digital diagnoses and fixes focused website, Shopify, automation, AI workflow, and software blockers with verification and proof." />
   <style>
-    :root{color-scheme:dark;--bg:#0d0f14;--panel:#171a22;--text:#f7f7fb;--muted:#aeb5c2;--line:#2a3040;--accent:#8b7cff;--good:#66d19e;--wait:#f3bf63}
-    *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#171a2d 0,#0d0f14 42%);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);line-height:1.55}
-    main{max-width:980px;margin:0 auto;padding:56px 20px 72px}.eyebrow{font-size:.8rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}h1{font-size:clamp(2.4rem,7vw,5.4rem);line-height:.95;margin:.4rem 0 1.2rem;max-width:850px}h2{font-size:1.55rem;margin:0 0 .45rem}.lede{font-size:1.14rem;color:var(--muted);max-width:760px}.disclosure{max-width:760px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:#11141c;color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin:34px 0}.card{background:linear-gradient(180deg,#1a1e28,#141821);border:1px solid var(--line);border-radius:20px;padding:22px}.status{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:999px;padding:6px 10px;font-size:.76rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}.good{color:var(--good)}.wait{color:var(--wait)}.card p{color:var(--muted)}.button{display:inline-block;margin-top:8px;padding:12px 16px;border-radius:12px;text-decoration:none;font-weight:750;background:var(--accent);color:white}.button.disabled{opacity:.5;background:#222838;border:1px solid #394158;color:#c5cad4;cursor:not-allowed}.rule{border-top:1px solid var(--line);margin:34px 0}.receipt{background:#11141c;border:1px solid var(--line);border-radius:18px;padding:20px}.tiny{font-size:.88rem;color:var(--muted)}ul{padding-left:1.2rem}a{color:#bcb4ff}footer{margin-top:48px;color:var(--muted);font-size:.88rem}
+    :root{color-scheme:dark;--bg:#090a10;--panel:#11131d;--panel2:#171a27;--text:#f8f8fb;--muted:#aeb5c4;--line:rgba(255,255,255,.11);--purple:#8d78ff;--blue:#55a7ff;--yellow:#ffd75e;--green:#73d6aa;--max:1120px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at 12% 0%,rgba(141,120,255,.21),transparent 34%),radial-gradient(circle at 90% 8%,rgba(85,167,255,.15),transparent 30%),var(--bg);color:var(--text);line-height:1.55}a{color:inherit}.wrap{max-width:var(--max);margin:auto;padding:22px}nav{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:8px 0 34px}.brand{display:flex;align-items:center;gap:10px;font-weight:900;text-decoration:none}.mark{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,var(--purple),var(--blue));box-shadow:0 0 28px rgba(112,113,255,.26)}.navlinks{display:flex;gap:10px;flex-wrap:wrap}.navlinks a,.button{border:1px solid var(--line);border-radius:999px;padding:10px 14px;text-decoration:none;font-weight:800;background:rgba(255,255,255,.025)}.hero{padding:66px 0 48px;display:grid;grid-template-columns:1.25fr .75fr;gap:28px;align-items:end}.eyebrow{text-transform:uppercase;letter-spacing:.14em;font-size:.78rem;font-weight:900;color:#c9c3ff}h1{font-size:clamp(3.1rem,8vw,7rem);line-height:.9;letter-spacing:-.06em;margin:.55rem 0 1.1rem}.gradient{background:linear-gradient(90deg,#fff,#c5beff 48%,#78c5ff 85%,#ffe17f 120%);background-clip:text;-webkit-background-clip:text;color:transparent}.lede{font-size:clamp(1.05rem,2.2vw,1.36rem);color:var(--muted);max-width:760px;margin:0}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}.button.primary{background:linear-gradient(135deg,var(--purple),var(--blue));border-color:transparent}.button:hover,.navlinks a:hover{transform:translateY(-1px);border-color:rgba(255,255,255,.24)}.proofbox{border:1px solid var(--line);border-radius:26px;padding:24px;background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.018))}.proofbox strong{color:#d1ccff}.proofbox p{color:var(--muted);margin:10px 0 0}.proofline{margin-top:16px;padding-top:15px;border-top:1px solid var(--line);font-size:.9rem;color:var(--muted)}section{padding:34px 0}.sectionhead{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:18px}.sectionhead h2{font-size:clamp(1.9rem,4vw,2.8rem);letter-spacing:-.045em;margin:0}.sectionhead p{color:var(--muted);max-width:590px;margin:0}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{border:1px solid var(--line);border-radius:22px;padding:22px;background:var(--panel);display:flex;flex-direction:column;min-height:286px}.price{font-size:2.3rem;font-weight:900;letter-spacing:-.05em;margin:10px 0}.tag{font-size:.75rem;text-transform:uppercase;letter-spacing:.12em;font-weight:900;color:#b8afff}.card p{color:var(--muted);margin:0 0 16px}.card ul{padding-left:1.1rem;color:#d9dce5}.card li{margin:.45rem 0}.card .button{margin-top:auto;text-align:center}.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.step{border:1px solid var(--line);border-radius:18px;padding:18px;background:var(--panel2)}.step b{display:block;color:var(--yellow);font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:7px}.projects{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.project{border:1px solid var(--line);border-radius:18px;padding:18px;background:var(--panel2);text-decoration:none}.project small{display:block;color:var(--muted);margin-top:6px}.notice{border:1px solid rgba(255,215,94,.24);border-radius:18px;padding:16px 18px;background:rgba(255,215,94,.055);color:#e9e2bf}.cta{margin:34px 0 8px;border:1px solid rgba(141,120,255,.28);border-radius:28px;padding:30px;background:linear-gradient(135deg,rgba(141,120,255,.1),rgba(85,167,255,.06))}.cta h2{font-size:clamp(2rem,5vw,3.6rem);letter-spacing:-.05em;margin:0 0 10px}.cta p{color:var(--muted);max-width:720px}footer{padding:48px 0 20px;color:var(--muted);font-size:.88rem;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}@media(max-width:850px){.hero{grid-template-columns:1fr}.grid,.projects{grid-template-columns:1fr}.flow{grid-template-columns:1fr 1fr}.proofbox{max-width:650px}}@media(max-width:520px){.wrap{padding:17px}.hero{padding-top:36px}.flow{grid-template-columns:1fr}.navlinks a:first-child{display:none}.sectionhead{align-items:start;flex-direction:column}.card{min-height:0}}
   </style>
 </head>
 <body>
-<main>
-  <div class="eyebrow">Juss Rayy · money paths, not money theater</div>
-  <h1>Useful picks. Real offers. Verified before promoted.</h1>
-  <p class="lede">This page separates what can earn now from what is still waiting on verified tracking, campaign authority, or lawful account-holder authority. A click is not revenue. Registration is not commission authority. Revenue is real only when the platform records a qualifying outcome.</p>
-  <p class="disclosure"><strong>Disclosure:</strong> Some links may become affiliate or referral links. If an activated link produces a qualifying purchase or action, Juss may earn compensation at no extra cost to the visitor. Right now, only the existing support path below is activated.</p>
+<div class="wrap">
+  <nav aria-label="Primary">
+    <a class="brand" href="#top"><span class="mark" aria-hidden="true">S</span><span>Sajay Digital</span></a>
+    <div class="navlinks"><a href="#offers">Offers</a><a href="#proof">Proof</a><a href="#start">Start a fix</a></div>
+  </nav>
+  <main id="top">
+    <header class="hero">
+      <div>
+        <div class="eyebrow">Focused digital repair + implementation</div>
+        <h1><span class="gradient">Stop guessing what’s broken.</span></h1>
+        <p class="lede">I diagnose focused blockers in websites, Shopify stores, automations, AI workflows, and software projects, fix the highest-value cause that fits the agreed scope, and verify the real path instead of handing you a vague report.</p>
+        <div class="actions"><a class="button primary" href="#offers">Choose a sprint</a><a class="button" href="#proof">See build proof</a></div>
+      </div>
+      <aside class="proofbox" aria-label="Service promise"><strong>Focused fix. Real verification. Proof when it’s done.</strong><p>No giant rewrite by default. We establish the goal, find the real blocker, make the smallest useful change, and test what a real user actually touches.</p><div class="proofline">Source green ≠ runtime green. A click ≠ revenue. Claims stay inside the evidence.</div></aside>
+    </header>
 
-  <div class="grid">
-    <section class="card">
-      <span class="status good">Verified external path</span>
-      <h2>Support the work</h2>
-      <p>The existing public support path is already connected to the founder profile.</p>
-      <a class="button" href="https://buymeacoffee.com/jussrayy" rel="noopener noreferrer">Support Juss</a>
+    <section id="offers">
+      <div class="sectionhead"><h2>Pick the level of help.</h2><p>Simple fixed starting prices so you can decide quickly. If the real scope is larger, I stop and re-scope before expanding work.</p></div>
+      <div class="grid">
+        <article class="card"><div class="tag">Quick Audit</div><div class="price">$49</div><p>For when you know something is wrong but do not yet know the real cause.</p><ul><li>One website, store, workflow, or software path</li><li>Focused diagnosis</li><li>Verified blocker + repair plan</li><li>No fake-green “looks fine” result</li></ul><a class="button primary" href="#start" data-offer="Quick Audit">Start a $49 audit</a></article>
+        <article class="card"><div class="tag">Fix Sprint</div><div class="price">$149</div><p>For one bounded problem that needs diagnosis, implementation, and proof.</p><ul><li>Focused audit</li><li>One agreed repair</li><li>Narrow verification</li><li>Receipt of what changed and what remains</li></ul><a class="button primary" href="#start" data-offer="Fix Sprint">Start a $149 fix</a></article>
+        <article class="card"><div class="tag">Build Sprint</div><div class="price">$399</div><p>For a bounded feature, conversion path, workflow, or implementation that needs to work end to end.</p><ul><li>Scope + implementation</li><li>Integration checks</li><li>Real-path browser/runtime verification when applicable</li><li>Rollback notes + next gate</li></ul><a class="button primary" href="#start" data-offer="Build Sprint">Start a $399 build</a></article>
+      </div>
     </section>
 
-    <section class="card">
-      <span class="status wait">Amazon · activation blocked</span>
-      <h2>Amazon picks</h2>
-      <p>An Influencer eligibility message was observed, but activation still requires a lawfully eligible account holder plus the exact compliant public storefront or consumer tracking URL. No Amazon earning link is active here.</p>
-      <span class="button disabled" aria-disabled="true">Await lawful authority + link proof</span>
-    </section>
+    <section aria-labelledby="how"><div class="sectionhead"><h2 id="how">How it works</h2><p>The workflow is intentionally boring in the best way: one goal, one cause, one reversible move, then evidence.</p></div><div class="flow"><div class="step"><b>1 · Goal</b>Tell me what should happen.</div><div class="step"><b>2 · Observe</b>Inspect the real source, path, and failure.</div><div class="step"><b>3 · Fix</b>Repair the focused cause.</div><div class="step"><b>4 · Verify</b>Test the path that matters.</div><div class="step"><b>5 · Receipt</b>You get reality, fix, proof, risk, and next gate.</div></div></section>
 
-    <section class="card">
-      <span class="status wait">eBay · activation blocked</span>
-      <h2>eBay finds</h2>
-      <p>Ambassador registration was observed, but activation still requires lawful member/account-holder authority plus a generated consumer-facing tracking link verified for this surface. No eBay earning link is active here.</p>
-      <span class="button disabled" aria-disabled="true">Await lawful authority + link proof</span>
-    </section>
+    <section id="proof"><div class="sectionhead"><h2>Proof, not decoration.</h2><p>These are founder-built systems and public engineering work used as build evidence, not client testimonials and not claims that every project is commercially live.</p></div><div class="projects"><a class="project" href="https://foundercontrolroom.org" rel="noopener noreferrer"><strong>Founder Control Room ↗</strong><small>Founder-controlled execution, evidence, and release work.</small></a><a class="project" href="https://github.com/jussray/StoryEngine" rel="noopener noreferrer"><strong>StoryEngine / L99 ↗</strong><small>Creator workflow, verification, metrics, and runtime work.</small></a><a class="project" href="https://sekretbip.net" rel="noopener noreferrer"><strong>Se’kret Bip ↗</strong><small>Human-centered product and privacy-focused implementation work.</small></a></div></section>
 
-    <section class="card">
-      <span class="status wait">DOPPCALL · account approved</span>
-      <h2>Call offers</h2>
-      <p>Publisher-account approval is verified, and current home-service campaign demand is verified. Campaign-specific promotion approval, payout trigger, geography, operating hours, traffic-source rules, legal-capacity requirements, and the assigned tracking number or link remain unverified.</p>
-      <span class="button disabled" aria-disabled="true">Await campaign-level proof</span>
-    </section>
-  </div>
+    <section id="start" class="cta"><div class="tag">Start here</div><h2>What are you trying to get working?</h2><p>Send the goal, the broken path, and any link or screenshot you can safely share. I’ll start from the smallest useful scope. Do not send passwords, API keys, payment credentials, or private customer data.</p><div class="actions"><a class="button primary" id="start-fix" href="https://www.linkedin.com/in/juss-rayy-13ba691a1" rel="noopener noreferrer">Message me on LinkedIn ↗</a><a class="button" href="https://github.com/jussray" rel="noopener noreferrer">Review my GitHub ↗</a></div></section>
 
-  <div class="rule"></div>
-
-  <section class="receipt">
-    <h2>Activation law</h2>
-    <ul>
-      <li><strong>Amazon:</strong> no Special Link or storefront earning path is published until lawful account-holder authority and the exact compliant consumer URL are both verified; required Amazon disclosures must be added before activation.</li>
-      <li><strong>eBay:</strong> no Ambassador earning path is published until lawful member/account-holder authority and the exact generated consumer tracking link are both verified.</li>
-      <li><strong>Pay-per-call:</strong> publish only after campaign-level approval, payout trigger, geography, operating hours, traffic-source rules, disclosure requirements, legal-capacity requirements, and assigned tracking are confirmed.</li>
-      <li><strong>All lanes:</strong> no paid ads until an organic path produces a verified tracked conversion or commission.</li>
-      <li><strong>Account requirements:</strong> tax, payment, identity, contract, and age-gated setup must be completed by an eligible account holder where the platform requires it. Do not bypass platform rules.</li>
-    </ul>
-  </section>
-
-  <footer>
-    Last re-observed: 2026-09-16. New evidence invalidates stale activation status.
-  </footer>
-</main>
+    <p class="notice"><strong>Payment truth:</strong> the page is an offer and inquiry path, not proof that a service payment has been collected. Any contract, tax, identity, or payment-account requirements must be completed through an eligible account holder and the provider’s rules before a paid engagement is accepted.</p>
+    <p><a href="./picks/">Affiliate + call-offer experiment →</a></p>
+  </main>
+  <footer><span>© 2026 Sajay Digital.</span><span>Focused fixes · verified outcomes · reversible work</span></footer>
+</div>
 </body>
 </html>
