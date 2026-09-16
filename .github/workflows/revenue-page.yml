@@ -4,7 +4,14 @@ on:
   push:
     branches: [main]
     paths:
-      - 'docs/index.html'
+      - 'docs/**'
+      - 'README.md'
+      - 'tests/revenue-page.spec.cjs'
+      - 'playwright.config.cjs'
+      - '.github/workflows/revenue-page.yml'
+  pull_request:
+    paths:
+      - 'docs/**'
       - 'README.md'
       - 'tests/revenue-page.spec.cjs'
       - 'playwright.config.cjs'
