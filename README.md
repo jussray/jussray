@@ -60,6 +60,18 @@ These are distinct products and systems. Anything not backed by a public reposit
 - **Commerce systems** — Juss Beautiful Hair and Untold Stories storefront work focused on vendor-backed products, creator commerce, and direct economic participation.
 - **Goalfix + PromptOS** — reusable operating contracts for efficient AI repair, controlled execution, and evidence-based agent behavior.
 
+## Revenue experiments
+
+The current public monetization carrier is **[Juss Picks + Call Offers](docs/index.html)**.
+
+- **Live now:** existing public support path.
+- **Amazon:** eligible program state observed; consumer storefront/tracking URL still requires verification before activation.
+- **eBay:** Ambassador registration observed; consumer tracking links still require verification before activation.
+- **Pay-per-call:** publisher demand observed; campaign terms, geography, payout trigger, and tracking number still require verification before activation.
+- **Rule:** no paid traffic until an organic path produces a verified tracked conversion or commission.
+
+Source readiness is not revenue readiness. A public page, click, email solicitation, or account eligibility notice does not count as earned revenue.
+
 ## Juss Receipts
 
 When a meaningful build deserves a public record, I use the same compact evidence shape:
