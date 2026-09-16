@@ -17,11 +17,17 @@ for (const viewport of viewports) {
     await expect(page).toHaveTitle('Juss Picks + Call Offers');
     await expect(page.getByRole('heading', { name: 'Useful picks. Real offers. Verified before promoted.' })).toBeVisible();
     await expect(page.getByText(/Disclosure:/)).toBeVisible();
-    await expect(page.getByText('Amazon · activation blocked')).toBeVisible();
-    await expect(page.getByText('eBay · activation blocked')).toBeVisible();
-    await expect(page.getByText('DOPPCALL · account approved')).toBeVisible();
-    await expect(page.getByText(/lawfully eligible account holder/)).toBeVisible();
-    await expect(page.getByText(/lawful member\/account-holder authority/)).toBeVisible();
+
+    const amazonCard = page.locator('section.card').filter({ hasText: 'Amazon · activation blocked' });
+    const ebayCard = page.locator('section.card').filter({ hasText: 'eBay · activation blocked' });
+    const doppcallCard = page.locator('section.card').filter({ hasText: 'DOPPCALL · account approved' });
+
+    await expect(amazonCard).toBeVisible();
+    await expect(amazonCard.getByText(/lawfully eligible account holder/)).toBeVisible();
+    await expect(ebayCard).toBeVisible();
+    await expect(ebayCard.getByText(/lawful member\/account-holder authority/)).toBeVisible();
+    await expect(doppcallCard).toBeVisible();
+    await expect(doppcallCard.getByText(/Campaign-specific promotion approval/)).toBeVisible();
 
     const support = page.getByRole('link', { name: 'Support Juss' });
     await expect(support).toHaveAttribute('href', 'https://buymeacoffee.com/jussrayy');
