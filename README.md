@@ -62,15 +62,15 @@ These are distinct products and systems. Anything not backed by a public reposit
 
 ## Revenue experiments
 
-The current public monetization carrier is **[Juss Picks + Call Offers](docs/index.html)**.
+The current **source carrier** is **[Juss Picks + Call Offers](docs/index.html)**. It is checked into `main`, but this repository does **not** currently have GitHub Pages enabled, so the standalone landing-page runtime is not yet verified live.
 
-- **Live now:** existing public support path.
-- **Amazon:** eligible program state observed; consumer storefront/tracking URL still requires verification before activation.
-- **eBay:** Ambassador registration observed; consumer tracking links still require verification before activation.
-- **Pay-per-call:** publisher demand observed; campaign terms, geography, payout trigger, and tracking number still require verification before activation.
+- **Live now:** the existing public Buy Me a Coffee support path.
+- **Amazon:** Influencer eligibility is verified; the exact consumer storefront/tracking URL still requires verification before activation.
+- **eBay:** Ambassador registration is verified; consumer tracking links still require generation and verification before activation.
+- **DOPPCALL:** the publisher account is verified approved and current home-service campaign demand is verified; campaign-level promotion approval, payout trigger, geography, traffic rules, and assigned tracking remain unverified.
 - **Rule:** no paid traffic until an organic path produces a verified tracked conversion or commission.
 
-Source readiness is not revenue readiness. A public page, click, email solicitation, or account eligibility notice does not count as earned revenue.
+Source readiness is not runtime readiness, and runtime readiness is not revenue. A file, page, click, solicitation, registration, or eligibility notice does not count as earned revenue.
 
 ## Juss Receipts
 
