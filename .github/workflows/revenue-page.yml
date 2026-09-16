@@ -31,8 +31,20 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
-      - name: Checkout exact head
+      - name: Checkout candidate head
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Verify checked-out identity
+        shell: bash
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          actual_sha="$(git rev-parse HEAD)"
+          test "$actual_sha" = "$EXPECTED_SHA"
+          printf 'verified_sha=%s\n' "$actual_sha"
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -68,7 +80,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: public-site-playwright-${{ github.sha }}
+          name: public-site-playwright-${{ github.event.pull_request.head.sha || github.sha }}
           path: |
             playwright-report
             test-results
