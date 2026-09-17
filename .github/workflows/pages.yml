@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - 'docs/profile/**'
+      - '.github/workflows/pages.yml'
 
 permissions:
   contents: read
