@@ -62,8 +62,9 @@ These are distinct products and systems. Anything not backed by a public reposit
 
 ## Revenue experiments
 
-The current **source carrier** is **[Juss Picks + Call Offers](docs/index.html)**. It is checked into `main`, but this repository does **not** currently have GitHub Pages enabled, so the standalone landing-page runtime is not yet verified live.
+The current money-now **source carrier** is **[Sajay Digital](docs/index.html)**. The separate **[Juss Picks + Call Offers](docs/picks/index.html)** experiment remains isolated and fail-closed for earning links that are not yet verified. These files are checked into `main`, but this repository does **not** currently report GitHub Pages as enabled, so neither standalone runtime is claimed live.
 
+- **Sajay Digital:** the source offers focused $49 audit, $149 fix, and $399 build starting points with an inquiry path; source availability is not proof of payment or revenue.
 - **Live now:** the existing public Buy Me a Coffee support path.
 - **Amazon:** Influencer eligibility is verified; the exact consumer storefront/tracking URL still requires verification before activation.
 - **eBay:** Ambassador registration is verified; consumer tracking links still require generation and verification before activation.
