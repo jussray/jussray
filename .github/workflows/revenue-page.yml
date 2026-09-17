@@ -4,8 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'docs/index.html'
-      - 'docs/profile/index.html'
+      - 'docs/**'
       - 'README.md'
       - 'tests/revenue-page.spec.cjs'
       - 'tests/profile-page.spec.cjs'
@@ -14,8 +13,7 @@ on:
   pull_request:
     branches: [main]
     paths:
-      - 'docs/index.html'
-      - 'docs/profile/index.html'
+      - 'docs/**'
       - 'README.md'
       - 'tests/revenue-page.spec.cjs'
       - 'tests/profile-page.spec.cjs'
