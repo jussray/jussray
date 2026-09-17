@@ -10,6 +10,7 @@ on:
       - 'tests/profile-page.spec.cjs'
       - 'playwright.config.cjs'
       - '.github/workflows/revenue-page.yml'
+      - '.github/workflows/pages.yml'
   pull_request:
     branches: [main]
     paths:
@@ -19,6 +20,7 @@ on:
       - 'tests/profile-page.spec.cjs'
       - 'playwright.config.cjs'
       - '.github/workflows/revenue-page.yml'
+      - '.github/workflows/pages.yml'
   workflow_dispatch:
 
 permissions:
