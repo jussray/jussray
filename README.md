@@ -1,8 +1,18 @@
 # Juss Rayy
 
-## Founder · Product & Systems Architect
+## Founder · Product & Full-Stack AI Systems Builder
 
-I build human-centered products and founder-controlled systems that turn **intent into provable outcomes**.
+I take ambiguous product and AI ideas from **concept → interface → backend/API → data/auth → deployment → browser verification**.
+
+I build human-centered products and founder-controlled systems that turn **intent into provable outcomes**. My strongest public proof sits across three active engineering surfaces:
+
+| Product | What I built | Public engineering proof |
+|---|---|---|
+| [Se’kret Bip](https://github.com/jussray/Sekret-Bip) | Privacy-first teen/family product spanning React Native + Expo, TypeScript, Supabase auth/data/RLS, Cloudflare APIs, product flows, and production verification contracts | Mobile/web product architecture, auth/data boundaries, API/runtime topology, migrations, tests, and production Playwright paths |
+| [Founder Control Room](https://github.com/jussray/founder-control-room) | Full-stack founder operating surface for approvals, repository truth, AI capability coordination, release control, evidence, rollback, and provider integrations | TypeScript, Express, Cloudflare Workers/Pages, Supabase, GitHub/provider integrations, browser/E2E verification, and deployment controls |
+| [PromptOS](https://github.com/jussray/promptos) | Governed AI instruction/skill runtime that turns founder intent into bounded executable missions and reusable workflows | 5,000 selected recipes, 398 curated prompts, mission compiler, portable command contracts, and desktop/mobile browser proof |
+
+I work across the seam where **new model capability becomes a usable product**: product judgment, interface behavior, backend contracts, AI orchestration, data boundaries, infrastructure, verification, and iteration.
 
 This GitHub is the public record of that work: focused changes, reviewable decisions, tests, verified milestones, documented risk, and reversible moves. A claim does not become true because it sounds compelling. **The evidence has to exist.**
 
