@@ -6,12 +6,12 @@ const viewports = [
 ];
 
 for (const viewport of viewports) {
-  test(`${viewport.name}: Sajay Digital service path is usable and truthful`, async ({ browser }) => {
+  test(`${viewport.name}: Juss Digital service path is usable and truthful`, async ({ browser }) => {
     const context = await browser.newContext({ viewport: { width: viewport.width, height: viewport.height } });
     const page = await context.newPage();
     await page.goto('http://127.0.0.1:4173/', { waitUntil: 'networkidle' });
 
-    await expect(page).toHaveTitle(/Sajay Digital/);
+    await expect(page).toHaveTitle(/Juss Digital/);
     await expect(page.getByRole('heading', { name: 'Stop guessing what’s broken.' })).toBeVisible();
     await expect(page.getByText('$49', { exact: true })).toBeVisible();
     await expect(page.getByText('$149', { exact: true })).toBeVisible();
