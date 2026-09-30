@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "bindingSchema": "juss/juss-and-co-runtime@v1",
+  "surface": "Juss & Co",
+  "canonicalRepository": "jussray/jussray",
+  "canonicalBranch": "main",
+  "repositoryRole": "public identity and portfolio source",
+  "runtime": {
+    "provider": "ChatGPT Sites",
+    "url": "https://juss-and-co.p9s5nbwqyt.chatgpt.site",
+    "role": "public presentation surface",
+    "verification": "PARTIAL",
+    "note": "Founder-confirmed runtime URL. Exact repository-to-runtime equivalence requires provider/runtime readback against a specific repository head."
+  },
+  "operationalAuthority": {
+    "repository": "jussray/founder-control-room",
+    "role": "governance, evidence, approvals, verification, and guarded execution",
+    "isIdentitySource": false
+  },
+  "productAuthorityRule": "Each product repository remains authoritative for its own source truth; Juss & Co presents the portfolio and does not replace product repositories.",
+  "lastBound": "2026-09-30"
+}
