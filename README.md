@@ -12,6 +12,16 @@ I build human-centered products and founder-controlled systems that turn **inten
 | [Founder Control Room](https://github.com/jussray/founder-control-room) | Full-stack founder operating surface for approvals, repository truth, AI capability coordination, release control, evidence, rollback, and provider integrations | TypeScript, Express, Cloudflare Workers/Pages, Supabase, GitHub/provider integrations, browser/E2E verification, and deployment controls |
 | [PromptOS](https://github.com/jussray/promptos) | Governed AI instruction/skill runtime that turns founder intent into bounded executable missions and reusable workflows | 5,000 selected recipes, 398 curated prompts, mission compiler, portable command contracts, and desktop/mobile browser proof |
 
+## Juss & Co — public portfolio front door
+
+**Live presentation runtime:** [Juss & Co](https://juss-and-co.p9s5nbwqyt.chatgpt.site)  
+**Canonical identity/portfolio repository:** [jussray/jussray](https://github.com/jussray/jussray)  
+**Repository/runtime binding:** [JUSS_AND_CO.md](JUSS_AND_CO.md)
+
+Juss & Co is the public-facing studio/portfolio presentation of this founder map. This repository is the canonical source for Juss & Co identity and portfolio truth. Founder Control Room remains the operational authority for approvals, evidence, verification, and guarded execution; it is **not** the identity source for Juss & Co. Individual product repositories remain authoritative for their own products.
+
+The current Juss & Co runtime URL is founder-confirmed. Repository-to-runtime equivalence is not automatically inferred: a repository commit does not prove the Site updated, and a visible Site does not prove it reflects the current repository head. See the binding contract for the exact proof rule.
+
 I work across the seam where **new model capability becomes a usable product**: product judgment, interface behavior, backend contracts, AI orchestration, data boundaries, infrastructure, verification, and iteration.
 
 This GitHub is the public record of that work: focused changes, reviewable decisions, tests, verified milestones, documented risk, and reversible moves. A claim does not become true because it sounds compelling. **The evidence has to exist.**
@@ -51,6 +61,7 @@ Se’kret Bip is its own product. The other systems below support separate found
 
 | Surface | Role | Authority |
 |---|---|---|
+| [Juss & Co](https://juss-and-co.p9s5nbwqyt.chatgpt.site) | Public studio/portfolio presentation of the founder map | **Presentation runtime; identity/portfolio source = `jussray/jussray`** |
 | [Sekret-Bip](https://github.com/jussray/Sekret-Bip) | Active Se’kret Bip product development, documentation, tests, and release evidence | **Canonical product source of truth** |
 | [founder-control-room](https://github.com/jussray/founder-control-room) | Founder-gated approvals, change proposals, verification, evidence, and rollback | **Operational authority** |
 | [chief-ai-machine](https://github.com/jussray/chief-ai-machine) | Chief / Proof Mode / controlled AI execution work | **Product and execution-contract source** |
@@ -64,6 +75,7 @@ Se’kret Bip is its own product. The other systems below support separate found
 
 These are distinct products and systems. Anything not backed by a public repository, live site, or verified artifact should be read as **in development**, not as a launch claim.
 
+- **Juss & Co** — the public-facing studio/portfolio layer that presents the founder map and links the connected products without replacing their individual source authority.
 - **Chief AI** — a chief-of-staff intelligence layer that coordinates specialist analysis, challenges conclusions, and returns founder-ready decisions.
 - **Founder Control Room** — the evidence and execution-authority layer for approvals, repository truth, verification, release state, and rollback records.
 - **StoryEngine / L99** — one creator-product architecture for writing, creating, preparing, publishing, distributing, and selling works. **StoryEngine** is the market-facing product; **L99** is the runtime that handles state integrity, provenance-safe reuse, recovery, orchestration, validation, and observable release controls.
@@ -133,6 +145,7 @@ Sponsorship or support helps fund development. It does **not** grant ownership, 
 
 ## Connect
 
+- [Juss & Co](https://juss-and-co.p9s5nbwqyt.chatgpt.site)
 - [LinkedIn](https://www.linkedin.com/in/juss-rayy-13ba691a1)
 - [Buy Me a Coffee](https://buymeacoffee.com/jussrayy)
 - [Facebook](https://www.facebook.com/share/1cH3mxVRpi/?mibextid=wwXIfr)
