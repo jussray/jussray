@@ -1,11 +1,12 @@
-name: Deploy founder profile to GitHub Pages
+name: Deploy Juss & Co site and founder pages to GitHub Pages
 
 on:
   workflow_dispatch:
   push:
     branches: [main]
     paths:
-      - 'docs/profile/**'
+      - 'site/**'
+      - 'docs/**'
       - '.github/workflows/pages.yml'
 
 permissions:
@@ -39,14 +40,18 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
-      - name: Stage founder landing page
+      - name: Stage Juss & Co site (root) and founder pages
         shell: bash
         run: |
           set -euo pipefail
           rm -rf _site
-          mkdir -p _site
-          cp docs/profile/index.html _site/index.html
+          mkdir -p _site/profile _site/digital _site/picks
+          cp -R site/. _site/
+          cp docs/profile/index.html _site/profile/index.html
+          cp docs/index.html _site/digital/index.html
+          cp docs/picks/index.html _site/picks/index.html
           touch _site/.nojekyll
+          find _site -maxdepth 2 -type f | sort
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
