@@ -42,15 +42,27 @@ jobs:
                 ok=0
                 continue
               }
-              if grep -Fq 'Turn thoughts into living works.' <<<"${body}"; then
-                echo "${host}: canonical Juss & Co content verified"
+              systems="$(curl -fsSL --connect-timeout 5 --max-time 15 "https://${host}/data/systems.json" 2>/tmp/jussco-systems-curl.err)" || {
+                echo "${host}: systems registry unreachable"
+                cat /tmp/jussco-systems-curl.err || true
+                ok=0
+                continue
+              }
+              if grep -Fq 'Turn thoughts into living works.' <<<"${body}" && grep -Fq 'Built to stand alone.' <<<"${body}"; then
+                echo "${host}: canonical hero + standalone OS section verified"
               else
-                echo "${host}: reachable but canonical hero fingerprint missing"
+                echo "${host}: reachable but canonical site/OS fingerprints missing"
                 ok=0
               fi
+              for expected in 'Truth Weaver' 'Truth Compass' 'Exact Match Engine' 'Living Truth' 'Proof Core'; do
+                if ! grep -Fq "${expected}" <<<"${systems}"; then
+                  echo "${host}: systems registry missing ${expected}"
+                  ok=0
+                fi
+              done
             done
             if [ "${ok}" -eq 1 ]; then
-              echo "canonical domains are live"
+              echo "canonical domains + standalone OS registry are live"
               exit 0
             fi
             sleep 10
