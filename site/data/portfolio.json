@@ -221,7 +221,6 @@
     }
   ],
   "excludedFromPublicProjection": {
-    "reason": "Unresolved, duplicate, private-operations-only or quarantined carriers are not promoted as public product identities.",
-    "count": 12
+    "reason": "Unresolved, duplicate, private-operations-only or quarantined carriers are not promoted as public product identities."
   }
 }
