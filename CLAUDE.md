@@ -2,6 +2,8 @@
 
 This repository is Juss's public front: the GitHub profile README plus the pages served at https://jussray.github.io/jussray/.
 
+Juss & Co's founder-declared canonical public domain is `https://jussco.company`. Until DNS and host routing are independently verified, `jussray.github.io/jussray/` remains the verified deployment carrier rather than proof that the custom domain is live.
+
 ## What lives here
 - `README.md` — the GitHub profile. Founder-authored; edit only on Juss's word.
 - `site/` — the Juss & Co founder-studio site, served at the Pages root. Single page, no build. `site/data/worlds.json` is the single source of per-world status, links, founder contacts and evidence.

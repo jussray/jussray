@@ -7,7 +7,7 @@
       "repo": "jussray/Sekret-Bip",
       "st": "soon",
       "label": "Opening soon",
-      "held": "Opening soon \u00b7 no public link yet",
+      "held": "Opening soon · no public link yet",
       "contact": {
         "site": "https://sekretbip.net",
         "github": "https://github.com/jussray/Sekret-Bip",
@@ -69,7 +69,7 @@
       "repo": "jussray/StoryEngine",
       "st": "building",
       "label": "Building",
-      "held": "Coming soon \u00b7 no public link yet",
+      "held": "Coming soon · no public link yet",
       "contact": {
         "github": "https://github.com/jussray/StoryEngine",
         "email": "[STORYENGINE CONTACT EMAIL]"
@@ -81,7 +81,7 @@
       "repo": "jussray/sync-party-game",
       "st": "live",
       "label": "Live",
-      "held": "Live \u00b7 link coming",
+      "held": "Live · link coming",
       "contact": {
         "github": "https://github.com/jussray/sync-party-game",
         "email": "[SYNC PARTY CONTACT EMAIL]"
@@ -92,6 +92,7 @@
   "company": {
     "name": "Juss & Co",
     "founder": "Juss",
+    "site": "https://jussco.company",
     "github": "https://github.com/jussray",
     "email": "[CONTACT EMAIL]",
     "linkedin": "https://www.linkedin.com/in/juss-rayy-13ba691a1",
