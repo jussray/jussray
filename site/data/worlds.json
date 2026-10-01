@@ -11,7 +11,8 @@
       "contact": {
         "site": "https://sekretbip.net",
         "github": "https://github.com/jussray/Sekret-Bip",
-        "email": "[BIP CONTACT EMAIL]"
+        "email": "founder@sekretbip.net",
+        "support": "support@sekretbip.net"
       },
       "evidence": {}
     },
@@ -27,7 +28,7 @@
       "contact": {
         "site": "https://foundercontrolroom.org",
         "github": "https://github.com/jussray/founder-control-room",
-        "email": "[FCR CONTACT EMAIL]",
+        "email": "hello@jussbeautifulhair.com",
         "linkedin": "https://www.linkedin.com/in/juss-rayy-13ba691a1"
       },
       "evidence": {}
@@ -43,7 +44,7 @@
       },
       "contact": {
         "github": "https://github.com/jussray/chief-ai-machine",
-        "email": "[CHIEF CONTACT EMAIL]"
+        "email": "hello@jussbeautifulhair.com"
       },
       "evidence": {}
     },
@@ -58,7 +59,7 @@
       },
       "contact": {
         "site": "https://jussbeautifulhair.com",
-        "email": "[JBH CONTACT EMAIL]",
+        "email": "hello@jussbeautifulhair.com",
         "instagram": "[JBH INSTAGRAM URL]",
         "facebook": "[JBH FACEBOOK PAGE URL]"
       },
@@ -72,7 +73,7 @@
       "held": "Coming soon · no public link yet",
       "contact": {
         "github": "https://github.com/jussray/StoryEngine",
-        "email": "[STORYENGINE CONTACT EMAIL]"
+        "email": "hello@jussbeautifulhair.com"
       },
       "evidence": {}
     },
@@ -84,7 +85,7 @@
       "held": "Live · link coming",
       "contact": {
         "github": "https://github.com/jussray/sync-party-game",
-        "email": "[SYNC PARTY CONTACT EMAIL]"
+        "email": "hello@jussbeautifulhair.com"
       },
       "evidence": {}
     }
@@ -94,11 +95,47 @@
     "founder": "Juss",
     "site": "https://jussco.company",
     "github": "https://github.com/jussray",
-    "email": "[CONTACT EMAIL]",
+    "email": "hello@jussbeautifulhair.com",
     "linkedin": "https://www.linkedin.com/in/juss-rayy-13ba691a1",
     "facebook": "https://www.facebook.com/share/1cH3mxVRpi/?mibextid=wwXIfr",
     "youtube": "[YOUTUBE URL]",
     "support": "https://buymeacoffee.com/jussrayy",
-    "profile": "https://jussray.github.io/jussray/profile/"
-  }
+    "profile": "https://jussray.github.io/jussray/profile/",
+    "contact_source": "founder emails published by the live sites: jussbeautifulhair.com pages (Shipping/Privacy/Returns) and the Se'kret Bip app; hello@jussbeautifulhair.com is the legal contact in the FCR, Bip and StoryEngine repos"
+  },
+  "quotes": [
+    {
+      "text": "A thought is not a result. Proof is a different kind of power.",
+      "note": "higher standards.\nbrighter tomorrows."
+    },
+    {
+      "text": "Ideas are easy. Proof changes everything.",
+      "note": "same thoughts.\nhigher outcomes."
+    },
+    {
+      "text": "Not magic. Repetition.",
+      "note": "same girl.\nnew possibilities."
+    },
+    {
+      "text": "The shift was identity, not permission.",
+      "note": "progress over\nperfection."
+    },
+    {
+      "text": "Every bug taught something.",
+      "note": "a brighter me builds\nbrighter things."
+    },
+    {
+      "text": "Proof before claim. Activity is not accomplishment.",
+      "note": "consistent girls build\nextraordinary things."
+    },
+    {
+      "text": "Historical truth stays immutable. Current truth gets re-observed.",
+      "note": "same truth.\nhigher outcomes."
+    },
+    {
+      "text": "Standardize the laws of trust. Customize how trust feels.",
+      "note": "ideas. products.\npeople. proof."
+    }
+  ],
+  "quotes_source": "Juss's own lines: the Juss & Co mockup, the 'Day I Became a Coder' poster, and the jussray profile README ('The signal')"
 }
