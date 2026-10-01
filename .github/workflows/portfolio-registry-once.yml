@@ -1,0 +1,62 @@
+name: One-shot portfolio registry repair
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/portfolio-registry-once.yml'
+permissions:
+  contents: write
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Apply registry repair
+        id: apply
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          git pull --ff-only origin main
+          python scripts/apply-portfolio-registry.py
+          python -m json.tool site/data/worlds.json >/dev/null
+          git diff --check
+      - name: Install Playwright
+        id: install
+        if: steps.apply.outcome == 'success'
+        continue-on-error: true
+        run: |
+          npm i --no-save --no-audit --no-fund playwright@1.61.1
+          npx playwright install chromium --with-deps
+      - name: Verify site in real browsers
+        id: proof
+        if: steps.apply.outcome == 'success' && steps.install.outcome == 'success'
+        continue-on-error: true
+        run: node scripts/verify-site.mjs
+      - name: Commit success or clean failure
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name 'Juss & Co Registry Bot'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if [ '${{ steps.apply.outcome }}' = 'success' ] && [ '${{ steps.install.outcome }}' = 'success' ] && [ '${{ steps.proof.outcome }}' = 'success' ]; then
+            git rm .github/workflows/portfolio-registry-once.yml scripts/apply-portfolio-registry.py
+            git add site/index.html site/data/worlds.json scripts/verify-site.mjs site/assets/w-truth-compass.png site/assets/w-truth-weaver.png site/assets/w-exact-match.png
+            git commit -m 'feat(site): add canonical portfolio registry'
+            git pull --rebase origin main
+            git push origin main
+          else
+            git restore site/index.html site/data/worlds.json scripts/verify-site.mjs || true
+            rm -f site/assets/w-truth-compass.png site/assets/w-truth-weaver.png site/assets/w-exact-match.png
+            git rm .github/workflows/portfolio-registry-once.yml scripts/apply-portfolio-registry.py
+            git commit -m 'chore(site): clean failed portfolio registry attempt'
+            git pull --rebase origin main
+            git push origin main
+            exit 1
+          fi
