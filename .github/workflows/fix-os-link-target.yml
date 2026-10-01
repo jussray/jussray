@@ -14,6 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Enlarge only the standalone OS preview-link tap target
         shell: bash
         run: |
@@ -39,4 +41,5 @@ jobs:
           git config user.email '286642846+jussray@users.noreply.github.com'
           git add site/index.html
           git commit -m 'fix(site): enlarge standalone OS preview tap target'
+          git pull --rebase origin main
           git push origin HEAD:main
