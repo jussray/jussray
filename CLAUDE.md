@@ -16,6 +16,7 @@ Juss & Co's public runtime is served by Cloudflare Worker `jussray` from `site/`
 - Every status, receipt and contact on the site is real. Founder-declared fields in `worlds.json` (`st`, `label`, `link`, `held`, `contact`) change only on Juss's word. `evidence.*` is written by Founder Control Room's `juss-and-co-status-sync` workflow from live GitHub state.
 - `portfolio.json` is identity/provenance truth, not execution authority and not a runtime-status substitute. Portfolio membership, role and parentage may come from FCR's canonical identity map; public runtime labels for featured worlds must remain consistent with `worlds.json`.
 - A repository, Lovable/Base44 app, domain, deployment, or other carrier is not automatically a separate company or product. Duplicate, legacy, quarantined, private-operations-only and unresolved carriers stay out of the public product index until their canonical relationship is proven.
+- Technical standalone identity and commercial packaging are separate truth planes. A system may remain independently runnable and publicly represented without automatically becoming a separate company, price, or acquisition funnel.
 - Placeholders are written `[LIKE THIS]` and render as "pending". Never replace one with a guess.
 - Se'kret Bip and StoryEngine get no public product link until their front doors are live.
 - Never delete or rewrite the existing profile, Juss Digital or picks source pages merely to make a runtime change easier.
