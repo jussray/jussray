@@ -21,6 +21,7 @@ jobs:
           node-version: '24'
       - run: npm i --no-save --no-audit --no-fund playwright@1.61.1 && npx playwright install chromium --with-deps
       - run: node -e "const c=JSON.parse(require('fs').readFileSync('wrangler.jsonc','utf8')); if(c.name!=='jussray'||c.assets?.directory!=='./site') process.exit(1); console.log('wrangler deploy target valid')"
+      - run: node -e "const c=JSON.parse(require('fs').readFileSync('wrangler.jsonc','utf8')); const want=['jussco.company','www.jussco.company']; const got=(c.routes||[]).map(r=>r.custom_domain===true?r.pattern:'NOT_CUSTOM:'+r.pattern).sort(); if(JSON.stringify(got)!==JSON.stringify(want)){console.error('wrangler routes must be exactly',want,'as custom domains; got',got);process.exit(1)} console.log('wrangler domains valid',got)"
       - run: node -e "JSON.parse(require('fs').readFileSync('site/data/worlds.json','utf8')); console.log('worlds.json valid')"
       - run: node scripts/verify-site.mjs
       - uses: actions/upload-artifact@v4
