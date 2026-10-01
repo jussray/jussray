@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-30T23:15:00Z",
+  "generatedAt": "2026-10-01T21:58:00Z",
   "source": "founder-declared baseline; evidence fields are filled by Founder Control Room's juss-and-co-status-sync workflow",
   "worlds": [
     {
@@ -28,7 +28,10 @@
       "contact": {
         "site": "https://foundercontrolroom.org",
         "github": "https://github.com/jussray/founder-control-room",
-        "email": "hello@jussbeautifulhair.com",
+        "email": "[fcr@jussco.company]",
+        "support": "[fcr-support@jussco.company]",
+        "partnerships": "[fcr-partnerships@jussco.company]",
+        "security": "[fcr-security@jussco.company]",
         "linkedin": "https://www.linkedin.com/in/juss-rayy-13ba691a1"
       },
       "evidence": {}
@@ -44,7 +47,10 @@
       },
       "contact": {
         "github": "https://github.com/jussray/chief-ai-machine",
-        "email": "hello@jussbeautifulhair.com"
+        "email": "[chief@jussco.company]",
+        "support": "[chief-support@jussco.company]",
+        "integrations": "[chief-integrations@jussco.company]",
+        "partnerships": "[chief-partnerships@jussco.company]"
       },
       "evidence": {}
     },
@@ -60,6 +66,7 @@
       "contact": {
         "site": "https://jussbeautifulhair.com",
         "email": "hello@jussbeautifulhair.com",
+        "wholesale": "wholesale@jussbeautifulhair.com",
         "instagram": "[JBH INSTAGRAM URL]",
         "facebook": "[JBH FACEBOOK PAGE URL]"
       },
@@ -73,7 +80,10 @@
       "held": "Coming soon · no public link yet",
       "contact": {
         "github": "https://github.com/jussray/StoryEngine",
-        "email": "hello@jussbeautifulhair.com"
+        "email": "[storyengine@jussco.company]",
+        "support": "[storyengine-support@jussco.company]",
+        "creators": "[storyengine-creators@jussco.company]",
+        "rights": "[storyengine-rights@jussco.company]"
       },
       "evidence": {}
     },
@@ -85,7 +95,10 @@
       "held": "Live · link coming",
       "contact": {
         "github": "https://github.com/jussray/sync-party-game",
-        "email": "hello@jussbeautifulhair.com"
+        "email": "[syncparty@jussco.company]",
+        "support": "[syncparty-support@jussco.company]",
+        "partnerships": "[syncparty-partnerships@jussco.company]",
+        "privacy": "[syncparty-privacy@jussco.company]"
       },
       "evidence": {}
     }
@@ -95,12 +108,12 @@
     "founder": "Juss",
     "site": "https://jussco.company",
     "github": "https://github.com/jussray",
-    "email": "hello@jussbeautifulhair.com",
+    "email": "[founder@jussco.company]",
     "linkedin": "https://www.linkedin.com/in/juss-rayy-13ba691a1",
     "facebook": "https://www.facebook.com/share/1cH3mxVRpi/?mibextid=wwXIfr",
     "youtube": "[YOUTUBE URL]",
     "support": "https://buymeacoffee.com/jussrayy",
-    "contact_source": "founder emails published by the live sites: jussbeautifulhair.com pages (Shipping/Privacy/Returns) and the Se'kret Bip app; hello@jussbeautifulhair.com is the legal contact in the FCR, Bip and StoryEngine repos"
+    "contact_source": "Founder-declared contact routing. jussco.company has been created in the mail provider but DNS verification and inbound routing are not yet proven; bracketed addresses are pending and must not be treated as live."
   },
   "quotes": [
     {
