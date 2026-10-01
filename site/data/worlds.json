@@ -1,0 +1,103 @@
+{
+  "generatedAt": "2026-09-30T23:15:00Z",
+  "source": "founder-declared baseline; evidence fields are filled by Founder Control Room's juss-and-co-status-sync workflow",
+  "worlds": [
+    {
+      "name": "Se'kret Bip",
+      "repo": "jussray/Sekret-Bip",
+      "st": "soon",
+      "label": "Opening soon",
+      "held": "Opening soon \u00b7 no public link yet",
+      "contact": {
+        "site": "https://sekretbip.net",
+        "github": "https://github.com/jussray/Sekret-Bip",
+        "email": "[BIP CONTACT EMAIL]"
+      },
+      "evidence": {}
+    },
+    {
+      "name": "Founder Control Room",
+      "repo": "jussray/founder-control-room",
+      "st": "building",
+      "label": "Building",
+      "link": {
+        "text": "Follow the build",
+        "url": "https://github.com/jussray/founder-control-room"
+      },
+      "contact": {
+        "site": "https://foundercontrolroom.org",
+        "github": "https://github.com/jussray/founder-control-room",
+        "email": "[FCR CONTACT EMAIL]",
+        "linkedin": "https://www.linkedin.com/in/juss-rayy-13ba691a1"
+      },
+      "evidence": {}
+    },
+    {
+      "name": "Chief AI",
+      "repo": "jussray/chief-ai-machine",
+      "st": "progress",
+      "label": "In progress",
+      "link": {
+        "text": "Follow the build",
+        "url": "https://github.com/jussray/chief-ai-machine"
+      },
+      "contact": {
+        "github": "https://github.com/jussray/chief-ai-machine",
+        "email": "[CHIEF CONTACT EMAIL]"
+      },
+      "evidence": {}
+    },
+    {
+      "name": "Juss Beautiful Hair",
+      "repo": "jussray/jussbeautifulhair-site",
+      "st": "live",
+      "label": "Live",
+      "link": {
+        "text": "Shop the store",
+        "url": "https://jussbeautifulhair.com"
+      },
+      "contact": {
+        "site": "https://jussbeautifulhair.com",
+        "email": "[JBH CONTACT EMAIL]",
+        "instagram": "[JBH INSTAGRAM URL]",
+        "facebook": "[JBH FACEBOOK PAGE URL]"
+      },
+      "evidence": {}
+    },
+    {
+      "name": "StoryEngine",
+      "repo": "jussray/StoryEngine",
+      "st": "building",
+      "label": "Building",
+      "held": "Coming soon \u00b7 no public link yet",
+      "contact": {
+        "github": "https://github.com/jussray/StoryEngine",
+        "email": "[STORYENGINE CONTACT EMAIL]"
+      },
+      "evidence": {}
+    },
+    {
+      "name": "Sync Party",
+      "repo": "jussray/sync-party-game",
+      "st": "live",
+      "label": "Live",
+      "held": "Live \u00b7 link coming",
+      "contact": {
+        "github": "https://github.com/jussray/sync-party-game",
+        "email": "[SYNC PARTY CONTACT EMAIL]"
+      },
+      "evidence": {}
+    }
+  ],
+  "company": {
+    "name": "Juss & Co",
+    "founder": "Juss",
+    "github": "https://github.com/jussray",
+    "email": "[CONTACT EMAIL]",
+    "linkedin": "https://www.linkedin.com/in/juss-rayy-13ba691a1",
+    "facebook": "https://www.facebook.com/share/1cH3mxVRpi/?mibextid=wwXIfr",
+    "youtube": "[YOUTUBE URL]",
+    "support": "https://buymeacoffee.com/jussrayy",
+    "profile": "https://jussray.github.io/jussray/profile/"
+  }
+}

@@ -1,0 +1,4 @@
+node_modules/
+proof/
+playwright-report/
+test-results/
