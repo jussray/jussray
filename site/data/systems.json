@@ -1,0 +1,161 @@
+{
+  "generatedAt": "2026-10-01T21:32:00Z",
+  "source": "builder inventories + founder-declared architecture; standalone identity and embedded use are tracked independently",
+  "rules": {
+    "standaloneDoesNotMeanAuthority": true,
+    "embeddedDoesNotMeanComponentOnly": true,
+    "duplicateBuildersDoNotCreateDuplicateProducts": true,
+    "internalUltrathinkIsNotPublicFacing": true
+  },
+  "systems": [
+    {
+      "name": "Truth Weaver",
+      "kind": "standalone_os",
+      "public": true,
+      "status": "repairing",
+      "label": "Standalone OS · Published · Surface repair",
+      "role": "Reasoning and challenge OS for separating evidence from inference, generating competing hypotheses, and stress-testing decisions.",
+      "builder": {
+        "provider": "Lovable",
+        "projectId": "8ef43cd3-8d93-4494-a685-59ce0f795614",
+        "latestCommit": "3878af5fab35a4d486df9625f6eaff8f20c0dceb",
+        "published": true,
+        "preview": "https://id-preview--8ef43cd3-8d93-4494-a685-59ce0f795614.lovable.app"
+      },
+      "repo": {
+        "name": "jussray/truth-weaver",
+        "visibility": "private"
+      },
+      "embeddedIn": [
+        { "name": "Founder Control Room", "status": "founder-declared" },
+        { "name": "Chief AI", "status": "founder-declared" }
+      ],
+      "note": "Standalone product identity is preserved even where its OS capability is mounted inside another project."
+    },
+    {
+      "name": "Truth Compass",
+      "kind": "standalone_os",
+      "public": true,
+      "status": "published",
+      "label": "Standalone OS · Published",
+      "role": "Living-truth control surface for claims, evidence, change, continuity, contradictions, and reconciliation state.",
+      "builder": {
+        "provider": "Lovable",
+        "projectId": "0fa1fd0f-9ec2-4bf3-9415-79bbfd4b3917",
+        "latestCommit": "4675f4ea5a1a5f132db55f23f663c25411233b21",
+        "published": true,
+        "preview": "https://id-preview--0fa1fd0f-9ec2-4bf3-9415-79bbfd4b3917.lovable.app"
+      },
+      "repo": {
+        "name": "jussray/truth-compass",
+        "visibility": "private"
+      },
+      "embeddedIn": [
+        { "name": "Founder Control Room", "status": "founder-declared" }
+      ]
+    },
+    {
+      "name": "Exact Match Engine",
+      "kind": "standalone_os",
+      "public": true,
+      "status": "published",
+      "label": "Standalone OS · Published",
+      "role": "Deterministic reconciliation OS that compares claimed state with observed evidence and produces traceable findings and receipts.",
+      "builder": {
+        "provider": "Lovable",
+        "projectId": "e1436754-7a41-40bb-927c-c9a0e081e70b",
+        "latestCommit": "d4378346414af17e49b1446dcf0c673ed794de58",
+        "published": true,
+        "preview": "https://id-preview--e1436754-7a41-40bb-927c-c9a0e081e70b.lovable.app"
+      },
+      "repo": {
+        "name": "jussray/exact-match-engine",
+        "visibility": "private"
+      },
+      "embeddedIn": [
+        { "name": "Founder Control Room", "status": "founder-declared" }
+      ]
+    },
+    {
+      "name": "Living Truth",
+      "kind": "standalone_os",
+      "public": true,
+      "status": "tracked",
+      "label": "Standalone OS · Base44",
+      "role": "Living-truth OS build extracted as its own multi-user product while remaining bindable to the portfolio truth plane.",
+      "builder": {
+        "provider": "Base44",
+        "appId": "6a94a7bfcbb4366d37894ffd",
+        "appName": "Living Truth"
+      },
+      "embeddedIn": [
+        { "name": "Founder Control Room", "status": "founder-declared" }
+      ],
+      "lineage": [
+        { "appId": "6a94a9bdf1ac72972e1d1470", "appName": "Living Truth (Copy)", "relationship": "duplicate carrier" }
+      ]
+    },
+    {
+      "name": "Proof Core",
+      "kind": "standalone_os",
+      "public": true,
+      "status": "prototype",
+      "label": "Standalone OS · Prototype",
+      "role": "Isolated proof and reconciliation OS build tracked independently from the systems that embed its capability.",
+      "builder": {
+        "provider": "Base44",
+        "appId": "6a94aed27e712e8fd5058c2f",
+        "appName": "Untitled"
+      },
+      "embeddedIn": [
+        { "name": "Founder Control Room", "status": "founder-declared" }
+      ]
+    },
+    {
+      "name": "ULTRATHINK · continuity carrier",
+      "kind": "standalone_internal_os",
+      "public": false,
+      "status": "internal",
+      "label": "Internal standalone OS carrier",
+      "builder": {
+        "provider": "Base44",
+        "appId": "6a9213ad92e06cfad8756b2b",
+        "appName": "ULTRATHINK"
+      },
+      "embeddedIn": [
+        { "name": "Founder Control Room", "status": "founder-declared" }
+      ]
+    },
+    {
+      "name": "ULTRATHINK · evidence/candidate carrier",
+      "kind": "standalone_internal_os",
+      "public": false,
+      "status": "internal",
+      "label": "Internal standalone OS carrier",
+      "builder": {
+        "provider": "Base44",
+        "appId": "6a93e49bb1804a2648534bdf",
+        "appName": "ULTRATHINK"
+      },
+      "embeddedIn": [
+        { "name": "Founder Control Room", "status": "founder-declared" },
+        { "name": "Chief AI", "status": "founder-declared" }
+      ]
+    }
+  ],
+  "supportingSurfaces": [
+    {
+      "name": "Sync Playtest Signups",
+      "kind": "supporting_surface",
+      "parent": "Sync Party",
+      "status": "published",
+      "builder": {
+        "provider": "Lovable",
+        "projectId": "06f8665b-2f48-409a-a2d7-ec60362808f2",
+        "latestCommit": "ce670095496219a586f2c13ee82094d86b60c229",
+        "published": true,
+        "preview": "https://id-preview--06f8665b-2f48-409a-a2d7-ec60362808f2.lovable.app"
+      }
+    }
+  ]
+}
