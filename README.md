@@ -2,6 +2,8 @@
 
 ## Founder · Product & Full-Stack AI Systems Builder
 
+> **Juss & Co** — the founder studio site: https://juss-and-co.p9s5nbwqyt.chatgpt.site (interim host until GitHub Pages is enabled; source of truth is [`site/`](site/) in this repo).
+
 I take ambiguous product and AI ideas from **concept → interface → backend/API → data/auth → deployment → browser verification**.
 
 I build human-centered products and founder-controlled systems that turn **intent into provable outcomes**. My strongest public proof sits across three active engineering surfaces:

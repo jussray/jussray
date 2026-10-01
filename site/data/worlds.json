@@ -98,6 +98,8 @@
     "facebook": "https://www.facebook.com/share/1cH3mxVRpi/?mibextid=wwXIfr",
     "youtube": "[YOUTUBE URL]",
     "support": "https://buymeacoffee.com/jussrayy",
-    "profile": "https://jussray.github.io/jussray/profile/"
+    "profile": "https://jussray.github.io/jussray/profile/",
+    "site": "https://juss-and-co.p9s5nbwqyt.chatgpt.site",
+    "site_note": "interim host until GitHub Pages is enabled; source of truth: jussray/jussray site/"
   }
 }
