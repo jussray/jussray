@@ -195,6 +195,11 @@ h1,h2,h3{text-wrap:balance}
 .quote::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(8,8,34,.9),rgba(8,8,34,.55) 55%,rgba(8,8,34,.75))}
 .quote blockquote{margin:0;font-family:var(--f-hand);font-weight:700;font-size:clamp(28px,2.6vw,38px);line-height:1.05;color:var(--gold-2);max-width:14ch;text-shadow:0 0 16px rgba(245,193,75,.35)}
 .quote cite{font-style:normal;font-family:var(--f-mono);font-size:10px;letter-spacing:.2em;color:var(--muted)}
+.quote.fade blockquote,.quote.fade .note{opacity:0;transform:translateY(6px)}
+.quote blockquote,.quote .note{transition:opacity .5s var(--ease),transform .5s var(--ease)}
+.qnav{position:absolute;left:16px;bottom:14px;display:flex;align-items:center;gap:10px;z-index:1}
+.qbtn{width:44px;height:44px;border-radius:50%;border:1px solid var(--line-hot);background:rgba(6,6,28,.6);color:#fff;font-size:22px;line-height:1;cursor:pointer}
+.qbtn:hover{border-color:var(--cyan)}
 .quote .note{position:static;transform:rotate(-6deg);align-self:flex-end;color:#FFB6EA;text-shadow:0 0 14px rgba(255,79,184,.5);font-size:22px;max-width:200px}
 .gains{list-style:none;margin:0;padding:0;display:grid;gap:12px}
 .gains li{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:center}
@@ -218,8 +223,8 @@ h1,h2,h3{text-wrap:balance}
 /* ---- close ---- */
 .close{position:relative;isolation:isolate;overflow:hidden;padding-block:clamp(64px,8vw,110px) 28px}
 .close-bg{position:absolute;inset:0;z-index:-2}
-.close-bg img{width:100%;height:100%;object-fit:cover;object-position:50% 100%;opacity:.75}
-.close::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,var(--void) 0%,rgba(6,6,28,.6) 35%,rgba(6,6,28,.85) 100%)}
+.close-bg img{width:100%;height:100%;object-fit:cover;object-position:50% 40%;opacity:.55;filter:saturate(1.15)}
+.close::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,var(--void) 0%,rgba(6,6,28,.7) 30%,rgba(6,6,28,.9) 100%)}
 .close-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) minmax(0,1fr);gap:32px;align-items:start}
 .close h2{font-family:var(--f-serif);font-weight:800;font-size:clamp(34px,3.6vw,52px);line-height:1;color:var(--cream)}
 .close p{margin-top:12px;color:var(--muted);max-width:40ch;font-size:15px}
@@ -387,9 +392,10 @@ h1,h2,h3{text-wrap:balance}
       </div>
       <div class="panel quote">
         <img src="assets/proof-scene.jpg" alt="" loading="lazy" width="410" height="138">
-        <blockquote>"A thought is not a result. Proof is a different kind of power."</blockquote>
+        <blockquote id="qText">"A thought is not a result. Proof is a different kind of power."</blockquote>
         <cite>— Juss &amp; Co</cite>
-        <p class="note hand">higher standards.<br>brighter tomorrows.</p>
+        <p class="note hand" id="qNote">higher standards.<br>brighter tomorrows.</p>
+        <div class="qnav"><button type="button" class="qbtn" id="qPrev" aria-label="Previous quote">‹</button><span class="mono" id="qIdx">1 / 1</span><button type="button" class="qbtn" id="qNext" aria-label="Next quote">›</button></div>
       </div>
       <div class="panel">
         <ul class="gains">
@@ -430,7 +436,7 @@ h1,h2,h3{text-wrap:balance}
 
 <!-- ================= CLOSE ================= -->
 <section class="close wrap" id="contact" aria-labelledby="h-close">
-  <div class="close-bg"><img src="assets/footer-city.jpg" alt="" loading="lazy" width="1055" height="165"></div>
+  <div class="close-bg"><img src="assets/footer-sky.jpg" alt="" loading="lazy" width="1440" height="982"></div>
   <div class="in">
     <div class="close-grid">
       <div>
@@ -438,7 +444,7 @@ h1,h2,h3{text-wrap:balance}
         <p>Ideas, people and proof for a brighter tomorrow. Whether you want to collaborate, join a project, or just say hello, we'd love to hear from you.</p>
       </div>
       <div class="contact-col">
-        <div class="addr"><span id="mail">[CONTACT EMAIL]</span><button class="copy" type="button" id="copyBtn">Copy</button></div>
+        <div class="addr"><span id="mail">hello@jussbeautifulhair.com</span><button class="copy" type="button" id="copyBtn">Copy</button></div>
         <a class="btn btn-gold" href="https://github.com/jussray">Follow the builds <span aria-hidden="true">↗</span></a>
         <a class="btn btn-ghost" href="#worlds">Explore all worlds</a>
       </div>
@@ -530,9 +536,27 @@ h1,h2,h3{text-wrap:balance}
       if(L.st && L.label){ w.st=L.st; w.label=L.label; var b=cards[i].querySelector(".badge"); b.className="badge s-"+L.st; b.textContent=L.label; }
       if(L.link && L.link.url){ w.link=[L.link.text||"Open", L.link.url]; w.held=null; } else if(L.held){ w.held=L.held; w.link=null; }
     });
+    if(d.company && d.company.email) document.getElementById("mail").textContent = d.company.email;
+    if(d.quotes && d.quotes.length) setQuotes(d.quotes);
     var stamp=document.getElementById("liveStamp"); if(stamp && d.generatedAt) stamp.textContent="Status synced "+new Date(d.generatedAt).toUTCString().replace(/:\d\d GMT$/," UTC");
     if(current>=0){ var k=current; current=-1; open(k); }
   }).catch(function(){});
+  /* ---------- rotating founder quotes (data-driven, founder-declared) ---------- */
+  var QUOTES=[{text:"A thought is not a result. Proof is a different kind of power.",note:"higher standards.\nbrighter tomorrows."}], qi=0, qTimer=null, qPaused=false;
+  var qBox=document.querySelector(".quote");
+  function showQuote(i, animate){
+    qi=(i+QUOTES.length)%QUOTES.length; var q=QUOTES[qi];
+    function paint(){ document.getElementById("qText").textContent='"'+q.text+'"'; var n=document.getElementById("qNote"); n.innerHTML=""; String(q.note||"").split("\n").forEach(function(line,ix){ if(ix) n.appendChild(document.createElement("br")); n.appendChild(document.createTextNode(line)); }); document.getElementById("qIdx").textContent=(qi+1)+" / "+QUOTES.length; }
+    if(animate && !reduce){ qBox.classList.add("fade"); setTimeout(function(){ paint(); qBox.classList.remove("fade"); }, 420); } else paint();
+  }
+  function setQuotes(list){ QUOTES=list; showQuote(0,false); startQuotes(); }
+  function startQuotes(){ if(qTimer) clearInterval(qTimer); if(reduce || QUOTES.length<2) return; qTimer=setInterval(function(){ if(!qPaused) showQuote(qi+1,true); }, 7000); }
+  document.getElementById("qNext").addEventListener("click",function(){ showQuote(qi+1,true); startQuotes(); });
+  document.getElementById("qPrev").addEventListener("click",function(){ showQuote(qi-1,true); startQuotes(); });
+  qBox.addEventListener("mouseenter",function(){ qPaused=true; }); qBox.addEventListener("mouseleave",function(){ qPaused=false; });
+  qBox.addEventListener("focusin",function(){ qPaused=true; }); qBox.addEventListener("focusout",function(){ qPaused=false; });
+  window.JC = { nextQuote:function(){ showQuote(qi+1,false); }, quoteIndex:function(){ return qi; }, quoteCount:function(){ return QUOTES.length; } };
+  showQuote(0,false);
   function evidenceRows(L){
     var rows=[]; if(!L || !L.evidence) return rows; var e=L.evidence;
     if(e.mainSha) rows.push(["Main", e.mainSha.slice(0,7)+(e.mainDate?" · "+e.mainDate.slice(0,10):"")]);
