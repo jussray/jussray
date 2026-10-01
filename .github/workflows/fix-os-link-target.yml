@@ -1,0 +1,42 @@
+name: One-time OS preview-link tap-target repair
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fix-os-link-target.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Enlarge only the standalone OS preview-link tap target
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('site/index.html')
+          s=p.read_text()
+          old='.os-link{align-self:flex-start;color:var(--cyan);font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;text-decoration:none}'
+          new='.os-link{align-self:flex-start;color:var(--cyan);font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center;min-height:44px;padding:8px 2px}'
+          if s.count(old)!=1:
+              raise SystemExit(f'expected one os-link style, found {s.count(old)}')
+          p.write_text(s.replace(old,new,1))
+          PY
+          git diff --check
+          grep -Fq 'min-height:44px' site/index.html
+          git diff -- site/index.html
+      - name: Commit tap-target repair
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'Juss'
+          git config user.email '286642846+jussray@users.noreply.github.com'
+          git add site/index.html
+          git commit -m 'fix(site): enlarge standalone OS preview tap target'
+          git push origin HEAD:main
