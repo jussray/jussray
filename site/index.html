@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="description" content="Juss & Co is a founder studio. Products, systems, stories and proof that help more people live, create and belong.">
 <meta property="og:title" content="Juss & Co — Turn thoughts into living works.">
-<meta property="og:description" content="A founder studio for a brighter tomorrow. Featured worlds, a complete portfolio map, and one proof protocol.">
+<meta property="og:description" content="A founder studio for a brighter tomorrow. Six worlds, one proof protocol.">
 <meta property="og:image" content="assets/hero.jpg">
 <meta name="theme-color" content="#06061C">
 <link rel="canonical" href="https://jussco.company/">
@@ -166,6 +166,26 @@ h1,h2,h3{text-wrap:balance}
 .step-detail b{font-family:var(--f-display);font-size:20px;letter-spacing:.06em;text-transform:uppercase;color:#fff;font-weight:400}
 .step-detail p{margin:0;font-size:14.5px;color:#D9D4F4;line-height:1.55;max-width:70ch}
 
+/* ---- standalone OS layer ---- */
+.os-layer{background:radial-gradient(65% 70% at 100% 10%,rgba(59,227,255,.10),transparent 60%),radial-gradient(55% 65% at 0% 90%,rgba(184,107,255,.13),transparent 62%),#070720;border-top:1px solid rgba(170,150,255,.14);border-bottom:1px solid rgba(59,227,255,.18)}
+.os-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.os-card{border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,rgba(16,14,52,.9),rgba(7,7,28,.96));padding:20px;display:flex;flex-direction:column;gap:12px;min-height:270px;box-shadow:0 18px 46px rgba(0,0,12,.34)}
+.os-card:hover{border-color:rgba(59,227,255,.5);box-shadow:0 22px 52px rgba(0,0,14,.45),0 0 26px rgba(59,227,255,.08)}
+.os-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.os-kind{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan)}
+.os-state{font-family:var(--f-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);border:1px solid rgba(245,193,75,.35);padding:5px 8px;border-radius:999px}
+.os-card h3{font-family:var(--f-serif);font-size:27px;line-height:1;color:#fff;margin:2px 0 0}
+.os-role{color:#D9D4F4;font-size:14px;line-height:1.5;flex:1}
+.os-meta{display:flex;gap:7px;flex-wrap:wrap}
+.os-meta span,.os-embed span{font-family:var(--f-mono);font-size:9px;letter-spacing:.09em;text-transform:uppercase;padding:6px 8px;border-radius:999px;border:1px solid rgba(170,150,255,.2);color:var(--muted);background:rgba(255,255,255,.02)}
+.os-embed{display:flex;gap:7px;flex-wrap:wrap;padding-top:11px;border-top:1px solid rgba(170,150,255,.13)}
+.os-embed b{width:100%;font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-2);font-weight:700}
+.os-link{align-self:flex-start;color:var(--cyan);font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;text-decoration:none}
+.surface-strip{margin-top:18px;border:1px dashed rgba(184,107,255,.35);border-radius:14px;padding:14px 16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;color:var(--muted);font-size:13px}
+.surface-strip b{color:#fff}.os-foot{margin-top:14px;color:var(--dim)}
+@media(max-width:900px){.os-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.os-grid{grid-template-columns:minmax(0,1fr)}}
+
 /* ---- proof ---- */
 .proof{background:linear-gradient(180deg,var(--void),#08082B 50%,var(--void));overflow:hidden}
 .proof::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(120,110,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(120,110,255,.07) 1px,transparent 1px);background-size:44px 44px;mask-image:radial-gradient(70% 60% at 50% 40%,#000,transparent 80%);-webkit-mask-image:radial-gradient(70% 60% at 50% 40%,#000,transparent 80%);pointer-events:none}
@@ -292,7 +312,7 @@ h1,h2,h3{text-wrap:balance}
     <nav class="navpill" aria-label="Primary">
       <a class="on" href="#top" data-nav="top">Home</a>
       <a href="#worlds" data-nav="worlds">Worlds</a>
-      <a href="portfolio.html">Portfolio</a>
+      <a href="#systems" data-nav="systems">Systems</a>
       <a href="#proof" data-nav="proof">Proof</a>
       <a href="#why" data-nav="why">The why</a>
       <a href="#contact" data-nav="contact">Contact</a>
@@ -362,6 +382,22 @@ h1,h2,h3{text-wrap:balance}
         <ul class="facts" id="dFacts"></ul>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ================= STANDALONE OS ================= -->
+<section class="sec os-layer wrap" id="systems" aria-labelledby="h-systems">
+  <div class="in">
+    <div class="sec-head">
+      <div>
+        <div class="kicker mono">Standalone OS layer</div>
+        <h2 class="h2" id="h-systems"><span class="ln">Built to stand alone.</span><span class="ln gold">Built to plug in.</span></h2>
+      </div>
+      <p class="sec-note"><strong style="color:var(--cream)">Standalone does not mean isolated.</strong> These operating systems are products in their own right and can also be mounted inside Juss &amp; Co systems without giving up their identity or authority boundary.</p>
+    </div>
+    <div class="os-grid" id="osGrid"></div>
+    <div class="surface-strip" id="surfaceStrip" hidden></div>
+    <p class="mono os-foot" id="osStamp">Standalone OS registry loading…</p>
   </div>
 </section>
 
@@ -542,7 +578,35 @@ h1,h2,h3{text-wrap:balance}
     var stamp=document.getElementById("liveStamp"); if(stamp && d.generatedAt) stamp.textContent="Status synced "+new Date(d.generatedAt).toUTCString().replace(/:\d\d GMT$/," UTC");
     if(current>=0){ var k=current; current=-1; open(k); }
   }).catch(function(){});
-  /* ---------- rotating founder quotes (data-driven, founder-declared) ---------- */
+
+/* ---------- standalone OS registry ---------- */
+var osGrid=document.getElementById("osGrid"), surfaceStrip=document.getElementById("surfaceStrip");
+function renderSystems(d){
+  if(!osGrid || !d || !Array.isArray(d.systems)) return;
+  osGrid.innerHTML="";
+  var visible=d.systems.filter(function(x){ return x.public!==false; });
+  visible.forEach(function(x){
+    var card=document.createElement("article"); card.className="os-card";
+    var top=document.createElement("div"); top.className="os-top";
+    var kind=document.createElement("span"); kind.className="os-kind"; kind.textContent="Standalone OS";
+    var state=document.createElement("span"); state.className="os-state"; state.textContent=x.label||x.status||"Tracked";
+    top.appendChild(kind); top.appendChild(state); card.appendChild(top);
+    var h=document.createElement("h3"); h.textContent=x.name; card.appendChild(h);
+    var role=document.createElement("p"); role.className="os-role"; role.textContent=x.role||"Standalone operating system."; card.appendChild(role);
+    var meta=document.createElement("div"); meta.className="os-meta";
+    var provider=document.createElement("span"); provider.textContent=(x.builder&&x.builder.provider)||"Tracked"; meta.appendChild(provider);
+    if(x.repo&&x.repo.name){ var repo=document.createElement("span"); repo.textContent=x.repo.visibility==="private"?"Private repo":"Repo"; meta.appendChild(repo); }
+    card.appendChild(meta);
+    if(x.embeddedIn&&x.embeddedIn.length){ var emb=document.createElement("div"); emb.className="os-embed"; var eb=document.createElement("b"); eb.textContent="Already embedded in"; emb.appendChild(eb); x.embeddedIn.forEach(function(e){ var sp=document.createElement("span"); sp.textContent=e.name; emb.appendChild(sp); }); card.appendChild(emb); }
+    if(x.builder&&x.builder.preview){ var a=document.createElement("a"); a.className="os-link"; a.href=x.builder.preview; a.textContent="Open builder preview ↗"; card.appendChild(a); }
+    osGrid.appendChild(card);
+  });
+  var stamp=document.getElementById("osStamp"); if(stamp) stamp.textContent=visible.length+" public standalone OS builds · internal carriers tracked separately"+(d.generatedAt?" · synced "+new Date(d.generatedAt).toISOString().slice(0,10):"");
+  if(surfaceStrip && Array.isArray(d.supportingSurfaces) && d.supportingSurfaces.length){ surfaceStrip.hidden=false; surfaceStrip.innerHTML=""; var b=document.createElement("b"); b.textContent="Supporting surfaces:"; surfaceStrip.appendChild(b); d.supportingSurfaces.forEach(function(x){ var sp=document.createElement("span"); sp.textContent=x.name+" → "+x.parent+" · "+((x.builder&&x.builder.provider)||"tracked")+" · "+x.status; surfaceStrip.appendChild(sp); }); }
+}
+fetch("data/systems.json",{cache:"no-store"}).then(function(r){ return r.ok?r.json():null; }).then(renderSystems).catch(function(){});
+
+/* ---------- rotating founder quotes (data-driven, founder-declared) ---------- */
   var QUOTES=[{text:"A thought is not a result. Proof is a different kind of power.",note:"higher standards.\nbrighter tomorrows."}], qi=0, qTimer=null, qPaused=false;
   var qBox=document.querySelector(".quote");
   function showQuote(i, animate){
@@ -655,7 +719,7 @@ h1,h2,h3{text-wrap:balance}
   /* ---------- nav highlight ---------- */
   var navLinks = Array.prototype.slice.call(document.querySelectorAll(".navpill a"));
   if("IntersectionObserver" in window){
-    var secs = ["top","worlds","proof","why","contact"].map(function(id){ return document.getElementById(id); });
+    var secs = ["top","worlds","systems","proof","why","contact"].map(function(id){ return document.getElementById(id); });
     new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ navLinks.forEach(function(a){ a.classList.toggle("on", a.dataset.nav===e.target.id); }); } }); },{rootMargin:"-40% 0px -50% 0px"}).observe;
     var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ navLinks.forEach(function(a){ a.classList.toggle("on", a.dataset.nav===e.target.id); }); } }); },{rootMargin:"-40% 0px -50% 0px"});
     secs.forEach(function(s){ if(s) io.observe(s); });
