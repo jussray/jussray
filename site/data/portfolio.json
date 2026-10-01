@@ -133,8 +133,7 @@
       "portfolioStatus": "active",
       "publicLabel": "Building",
       "featured": true,
-      "description": "Carries creative work from idea through controlled release preparation while preserving provenance and creator authority.",
-      "link": "https://github.com/jussray/StoryEngine"
+      "description": "Carries creative work from idea through controlled release preparation while preserving provenance and creator authority."
     },
     {
       "slug": "sekret-bip",
@@ -208,8 +207,7 @@
       "portfolioStatus": "active",
       "publicLabel": "Live",
       "featured": true,
-      "description": "A social party experience built around matching the vibe, playing together and finding your people.",
-      "link": "https://github.com/jussray/sync-party-game"
+      "description": "A social party experience built around matching the vibe, playing together and finding your people."
     },
     {
       "slug": "ayure",
