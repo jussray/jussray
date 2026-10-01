@@ -1,0 +1,229 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-01T21:25:00Z",
+  "source": {
+    "repository": "jussray/founder-control-room",
+    "contract": "config/portfolio-identity-map.json",
+    "mergeSha": "b037ecce18863eb0be35098508b3b1fcf95c049d"
+  },
+  "authority": "public-safe identity projection only; non-authorizing",
+  "intent": "Show the complete Juss & Co portfolio without treating every repository, builder app, module, or carrier as a separate company.",
+  "featuredWorlds": [
+    "sekret-bip",
+    "founder-control-room",
+    "chief-ai-machine",
+    "juss-beautiful-hair",
+    "storyengine",
+    "sync-party"
+  ],
+  "projects": [
+    {
+      "slug": "founder-control-room",
+      "name": "Founder Control Room",
+      "category": "Founder software",
+      "role": "Core software company",
+      "portfolioStatus": "active",
+      "publicLabel": "Building",
+      "featured": true,
+      "description": "A governed founder operating environment for intent, authority, execution, evidence, continuity and next gates.",
+      "link": "https://github.com/jussray/founder-control-room"
+    },
+    {
+      "slug": "chief-ai-machine",
+      "name": "Chief AI Machine",
+      "category": "Founder software",
+      "role": "Supporting system",
+      "portfolioStatus": "active",
+      "publicLabel": "In progress",
+      "featured": true,
+      "description": "Provider-neutral company intelligence and structured executive reasoning inside the founder software world.",
+      "link": "https://github.com/jussray/chief-ai-machine"
+    },
+    {
+      "slug": "promptos",
+      "name": "PromptOS",
+      "category": "Founder software",
+      "role": "Supporting system",
+      "portfolioStatus": "active",
+      "publicLabel": "Active system",
+      "featured": false,
+      "description": "Governed prompt, skill and founder-intent workflows with lineage and evidence.",
+      "link": "https://github.com/jussray/promptos"
+    },
+    {
+      "slug": "truth-compass",
+      "name": "Truth Compass",
+      "category": "Founder software",
+      "role": "Evidence and reconciliation module",
+      "portfolioStatus": "external",
+      "publicLabel": "Tracked module",
+      "featured": false,
+      "description": "Keeps claims, evidence, observed versions, continuity markers and failure receipts separate from authority."
+    },
+    {
+      "slug": "truth-weaver",
+      "name": "Truth Weaver Counsel",
+      "aliases": ["Truth Weaver"],
+      "category": "Founder software",
+      "role": "Legal knowledge and decision-support module",
+      "portfolioStatus": "external",
+      "publicLabel": "Tracked module",
+      "featured": false,
+      "description": "Evidence-first legal knowledge and bounded decision support that remains educational and non-authorizing."
+    },
+    {
+      "slug": "exact-match-engine",
+      "name": "Exact Match Engine",
+      "category": "Founder software",
+      "role": "Claims-to-reality reconciliation module",
+      "portfolioStatus": "continuity-only",
+      "publicLabel": "Tracked module",
+      "featured": false,
+      "description": "Compares claimed state with observed evidence and records mismatches, gaps and receipts."
+    },
+    {
+      "slug": "living-truth",
+      "name": "Living Truth",
+      "category": "Founder software",
+      "role": "Commercial candidate",
+      "portfolioStatus": "tracked",
+      "publicLabel": "Candidate",
+      "featured": false,
+      "description": "A tracked truth-product candidate whose commercial path remains separate from product and runtime proof."
+    },
+    {
+      "slug": "think-tank",
+      "name": "Think Tank",
+      "category": "Founder software",
+      "role": "Acquisition wedge",
+      "portfolioStatus": "external",
+      "publicLabel": "Tracked project",
+      "featured": false,
+      "description": "Turns rough ideas into challenged, scored and portable idea records.",
+      "link": "https://github.com/jussray/THINK-TANK"
+    },
+    {
+      "slug": "solcontinuity",
+      "name": "SolContinuity",
+      "category": "Founder software",
+      "role": "Continuity system",
+      "portfolioStatus": "external",
+      "publicLabel": "Tracked system",
+      "featured": false,
+      "description": "Continuity, evidence history and resilience infrastructure.",
+      "link": "https://github.com/jussray/solcontinuity"
+    },
+    {
+      "slug": "sleepwealth-agent",
+      "name": "SleepWealth Agent",
+      "category": "Research",
+      "role": "Research lane",
+      "portfolioStatus": "external",
+      "publicLabel": "Research",
+      "featured": false,
+      "description": "A governed consequential-agent research lane used to test risk and control primitives.",
+      "link": "https://github.com/jussray/SleepWealth-Agent"
+    },
+    {
+      "slug": "storyengine",
+      "name": "StoryEngine",
+      "aliases": ["L99 StoryEngine"],
+      "category": "Creator software",
+      "role": "Core creator software company",
+      "portfolioStatus": "active",
+      "publicLabel": "Building",
+      "featured": true,
+      "description": "Carries creative work from idea through controlled release preparation while preserving provenance and creator authority.",
+      "link": "https://github.com/jussray/StoryEngine"
+    },
+    {
+      "slug": "sekret-bip",
+      "name": "Se’kret Bip",
+      "category": "Family product",
+      "role": "Core family product",
+      "portfolioStatus": "active",
+      "publicLabel": "Opening soon",
+      "featured": true,
+      "description": "A private emotional-growth and self-expression world designed around teen trust and relationship-aware family boundaries."
+    },
+    {
+      "slug": "bip-jr",
+      "name": "Bip Jr",
+      "category": "Family product",
+      "role": "Family module",
+      "portfolioStatus": "continuity-only",
+      "publicLabel": "Family module",
+      "featured": false,
+      "parent": "sekret-bip",
+      "description": "A younger-family experience inside the Se’kret Bip world rather than a separate company."
+    },
+    {
+      "slug": "juss-beautiful-hair",
+      "name": "Juss Beautiful Hair",
+      "aliases": ["JBH"],
+      "category": "Commerce",
+      "role": "Core commerce business",
+      "portfolioStatus": "active",
+      "publicLabel": "Live",
+      "featured": true,
+      "description": "A real hair-commerce brand with its own catalog, storefront, customer economics and fulfillment truth.",
+      "link": "https://jussbeautifulhair.com"
+    },
+    {
+      "slug": "untold-stories",
+      "name": "Untold Stories",
+      "category": "Commerce",
+      "role": "Commerce brand",
+      "portfolioStatus": "active",
+      "publicLabel": "Active project",
+      "featured": false,
+      "description": "Story-led commerce with its own storefront identity and economics."
+    },
+    {
+      "slug": "sweats",
+      "name": "SWEATS",
+      "aliases": ["Sweats", "SWEAT"],
+      "category": "Commerce",
+      "role": "Commerce brand",
+      "portfolioStatus": "external",
+      "publicLabel": "Prelaunch",
+      "featured": false,
+      "description": "A soft-luxury athleisure brand whose catalog and fulfillment truth remain separate from its visual identity."
+    },
+    {
+      "slug": "alexa-commerce-engine",
+      "name": "Alexa Commerce Engine",
+      "category": "Commerce",
+      "role": "Supporting system",
+      "portfolioStatus": "external",
+      "publicLabel": "Tracked system",
+      "featured": false,
+      "description": "Commerce-agent infrastructure that supports portfolio commerce without becoming the brand itself."
+    },
+    {
+      "slug": "sync-party",
+      "name": "SYNC Party",
+      "category": "Consumer experiences",
+      "role": "Consumer experience product",
+      "portfolioStatus": "active",
+      "publicLabel": "Live",
+      "featured": true,
+      "description": "A social party experience built around matching the vibe, playing together and finding your people.",
+      "link": "https://github.com/jussray/sync-party-game"
+    },
+    {
+      "slug": "ayure",
+      "name": "AYURE",
+      "category": "Networks",
+      "role": "Emerging network product",
+      "portfolioStatus": "continuity-only",
+      "publicLabel": "Emerging",
+      "featured": false,
+      "description": "An intent-first property network connecting search, matching, evidence, people, services and outcome proof."
+    }
+  ],
+  "excludedFromPublicProjection": {
+    "reason": "Unresolved, duplicate, private-operations-only or quarantined carriers are not promoted as public product identities.",
+    "count": 12
+  }
+}
