@@ -23,6 +23,36 @@ jobs:
       - run: node -e "const c=JSON.parse(require('fs').readFileSync('wrangler.jsonc','utf8')); const routes=c.routes||[]; const expected=['jussco.company','www.jussco.company']; const actual=routes.filter(r=>r?.custom_domain===true).map(r=>r.pattern).sort(); if(c.name!=='jussray'||c.assets?.directory!=='./site'||JSON.stringify(actual)!==JSON.stringify(expected)) process.exit(1); console.log('wrangler deploy target + custom domains valid')"
       - run: node -e "JSON.parse(require('fs').readFileSync('site/data/worlds.json','utf8')); console.log('worlds.json valid')"
       - run: node scripts/verify-site.mjs
+      - name: Verify public custom domains
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          set -u
+          for attempt in $(seq 1 18); do
+            ok=1
+            echo "public-domain attempt ${attempt}/18"
+            for host in jussco.company www.jussco.company; do
+              body="$(curl -fsSL --connect-timeout 5 --max-time 15 "https://${host}/" 2>/tmp/jussco-curl.err)" || {
+                echo "${host}: unreachable"
+                cat /tmp/jussco-curl.err || true
+                ok=0
+                continue
+              }
+              if grep -Fq 'Turn thoughts into living works.' <<<"${body}"; then
+                echo "${host}: canonical Juss & Co content verified"
+              else
+                echo "${host}: reachable but canonical hero fingerprint missing"
+                ok=0
+              fi
+            done
+            if [ "${ok}" -eq 1 ]; then
+              echo "canonical domains are live"
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "canonical domains did not become healthy within the verification window"
+          exit 1
       - uses: actions/upload-artifact@v4
         if: always()
         with:
