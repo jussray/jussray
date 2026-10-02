@@ -48,5 +48,13 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   say(errors.length === 0, `${vp.n}: no console errors${errors.length ? ' — ' + errors.join(' | ') : ''}`);
   await page.screenshot({ path: `proof/site/${vp.n}.png`, fullPage: true }); await ctx.close();
 }
+for (const mode of ['abort', 'malformed']) {
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } }); const page = await ctx.newPage();
+  await page.route('**/data/connectors.json', (r) => mode === 'abort' ? r.abort() : r.fulfill({ status: 200, contentType: 'application/json', body: '{not json' }));
+  await page.goto(url, { waitUntil: 'load' }); await page.waitForTimeout(1500);
+  say((await page.$$('.os-card')).length === 5, `isolation: connectors.json ${mode} still renders 5 OS cards`);
+  say((await page.$$('.os-connectors')).length === 0, `isolation: connectors.json ${mode} renders no connector claims`);
+  await ctx.close();
+}
 await browser.close(); srv.close();
 console.log(failed ? `\n${failed} check(s) FAILED` : '\nall checks passed'); process.exit(failed ? 1 : 0);
