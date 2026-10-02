@@ -574,7 +574,7 @@ h1,h2,h3{text-wrap:balance}
       if(L.st && L.label){ w.st=L.st; w.label=L.label; var b=cards[i].querySelector(".badge"); b.className="badge s-"+L.st; b.textContent=L.label; }
       if(L.link && L.link.url){ w.link=[L.link.text||"Open", L.link.url]; w.held=null; } else if(L.held){ w.held=L.held; w.link=null; }
     });
-    if(d.company && d.company.email) document.getElementById("mail").textContent = d.company.email;
+    if(d.company && d.company.email && d.company.email[0]!=="[") document.getElementById("mail").textContent = d.company.email;
     if(d.quotes && d.quotes.length) setQuotes(d.quotes);
     var stamp=document.getElementById("liveStamp"); if(stamp && d.generatedAt) stamp.textContent="Status synced "+new Date(d.generatedAt).toUTCString().replace(/:\d\d GMT$/," UTC");
     if(current>=0){ var k=current; current=-1; open(k); }
