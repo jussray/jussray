@@ -21,12 +21,13 @@ jobs:
           grep -Fq 'no connector claims connected without runtime proof' scripts/verify-site.mjs
           grep -Fq 'connector fabric registry valid' .github/workflows/site-proof.yml
           git diff -- site/index.html scripts/verify-site.mjs .github/workflows/site-proof.yml
-      - name: Commit connector fabric UI
+      - name: Commit non-workflow connector UI files
         shell: bash
         run: |
           set -euo pipefail
+          git restore .github/workflows/site-proof.yml
           git config user.name 'Juss'
           git config user.email '286642846+jussray@users.noreply.github.com'
-          git add site/index.html scripts/verify-site.mjs .github/workflows/site-proof.yml
+          git add site/index.html scripts/verify-site.mjs
           git commit -m 'feat(site): render connector fabric with truthful states'
           git push origin HEAD:main
