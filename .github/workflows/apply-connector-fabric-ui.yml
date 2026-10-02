@@ -10,99 +10,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Render connector fabric and extend proof
+      - name: Apply bounded connector fabric UI patch
+        run: node scripts/apply-connector-fabric-ui.mjs
+      - name: Prove bounded patch
         shell: bash
         run: |
           set -euo pipefail
-          python - <<'PY'
-          from pathlib import Path
-
-          p=Path('site/index.html')
-          s=p.read_text()
-          def one(old,new,label):
-              global s
-              c=s.count(old)
-              if c!=1: raise SystemExit(f'{label}: expected 1 anchor, found {c}')
-              s=s.replace(old,new,1)
-
-          old='.os-meta{display:flex;gap:7px;flex-wrap:wrap}'
-          new='''.os-meta{display:flex;gap:7px;flex-wrap:wrap}
-.os-connectors{display:flex;gap:7px;flex-wrap:wrap;padding-top:11px;border-top:1px solid rgba(59,227,255,.12)}
-.os-connectors b{width:100%;font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);font-weight:700}
-.os-connectors span{font-family:var(--f-mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;padding:6px 8px;border-radius:999px;border:1px solid rgba(59,227,255,.2);color:var(--muted);background:rgba(59,227,255,.035)}
-.os-connectors span[data-state="blocked"]{border-color:rgba(255,103,141,.35);color:#ff9bb4}
-.os-connectors span[data-state="connected"]{border-color:rgba(118,255,190,.35);color:#9dffd0}
-.os-connectors span[data-state="needs_setup"],.os-connectors span[data-state="not_configured"]{border-color:rgba(245,193,75,.3);color:var(--gold-2)}'''
-          one(old,new,'connector css')
-
-          old='var osGrid=document.getElementById("osGrid"), surfaceStrip=document.getElementById("surfaceStrip");'
-          new='var osGrid=document.getElementById("osGrid"), surfaceStrip=document.getElementById("surfaceStrip"), connectorRegistry=null;'
-          one(old,new,'registry declaration')
-
-          old='''    card.appendChild(meta);
-    if(x.embeddedIn&&x.embeddedIn.length){'''
-          new='''    card.appendChild(meta);
-    var connectorEntry=connectorRegistry&&connectorRegistry.systems&&connectorRegistry.systems[x.name];
-    var bindings=connectorEntry&&Array.isArray(connectorEntry.bindings)?connectorEntry.bindings:[];
-    if(bindings.length){
-      var cw=document.createElement("div"); cw.className="os-connectors"; var cwb=document.createElement("b"); cwb.textContent="Connector fabric"; cw.appendChild(cwb);
-      bindings.forEach(function(binding){ var lane=(connectorRegistry.lanes||[]).find(function(l){ return l.id===binding.id; }); var sp=document.createElement("span"); sp.dataset.connector=binding.id; sp.dataset.state=binding.state; sp.textContent=(lane?lane.name:binding.id)+" · "+String(binding.state||"unknown").replace(/_/g," "); cw.appendChild(sp); });
-      card.appendChild(cw);
-    }
-    if(x.embeddedIn&&x.embeddedIn.length){'''
-          one(old,new,'connector render')
-
-          old='fetch("data/systems.json",{cache:"no-store"}).then(function(r){ return r.ok?r.json():null; }).then(renderSystems).catch(function(){});'
-          new='''Promise.all([
-  fetch("data/systems.json",{cache:"no-store"}).then(function(r){ return r.ok?r.json():null; }),
-  fetch("data/connectors.json",{cache:"no-store"}).then(function(r){ return r.ok?r.json():null; })
-]).then(function(pair){ connectorRegistry=pair[1]; renderSystems(pair[0]); }).catch(function(){});'''
-          one(old,new,'dual registry fetch')
-          p.write_text(s)
-
-          p=Path('scripts/verify-site.mjs')
-          s=p.read_text()
-          old="const WORLD_REGISTRY = JSON.parse(readFileSync(join(ROOT, 'data/worlds.json'), 'utf8')); const EXPECTED_WORLDS = WORLD_REGISTRY.worlds.map((w) => w.name); const IDEA_WORLDS = WORLD_REGISTRY.worlds.filter((w) => w.display?.group === 'Ideas & systems').map((w) => w.name);"
-          new=old+"\nconst CONNECTOR_REGISTRY = JSON.parse(readFileSync(join(ROOT, 'data/connectors.json'), 'utf8')); const EXPECTED_CONNECTORS = CONNECTOR_REGISTRY.lanes.map((x) => x.name);"
-          if s.count(old)!=1: raise SystemExit('verify registry anchor mismatch')
-          s=s.replace(old,new,1)
-          old="  await page.goto(url, { waitUntil: 'load' }); await page.waitForFunction((n) => document.querySelectorAll('.card').length === n, EXPECTED_WORLDS.length); await page.waitForFunction(() => document.querySelectorAll('.os-card').length === 5); await page.waitForTimeout(300);"
-          new="  await page.goto(url, { waitUntil: 'load' }); await page.waitForFunction((n) => document.querySelectorAll('.card').length === n, EXPECTED_WORLDS.length); await page.waitForFunction(() => document.querySelectorAll('.os-card').length === 5 && document.querySelectorAll('.os-connectors').length === 5); await page.waitForTimeout(300);"
-          if s.count(old)!=1: raise SystemExit('verify wait anchor mismatch')
-          s=s.replace(old,new,1)
-          old="  say((await page.evaluate(() => [...document.querySelectorAll('.os-kind')].every((e) => e.textContent === 'Standalone OS'))), `${vp.n}: every public system is labeled standalone OS`);"
-          new=old+"\n  say((await page.evaluate((names) => [...document.querySelectorAll('.os-card')].every((c) => names.every((n) => c.innerText.includes(n))), EXPECTED_CONNECTORS)), `${vp.n}: every standalone OS exposes Exa Notion Linear Slack fabric`);\n  say((await page.evaluate(() => document.querySelector('.os-card:nth-child(3)')?.innerText.includes('blocked'))), `${vp.n}: Exact Match connector fabric remains visibly blocked`);\n  say((await page.evaluate(() => ![...document.querySelectorAll('.os-connectors span')].some((e) => e.dataset.state === 'connected'))), `${vp.n}: no connector claims connected without runtime proof`);"
-          if s.count(old)!=1: raise SystemExit('verify assertion anchor mismatch')
-          s=s.replace(old,new,1)
-          p.write_text(s)
-
-          p=Path('.github/workflows/site-proof.yml')
-          s=p.read_text()
-          old='''      - name: Verify canonical public URL'''
-          new='''      - name: Validate connector fabric registry
-        run: node -e "const d=JSON.parse(require('fs').readFileSync('site/data/connectors.json','utf8')); const ids=(d.lanes||[]).map(x=>x.id); const expected=['exa','notion','linear','slack']; const systems=d.systems||{}; const publicSystems=['Truth Weaver','Truth Compass','Exact Match Engine','Living Truth','Proof Core']; if(JSON.stringify(ids)!==JSON.stringify(expected)||!publicSystems.every(n=>Array.isArray(systems[n]?.bindings)&&systems[n].bindings.length===4)||Object.values(systems).flatMap(x=>x.bindings||[]).some(x=>x.state==='connected')) process.exit(1); console.log('connector fabric registry valid; no unproven connected state')"
-      - name: Verify canonical public URL'''
-          if s.count(old)!=1: raise SystemExit('workflow validation anchor mismatch')
-          s=s.replace(old,new,1)
-          old="            await page.waitForFunction(() => document.querySelectorAll('.card').length === 15 && document.querySelectorAll('.os-card').length === 5, null, { timeout: 20000 });"
-          new="            await page.waitForFunction(() => document.querySelectorAll('.card').length === 15 && document.querySelectorAll('.os-card').length === 5 && document.querySelectorAll('.os-connectors').length === 5, null, { timeout: 20000 });"
-          if s.count(old)!=1: raise SystemExit('workflow deployed-browser wait anchor mismatch')
-          s=s.replace(old,new,1)
-          old="            const systemNames = await page.locator('.os-card h3').allTextContents();"
-          new=old+"\n            const connectorText = await page.locator('#systems').innerText();"
-          if s.count(old)!=1: raise SystemExit('workflow connector text anchor mismatch')
-          s=s.replace(old,new,1)
-          old="            const ok = requiredWorlds.every(n => worldNames.includes(n)) && requiredSystems.every(n => systemNames.includes(n)) && !worldNames.some(n => n.startsWith('ULTRATHINK')) && overflow === 0 && errors.length === 0;"
-          new="            const ok = requiredWorlds.every(n => worldNames.includes(n)) && requiredSystems.every(n => systemNames.includes(n)) && ['Exa','Notion','Linear','Slack'].every(n => connectorText.includes(n)) && connectorText.includes('blocked') && !connectorText.toLowerCase().includes('connected') && !worldNames.some(n => n.startsWith('ULTRATHINK')) && overflow === 0 && errors.length === 0;"
-          if s.count(old)!=1: raise SystemExit('workflow ok anchor mismatch')
-          s=s.replace(old,new,1)
-          p.write_text(s)
-          PY
           git diff --check
           grep -Fq 'data/connectors.json' site/index.html
           grep -Fq 'no connector claims connected without runtime proof' scripts/verify-site.mjs
           grep -Fq 'connector fabric registry valid' .github/workflows/site-proof.yml
-      - name: Commit bounded connector UI expansion
+          git diff -- site/index.html scripts/verify-site.mjs .github/workflows/site-proof.yml
+      - name: Commit connector fabric UI
         shell: bash
         run: |
           set -euo pipefail
