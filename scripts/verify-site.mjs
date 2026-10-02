@@ -24,6 +24,15 @@ const worldSlugByName = new Map([
   ['Juss Beautiful Hair', 'juss-beautiful-hair'],
   ['StoryEngine', 'storyengine'],
   ['Sync Party', 'sync-party'],
+  ['Bip Jr', 'bip-jr'],
+  ['PromptOS', 'promptos'],
+  ['SolContinuity', 'solcontinuity'],
+  ['Untold Stories', 'untold-stories'],
+  ['SWEATS', 'sweats'],
+  ['SleepWealth Agent', 'sleepwealth-agent'],
+  ['Think Tank', 'think-tank'],
+  ['Alexa Commerce Engine', 'alexa-commerce-engine'],
+  ['Ayure', 'ayure'],
 ]);
 const forbiddenProjectionTokens = ['jussray/jbh-private', 'jussray/exact-match-engine-', 'jussray/juss-protect-me', '6a9213ad92e06cfad8756b2b', '6a93e49bb1804a2648534bdf'];
 const projectionText = JSON.stringify(portfolio);
