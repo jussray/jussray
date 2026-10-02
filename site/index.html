@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="description" content="Juss & Co is a founder studio. Products, systems, stories and proof that help more people live, create and belong.">
 <meta property="og:title" content="Juss & Co — Turn thoughts into living works.">
-<meta property="og:description" content="A founder studio for a brighter tomorrow. Connected worlds, one proof protocol.">
+<meta property="og:description" content="A founder studio for a brighter tomorrow. Featured worlds, standalone systems, a complete portfolio map, and one proof protocol.">
 <meta property="og:image" content="assets/hero.jpg">
 <meta name="theme-color" content="#06061C">
 <link rel="canonical" href="https://jussco.company/">
@@ -319,6 +319,7 @@ h1,h2,h3{text-wrap:balance}
       <a class="on" href="#top" data-nav="top">Home</a>
       <a href="#worlds" data-nav="worlds">Worlds</a>
       <a href="#systems" data-nav="systems">Systems</a>
+      <a href="portfolio.html">Portfolio</a>
       <a href="#proof" data-nav="proof">Proof</a>
       <a href="#why" data-nav="why">The why</a>
       <a href="#contact" data-nav="contact">Contact</a>
@@ -571,7 +572,7 @@ h1,h2,h3{text-wrap:balance}
     if(!d||!d.worlds)return;
     d.worlds.forEach(function(L){LIVE[L.name]=L;var idx=WORLDS.findIndex(function(w){return w.name===L.name;});if(idx<0&&L.display){var added=worldFromRegistry(L);WORLDS.push(added);idx=WORLDS.length-1;renderWorldCard(added,idx);}if(idx<0)return;var w=WORLDS[idx];if(L.st&&L.label){w.st=L.st;w.label=L.label;var b=cards[idx].querySelector(".badge");b.className="badge s-"+L.st;b.textContent=L.label;}if(L.link&&L.link.url){w.link=[L.link.text||"Open",L.link.url];w.held=null;}else if(L.held){w.held=L.held;w.link=null;}});
     var n=document.querySelector('#filters .chip[data-group=""] .n');if(n)n.textContent=String(WORLDS.length).padStart(2,"0");
-    if(d.company&&d.company.email)document.getElementById("mail").textContent=d.company.email;if(d.quotes&&d.quotes.length)setQuotes(d.quotes);var stamp=document.getElementById("liveStamp");if(stamp&&d.generatedAt)stamp.textContent="Status synced "+new Date(d.generatedAt).toUTCString().replace(/:\d\d GMT$/," UTC");if(current>=0){var k=current;current=-1;open(k);}
+    if(d.company&&d.company.email&&d.company.email[0]!=="[")document.getElementById("mail").textContent=d.company.email;if(d.quotes&&d.quotes.length)setQuotes(d.quotes);var stamp=document.getElementById("liveStamp");if(stamp&&d.generatedAt)stamp.textContent="Status synced "+new Date(d.generatedAt).toUTCString().replace(/:\d\d GMT$/," UTC");if(current>=0){var k=current;current=-1;open(k);}
   }).catch(function(){});
 
 /* ---------- standalone OS registry ---------- */
