@@ -177,6 +177,12 @@ h1,h2,h3{text-wrap:balance}
 .os-card h3{font-family:var(--f-serif);font-size:27px;line-height:1;color:#fff;margin:2px 0 0}
 .os-role{color:#D9D4F4;font-size:14px;line-height:1.5;flex:1}
 .os-meta{display:flex;gap:7px;flex-wrap:wrap}
+.os-connectors{display:flex;gap:7px;flex-wrap:wrap;padding-top:11px;border-top:1px solid rgba(59,227,255,.12)}
+.os-connectors b{width:100%;font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);font-weight:700}
+.os-connectors span{font-family:var(--f-mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;padding:6px 8px;border-radius:999px;border:1px solid rgba(59,227,255,.2);color:var(--muted);background:rgba(59,227,255,.035)}
+.os-connectors span[data-state="blocked"]{border-color:rgba(255,103,141,.35);color:#ff9bb4}
+.os-connectors span[data-state="connected"]{border-color:rgba(118,255,190,.35);color:#9dffd0}
+.os-connectors span[data-state="needs_setup"],.os-connectors span[data-state="not_configured"]{border-color:rgba(245,193,75,.3);color:var(--gold-2)}
 .os-meta span,.os-embed span{font-family:var(--f-mono);font-size:9px;letter-spacing:.09em;text-transform:uppercase;padding:6px 8px;border-radius:999px;border:1px solid rgba(170,150,255,.2);color:var(--muted);background:rgba(255,255,255,.02)}
 .os-embed{display:flex;gap:7px;flex-wrap:wrap;padding-top:11px;border-top:1px solid rgba(170,150,255,.13)}
 .os-embed b{width:100%;font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-2);font-weight:700}
@@ -569,7 +575,7 @@ h1,h2,h3{text-wrap:balance}
   }).catch(function(){});
 
 /* ---------- standalone OS registry ---------- */
-var osGrid=document.getElementById("osGrid"), surfaceStrip=document.getElementById("surfaceStrip");
+var osGrid=document.getElementById("osGrid"), surfaceStrip=document.getElementById("surfaceStrip"), connectorRegistry=null;
 function renderSystems(d){
   if(!osGrid || !d || !Array.isArray(d.systems)) return;
   osGrid.innerHTML="";
@@ -586,6 +592,13 @@ function renderSystems(d){
     var provider=document.createElement("span"); provider.textContent=(x.builder&&x.builder.provider)||"Tracked"; meta.appendChild(provider);
     if(x.repo&&x.repo.name){ var repo=document.createElement("span"); repo.textContent=x.repo.visibility==="private"?"Private repo":"Repo"; meta.appendChild(repo); }
     card.appendChild(meta);
+    var connectorEntry=connectorRegistry&&connectorRegistry.systems&&connectorRegistry.systems[x.name];
+    var bindings=connectorEntry&&Array.isArray(connectorEntry.bindings)?connectorEntry.bindings:[];
+    if(bindings.length){
+      var cw=document.createElement("div"); cw.className="os-connectors"; var cwb=document.createElement("b"); cwb.textContent="Connector fabric"; cw.appendChild(cwb);
+      bindings.forEach(function(binding){ var lane=(connectorRegistry.lanes||[]).find(function(l){ return l.id===binding.id; }); var sp=document.createElement("span"); sp.dataset.connector=binding.id; sp.dataset.state=binding.state; sp.textContent=(lane?lane.name:binding.id)+" · "+String(binding.state||"unknown").replace(/_/g," "); cw.appendChild(sp); });
+      card.appendChild(cw);
+    }
     if(x.embeddedIn&&x.embeddedIn.length){ var emb=document.createElement("div"); emb.className="os-embed"; var eb=document.createElement("b"); eb.textContent="Already embedded in"; emb.appendChild(eb); x.embeddedIn.forEach(function(e){ var sp=document.createElement("span"); sp.textContent=e.name; emb.appendChild(sp); }); card.appendChild(emb); }
     if(x.builder&&x.builder.preview){ var a=document.createElement("a"); a.className="os-link"; a.href=x.builder.preview; a.textContent="Open builder preview ↗"; card.appendChild(a); }
     osGrid.appendChild(card);
@@ -593,7 +606,10 @@ function renderSystems(d){
   var stamp=document.getElementById("osStamp"); if(stamp) stamp.textContent=visible.length+" public standalone OS builds · internal carriers tracked separately"+(d.generatedAt?" · synced "+new Date(d.generatedAt).toISOString().slice(0,10):"");
   if(surfaceStrip && Array.isArray(d.supportingSurfaces) && d.supportingSurfaces.length){ surfaceStrip.hidden=false; surfaceStrip.innerHTML=""; var b=document.createElement("b"); b.textContent="Supporting surfaces:"; surfaceStrip.appendChild(b); d.supportingSurfaces.forEach(function(x){ var sp=document.createElement("span"); sp.textContent=x.name+" → "+x.parent+" · "+((x.builder&&x.builder.provider)||"tracked")+" · "+x.status; surfaceStrip.appendChild(sp); }); }
 }
-fetch("data/systems.json",{cache:"no-store"}).then(function(r){ return r.ok?r.json():null; }).then(renderSystems).catch(function(){});
+Promise.all([
+  fetch("data/systems.json",{cache:"no-store"}).then(function(r){ return r.ok?r.json():null; }),
+  fetch("data/connectors.json",{cache:"no-store"}).then(function(r){ return r.ok?r.json():null; })
+]).then(function(pair){ connectorRegistry=pair[1]; renderSystems(pair[0]); }).catch(function(){});
 
 /* ---------- rotating founder quotes (data-driven, founder-declared) ---------- */
   var QUOTES=[{text:"A thought is not a result. Proof is a different kind of power.",note:"higher standards.\nbrighter tomorrows."}], qi=0, qTimer=null, qPaused=false;
