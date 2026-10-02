@@ -4,7 +4,7 @@
 
 I take ambiguous product and AI ideas from **concept → interface → backend/API → data/auth → deployment → browser verification**.
 
-I build human-centered products and founder-controlled systems that turn **intent into provable outcomes**. My strongest public proof sits across three active engineering surfaces:
+I build human-centered products and founder-controlled systems that turn **intent into provable outcomes**. My strongest public proof has three anchor surfaces, with the fuller current public project map below:
 
 | Product | What I built | Public engineering proof |
 |---|---|---|
@@ -45,30 +45,47 @@ A privacy-first emotional growth and self-expression platform for teens and fami
 **Official site:** [sekretbip.net](https://sekretbip.net)  
 **Canonical active repository:** [jussray/Sekret-Bip](https://github.com/jussray/Sekret-Bip)
 
-Se’kret Bip is its own product. The other systems below support separate founder, publishing, commerce, and AI-workflow goals and must not be presented as Bip features unless exact product evidence proves an approved integration.
+Se’kret Bip is its own product. The other systems below support separate founder, publishing, commerce, games, continuity, and AI-workflow goals and must not be presented as Bip features unless exact product evidence proves an approved integration.
 
 ## Public proof graph
+
+This map promotes **canonical public carriers with enough source truth to support a bounded role**. Repository existence alone is not proof of product maturity, runtime health, launch state, or authority.
 
 | Surface | Role | Authority |
 |---|---|---|
 | [Sekret-Bip](https://github.com/jussray/Sekret-Bip) | Active Se’kret Bip product development, documentation, tests, and release evidence | **Canonical product source of truth** |
-| [founder-control-room](https://github.com/jussray/founder-control-room) | Founder-gated approvals, change proposals, verification, evidence, and rollback | **Operational authority** |
-| [chief-ai-machine](https://github.com/jussray/chief-ai-machine) | Chief / Proof Mode / controlled AI execution work | **Product and execution-contract source** |
-| [promptos](https://github.com/jussray/promptos) | Prompt and agent operating contracts | **PromptOS source** |
-| [StoryEngine / L99](https://github.com/jussray/StoryEngine) | StoryEngine creator product powered by the L99 execution, provenance, recovery, and release runtime | **StoryEngine / L99 source** |
+| [founder-control-room](https://github.com/jussray/founder-control-room) | Founder operating plane for repository truth, approvals, governed actions, evidence, release control, rollback, and cross-project decisions | **Operational and execution-authority plane** |
+| [chief-ai-machine](https://github.com/jussray/chief-ai-machine) | Governed cognition, portable company intelligence, council/synthesis, and proposal/evidence handoffs | **Chief source; consequential execution remains founder/FCR gated** |
+| [promptos](https://github.com/jussray/promptos) | Governed prompt, skill, instruction, mission, and reusable workflow contracts | **PromptOS instruction-governance source** |
+| [StoryEngine / L99](https://github.com/jussray/StoryEngine) | StoryEngine creator product powered by L99 execution, provenance, recovery, and release controls | **StoryEngine / L99 source** |
+| [Juss Beautiful Hair](https://github.com/jussray/jussbeautifulhair-site) | Public storefront and bounded Shopify Storefront Cart / Shopify-hosted checkout source | **Canonical public storefront source; live provider state requires separate proof** |
+| [Sync Party](https://github.com/jussray/sync-party-game) | Real-time multiplayer party-game system with authoritative room state, synchronized reveal/scoring, reconnect, and replay contracts | **Canonical game source** |
+| [SolContinuity](https://github.com/jussray/solcontinuity) | Provider-aware continuity, quorum, failover, recovery, evidence history, and Solana-first adapter tooling | **Canonical continuity source** |
+| [SleepWealth Agent](https://github.com/jussray/SleepWealth-Agent) | Governed trading-agent research and paper/simulation execution with approval, risk, audit, and read-only provider evidence boundaries | **Canonical experiment source; live-money execution disabled** |
+| [THINK-TANK](https://github.com/jussray/THINK-TANK) | Deterministic local-first founder idea interview, challenge, scoring, synthesis, versioning, export/import, and recovery loop | **Canonical Think Tank source; not presented as production AI** |
+| [Solwealth](https://github.com/jussray/SolWealth-Meteora-) | Independently runnable learning-agent experiment using dry-run / Solana Devnet / Meteora-shaped evidence loops | **Canonical experiment source; no signing, mainnet, or real-money authority** |
 | [sekret-bip-demo](https://github.com/jussray/sekret-bip-demo) | Controlled public demonstration of selected concepts | **Showcase only, non-authoritative** |
-| [do-not-use](https://github.com/jussray/do-not-use) | Preserved historical and prototype material | **Quarantined, not for development or deployment** |
-| [jussray](https://github.com/jussray/jussray) | This profile and public founder map | **Public identity front door** |
+| [do-not-use](https://github.com/jussray/do-not-use) | Preserved historical and prototype material | **Archived quarantine; not for development or deployment** |
+| [jussray](https://github.com/jussray/jussray) | This profile, Juss & Co public founder map, and portfolio registry carrier | **Public identity front door** |
+
+Not every public repository is promoted into this graph. Empty duplicate shells, title-only experiments, archived lineage, and non-canonical carriers stay out until their own source proves a meaningful boundary. Private canonical repositories are not presented as public source merely because the broader product is tracked in the portfolio.
+
+The profile also carries a public portfolio registry in [`site/data/worlds.json`](site/data/worlds.json) and [`site/data/systems.json`](site/data/systems.json). Those files help map product identity and carriers; exact repository/runtime/provider truth still wins when state changes.
 
 ## Portfolio lanes
 
 These are distinct products and systems. Anything not backed by a public repository, live site, or verified artifact should be read as **in development**, not as a launch claim.
 
-- **Chief AI** — a chief-of-staff intelligence layer that coordinates specialist analysis, challenges conclusions, and returns founder-ready decisions.
-- **Founder Control Room** — the evidence and execution-authority layer for approvals, repository truth, verification, release state, and rollback records.
-- **StoryEngine / L99** — one creator-product architecture for writing, creating, preparing, publishing, distributing, and selling works. **StoryEngine** is the market-facing product; **L99** is the runtime that handles state integrity, provenance-safe reuse, recovery, orchestration, validation, and observable release controls.
-- **Commerce systems** — Juss Beautiful Hair and Untold Stories storefront work focused on vendor-backed products, creator commerce, and direct economic participation.
-- **Goalfix + PromptOS** — reusable operating contracts for efficient AI repair, controlled execution, and evidence-based agent behavior.
+- **Founder Control Room** — the provider-independent founder operating plane for repository truth, approvals, governed actions, evidence, release state, rollback, and cross-project decisions.
+- **Chief AI** — the governed cognition and portable company-intelligence layer paired with FCR. It can reason and propose independently, but consequential execution remains separately authorized.
+- **PromptOS** — the instruction-governance layer for prompts, skills, missions, reusable workflows, and portable command semantics.
+- **StoryEngine / L99** — one creator-product architecture for writing, creating, preparing, publishing, distributing, and selling works. **StoryEngine** is the market-facing product; **L99** handles state integrity, provenance-safe reuse, recovery, orchestration, validation, and observable release controls.
+- **Commerce systems** — [Juss Beautiful Hair](https://github.com/jussray/jussbeautifulhair-site) is the canonical public storefront source; Untold Stories remains a private storefront build.
+- **Games** — [Sync Party](https://github.com/jussray/sync-party-game) is the canonical public multiplayer game source.
+- **Continuity** — [SolContinuity](https://github.com/jussray/solcontinuity) explores provider-aware continuity, quorum, failover, recovery, and portable evidence.
+- **Founder experiments** — [THINK-TANK](https://github.com/jussray/THINK-TANK), [SleepWealth Agent](https://github.com/jussray/SleepWealth-Agent), and [Solwealth](https://github.com/jussray/SolWealth-Meteora-) are bounded experiments whose claims stop at their proved source and authority ceilings.
+- **Truth systems** — Truth Weaver, Truth Compass, Exact Match Engine, Living Truth, and Proof Core are tracked as standalone portfolio systems in `site/data/systems.json`; private GitHub carriers are not promoted as public source proof.
+- **Goalfix** — a reusable repair contract for finding the real blocker, making the smallest reversible fix, and verifying the real path before claiming success.
 
 ## Revenue experiments
 
@@ -133,6 +150,7 @@ Sponsorship or support helps fund development. It does **not** grant ownership, 
 
 ## Connect
 
+- [Juss & Co](https://jussco.company)
 - [LinkedIn](https://www.linkedin.com/in/juss-rayy-13ba691a1)
 - [Buy Me a Coffee](https://buymeacoffee.com/jussrayy)
 - [Facebook](https://www.facebook.com/share/1cH3mxVRpi/?mibextid=wwXIfr)
