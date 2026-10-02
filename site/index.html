@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Playfair+Display:wght@700;800&family=Kaushan+Script&family=Caveat:wght@700&family=Sora:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
 <style>
 /* Layout concept (from Juss's 30 Sep mockup): founder-studio universe — cinematic hero with the
-   builder at her desk, a 3×2 grid of project worlds with an inline detail drawer, the Proof Protocol
+   builder at her desk, a growing grid of project worlds with an inline detail drawer, the Proof Protocol
    as a six-step system, and a city-lights close. Single committed dark look; midnight/violet/cyan
    with gold reserved for focus. */
 :root{
@@ -180,7 +180,7 @@ h1,h2,h3{text-wrap:balance}
 .os-meta span,.os-embed span{font-family:var(--f-mono);font-size:9px;letter-spacing:.09em;text-transform:uppercase;padding:6px 8px;border-radius:999px;border:1px solid rgba(170,150,255,.2);color:var(--muted);background:rgba(255,255,255,.02)}
 .os-embed{display:flex;gap:7px;flex-wrap:wrap;padding-top:11px;border-top:1px solid rgba(170,150,255,.13)}
 .os-embed b{width:100%;font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-2);font-weight:700}
-.os-link{align-self:flex-start;min-height:40px;display:inline-flex;align-items:center;color:var(--cyan);font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;text-decoration:none}
+.os-link{align-self:flex-start;color:var(--cyan);font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center;min-height:44px;padding:8px 2px}
 .surface-strip{margin-top:18px;border:1px dashed rgba(184,107,255,.35);border-radius:14px;padding:14px 16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;color:var(--muted);font-size:13px}
 .surface-strip b{color:#fff}.os-foot{margin-top:14px;color:var(--dim)}
 @media(max-width:900px){.os-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -551,33 +551,22 @@ h1,h2,h3{text-wrap:balance}
 
   var grid = document.getElementById("grid"), drawer = document.getElementById("drawer");
   var cards = [], current = -1;
-  WORLDS.forEach(function(w,i){
-    var c = document.createElement("article"); c.className = "card"; c.style.setProperty("--w", w.w);
-    c.innerHTML =
-      '<figure><img loading="'+(i<3?"eager":"lazy")+'" width="322" height="132"><span class="badge s-'+w.st+'">'+w.label+'</span></figure>'+
-      '<div class="body"><span class="grp"></span><h3></h3><p class="desc"></p><div class="row"><div class="tags"></div>'+
-      '<button class="go" type="button" aria-expanded="false" aria-controls="drawer" id="go-'+i+'"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div></div>';
-    var img = c.querySelector("img"); img.src = w.img; img.alt = w.alt;
-    c.querySelector("h3").textContent = w.name; c.querySelector(".grp").textContent = w.group; c.querySelector(".desc").textContent = w.desc;
-    var go = c.querySelector(".go"); go.setAttribute("aria-label","Open "+w.name);
-    var t = c.querySelector(".tags"); w.tags.forEach(function(x){ var s=document.createElement("span"); s.textContent=x; t.appendChild(s); });
-    c.addEventListener("click", function(e){ if(e.target.closest("a")) return; toggle(i); });
-    go.addEventListener("click", function(e){ e.stopPropagation(); toggle(i); });
-    grid.appendChild(c); cards.push(c);
-  });
+  function renderWorldCard(w,i){
+    w.tags=Array.isArray(w.tags)?w.tags:[]; w.facts=Array.isArray(w.facts)?w.facts:[];
+    var c=document.createElement("article"); c.className="card"; c.style.setProperty("--w",w.w||"#8B5CF6");
+    c.innerHTML='<figure><img loading="'+(i<3?"eager":"lazy")+'" width="322" height="132"><span class="badge s-'+w.st+'">'+w.label+'</span></figure><div class="body"><span class="grp"></span><h3></h3><p class="desc"></p><div class="row"><div class="tags"></div><button class="go" type="button" aria-expanded="false" aria-controls="drawer" id="go-'+i+'"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div></div>';
+    var img=c.querySelector("img");img.src=w.img;img.alt=w.alt||"";c.querySelector("h3").textContent=w.name;c.querySelector(".grp").textContent=w.group;c.querySelector(".desc").textContent=w.desc||"";
+    var go=c.querySelector(".go");go.setAttribute("aria-label","Open "+w.name);var tags=c.querySelector(".tags");w.tags.forEach(function(x){var s=document.createElement("span");s.textContent=x;tags.appendChild(s);});
+    c.addEventListener("click",function(e){if(e.target.closest("a"))return;toggle(i);});go.addEventListener("click",function(e){e.stopPropagation();toggle(i);});grid.appendChild(c);cards.push(c);
+  }
+  WORLDS.forEach(function(w,i){renderWorldCard(w,i);});
   var LIVE = {};
-  fetch("data/worlds.json",{cache:"no-store"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
-    if(!d || !d.worlds) return;
-    d.worlds.forEach(function(w){ LIVE[w.name] = w; });
-    WORLDS.forEach(function(w,i){
-      var L = LIVE[w.name]; if(!L) return;
-      if(L.st && L.label){ w.st=L.st; w.label=L.label; var b=cards[i].querySelector(".badge"); b.className="badge s-"+L.st; b.textContent=L.label; }
-      if(L.link && L.link.url){ w.link=[L.link.text||"Open", L.link.url]; w.held=null; } else if(L.held){ w.held=L.held; w.link=null; }
-    });
-    if(d.company && d.company.email && d.company.email[0]!=="[") document.getElementById("mail").textContent = d.company.email;
-    if(d.quotes && d.quotes.length) setQuotes(d.quotes);
-    var stamp=document.getElementById("liveStamp"); if(stamp && d.generatedAt) stamp.textContent="Status synced "+new Date(d.generatedAt).toUTCString().replace(/:\d\d GMT$/," UTC");
-    if(current>=0){ var k=current; current=-1; open(k); }
+  function worldFromRegistry(L){var p=L.display||{};return{name:L.name,group:p.group||"Ideas & systems",st:L.st||"building",label:L.label||"Building",w:p.accent||"#8B5CF6",img:p.img||"assets/w-fcr.jpg",alt:p.alt||"",desc:p.desc||"",tags:Array.isArray(p.tags)?p.tags:[],tag:p.tag||"",blurb:p.blurb||p.desc||"",facts:Array.isArray(p.facts)?p.facts:[],held:L.held||"Tracked · no public link yet",link:(L.link&&L.link.url)?[L.link.text||"Open",L.link.url]:null};}
+  fetch("data/worlds.json",{cache:"no-store"}).then(function(r){return r.ok?r.json():null;}).then(function(d){
+    if(!d||!d.worlds)return;
+    d.worlds.forEach(function(L){LIVE[L.name]=L;var idx=WORLDS.findIndex(function(w){return w.name===L.name;});if(idx<0&&L.display){var added=worldFromRegistry(L);WORLDS.push(added);idx=WORLDS.length-1;renderWorldCard(added,idx);}if(idx<0)return;var w=WORLDS[idx];if(L.st&&L.label){w.st=L.st;w.label=L.label;var b=cards[idx].querySelector(".badge");b.className="badge s-"+L.st;b.textContent=L.label;}if(L.link&&L.link.url){w.link=[L.link.text||"Open",L.link.url];w.held=null;}else if(L.held){w.held=L.held;w.link=null;}});
+    var n=document.querySelector('#filters .chip[data-group=""] .n');if(n)n.textContent=String(WORLDS.length).padStart(2,"0");
+    if(d.company&&d.company.email&&d.company.email[0]!=="[")document.getElementById("mail").textContent=d.company.email;if(d.quotes&&d.quotes.length)setQuotes(d.quotes);var stamp=document.getElementById("liveStamp");if(stamp&&d.generatedAt)stamp.textContent="Status synced "+new Date(d.generatedAt).toUTCString().replace(/:\d\d GMT$/," UTC");if(current>=0){var k=current;current=-1;open(k);}
   }).catch(function(){});
 
 /* ---------- standalone OS registry ---------- */
@@ -628,6 +617,7 @@ fetch("data/systems.json",{cache:"no-store"}).then(function(r){ return r.ok?r.js
     if(e.mainSha) rows.push(["Main", e.mainSha.slice(0,7)+(e.mainDate?" · "+e.mainDate.slice(0,10):"")]);
     if(e.latestMergedPr) rows.push(["Latest merged", "#"+e.latestMergedPr.number+" "+e.latestMergedPr.title+(e.latestMergedPr.mergedAt?" · "+e.latestMergedPr.mergedAt.slice(0,10):"")]);
     if(e.ci) rows.push(["CI on main", e.ci]);
+    if(L.carriers&&L.carriers.length) rows.push(["Tracked carriers",L.carriers.map(function(x){return x.ref||x.name||x.id||x.platform;}).join(" · ")]);
     return rows;
   }
   function renderContacts(L){
@@ -657,7 +647,7 @@ fetch("data/systems.json",{cache:"no-store"}).then(function(r){ return r.ok?r.js
     document.getElementById("dName").textContent = w.name;
     document.getElementById("dTag").textContent = w.tag;
     document.getElementById("dBlurb").textContent = w.blurb;
-    document.getElementById("dIdx").textContent = "0"+(i+1)+" / 0"+WORLDS.length;
+    document.getElementById("dIdx").textContent = String(i+1).padStart(2,"0")+" / "+String(WORLDS.length).padStart(2,"0");
     var f = document.getElementById("dFacts"); f.innerHTML = "";
     w.facts.concat(evidenceRows(LIVE[w.name])).forEach(function(p,ix){ var li=document.createElement("li"), k=document.createElement("b"), v=document.createElement("span"); k.textContent=p[0]; v.textContent=p[1]; if(ix>=w.facts.length) li.className="evid"; li.appendChild(k); li.appendChild(v); f.appendChild(li); });
     renderContacts(LIVE[w.name]);

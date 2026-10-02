@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-01T21:32:00Z",
+  "generatedAt": "2026-10-01T21:48:05Z",
   "source": "builder inventories + founder-declared architecture; standalone identity and embedded use are tracked independently",
   "rules": {
     "standaloneDoesNotMeanAuthority": true,
@@ -27,8 +27,14 @@
         "visibility": "private"
       },
       "embeddedIn": [
-        { "name": "Founder Control Room", "status": "founder-declared" },
-        { "name": "Chief AI", "status": "founder-declared" }
+        {
+          "name": "Founder Control Room",
+          "status": "founder-declared"
+        },
+        {
+          "name": "Chief AI",
+          "status": "founder-declared"
+        }
       ],
       "note": "Standalone product identity is preserved even where its OS capability is mounted inside another project."
     },
@@ -51,7 +57,10 @@
         "visibility": "private"
       },
       "embeddedIn": [
-        { "name": "Founder Control Room", "status": "founder-declared" }
+        {
+          "name": "Founder Control Room",
+          "status": "founder-declared"
+        }
       ]
     },
     {
@@ -73,7 +82,16 @@
         "visibility": "private"
       },
       "embeddedIn": [
-        { "name": "Founder Control Room", "status": "founder-declared" }
+        {
+          "name": "Founder Control Room",
+          "status": "founder-declared"
+        }
+      ],
+      "lineage": [
+        {
+          "repo": "jussray/exact-match-engine-",
+          "relationship": "empty public duplicate shell; not canonical"
+        }
       ]
     },
     {
@@ -89,10 +107,17 @@
         "appName": "Living Truth"
       },
       "embeddedIn": [
-        { "name": "Founder Control Room", "status": "founder-declared" }
+        {
+          "name": "Founder Control Room",
+          "status": "founder-declared"
+        }
       ],
       "lineage": [
-        { "appId": "6a94a9bdf1ac72972e1d1470", "appName": "Living Truth (Copy)", "relationship": "duplicate carrier" }
+        {
+          "appId": "6a94a9bdf1ac72972e1d1470",
+          "appName": "Living Truth (Copy)",
+          "relationship": "duplicate carrier"
+        }
       ]
     },
     {
@@ -108,7 +133,13 @@
         "appName": "Untitled"
       },
       "embeddedIn": [
-        { "name": "Founder Control Room", "status": "founder-declared" }
+        {
+          "name": "Founder Control Room",
+          "status": "founder-declared"
+        }
+      ],
+      "aliases": [
+        "Untitled (current Base44 app name)"
       ]
     },
     {
@@ -123,7 +154,16 @@
         "appName": "ULTRATHINK"
       },
       "embeddedIn": [
-        { "name": "Founder Control Room", "status": "founder-declared" }
+        {
+          "name": "Founder Control Room",
+          "status": "founder-declared"
+        }
+      ],
+      "lineage": [
+        {
+          "previousName": "Untitled",
+          "relationship": "renamed same Base44 app"
+        }
       ]
     },
     {
@@ -138,8 +178,14 @@
         "appName": "ULTRATHINK"
       },
       "embeddedIn": [
-        { "name": "Founder Control Room", "status": "founder-declared" },
-        { "name": "Chief AI", "status": "founder-declared" }
+        {
+          "name": "Founder Control Room",
+          "status": "founder-declared"
+        },
+        {
+          "name": "Chief AI",
+          "status": "founder-declared"
+        }
       ]
     }
   ],

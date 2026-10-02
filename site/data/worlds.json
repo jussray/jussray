@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-10-01T21:58:00Z",
-  "source": "founder-declared baseline; evidence fields are filled by Founder Control Room's juss-and-co-status-sync workflow",
+  "source": "founder-declared portfolio worlds + builder/repository carriers; evidence fields remain FCR-owned",
   "worlds": [
     {
       "name": "Se'kret Bip",
@@ -14,7 +14,24 @@
         "email": "founder@sekretbip.net",
         "support": "support@sekretbip.net"
       },
-      "evidence": {}
+      "evidence": {},
+      "display": {
+        "group": "People & belonging"
+      },
+      "carriers": [
+        {
+          "platform": "github",
+          "ref": "jussray/Sekret-Bip",
+          "role": "canonical source",
+          "visibility": "public"
+        },
+        {
+          "platform": "github",
+          "ref": "jussray/sekret-bip-demo",
+          "role": "demo/supporting source",
+          "visibility": "public"
+        }
+      ]
     },
     {
       "name": "Founder Control Room",
@@ -34,7 +51,18 @@
         "security": "[fcr-security@jussco.company]",
         "linkedin": "https://www.linkedin.com/in/juss-rayy-13ba691a1"
       },
-      "evidence": {}
+      "evidence": {},
+      "display": {
+        "group": "Ideas & systems"
+      },
+      "carriers": [
+        {
+          "platform": "github",
+          "ref": "jussray/founder-control-room",
+          "role": "canonical source",
+          "visibility": "public"
+        }
+      ]
     },
     {
       "name": "Chief AI",
@@ -52,7 +80,18 @@
         "integrations": "[chief-integrations@jussco.company]",
         "partnerships": "[chief-partnerships@jussco.company]"
       },
-      "evidence": {}
+      "evidence": {},
+      "display": {
+        "group": "Ideas & systems"
+      },
+      "carriers": [
+        {
+          "platform": "github",
+          "ref": "jussray/chief-ai-machine",
+          "role": "canonical source",
+          "visibility": "public"
+        }
+      ]
     },
     {
       "name": "Juss Beautiful Hair",
@@ -70,7 +109,37 @@
         "instagram": "[JBH INSTAGRAM URL]",
         "facebook": "[JBH FACEBOOK PAGE URL]"
       },
-      "evidence": {}
+      "evidence": {},
+      "display": {
+        "group": "People & belonging"
+      },
+      "carriers": [
+        {
+          "platform": "github",
+          "ref": "jussray/jussbeautifulhair-site",
+          "role": "canonical storefront source",
+          "visibility": "public"
+        },
+        {
+          "platform": "github",
+          "ref": "jussray/jussbeautifulhair1",
+          "role": "additional private carrier",
+          "visibility": "private"
+        },
+        {
+          "platform": "github",
+          "ref": "jussray/jbh-private",
+          "role": "additional carrier",
+          "visibility": "public"
+        },
+        {
+          "platform": "github",
+          "ref": "jussray/Juss-beautiful-hair-",
+          "role": "archived lineage",
+          "visibility": "private",
+          "archived": true
+        }
+      ]
     },
     {
       "name": "StoryEngine",
@@ -85,7 +154,18 @@
         "creators": "[storyengine-creators@jussco.company]",
         "rights": "[storyengine-rights@jussco.company]"
       },
-      "evidence": {}
+      "evidence": {},
+      "display": {
+        "group": "Stories & play"
+      },
+      "carriers": [
+        {
+          "platform": "github",
+          "ref": "jussray/StoryEngine",
+          "role": "canonical source",
+          "visibility": "public"
+        }
+      ]
     },
     {
       "name": "Sync Party",
@@ -100,7 +180,457 @@
         "partnerships": "[syncparty-partnerships@jussco.company]",
         "privacy": "[syncparty-privacy@jussco.company]"
       },
-      "evidence": {}
+      "evidence": {},
+      "display": {
+        "group": "Stories & play"
+      },
+      "carriers": [
+        {
+          "platform": "github",
+          "ref": "jussray/sync-party-game",
+          "role": "canonical game source",
+          "visibility": "public"
+        }
+      ]
+    },
+    {
+      "name": "Bip Jr",
+      "repo": "jussray/Bip-Jr",
+      "st": "building",
+      "label": "Private build",
+      "held": "Private build · tracked internally",
+      "contact": {
+        "email": "hello@jussbeautifulhair.com"
+      },
+      "evidence": {},
+      "carriers": [
+        {
+          "platform": "github",
+          "ref": "jussray/Bip-Jr",
+          "role": "canonical source",
+          "visibility": "private"
+        }
+      ],
+      "display": {
+        "group": "People & belonging",
+        "accent": "#9A7CFF",
+        "img": "assets/w-bip.jpg",
+        "alt": "Se’kret Bip family-world artwork",
+        "desc": "The younger-family branch of the Se’kret Bip universe.",
+        "tags": [
+          "Family",
+          "Kids",
+          "Belonging"
+        ],
+        "tag": "A younger doorway into the Bip universe.",
+        "blurb": "A family-facing branch built around belonging, communication and age-appropriate connection.",
+        "facts": [
+          [
+            "Source",
+            "Private GitHub project"
+          ],
+          [
+            "Relationship",
+            "Part of the wider Se’kret Bip family"
+          ],
+          [
+            "Public state",
+            "No public front door declared"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "PromptOS",
+      "repo": "jussray/promptos",
+      "st": "building",
+      "label": "Building",
+      "link": {
+        "text": "Follow the build",
+        "url": "https://github.com/jussray/promptos"
+      },
+      "contact": {
+        "github": "https://github.com/jussray/promptos",
+        "email": "hello@jussbeautifulhair.com"
+      },
+      "evidence": {},
+      "carriers": [
+        {
+          "platform": "github",
+          "ref": "jussray/promptos",
+          "role": "canonical source",
+          "visibility": "public"
+        }
+      ],
+      "display": {
+        "group": "Ideas & systems",
+        "accent": "#7C5CFF",
+        "img": "assets/w-fcr.jpg",
+        "alt": "Founder systems command-center artwork",
+        "desc": "A governed prompt, skill and mission runtime for turning founder intent into bounded work.",
+        "tags": [
+          "AI",
+          "Prompts",
+          "Governance"
+        ],
+        "tag": "Intent becomes bounded missions.",
+        "blurb": "A portable instruction and skill runtime that keeps intent, authority, execution and proof separate.",
+        "facts": [
+          [
+            "Role",
+            "Prompt + skill runtime"
+          ],
+          [
+            "Boundary",
+            "Consequential authority stays outside the prompt layer"
+          ],
+          [
+            "Source",
+            "Public GitHub build"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "SolContinuity",
+      "repo": "jussray/solcontinuity",
+      "st": "building",
+      "label": "Building",
+      "link": {
+        "text": "Follow the build",
+        "url": "https://github.com/jussray/solcontinuity"
+      },
+      "contact": {
+        "github": "https://github.com/jussray/solcontinuity",
+        "email": "hello@jussbeautifulhair.com"
+      },
+      "evidence": {},
+      "carriers": [
+        {
+          "platform": "github",
+          "ref": "jussray/solcontinuity",
+          "role": "canonical source",
+          "visibility": "public"
+        }
+      ],
+      "display": {
+        "group": "Ideas & systems",
+        "accent": "#14F195",
+        "img": "assets/w-fcr.jpg",
+        "alt": "Founder systems command-center artwork",
+        "desc": "A continuity system for carrying verified state across Solana-linked work.",
+        "tags": [
+          "Solana",
+          "Continuity",
+          "Proof"
+        ],
+        "tag": "Continuity that survives handoffs.",
+        "blurb": "A portfolio experiment in preserving state, evidence and continuity across decentralized workflows.",
+        "facts": [
+          [
+            "Source",
+            "Public GitHub build"
+          ],
+          [
+            "Focus",
+            "Continuity + proof"
+          ],
+          [
+            "Stage",
+            "Active build"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "Untold Stories",
+      "repo": "jussray/untold-stories-storefront",
+      "st": "building",
+      "label": "Private build",
+      "held": "Private storefront build · tracked internally",
+      "contact": {
+        "email": "hello@jussbeautifulhair.com"
+      },
+      "evidence": {},
+      "carriers": [
+        {
+          "platform": "github",
+          "ref": "jussray/untold-stories-storefront",
+          "role": "canonical storefront source",
+          "visibility": "private"
+        }
+      ],
+      "display": {
+        "group": "Stories & play",
+        "accent": "#FF8A5B",
+        "img": "assets/w-story.jpg",
+        "alt": "Story and filmmaking world artwork",
+        "desc": "A storefront world for stories that deserve a place to live.",
+        "tags": [
+          "Stories",
+          "Commerce",
+          "Culture"
+        ],
+        "tag": "Stories become tangible worlds.",
+        "blurb": "A private storefront build connecting narrative, culture and commerce.",
+        "facts": [
+          [
+            "Source",
+            "Private GitHub storefront"
+          ],
+          [
+            "Stage",
+            "Building"
+          ],
+          [
+            "Public state",
+            "No public front door declared"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "SWEATS",
+      "repo": "jussray/Sweats",
+      "st": "building",
+      "label": "Private build",
+      "held": "Private brand build · tracked internally",
+      "contact": {
+        "email": "hello@jussbeautifulhair.com"
+      },
+      "evidence": {},
+      "carriers": [
+        {
+          "platform": "github",
+          "ref": "jussray/Sweats",
+          "role": "canonical brand source",
+          "visibility": "private"
+        }
+      ],
+      "display": {
+        "group": "People & belonging",
+        "accent": "#E8E6E3",
+        "img": "assets/w-jbh.jpg",
+        "alt": "Fashion and lifestyle world artwork",
+        "desc": "A soft-luxury athleisure brand and buyer-psychology experiment.",
+        "tags": [
+          "Fashion",
+          "Brand",
+          "Commerce"
+        ],
+        "tag": "Soft luxury with a point of view.",
+        "blurb": "An apparel experiment built to test brand identity, buyer psychology and real demand.",
+        "facts": [
+          [
+            "Source",
+            "Private GitHub build"
+          ],
+          [
+            "Category",
+            "Athleisure / fashion"
+          ],
+          [
+            "Stage",
+            "Building"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "SleepWealth Agent",
+      "repo": "jussray/SleepWealth-Agent",
+      "st": "building",
+      "label": "Building",
+      "link": {
+        "text": "Follow the build",
+        "url": "https://github.com/jussray/SleepWealth-Agent"
+      },
+      "contact": {
+        "github": "https://github.com/jussray/SleepWealth-Agent",
+        "email": "hello@jussbeautifulhair.com"
+      },
+      "evidence": {},
+      "carriers": [
+        {
+          "platform": "github",
+          "ref": "jussray/SleepWealth-Agent",
+          "role": "canonical source",
+          "visibility": "public"
+        }
+      ],
+      "display": {
+        "group": "People & belonging",
+        "accent": "#6CCFF6",
+        "img": "assets/w-bip.jpg",
+        "alt": "Calm night-world artwork",
+        "desc": "A public agent experiment in the Juss portfolio.",
+        "tags": [
+          "Agents",
+          "Automation",
+          "Experiment"
+        ],
+        "tag": "An agent build under active exploration.",
+        "blurb": "A public experimental agent project, tracked here without claiming more than the source proves.",
+        "facts": [
+          [
+            "Source",
+            "Public GitHub repository"
+          ],
+          [
+            "Stage",
+            "Active experiment"
+          ],
+          [
+            "Claims",
+            "Runtime impact is not promoted without proof"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "Think Tank",
+      "repo": "jussray/THINK-TANK",
+      "st": "building",
+      "label": "Building",
+      "link": {
+        "text": "Follow the build",
+        "url": "https://github.com/jussray/THINK-TANK"
+      },
+      "contact": {
+        "github": "https://github.com/jussray/THINK-TANK",
+        "email": "hello@jussbeautifulhair.com"
+      },
+      "evidence": {},
+      "carriers": [
+        {
+          "platform": "github",
+          "ref": "jussray/THINK-TANK",
+          "role": "canonical source",
+          "visibility": "public"
+        }
+      ],
+      "display": {
+        "group": "Ideas & systems",
+        "accent": "#F5C14B",
+        "img": "assets/w-fcr.jpg",
+        "alt": "Founder systems command-center artwork",
+        "desc": "A public idea-and-experiment workspace for exploring what should exist next.",
+        "tags": [
+          "Ideas",
+          "Research",
+          "Experiments"
+        ],
+        "tag": "Pressure-test the next idea.",
+        "blurb": "A compact public workspace for turning rough ideas into things that can be challenged and tested.",
+        "facts": [
+          [
+            "Source",
+            "Public GitHub repository"
+          ],
+          [
+            "Stage",
+            "Building"
+          ],
+          [
+            "Role",
+            "Idea + experiment workspace"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "Alexa Commerce Engine",
+      "repo": "jussray/alexa-commerce-engine-",
+      "st": "building",
+      "label": "Private build",
+      "held": "Private commerce build · tracked internally",
+      "contact": {
+        "email": "hello@jussbeautifulhair.com"
+      },
+      "evidence": {},
+      "carriers": [
+        {
+          "platform": "github",
+          "ref": "jussray/alexa-commerce-engine-",
+          "role": "canonical source",
+          "visibility": "private"
+        }
+      ],
+      "display": {
+        "group": "Ideas & systems",
+        "accent": "#4CB5FF",
+        "img": "assets/w-jbh.jpg",
+        "alt": "Commerce world artwork",
+        "desc": "A private commerce-engine project inside the Juss portfolio.",
+        "tags": [
+          "Commerce",
+          "Automation",
+          "Systems"
+        ],
+        "tag": "Commerce workflows as a system.",
+        "blurb": "A private engine build exploring reusable commerce and product-operation workflows.",
+        "facts": [
+          [
+            "Source",
+            "Private GitHub repository"
+          ],
+          [
+            "Stage",
+            "Building"
+          ],
+          [
+            "Public state",
+            "No public front door declared"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "Ayure",
+      "repo": "jussray/Ayure-",
+      "st": "building",
+      "label": "Private build",
+      "held": "Private product build · tracked internally",
+      "contact": {
+        "email": "hello@jussbeautifulhair.com"
+      },
+      "evidence": {},
+      "carriers": [
+        {
+          "platform": "github",
+          "ref": "jussray/Ayure-",
+          "role": "canonical source",
+          "visibility": "private"
+        }
+      ],
+      "display": {
+        "group": "Ideas & systems",
+        "accent": "#C98BFF",
+        "img": "assets/w-fcr.jpg",
+        "alt": "Founder systems command-center artwork",
+        "desc": "An active private product build moving through its architecture and data layer.",
+        "tags": [
+          "Product",
+          "Data",
+          "Architecture"
+        ],
+        "tag": "A private product under active construction.",
+        "blurb": "Ayure is tracked as an active company project while its product and runtime state continue to mature.",
+        "facts": [
+          [
+            "Source",
+            "Private GitHub repository"
+          ],
+          [
+            "Stage",
+            "Active architecture build"
+          ],
+          [
+            "Public state",
+            "No public front door declared"
+          ]
+        ]
+      }
     }
   ],
   "company": {
@@ -149,5 +679,7 @@
       "note": "ideas. products.\npeople. proof."
     }
   ],
-  "quotes_source": "Juss's own lines: the Juss & Co mockup, the 'Day I Became a Coder' poster, and the jussray profile README ('The signal')"
+  "quotes_source": "Juss's own lines: the Juss & Co mockup, the 'Day I Became a Coder' poster, and the jussray profile README ('The signal')",
+  "registryVersion": 2,
+  "canonicalization": "Worlds render once; standalone OS products live in systems.json; copies and supporting surfaces stay nested carriers."
 }
