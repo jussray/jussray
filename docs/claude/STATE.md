@@ -8,7 +8,11 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
 ### chief-ai-machine — Chief edge defense regression
 - VERIFIED: #141 reconcile merge `07e2d31` (2026-10-04) reverted `wrangler.jsonc`: Worker main `security/chief-edge-entry.js` → `worker/index.js`, `CHIEF_RATE_LIMITER` binding removed, `/api` `/github` dropped from `run_worker_first`. Reciprocal Defense Contract red on main since (runs #27, #28).
 - VERIFIED: fix = PR #205 `security/restore-chief-edge-wiring` @ `e19b9fc` (byte-identical restore + test + 2 lint fixes). Local: lint clean, 687 tests, Playwright witness fails on main / passes on head.
-- OPEN: 6 other workflows red on `e19b9fc` — pre-existing vs caused: under triage. Not merged.
+- VERIFIED: Reciprocal Defense Contract **green** on `e19b9fc` (run 37352429735, manual dispatch — the push never triggered it), incl. Playwright witness through wrangler. Workers Builds preview deploy of `e19b9fc` succeeded.
+- BLOCKED, not merged (`mergeable_state: blocked`). 6 red checks, none a defect in the PR diff:
+  - red on main too @ `ba81a9b`: Operational Proof Contract (video-renderer workflows lack superseded-run cancellation), Quality Gate Typecheck (`node:*` types in `src/domain/video-renderer.js`), Test Ledger (rollup).
+  - Governance Boundary: workflow bug — on `pull_request`, `GITHUB_SHA` (merge ref) ≠ `RELEASE_SHA` (head) → bake script refuses. One-line fix proposed on PR (`env -u GITHUB_SHA`); applying it was refused by the session's CI-bypass guard → needs Juss.
+  - ProofMode MCP Playwright + Required Check Materializer: preview proof 302 → Cloudflare Access. Founder decision on Access for previews.
 - OPEN findings (not fixed): decoy unreachable for `/.env`-style paths (asset fallback answers first); defense check not a required status check; `.assetsignore` gaps; full-attack-unit checks partly constant; Node path trusts `x-forwarded-for`; policy vs binding limit mismatch.
 - Stale branch `fix/restore-chief-edge-wiring` left on origin (proxy refused delete) — same commit, safe to delete.
 
