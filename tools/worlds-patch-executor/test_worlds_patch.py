@@ -48,5 +48,15 @@ class WorldsPatchRegressionTests(unittest.TestCase):
         self.assertTrue(any("UNVERIFIED" in reason for reason in result["pending"]))
 
 
+    def test_patch_waits_when_upstream_baseline_is_failing(self):
+        worlds = [
+            {"id": "up", "governance": {"required_checks": ["unit"]},
+             "state": {"checks": {"unit": {"status": "fail"}}}},
+            {"id": "down", "depends_on": ["up"], "governance": {"required_checks": []}},
+        ]
+        r = worlds_patch.evaluate(worlds, [{"id": "p", "world": "down", "files": ["a.ts"]}])["results"][0]
+        self.assertEqual(r["status"], "PENDING")
+        self.assertTrue(any("upstream world 'up' is failing unit" in x for x in r["pending"]))
+
 if __name__ == "__main__":
     unittest.main()
