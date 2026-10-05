@@ -7,14 +7,6 @@ It reads what you declare (worlds + patches + evidence) and tells you, per patch
 READY / PENDING / BLOCKED, why, what it breaks downstream, and the next gate.
 
 Truth rule: a check marked "pass" with no evidence link is UNVERIFIED -> PENDING, never READY.
-
-Usage:
-  python worlds_patch.py worlds.json patches.json                 # full report (markdown)
-  python worlds_patch.py worlds.json patches.json --json          # machine-readable
-  python worlds_patch.py worlds.json patches.json --ready         # "which worlds can I patch right now?"
-  python worlds_patch.py worlds.json patches.json --depends-on L99   # "patch all worlds depending on L99"
-  python worlds_patch.py worlds.json patches.json --impact core-auth # "patch X, what breaks?"
-  python worlds_patch.py worlds.json patches.json --scan-docs     # find governance docs in local_path repos
 """
 import argparse
 import fnmatch
@@ -27,7 +19,6 @@ GOV_FILES = ["GOVERNANCE.md", "AGENTS.md", "CLAUDE.md", "CODEOWNERS", ".github/C
              "SECURITY.md", "CONTRIBUTING.md", "docs/GOVERNANCE.md"]
 
 
-# ---------- graph ----------
 def build_graph(worlds):
     ids = {w["id"] for w in worlds}
     problems = []
@@ -45,6 +36,41 @@ def build_graph(worlds):
     return deps, rdeps, problems
 
 
+def cycle_members(deps):
+    """Return only nodes that are actually members of dependency cycles."""
+    index = 0
+    stack, on_stack = [], set()
+    indices, lowlink, members = {}, {}, set()
+
+    def visit(v):
+        nonlocal index
+        indices[v] = lowlink[v] = index
+        index += 1
+        stack.append(v)
+        on_stack.add(v)
+        for w in deps.get(v, []):
+            if w not in indices:
+                visit(w)
+                lowlink[v] = min(lowlink[v], lowlink[w])
+            elif w in on_stack:
+                lowlink[v] = min(lowlink[v], indices[w])
+        if lowlink[v] == indices[v]:
+            component = []
+            while True:
+                w = stack.pop()
+                on_stack.remove(w)
+                component.append(w)
+                if w == v:
+                    break
+            if len(component) > 1 or (len(component) == 1 and v in deps.get(v, [])):
+                members.update(component)
+
+    for v in sorted(deps):
+        if v not in indices:
+            visit(v)
+    return sorted(members)
+
+
 def topo_order(deps):
     indeg = {w: len(ds) for w, ds in deps.items()}
     rd = defaultdict(list)
@@ -60,8 +86,7 @@ def topo_order(deps):
             indeg[m] -= 1
             if indeg[m] == 0:
                 q.append(m)
-    cyclic = sorted(w for w in deps if w not in order)
-    return order, cyclic
+    return order, cycle_members(deps)
 
 
 def walk(start, edges):
@@ -79,7 +104,6 @@ def touches(files, patterns):
     return sorted({f for f in files for p in patterns if fnmatch.fnmatch(f, p)})
 
 
-# ---------- evaluation ----------
 def eval_patch(p, W, deps, rdeps, cyclic, upstream_status):
     wid = p.get("world")
     blocked, pending, risks, proof = [], [], [], []
@@ -92,7 +116,6 @@ def eval_patch(p, W, deps, rdeps, cyclic, upstream_status):
     state = w.get("state", {})
     files = p.get("files", [])
 
-    # governance: hard stops
     if gov.get("frozen"):
         blocked.append(f"world frozen ({gov.get('freeze_reason', 'no reason given')})")
     if wid in cyclic:
@@ -101,8 +124,7 @@ def eval_patch(p, W, deps, rdeps, cyclic, upstream_status):
     if hit_forbidden:
         blocked.append(f"touches forbidden paths: {', '.join(hit_forbidden)}")
 
-    # checks: evidence required
-    checks = {**state.get("checks", {}), **p.get("checks", {})}  # patch-level evidence overrides world-level
+    checks = {**state.get("checks", {}), **p.get("checks", {})}
     for name in gov.get("required_checks", []):
         c = checks.get(name)
         if c is None:
@@ -111,14 +133,13 @@ def eval_patch(p, W, deps, rdeps, cyclic, upstream_status):
         st, ev = c.get("status", "unknown"), c.get("evidence")
         if st == "fail":
             blocked.append(f"check '{name}' FAILING" + (f" ({ev})" if ev else ""))
-        elif st == "pass" and ev:
-            proof.append(f"VERIFIED {name}: {ev}")
+        elif st == "pass" and isinstance(ev, str) and ev.strip():
+            proof.append(f"VERIFIED {name}: {ev.strip()}")
         elif st == "pass":
             pending.append(f"check '{name}' says pass but has no evidence — UNVERIFIED")
         else:
             pending.append(f"check '{name}' status '{st}'")
 
-    # approvals
     approvals = set(p.get("approvals", []))
     need = set(gov.get("requires_approval_from", []))
     hit_protected = touches(files, gov.get("protected_paths", []))
@@ -129,8 +150,10 @@ def eval_patch(p, W, deps, rdeps, cyclic, upstream_status):
         why = f" (protected paths: {', '.join(hit_protected)})" if hit_protected else ""
         pending.append(f"approval missing from: {', '.join(missing)}{why}")
 
-    # upstream: patches in worlds this one depends on must not be blocked
     upstream = walk(wid, deps)
+    cyclic_upstream = sorted(set(upstream) & set(cyclic))
+    if cyclic_upstream:
+        blocked.append(f"upstream dependency cycle involves: {', '.join(cyclic_upstream)} — order cannot be proven")
     for u in upstream:
         st = upstream_status.get(u)
         if st == "BLOCKED":
@@ -138,7 +161,6 @@ def eval_patch(p, W, deps, rdeps, cyclic, upstream_status):
         elif st == "PENDING":
             pending.append(f"upstream world '{u}' has a PENDING patch — land upstream first")
 
-    # downstream impact
     down = walk(wid, rdeps)
     public = touches(files, gov.get("public_surface", []))
     if not down:
@@ -164,11 +186,17 @@ def eval_patch(p, W, deps, rdeps, cyclic, upstream_status):
 
 
 def evaluate(worlds, patches):
+    ids = [w.get("id") for w in worlds]
+    missing_ids = [i for i, wid in enumerate(ids) if not isinstance(wid, str) or not wid.strip()]
+    if missing_ids:
+        raise ValueError(f"world entries missing a non-empty string id at indexes: {missing_ids}")
+    duplicates = sorted({wid for wid in ids if ids.count(wid) > 1})
+    if duplicates:
+        raise ValueError(f"duplicate world id(s): {', '.join(duplicates)}")
     W = {w["id"]: w for w in worlds}
     deps, rdeps, problems = build_graph(worlds)
     order, cyclic = topo_order(deps)
     rank = {w: i for i, w in enumerate(order)}
-    # evaluate upstream-first so downstream patches see upstream status
     queue = sorted(patches, key=lambda p: rank.get(p.get("world"), 10**6))
     world_status, results = {}, []
     sev = {"BLOCKED": 2, "PENDING": 1, "READY": 0}
@@ -183,7 +211,6 @@ def evaluate(worlds, patches):
                 cyclic=cyclic, results=results, world_status=world_status)
 
 
-# ---------- report ----------
 def next_gate(r):
     if r["blocked"]:
         return f"Clear hard stop: {r['blocked'][0]}"
@@ -218,19 +245,16 @@ def render_md(E, title="Worlds Patch Report"):
         w = r["world"] or {}
         gov = w.get("governance", {})
         out.append(f"## {p.get('id','?')} → {p.get('world')} — {r['status']}")
-        out.append(f"- **REALITY:** commit `{p.get('commit','?')}` on `{p.get('branch', w.get('branch','?'))}` "
-                   f"in {w.get('repo','?')}. Owner: {gov.get('owner','undeclared')}. "
-                   f"Depends on: {', '.join(r['upstream']) or 'nothing'}.")
+        out.append(f"- **REALITY:** commit `{p.get('commit','?')}` on `{p.get('branch', w.get('branch','?'))}` in {w.get('repo','?')}. Owner: {gov.get('owner','undeclared')}. Depends on: {', '.join(r['upstream']) or 'nothing'}.")
         out.append(f"- **FIX:** {p.get('summary','(no summary)')} — files: {', '.join(p.get('files', [])) or 'none listed'}")
         proof = r["proof"] or ["none — nothing here is VERIFIED yet"]
-        out.append(f"- **PROOF:** " + "; ".join(proof))
+        out.append("- **PROOF:** " + "; ".join(proof))
         if r["blocked"]:
-            out.append(f"- **BLOCKED BY:** " + "; ".join(r["blocked"]))
+            out.append("- **BLOCKED BY:** " + "; ".join(r["blocked"]))
         if r["pending"]:
-            out.append(f"- **PENDING ON:** " + "; ".join(r["pending"]))
-        out.append(f"- **RISK:** " + ("; ".join(r["risks"]) if r["risks"] else f"impact {r['impact']}"))
-        out.append(f"- **ROLLBACK:** {p.get('rollback') or ('git revert ' + str(p.get('commit','<sha>')))}"
-                   + (f" — then re-verify {', '.join(r['downstream'])}" if r["downstream"] else ""))
+            out.append("- **PENDING ON:** " + "; ".join(r["pending"]))
+        out.append("- **RISK:** " + ("; ".join(r["risks"]) if r["risks"] else f"impact {r['impact']}"))
+        out.append(f"- **ROLLBACK:** {p.get('rollback') or ('git revert ' + str(p.get('commit','<sha>')))}" + (f" — then re-verify {', '.join(r['downstream'])}" if r["downstream"] else ""))
         out.append(f"- **NEXT GATE:** {next_gate(r)}")
         out.append("")
     return "\n".join(out)
@@ -269,17 +293,32 @@ def main():
     ap.add_argument("--scan-docs", action="store_true")
     a = ap.parse_args()
 
-    wdoc = json.load(open(a.worlds))
+    try:
+        with open(a.worlds, encoding="utf-8") as f:
+            wdoc = json.load(f)
+    except (OSError, json.JSONDecodeError) as e:
+        ap.error(f"cannot read worlds file: {e}")
     worlds = wdoc["worlds"] if isinstance(wdoc, dict) else wdoc
     if a.scan_docs:
         print(scan_docs(worlds))
         return
     patches = []
     if a.patches:
-        pdoc = json.load(open(a.patches))
+        try:
+            with open(a.patches, encoding="utf-8") as f:
+                pdoc = json.load(f)
+        except (OSError, json.JSONDecodeError) as e:
+            ap.error(f"cannot read patches file: {e}")
         patches = pdoc["patches"] if isinstance(pdoc, dict) else pdoc
 
-    E = evaluate(worlds, patches)
+    if not isinstance(worlds, list) or not all(isinstance(w, dict) for w in worlds):
+        ap.error("worlds must be a JSON array of objects (or an object with a 'worlds' array)")
+    if not isinstance(patches, list) or not all(isinstance(p, dict) for p in patches):
+        ap.error("patches must be a JSON array of objects (or an object with a 'patches' array)")
+    try:
+        E = evaluate(worlds, patches)
+    except (KeyError, TypeError, ValueError) as e:
+        ap.error(str(e))
 
     if a.impact:
         if a.impact not in E["W"]:
@@ -291,8 +330,7 @@ def main():
         print(f"- Public surface (changes here hit dependents): {', '.join(gov.get('public_surface', [])) or 'UNDECLARED — assume everything'}")
         for d in down:
             dg = E["W"][d].get("governance", {})
-            print(f"- After patching, re-verify '{d}': {', '.join(dg.get('required_checks', [])) or 'no checks declared — add one'}"
-                  + (" ⚠ FROZEN" if dg.get("frozen") else ""))
+            print(f"- After patching, re-verify '{d}': {', '.join(dg.get('required_checks', [])) or 'no checks declared — add one'}" + (" ⚠ FROZEN" if dg.get("frozen") else ""))
         return
 
     title = "Worlds Patch Report"
