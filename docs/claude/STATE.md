@@ -1,5 +1,11 @@
 # Claude session state — public portfolio
 
+## 2026-10-06 03:03 — Chief edge defense restored
+- MERGED (by Juss): chief-ai-machine PR #205 → main `167d03f` (edge entry + `CHIEF_RATE_LIMITER` + `/api` `/github` routes).
+- VERIFIED: latest Cloudflare `chief-ai` bundle is stamped `BUILD_RELEASE_SHA=167d03f` and contains `enforceChiefEdgeRateLimit`, `observeFetchRequest`, `runFullAttackUnit`. INFERRED (high): production active deployment = this build (production-branch build; connector cannot read active deployment; live host egress-blocked here).
+- My governance-workflow patch proposal is withdrawn: main `f5cbe28` fixed the PR-merge SHA ambiguity in the bake script.
+- Remaining: #206 (supabase/ asset exclusion) waits only on Cloudflare Access for preview proof; Sekret-Bip #1136 draft (anonymous-session guard, CI green, not applied).
+
 ## 2026-10-06 — Supabase + Cloudflare pass
 - Cloudflare: production `chief-ai` active version UNKNOWN (connector has no deployments read; container egress blocks the live hosts). Latest uploaded bundle = PR #206 preview (`6e7c82d`), contains no edge-defense code. INFERRED: production (built from `main`) also lacks it — PR #205 is the fix.
 - Supabase `founder-control-room`: RLS on; 38 tables deny-all to clients (server-only, correct). Leaked-password protection OFF (dashboard toggle; founder).
