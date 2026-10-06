@@ -1,5 +1,11 @@
 # Claude session state — public portfolio
 
+## 2026-10-06 — Supabase + Cloudflare pass
+- Cloudflare: production `chief-ai` active version UNKNOWN (connector has no deployments read; container egress blocks the live hosts). Latest uploaded bundle = PR #206 preview (`6e7c82d`), contains no edge-defense code. INFERRED: production (built from `main`) also lacks it — PR #205 is the fix.
+- Supabase `founder-control-room`: RLS on; 38 tables deny-all to clients (server-only, correct). Leaked-password protection OFF (dashboard toggle; founder).
+- Supabase `Se'kret Bip`: RLS on all 86 public tables (VERIFIED). Anon-callable SECURITY DEFINER functions are auth.uid()-gated (low risk, VERIFIED). Anonymous-session policy coverage has gaps on non-private surfaces — details delivered to Juss directly, not recorded in public repos. No DB/config changes made (repo CLAUDE.md requires founder approval for migrations/RLS). Leaked-password protection OFF.
+- Perplexity evidence-ledger patch: reviewed, not yet implemented (see chat verdict).
+
 Written the moment state changes. Newest first. Private-repo state lives in that repo's own `docs/claude/STATE.md`.
 Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
 
