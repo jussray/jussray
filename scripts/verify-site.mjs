@@ -18,8 +18,10 @@ for (const mode of ['abort', 'malformed']) {
     : r.fulfill({ status: 200, contentType: 'application/json', body: '{not json' }));
   await page.goto(url, { waitUntil: 'load' });
   await page.waitForFunction(() => document.querySelectorAll('.os-card').length === 5, null, { timeout: 5000 });
-  say((await page.$('.os-card')).length === 5, `isolation: connectors.json ${mode} still renders 5 OS cards`);
-  say((await page.$('.os-connectors')).length === 0, `isolation: connectors.json ${mode} renders no connector claims`);
+  const osCardCount = await page.locator('.os-card').count();
+  const connectorClaimCount = await page.locator('.os-connectors').count();
+  say(osCardCount === 5, `isolation: connectors.json ${mode} still renders 5 OS cards`);
+  say(connectorClaimCount === 0, `isolation: connectors.json ${mode} renders no connector claims`);
   await ctx.close();
 }
 for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1112, m: true }, { n: 'mobile', w: 390, h: 844, m: true }]) {
