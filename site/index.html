@@ -607,8 +607,8 @@ function renderSystems(d){
   if(surfaceStrip && Array.isArray(d.supportingSurfaces) && d.supportingSurfaces.length){ surfaceStrip.hidden=false; surfaceStrip.innerHTML=""; var b=document.createElement("b"); b.textContent="Supporting surfaces:"; surfaceStrip.appendChild(b); d.supportingSurfaces.forEach(function(x){ var sp=document.createElement("span"); sp.textContent=x.name+" → "+x.parent+" · "+((x.builder&&x.builder.provider)||"tracked")+" · "+x.status; surfaceStrip.appendChild(sp); }); }
 }
 Promise.all([
-  fetch("data/systems.json",{cache:"no-store"}).then(function(r){ return r.ok?r.json():null; }),
-  fetch("data/connectors.json",{cache:"no-store"}).then(function(r){ return r.ok?r.json():null; })
+  fetch("data/systems.json",{cache:"no-store"}).then(function(r){ return r.ok?r.json():null; }).catch(function(){ return null; }),
+  fetch("data/connectors.json",{cache:"no-store"}).then(function(r){ return r.ok?r.json():null; }).catch(function(){ return null; })
 ]).then(function(pair){ connectorRegistry=pair[1]; renderSystems(pair[0]); }).catch(function(){});
 
 /* ---------- rotating founder quotes (data-driven, founder-declared) ---------- */
