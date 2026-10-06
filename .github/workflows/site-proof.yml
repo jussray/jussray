@@ -8,6 +8,10 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+# A newer main push supersedes an older live-freshness proof (the live site can only match the newest commit).
+concurrency:
+  group: site-proof-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -37,9 +41,9 @@ jobs:
         shell: bash
         run: |
           set -u
-          for attempt in $(seq 1 18); do
+          for attempt in $(seq 1 30); do
             ok=1
-            echo "public-domain attempt ${attempt}/18"
+            echo "public-domain attempt ${attempt}/30"
             for host in jussco.company www.jussco.company; do
               body="$(curl -fsSL --connect-timeout 5 --max-time 15 "https://${host}/" 2>/tmp/jussco-curl.err)" || {
                 echo "${host}: unreachable"
@@ -90,6 +94,17 @@ jobs:
               for expected in 'Bip Jr' 'PromptOS' 'SolContinuity' 'Untold Stories' 'SWEATS' 'SleepWealth Agent' 'Solwealth' 'Think Tank' 'Alexa Commerce Engine' 'Ayure'; do
                 if ! grep -Fq "${expected}" <<<"${worlds}"; then
                   echo "${host}: worlds registry missing ${expected}"
+                  ok=0
+                fi
+              done
+              # Freshness: the live registries must be byte-identical to this commit, so a stale deploy cannot pass.
+              for registry in worlds systems connectors; do
+                live_file="/tmp/jussco-live-${registry}.json"
+                if curl -fsSL --connect-timeout 5 --max-time 15 -o "${live_file}" "https://${host}/data/${registry}.json" \
+                  && cmp -s "${live_file}" "site/data/${registry}.json"; then
+                  echo "${host}: data/${registry}.json matches ${GITHUB_SHA::7}"
+                else
+                  echo "${host}: data/${registry}.json does not yet match ${GITHUB_SHA::7}"
                   ok=0
                 fi
               done
