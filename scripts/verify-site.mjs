@@ -11,6 +11,19 @@ await new Promise((res) => srv.listen(0, '127.0.0.1', res)); const url = `http:/
 mkdirSync('proof/site', { recursive: true });
 const browser = await chromium.launch(); let failed = 0; const say = (ok, m) => { console.log(`${ok ? 'ok ' : 'FAIL'} ${m}`); if (!ok) failed++; };
 const expectedOS = ['Truth Weaver', 'Truth Compass', 'Exact Match Engine', 'Living Truth', 'Proof Core'];
+for (const mode of ['abort', 'malformed']) {
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } }); const page = await ctx.newPage();
+  await page.route('**/data/connectors.json', (r) => mode === 'abort'
+    ? r.abort()
+    : r.fulfill({ status: 200, contentType: 'application/json', body: '{not json' }));
+  await page.goto(url, { waitUntil: 'load' });
+  await page.waitForFunction(() => document.querySelectorAll('.os-card').length === 5, null, { timeout: 5000 });
+  const osCardCount = await page.locator('.os-card').count();
+  const connectorClaimCount = await page.locator('.os-connectors').count();
+  say(osCardCount === 5, `isolation: connectors.json ${mode} still renders 5 OS cards`);
+  say(connectorClaimCount === 0, `isolation: connectors.json ${mode} renders no connector claims`);
+  await ctx.close();
+}
 for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1112, m: true }, { n: 'mobile', w: 390, h: 844, m: true }]) {
   const ctx = await browser.newContext({ viewport: { width: vp.w, height: vp.h }, isMobile: !!vp.m, hasTouch: !!vp.m }); const page = await ctx.newPage();
   const errors = []; page.on('pageerror', (e) => errors.push(String(e))); page.on('requestfailed', (r) => { if (!/fonts\.(googleapis|gstatic)\.com/.test(r.url())) errors.push(`${r.failure()?.errorText} ${r.url()}`); }); page.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) errors.push(m.text()); });

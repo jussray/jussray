@@ -2,9 +2,9 @@ name: Juss & Co site browser proof
 on:
   push:
     branches: [main]
-    paths: ['site/**', 'scripts/verify-site.mjs', 'wrangler.jsonc', '.github/workflows/site-proof.yml']
+    paths: ['site/**', 'scripts/verify-site.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', '.github/workflows/site-proof.yml']
   pull_request:
-    paths: ['site/**', 'scripts/verify-site.mjs', 'wrangler.jsonc', '.github/workflows/site-proof.yml']
+    paths: ['site/**', 'scripts/verify-site.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', '.github/workflows/site-proof.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -16,13 +16,15 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
+      - name: Verify worlds-patch executor truth gates
+        run: python3 tools/worlds-patch-executor/test_worlds_patch.py
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: '24'
       - run: npm i --no-save --no-audit --no-fund playwright@1.61.1 && npx playwright install chromium --with-deps
       - run: node -e "const c=JSON.parse(require('fs').readFileSync('wrangler.jsonc','utf8')); const routes=c.routes||[]; const expected=['jussco.company','www.jussco.company']; const actual=routes.filter(r=>r?.custom_domain===true).map(r=>r.pattern).sort(); if(c.name!=='jussray'||c.assets?.directory!=='./site'||JSON.stringify(actual)!==JSON.stringify(expected)) process.exit(1); console.log('wrangler deploy target + custom domains valid')"
       - name: Validate world registry
-        run: node -e "const d=JSON.parse(require('fs').readFileSync('site/data/worlds.json','utf8')); const names=(d.worlds||[]).map(x=>x.name); const added=['Bip Jr','PromptOS','SolContinuity','Untold Stories','SWEATS','SleepWealth Agent','Think Tank','Alexa Commerce Engine','Ayure']; if(names.length!==15||!added.every(x=>names.includes(x))) process.exit(1); console.log('15-world portfolio registry valid')"
+        run: node -e "const d=JSON.parse(require('fs').readFileSync('site/data/worlds.json','utf8')); const worlds=d.worlds||[]; const names=worlds.map(x=>x.name); const required=['Se\'kret Bip','Founder Control Room','Chief AI','Juss Beautiful Hair','StoryEngine','Sync Party','Bip Jr','PromptOS','SolContinuity','Untold Stories','SWEATS','SleepWealth Agent','Solwealth','Think Tank','Alexa Commerce Engine','Ayure']; if(d.registryVersion<3||new Set(names).size!==names.length||!required.every(x=>names.includes(x))) process.exit(1); console.log(names.length+'-world portfolio registry valid')"
       - name: Validate standalone OS registry
         run: node -e "const d=JSON.parse(require('fs').readFileSync('site/data/systems.json','utf8')); const pub=(d.systems||[]).filter(x=>x.public!==false); const names=pub.map(x=>x.name); const expected=['Truth Weaver','Truth Compass','Exact Match Engine','Living Truth','Proof Core']; const internal=(d.systems||[]).filter(x=>x.public===false); if(JSON.stringify(names)!==JSON.stringify(expected)||!pub.every(x=>x.kind==='standalone_os')||!pub.every(x=>Array.isArray(x.embeddedIn)&&x.embeddedIn.length)||internal.length<2||!d.rules?.embeddedDoesNotMeanComponentOnly) process.exit(1); console.log('standalone OS registry + embedded relationships valid')"
       - name: Validate connector fabric registry
@@ -85,7 +87,7 @@ jobs:
                 echo "${host}: connector registry contains unproven connected claim"
                 ok=0
               fi
-              for expected in 'Bip Jr' 'PromptOS' 'SolContinuity' 'Untold Stories' 'SWEATS' 'SleepWealth Agent' 'Think Tank' 'Alexa Commerce Engine' 'Ayure'; do
+              for expected in 'Bip Jr' 'PromptOS' 'SolContinuity' 'Untold Stories' 'SWEATS' 'SleepWealth Agent' 'Solwealth' 'Think Tank' 'Alexa Commerce Engine' 'Ayure'; do
                 if ! grep -Fq "${expected}" <<<"${worlds}"; then
                   echo "${host}: worlds registry missing ${expected}"
                   ok=0
@@ -105,8 +107,10 @@ jobs:
         run: |
           node --input-type=module <<'NODE'
           import { chromium } from 'playwright';
+          import { readFileSync } from 'node:fs';
           const browser = await chromium.launch();
-          const requiredWorlds = ['Bip Jr','PromptOS','SolContinuity','Untold Stories','SWEATS','SleepWealth Agent','Think Tank','Alexa Commerce Engine','Ayure'];
+          const worldRegistry = JSON.parse(readFileSync('site/data/worlds.json','utf8'));
+          const requiredWorlds = worldRegistry.worlds.map(w => w.name);
           const requiredSystems = ['Truth Weaver','Truth Compass','Exact Match Engine','Living Truth','Proof Core'];
           const requiredConnectors = ['Exa','Notion','Linear','Slack'];
           let failed = false;
@@ -115,7 +119,7 @@ jobs:
             const errors = [];
             page.on('pageerror', e => errors.push(String(e)));
             await page.goto(`https://${host}/`, { waitUntil: 'domcontentloaded', timeout: 30000 });
-            await page.waitForFunction(() => document.querySelectorAll('.card').length === 15 && document.querySelectorAll('.os-card').length === 5 && document.querySelectorAll('.os-connectors').length === 5, null, { timeout: 20000 });
+            await page.waitForFunction((expectedCount) => document.querySelectorAll('.card').length === expectedCount && document.querySelectorAll('.os-card').length === 5 && document.querySelectorAll('.os-connectors').length === 5, requiredWorlds.length, { timeout: 20000 });
             const worldNames = await page.locator('.card h3').allTextContents();
             const systemNames = await page.locator('.os-card h3').allTextContents();
             const connectorText = (await page.locator('#systems').innerText()).toLowerCase();
