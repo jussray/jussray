@@ -89,6 +89,7 @@ Per-patch readiness report:
 - **Failing check** = BLOCKED
 - **Frozen world** = BLOCKED
 - **Upstream world BLOCKED/PENDING** = downstream PENDING
+- **Upstream world failing a required check** (its own baseline, even with no queued patch) = downstream PENDING
 - **Protected path touched** → requires approval from protected_approvers
 - **Public surface changed + downstream frozen** = RISK flag
 
