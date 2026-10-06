@@ -16,7 +16,8 @@ for (const mode of ['abort', 'malformed']) {
   await page.route('**/data/connectors.json', (r) => mode === 'abort'
     ? r.abort()
     : r.fulfill({ status: 200, contentType: 'application/json', body: '{not json' }));
-  await page.goto(url, { waitUntil: 'load' }); await page.waitForTimeout(1500);
+  await page.goto(url, { waitUntil: 'load' });
+  await page.waitForFunction(() => document.querySelectorAll('.os-card').length === 5, null, { timeout: 5000 });
   say((await page.$('.os-card')).length === 5, `isolation: connectors.json ${mode} still renders 5 OS cards`);
   say((await page.$('.os-connectors')).length === 0, `isolation: connectors.json ${mode} renders no connector claims`);
   await ctx.close();
