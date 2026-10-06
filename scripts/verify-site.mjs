@@ -33,6 +33,7 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   const worldNames = await page.evaluate(() => [...document.querySelectorAll('.card h3')].map((e) => e.textContent));
   say(['Bip Jr','PromptOS','SolContinuity','Untold Stories','SWEATS','SleepWealth Agent','Think Tank','Alexa Commerce Engine','Ayure'].every((n) => worldNames.includes(n)), `${vp.n}: remaining portfolio worlds render`);
   say((await page.innerText('#filters .chip[data-group=""] .n')) === String(EXPECTED_WORLDS.length).padStart(2,'0'), `${vp.n}: world count follows registry`);
+  say((await page.locator('#worlds').innerText()).includes(`${EXPECTED_WORLDS.length === 15 ? 'Fifteen' : EXPECTED_WORLDS.length} worlds. One shared belief.`), `${vp.n}: public world-count copy matches registry`);
   say((await page.$$('.os-card')).length === 5, `${vp.n}: five public standalone OS builds`);
   say(JSON.stringify(await page.evaluate(() => [...document.querySelectorAll('.os-card h3')].map((e) => e.textContent))) === JSON.stringify(expectedOS), `${vp.n}: standalone OS identities preserved`);
   say((await page.evaluate(() => [...document.querySelectorAll('.os-kind')].every((e) => e.textContent === 'Standalone OS'))), `${vp.n}: every public system is labeled standalone OS`);
@@ -59,7 +60,26 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   const q0 = await page.innerText('#qText'); await page.click('#qNext'); await page.waitForTimeout(600); say((await page.innerText('#qText')) !== q0, `${vp.n}: quote rotates`);
   say(/@/.test(await page.innerText('#mail')) && !/\[/.test(await page.innerText('#mail')), `${vp.n}: real company email rendered`);
   say(errors.length === 0, `${vp.n}: no console errors${errors.length ? ' — ' + errors.join(' | ') : ''}`);
-  await page.screenshot({ path: `proof/site/${vp.n}.png`, fullPage: true }); await ctx.close();
+  await page.screenshot({ path: `proof/site/${vp.n}.png`, fullPage: true });
+
+  const servicePage = await ctx.newPage();
+  const serviceErrors = [];
+  servicePage.on('pageerror', (e) => serviceErrors.push(String(e)));
+  servicePage.on('requestfailed', (r) => serviceErrors.push(`${r.failure()?.errorText} ${r.url()}`));
+  servicePage.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) serviceErrors.push(m.text()); });
+  await servicePage.goto(`${url}services.html`, { waitUntil: 'load' });
+  say((await servicePage.title()) === 'Work with Juss — Focused fixes, verified outcomes.', `${vp.n}: Juss services title`);
+  const serviceText = await servicePage.locator('body').innerText();
+  say(/Work with Juss/.test(serviceText) && !/Sajay|Juss Digital/.test(serviceText), `${vp.n}: current Juss identity only`);
+  say(['$49','$149','$399'].every((x) => serviceText.includes(x)), `${vp.n}: three fixed-price service offers`);
+  say((await servicePage.locator('a[href^="mailto:hello@jussbeautifulhair.com"]').count()) === 4, `${vp.n}: verified email inquiry paths`);
+  say((await servicePage.locator('a[href*="linkedin.com/in/juss-rayy"]').count()) === 1, `${vp.n}: founder LinkedIn inquiry path`);
+  say((await servicePage.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)) === 0, `${vp.n}: services no horizontal overflow`);
+  say(/not proof that payment was collected/i.test(serviceText), `${vp.n}: payment truth boundary visible`);
+  say(/Do not send passwords, API keys, payment credentials/i.test(serviceText), `${vp.n}: secret-sharing warning visible`);
+  say(serviceErrors.length === 0, `${vp.n}: services no console errors${serviceErrors.length ? ' — ' + serviceErrors.join(' | ') : ''}`);
+  await servicePage.screenshot({ path: `proof/site/services-${vp.n}.png`, fullPage: true });
+  await ctx.close();
 }
 await browser.close(); srv.close();
 console.log(failed ? `\n${failed} check(s) FAILED` : '\nall checks passed'); process.exit(failed ? 1 : 0);
