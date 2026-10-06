@@ -2,9 +2,9 @@ name: Juss & Co site browser proof
 on:
   push:
     branches: [main]
-    paths: ['site/**', 'scripts/verify-site.mjs', 'wrangler.jsonc', '.github/workflows/site-proof.yml']
+    paths: ['site/**', 'scripts/verify-site.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', '.github/workflows/site-proof.yml']
   pull_request:
-    paths: ['site/**', 'scripts/verify-site.mjs', 'wrangler.jsonc', '.github/workflows/site-proof.yml']
+    paths: ['site/**', 'scripts/verify-site.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', '.github/workflows/site-proof.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -16,6 +16,8 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
+      - name: Verify worlds-patch executor truth gates
+        run: python3 tools/worlds-patch-executor/test_worlds_patch.py
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: '24'

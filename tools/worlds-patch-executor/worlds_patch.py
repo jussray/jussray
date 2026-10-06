@@ -104,6 +104,12 @@ def touches(files, patterns):
     return sorted({f for f in files for p in patterns if fnmatch.fnmatch(f, p)})
 
 
+def upstream_failing_checks(world):
+    """Required checks that are recorded as failing on a world's own baseline."""
+    gov, checks = world.get("governance", {}), world.get("state", {}).get("checks", {})
+    return [n for n in gov.get("required_checks", []) if checks.get(n, {}).get("status") == "fail"]
+
+
 def eval_patch(p, W, deps, rdeps, cyclic, upstream_status):
     wid = p.get("world")
     blocked, pending, risks, proof = [], [], [], []
@@ -160,6 +166,9 @@ def eval_patch(p, W, deps, rdeps, cyclic, upstream_status):
             pending.append(f"upstream world '{u}' has a BLOCKED patch — fix upstream first")
         elif st == "PENDING":
             pending.append(f"upstream world '{u}' has a PENDING patch — land upstream first")
+        failing = upstream_failing_checks(W[u])
+        if failing:
+            pending.append(f"upstream world '{u}' is failing {', '.join(failing)} — never build on bad state")
 
     down = walk(wid, rdeps)
     public = touches(files, gov.get("public_surface", []))
