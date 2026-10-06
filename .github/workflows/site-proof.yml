@@ -63,10 +63,22 @@ jobs:
                 ok=0
                 continue
               }
+              services="$(curl -fsSL --connect-timeout 5 --max-time 15 "https://${host}/services.html" 2>/tmp/jussco-services-curl.err)" || {
+                echo "${host}: services page unreachable"
+                cat /tmp/jussco-services-curl.err || true
+                ok=0
+                continue
+              }
               if grep -Fq 'Turn thoughts into living works.' <<<"${body}" && grep -Fq 'Built to stand alone.' <<<"${body}"; then
                 echo "${host}: canonical hero + standalone OS section verified"
               else
                 echo "${host}: reachable but canonical site/OS fingerprints missing"
+                ok=0
+              fi
+              if grep -Fq 'Work with Juss' <<<"${services}" && grep -Fq '$49' <<<"${services}" && grep -Fq '$149' <<<"${services}" && grep -Fq '$399' <<<"${services}" && ! grep -Eq 'Sajay|Juss Digital' <<<"${services}"; then
+                echo "${host}: Juss services page verified"
+              else
+                echo "${host}: services page missing current identity or offer fingerprints"
                 ok=0
               fi
               for expected in 'Truth Weaver' 'Truth Compass' 'Exact Match Engine' 'Living Truth' 'Proof Core'; do
@@ -127,6 +139,20 @@ jobs:
             const ok = requiredWorlds.every(n => worldNames.includes(n)) && requiredSystems.every(n => systemNames.includes(n)) && requiredConnectors.every(n => connectorText.includes(n.toLowerCase())) && connectedClaims === 0 && blockedClaims >= 4 && !worldNames.some(n => n.startsWith('ULTRATHINK')) && overflow === 0 && errors.length === 0;
             console.log(`${host}: ${worldNames.length} worlds + ${systemNames.length} standalone systems + ${requiredConnectors.length} connector lanes; deployed-browser ${ok ? 'verified' : 'FAILED'}`);
             if (!ok) failed = true;
+
+            await page.goto(`https://${host}/services.html`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+            const serviceText = await page.locator('body').innerText();
+            const serviceOverflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+            const serviceOk = (await page.title()) === 'Work with Juss — Focused fixes, verified outcomes.'
+              && ['Work with Juss','$49','$149','$399'].every(x => serviceText.includes(x))
+              && !/Sajay|Juss Digital/.test(serviceText)
+              && (await page.locator('a[href^="mailto:hello@jussbeautifulhair.com"]').count()) === 4
+              && (await page.locator('a[href*="linkedin.com/in/juss-rayy"]').count()) === 1
+              && /not proof that payment was collected/i.test(serviceText)
+              && serviceOverflow === 0
+              && errors.length === 0;
+            console.log(`${host}: services deployed-browser ${serviceOk ? 'verified' : 'FAILED'}`);
+            if (!serviceOk) failed = true;
             await page.close();
           }
           await browser.close();
