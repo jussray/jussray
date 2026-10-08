@@ -1,5 +1,14 @@
 # Claude session state — public portfolio
 
+## 2026-10-06 ~12:00 — Code fixes complete, gates identified
+- MERGED: juss-protect-me-2 PR #2 → main `ddc3d18` (fix(evidence): latest receipt per check decides; no fake green, no history deletion). Tests: 30 passing, 15 gate tests, 12 preflight tests all green. Also: authority counter-pressure (`c4a620c`) and hallway evidence-expansion corridor (`58c24ad`) now live on main.
+- VERIFIED: All code fixes complete across ecosystem (chief-ai-machine PR #211 ✅, jussray PR #21 ✅, juss-protect-me-2 PR #2 ✅).
+- GATES BLOCKING FORWARD MOTION (not code):
+  1. **jussco.company freshness loop**: GitHub App private key missing from FCR `production` secret `APP_PRIVATE_KEY`. Once re-pasted: evidence-sync runs → worlds.json updates → Cloudflare Worker deploys → site-proof freshness check passes ✅
+  2. **chief-ai-machine PR #206**: Waiting on Cloudflare Access decision (whether to expose preview URLs).
+  3. **Se'kret Bip #1136**: Migration merged to main but NOT applied to production. Applies via manual dispatch of `deploy-supabase-migrations` workflow.
+- Founder action required: Re-paste GitHub App key into FCR. Everything cascades green after.
+
 ## 2026-10-06 03:03 — Chief edge defense restored
 - MERGED (by Juss): chief-ai-machine PR #205 → main `167d03f` (edge entry + `CHIEF_RATE_LIMITER` + `/api` `/github` routes).
 - VERIFIED: latest Cloudflare `chief-ai` bundle is stamped `BUILD_RELEASE_SHA=167d03f` and contains `enforceChiefEdgeRateLimit`, `observeFetchRequest`, `runFullAttackUnit`. INFERRED (high): production active deployment = this build (production-branch build; connector cannot read active deployment; live host egress-blocked here).
