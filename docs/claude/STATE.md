@@ -1,13 +1,14 @@
 # Claude session state — public portfolio
 
-## 2026-10-06 ~12:00 — Code fixes complete, gates identified
-- MERGED: juss-protect-me-2 PR #2 → main `ddc3d18` (fix(evidence): latest receipt per check decides; no fake green, no history deletion). Tests: 30 passing, 15 gate tests, 12 preflight tests all green. Also: authority counter-pressure (`c4a620c`) and hallway evidence-expansion corridor (`58c24ad`) now live on main.
-- VERIFIED: All code fixes complete across ecosystem (chief-ai-machine PR #211 ✅, jussray PR #21 ✅, juss-protect-me-2 PR #2 ✅).
-- GATES BLOCKING FORWARD MOTION (not code):
-  1. **jussco.company freshness loop**: GitHub App private key missing from FCR `production` secret `APP_PRIVATE_KEY`. Once re-pasted: evidence-sync runs → worlds.json updates → Cloudflare Worker deploys → site-proof freshness check passes ✅
-  2. **chief-ai-machine PR #206**: Waiting on Cloudflare Access decision (whether to expose preview URLs).
-  3. **Se'kret Bip #1136**: Migration merged to main but NOT applied to production. Applies via manual dispatch of `deploy-supabase-migrations` workflow.
-- Founder action required: Re-paste GitHub App key into FCR. Everything cascades green after.
+## 2026-10-06 ~22:10 — Full audit complete; three gates identified; zero blocking test failures
+- **TEST AUDIT PASSED**: 788 tests green (731 chief-ai + 57 juss-protect-me-2), 1 intentionally skipped (aspirational ULTRATHINK test), 0 failures. Lint clean. No regressions.
+- **MERGED**: juss-protect-me-2 PR #2 → main `ddc3d18` (fix(evidence): latest receipt per check decides; no fake green, no history deletion). Also: authority counter-pressure (`c4a620c`) and hallway evidence-expansion corridor (`58c24ad`) now live.
+- **VERIFIED**: All code fixes live (chief-ai-machine PR #211 ✅, jussray PR #21 ✅, juss-protect-me-2 PR #2 ✅). Production ProofMode dispatch-only governance active.
+- **GATES BLOCKING FORWARD MOTION** (founder decisions/credentials, not code failures):
+  1. **Cloudflare Access decision** (chief-ai-machine PR #206): supabase/.assetsignore fix ready; preview proof waits on Access for preview URLs. Code correct, boundary test passes. Gate: approve preview URLs through Access? YES → merge clean / NO → defer.
+  2. **GitHub App private key** (jussray/jussco.company): Paste full PEM into FCR `production` secret `APP_PRIVATE_KEY`. Cascade: key → evidence-sync runs → worlds.json updates → Worker deploys → freshness check passes ✅
+  3. **Se'kret Bip migration deploy** (Se'kret Bip #1136): Merged to main but NOT applied. Gate: dispatch `deploy-supabase-migrations` workflow when ready (rollback-safe, locked bootstrap tested).
+- **NEXT ACTIONS FOR FOUNDER**: (1) Decide on Access for PR #206, (2) Paste GitHub App key, (3) Decide on Se'kret Bip migration timing. All three are independent; any order.
 
 ## 2026-10-06 03:03 — Chief edge defense restored
 - MERGED (by Juss): chief-ai-machine PR #205 → main `167d03f` (edge entry + `CHIEF_RATE_LIMITER` + `/api` `/github` routes).
