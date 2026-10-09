@@ -4,6 +4,9 @@ import assert from 'node:assert/strict';
 const data = JSON.parse(readFileSync(new URL('../site/data/approved-stories.json', import.meta.url), 'utf8'));
 assert.equal(data.schema, 'jussco/approved-stories@v1');
 assert.ok(Array.isArray(data.stories) && data.stories.length <= 100);
+// Publication remains locked until a trusted, authenticated consent + revocation service is integrated.
+// This blocks manually setting approval flags in public JSON as a shortcut.
+assert.equal(data.stories.length, 0, 'PUBLICATION_LOCK: real stories are disabled until authenticated consent and revocation are verified');
 const allowed = new Set(['id','project','title','summary','proofUrl','approved','publicationApproved','destination','approvalReceipt','approvedAt']);
 const ids = new Set();
 for (const story of data.stories) {
