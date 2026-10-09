@@ -1,3 +1,13 @@
+## 2026-10-09 — JussCo outcome showcase branch receipt
+- Branch: `feature/approved-outcome-showcase`; production `main` intentionally unchanged.
+- Scope: `site/index.html` parent-company showcase; empty `site/data/approved-stories.json`; `scripts/verify-site.mjs` browser regressions; `scripts/verify-approved-stories.mjs` public-feed validation; `.github/workflows/site-proof.yml` validation step; README and CLAUDE contract updates.
+- Brand: existing midnight/violet/cyan/gold styling retained; no project registry or hero replacement.
+- Evidence: GitHub commits accepted; exact-head CI/Playwright not yet confirmed; no deployment, merge, or real stories published.
+- Risk: approval flags are declarative, not independently authenticated consent; revocation and removal are not yet implemented. Public JSON must not contain private data.
+- Next gate: open PR for branch-triggered site proof, review exact-head checks/screenshots, then design trusted approval/revocation ingestion before any real-person story publication. HOLD merge and deploy until gates are met.
+
+---
+
 # Claude session state — public portfolio
 
 ## 2026-10-09 ~16:45 — All 5 parallel audits complete; 61 errors found and fixed; StoryEngine critical vulnerability patched; cascades ready
