@@ -10,6 +10,13 @@ Juss & Co's public runtime is served by Cloudflare Worker `jussray` from `site/`
 - `docs/profile/`, `docs/index.html`, and `docs/picks/` — retained founder/profile, Juss Digital and picks source/history. They are not currently deployed by this repository and must not be treated as live-runtime evidence.
 - `.github/workflows/site-proof.yml` runs `scripts/verify-site.mjs` (Playwright, three widths), validates Wrangler/domain truth, and verifies the canonical public domains on `main`. `revenue-page.yml` runs the existing `tests/*.spec.cjs`.
 
+## Outcome showcase (feature branch, not production-verified)
+- `site/data/approved-stories.json` is a separate, public-only, initially empty source for **The Outcome Edit** on JussCo.company. It does not replace `site/data/worlds.json` or authorize changing project status.
+- `scripts/verify-approved-stories.mjs` validates the feed schema, declared approval, destination, public proof link, and field allowlist. `.github/workflows/site-proof.yml` invokes it before the existing Playwright script. `scripts/verify-site.mjs` includes empty/mixed/unavailable feed checks.
+- Never put personal, private, child, customer, or internal-receipt data into public JSON. Client-side filtering is not a privacy boundary. Consent metadata is not independently verified consent; do not publish real-person stories until authenticated approval and withdrawal/removal are implemented and tested.
+- Project brands own their achievements; the parent site may feature only separately approved and attributed public outcomes. No synthetic testimonials, inflated claims, or auto-publication from FCR observation.
+- The feature branch is not proof of CI, deployment, or runtime success. Require exact-head tests and real browser readback before a merge decision.
+
 ## Truth rules
 - Every status, receipt and contact on the site is real. Founder-declared fields in `worlds.json` (`st`, `label`, `link`, `held`, `contact`) change only on Juss's word. `evidence.*` is written by Founder Control Room's `juss-and-co-status-sync` workflow from live GitHub state.
 - Placeholders are written `[LIKE THIS]` and render as "pending". Never replace one with a guess.
