@@ -13,6 +13,7 @@ Juss & Co's public runtime is served by Cloudflare Worker `jussray` from `site/`
 ## Outcome showcase (feature branch, not production-verified)
 - `site/data/approved-stories.json` is a separate, public-only, initially empty source for **The Outcome Edit** on JussCo.company. It does not replace `site/data/worlds.json` or authorize changing project status.
 - `scripts/verify-approved-stories.mjs` validates the feed schema, declared approval, destination, public proof link, and field allowlist. `.github/workflows/site-proof.yml` invokes it before the existing Playwright script. `scripts/verify-site.mjs` includes empty/mixed/unavailable feed checks.
+- Publication lock: the CI validator requires `stories.length === 0`; do not remove this lock until authenticated cross-brand consent, revocation/removal, and production readback are proven.
 - Never put personal, private, child, customer, or internal-receipt data into public JSON. Client-side filtering is not a privacy boundary. Consent metadata is not independently verified consent; do not publish real-person stories until authenticated approval and withdrawal/removal are implemented and tested.
 - Project brands own their achievements; the parent site may feature only separately approved and attributed public outcomes. No synthetic testimonials, inflated claims, or auto-publication from FCR observation.
 - The feature branch is not proof of CI, deployment, or runtime success. Require exact-head tests and real browser readback before a merge decision.
