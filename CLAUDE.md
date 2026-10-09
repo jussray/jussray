@@ -25,6 +25,20 @@ Juss & Co's public runtime is served by Cloudflare Worker `jussray` from `site/`
 - Never delete or rewrite the existing profile, Juss Digital or picks source pages merely to make a runtime change easier.
 - Do not treat a stale deployment workflow, historical URL, build artifact, or repository file as proof of current runtime state. Re-observe the canonical Cloudflare domains.
 
+## Founder-approved proof-led delivery workflow
+1. OBSERVE the canonical repository, current branch/head, provider state, and runtime; distinguish observations from claims.
+2. AUDIT the smallest relevant surface, including privacy, authority, regressions, and rollback.
+3. FIX narrowly on a reversible feature branch; preserve independent project brands and source-of-truth ownership.
+4. TEST focused behavior and negative cases; add gates to the existing CI where appropriate.
+5. DOCUMENT the changed contract, status, risks, and continuity receipt in the applicable README/operating docs without claiming unverified deployment.
+6. COMMIT and record the exact SHA/fingerprint. Open a draft PR when provider CI is needed; never equate a branch push with passing checks.
+7. PROVE the exact current head using provider CI, real-browser evidence, and review status. A previous head's green checks do not transfer.
+8. REVIEW unresolved findings and mergeability. Founder approval authorizes only the stated action; keep merge/deploy held when safety or proof gates remain.
+9. AUTHORIZE and DEPLOY only after required evidence and authority; then independently re-observe the live runtime and public data.
+10. RECORD REALITY / FIX / PROOF / RISK / ROLLBACK / NEXT GATE, with branch, head SHA, tests, and supersession state.
+
+**Outcome publishing extension:** Evidence and editorial approval are separate from authenticated cross-brand publication consent. Public feeds must fail closed until trusted consent and revocation/removal are implemented and tested. An empty showcase may be tested without publishing real-person stories. Never treat FCR observation-only evidence as publication authority.
+
 ## Loop
 Observe → smallest reversible change → exact-head browser/runtime proof → merge or direct-main mutation only with Juss's authority → re-observe production.
 Report: REALITY / FIX / PROOF / RISK / ROLLBACK / NEXT GATE.
