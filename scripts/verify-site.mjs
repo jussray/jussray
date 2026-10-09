@@ -24,6 +24,27 @@ for (const mode of ['abort', 'malformed']) {
   say(connectorClaimCount === 0, `isolation: connectors.json ${mode} renders no connector claims`);
   await ctx.close();
 }
+// Outcome Edit: no unapproved, wrong-destination, or unproven stories may render.
+for (const mode of ['empty', 'mixed', 'unavailable']) {
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const page = await ctx.newPage();
+  await page.route('**/data/approved-stories.json', (route) => {
+    if (mode === 'unavailable') return route.abort();
+    const stories = mode === 'empty' ? [] : [
+      { title: 'Unapproved', summary: 'Hidden', project: 'Test', proofUrl: 'https://example.org/proof', destination: 'jussco.company', approved: false, publicationApproved: true },
+      { title: 'Wrong destination', summary: 'Hidden', project: 'Test', proofUrl: 'https://example.org/proof', destination: 'other.example', approved: true, publicationApproved: true },
+      { title: 'No public proof', summary: 'Hidden', project: 'Test', destination: 'jussco.company', approved: true, publicationApproved: true },
+      { title: 'Approved test fixture', summary: 'Public test only', project: 'Test', proofUrl: 'https://example.org/proof', destination: 'jussco.company', approved: true, publicationApproved: true }
+    ];
+    return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ schema: 'jussco/approved-stories@v1', stories }) });
+  });
+  await page.goto(url, { waitUntil: 'load' });
+  await page.waitForTimeout(300);
+  const titles = await page.locator('#outcome-stories h3').allTextContents();
+  say(JSON.stringify(titles) === JSON.stringify(mode === 'mixed' ? ['Approved test fixture'] : []), `outcomes: ${mode} publication filter`);
+  say(await page.locator('#outcome-empty').isVisible() === (mode !== 'mixed'), `outcomes: ${mode} empty state`);
+  await ctx.close();
+}
 for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1112, m: true }, { n: 'mobile', w: 390, h: 844, m: true }]) {
   const ctx = await browser.newContext({ viewport: { width: vp.w, height: vp.h }, isMobile: !!vp.m, hasTouch: !!vp.m }); const page = await ctx.newPage();
   const errors = []; page.on('pageerror', (e) => errors.push(String(e))); page.on('requestfailed', (r) => { if (!/fonts\.(googleapis|gstatic)\.com/.test(r.url())) errors.push(`${r.failure()?.errorText} ${r.url()}`); }); page.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) errors.push(m.text()); });
