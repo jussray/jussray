@@ -29,7 +29,7 @@ The parent-company website at [jussco.company](https://jussco.company) is being 
 
 **Current state:** implemented on the `feature/approved-outcome-showcase` branch only. It is **not verified as deployed**. The public feed at `site/data/approved-stories.json` starts empty; no customer stories or testimonials have been published through this feature.
 
-The feed is checked by `scripts/verify-approved-stories.mjs` in `.github/workflows/site-proof.yml`, and `scripts/verify-site.mjs` contains browser regression cases. These checks are committed, **not yet reported as passing at the exact feature head**. A source-file approval flag is not authenticated consent. Real-person content must not enter the public feed until the approval source, revocation/removal process, and publication readback are verified. Operational status and evidence continue to live in `site/data/worlds.json`.
+The feed is checked by `scripts/verify-approved-stories.mjs` in `.github/workflows/site-proof.yml`, and `scripts/verify-site.mjs` contains browser regression cases. These checks are committed, **not yet reported as passing at the exact feature head**. **Publication lock active:** the CI validator requires an empty story feed until trusted consent and revocation controls are verified. A source-file approval flag is not authenticated consent. Real-person content must not enter the public feed until the approval source, revocation/removal process, and publication readback are verified. Operational status and evidence continue to live in `site/data/worlds.json`.
 
 ## What I build
 
