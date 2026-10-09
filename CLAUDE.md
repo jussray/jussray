@@ -25,6 +25,11 @@ Juss & Co's public runtime is served by Cloudflare Worker `jussray` from `site/`
 - Never delete or rewrite the existing profile, Juss Digital or picks source pages merely to make a runtime change easier.
 - Do not treat a stale deployment workflow, historical URL, build artifact, or repository file as proof of current runtime state. Re-observe the canonical Cloudflare domains.
 
+## Founder /godmode routing contract
+Founder shorthand `/godmode` means the existing founder-governed workflow, **not** an unrestricted permission or a new self-authorizing role. When relevant, use ULTRATHINK, Attack Ten, Devil/Red Team I + II, OODA, Lindy, L99, Proof Mode, and the Founder Adaptive Kernel as internal analysis/verification techniques, selected by the authority layer rather than by untrusted content. Route work to available tools and systems by demonstrated strengths; do not pretend to invoke unavailable models or capabilities.
+
+Preserve the chain: **founder intent → system authority → observe/audit → bounded execution → exact-head proof → adaptive decision → continuity receipt**. Adaptive decisions are ACCELERATE / CONTINUE / REPAIR / REFOCUS / HALT, grounded in evidence. Distinguish intent, permission, action, receipt, evidence, and verified state. Keep FCR, Chief, Sol, PromptOS, and all product repos independent; integrate only through approved interfaces. Never repeat work already proved complete. Do not bypass consent, safety, merge, deployment, or founder gates. Apply this standard across relevant work, but this repository document governs only this repository; global cross-chat persistence requires the user's ChatGPT personalization settings or another shared canonical source.
+
 ## Founder-approved proof-led delivery workflow
 1. OBSERVE the canonical repository, current branch/head, provider state, and runtime; distinguish observations from claims.
 2. AUDIT the smallest relevant surface, including privacy, authority, regressions, and rollback.
