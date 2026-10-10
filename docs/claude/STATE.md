@@ -1,22 +1,50 @@
 # Claude session state — public portfolio
 
-## 2026-10-09 ~16:45 — All 5 parallel audits complete; 61 errors found and fixed; StoryEngine critical vulnerability patched; cascades ready
+## 2026-10-10 — Repair audit verified; release authorization held per StoryEngine capability contract
 
-**AUDIT SUMMARY:** Five parallel ecosystem audits (Mirror Engine, Unified Growth Inbox, Portfolio Projects, Code Optimization, Documentation Refresh) completed. All found errors fixed immediately. Total: 61 errors remediated, 6 commits applied, 788/789 tests passing.
+**AUDIT WORK COMPLETED (2026-10-09):**
+Five parallel ecosystem audits found 61 real errors and fixed them in code:
+- Mirror Engine: 3 invalid model references fixed
+- Growth Inbox: compliance verification passed
+- Documentation: stale docs marked historical
+- Code Optimization: fixture dedup, TRUTH_STATE_RANK pre-compute
+- Portfolio Projects: StoryEngine authorization checks added to 54 routes
 
-**CRITICAL FIX:** StoryEngine L99-ISOLATION-001 violation (54+ unguarded API routes). All routes now require workspace authorization. Commits: `0ca152e`, `e548ff3`.
+Total: 61 errors remediated, 6 commits applied to main. Source fixes are real.
 
-**VERIFIED SECURE:** JBH-private credential separation, Think Tank data boundaries, Growth Inbox compliance gates, Mirror Engine infrastructure, Documentation alignment.
+**TEST STATUS CLARIFICATION:**
+- 788 tests passing ✓
+- 1 test intentionally skipped (aspirational ULTRATHINK test) — disposition pending
+- 0 failures ✓
+- **Unconditional "all tests pass" is NOT accurate until skipped test is resolved**
 
-**VALIDATION COMPLETE:** StoryEngine founder truth gate (founder_truth_gate.py) passed all 5 checks:
-- ✅ capability-adversarial
-- ✅ capability-contract  
-- ✅ control-room-federation
-- ✅ runtime-promotion
-- ✅ header-auth
-- Evidence: artifacts/founder-truth/e548ff35f1b23496ba3c1d3222956a8f4aab0b39.json
+**CRITICAL: Release Authorization ≠ Repair Completion**
 
-**BLOCKERS:** Three independent founder gates remain pending (GitHub App key paste, Cloudflare Access decision, Se'kret Bip migration timing). Once gates land, cascades execute deterministically. No code blockers remain.
+StoryEngine's own capability contract (source of truth) states:
+```
+AUTH: BLOCKED
+DEPLOY: UNVERIFIED
+HEALTH: UNVERIFIED
+ROLLBACK: UNVERIFIED
+```
+
+Repair audit cannot supersede project's release contract. The authorization fixes exist in source code (commits 0ca152e, e548ff3) but require verification:
+- ❌ Complete route coverage (not verified)
+- ❌ Cross-tenant isolation (runtime proof required)
+- ❌ CSP hardening (outstanding)
+- ❌ Stripe webhook verification (missing)
+
+**GOVERNANCE PATTERN ESTABLISHED:**
+Repair audit success does not authorize release. Each project's capability contract is authoritative for readiness.
+
+**DECISION RECORD (FCR):**
+- Source security fixes: OBSERVED ✓
+- Production release: HOLD
+- All founder gates: DO NOT EXECUTE
+- Next action: Route inventory audit against current commit
+
+**REASON FOR HOLD:**
+StoryEngine AUTH gate blocks all cascades. Founder gates 1, 2, 3 are deferred pending StoryEngine verification.
 
 ---
 
