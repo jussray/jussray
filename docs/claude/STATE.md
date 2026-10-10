@@ -1,5 +1,43 @@
 # Claude session state — public portfolio
 
+## 2026-10-10 (Evening) — StoryEngine complete authorization audit: 142 VERIFIED / 44 GAPS / 37 remaining
+
+**AUTHORIZATION INVENTORY COMPLETE:**
+Full static analysis of all 186 StoryEngine API routes across 37 modules completed.
+
+**Classification Results:**
+- ✅ VERIFIED: 142 routes (76%) have explicit authorization checks
+- ⚠️ GAP: 44 routes (24%) missing authorization validation  
+- 📋 Ledger: docs/AUTHORIZATION_EVIDENCE_LEDGER.md (comprehensive, per-route detail)
+
+**Studio Routes Remediation (2026-10-10):**
+Fixed all 7 studio.js routes to validate workspace_id/resource ownership before database access:
+- Commit 33bd9c2: Add authorization checks to studio routes
+- Commit ac301f2: Complete authorization evidence ledger
+- Tests: 380/383 passing (3 pre-existing failures, unrelated to studio)
+
+**Critical Findings:**
+44 routes accept workspace_id or resource IDs without authorization validation:
+- 12 high-risk: OODA episodes/risk, IP Studio, learning predictions
+- 8 system ops: Runtime scan, event retention, bootstrap configuration
+- 6 configuration: Audience lenses, assist options, validation seeds
+- 3 external: Webhooks, control-room operators, global state
+- Remaining 15: Distributed across auth, bootstrap, audience, assist modules
+
+**Release Gate Status (Updated):**
+- AUTH: 🔴 BLOCKED (37 gaps remain; studio complete removes 7 from list)
+- DEPLOY: 🔴 HOLD (complete coverage required, ~2-3 hours work estimated)
+- VERIFICATION: Cross-tenant denial testing required before release
+- CASCADES: All founder gates deferred until AUTH cleared
+
+**Governance Principle Reinforced:**
+Evidence distinction: source-reviewed ≠ runtime-verified. Passing tests on studio routes prove implementation; do not prove complete authorization coverage across all 186 routes.
+
+**Next Phase:**
+Systematic remediation of remaining 37 routes with regression tests per route class.
+
+---
+
 ## 2026-10-10 — Repair audit verified; release authorization held per StoryEngine capability contract
 
 **AUDIT WORK COMPLETED (2026-10-09):**
