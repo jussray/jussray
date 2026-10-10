@@ -755,5 +755,34 @@ Promise.all([
   });
 })();
 </script>
+
+<!-- Approved outcomes: separate from operational world evidence; empty by default. -->
+<section class="sec wrap" id="outcomes" aria-labelledby="outcomes-title" style="border-top:1px solid var(--line)">
+  <div class="in">
+    <div class="kicker mono">THE OUTCOME EDIT</div>
+    <h2 class="h2" id="outcomes-title">Work worth <span class="gold">celebrating.</span></h2>
+    <p class="sec-note" style="margin-top:18px">Verified accomplishments shared with permission, from across the Juss &amp; Co worlds.</p>
+    <div id="outcome-stories" aria-live="polite" style="margin-top:28px;display:grid;gap:16px"></div>
+    <p id="outcome-empty" style="margin-top:24px;color:var(--muted)">The first approved stories are on their way. No private work is published automatically.</p>
+  </div>
+</section>
+<script>
+(function(){
+  var host=document.getElementById('outcome-stories'),empty=document.getElementById('outcome-empty');
+  fetch('/data/approved-stories.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw Error('unavailable');return r.json()}).then(function(data){
+    if(data.schema!=='jussco/approved-stories@v1'||!Array.isArray(data.stories))return;
+    data.stories.forEach(function(story){
+      if(!story||story.approved!==true||story.publicationApproved!==true||story.destination!=='jussco.company'||!story.proofUrl||!/^https:\/\//.test(story.proofUrl)||!story.title||!story.summary)return;
+      var card=document.createElement('article');card.style.cssText='border:1px solid var(--line);border-radius:18px;padding:24px;background:var(--ink)';
+      var label=document.createElement('p');label.className='mono';label.style.color='var(--gold)';label.textContent=story.project||'Juss & Co';
+      var title=document.createElement('h3');title.className='serif';title.style.cssText='font-size:clamp(23px,3vw,34px);margin:12px 0';title.textContent=story.title;
+      var summary=document.createElement('p');summary.style.color='var(--muted)';summary.textContent=story.summary;
+      var link=document.createElement('a');link.href=story.proofUrl;link.textContent='View public evidence';link.rel='noopener noreferrer';link.target='_blank';link.style.cssText='display:inline-block;margin-top:16px;color:var(--cyan)';
+      card.append(label,title,summary,link);host.appendChild(card);
+    });
+    empty.hidden=host.children.length>0;
+  }).catch(function(){/* Keep the honest empty state when the feed is unavailable. */});
+})();
+</script>
 </body>
 </html>
