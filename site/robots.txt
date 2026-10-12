@@ -1,0 +1,9 @@
+# Juss & Co crawler policy
+# Public discovery of the founder studio site is welcome.
+# robots.txt is crawler policy, not access control.
+
+User-agent: *
+Allow: /
+Allow: /creative-history.html
+
+Sitemap: https://jussco.company/sitemap.xml

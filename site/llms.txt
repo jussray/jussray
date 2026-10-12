@@ -1,0 +1,21 @@
+# Juss & Co
+
+> Juss & Co is a founder studio. It builds products, systems, stories and proof. Founder: Juss.
+
+Canonical site: https://jussco.company
+Source: https://github.com/jussray
+
+## Worlds (status as declared by the founder)
+- Se'kret Bip: Opening soon. No public link yet.
+- Founder Control Room: Building. Source: https://github.com/jussray/founder-control-room
+- Chief AI: In progress. Source: https://github.com/jussray/chief-ai-machine
+- Juss Beautiful Hair: Live. Store: https://jussbeautifulhair.com
+- StoryEngine: Building. No public link yet.
+- Sync Party: Live.
+
+## Pages
+- https://jussco.company/ : home, the six worlds and the proof protocol
+- https://jussco.company/creative-history.html : evidence-led timeline of creative work, with stated caveats on unverified claims
+
+## Use rules
+Statuses on this site are founder-declared. Source and proof links are the verification path. Items marked "No public link yet" are intentionally unlinked.
