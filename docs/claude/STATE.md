@@ -1,5 +1,63 @@
 # Claude session state — public portfolio
 
+## 2026-10-11 — Release-readiness consolidation: 4 gates identified, 23 blockers mapped
+
+**AUTHORIZATION EVIDENCE LEDGER:** docs/AUTHORIZATION_EVIDENCE_LEDGER.md — comprehensive per-component tracking (VERIFIED / INFERRED / BLOCKED / UNKNOWN).
+
+**PHASE 3 STATUS: IN PROGRESS**
+- Phase 1-2: ✅ COMPLETE (21/44 routes: 7 studio + 14 high/medium-risk)
+- Phase 3: 🔄 IN PROGRESS (23 routes remaining: system ops, configuration, external, auth, audience, distributed)
+- Regression tests: 394+ per route class; 380/383 studio tests passing
+- Blocker: Cross-tenant isolation test suite (runtime verification, not yet started)
+
+**SECURITY ARCHITECTURE SNAPSHOT:**
+
+| Component | Status | Evidence | Action |
+|-----------|--------|----------|--------|
+| Edge rate limiting | ✅ VERIFIED | Prod build 167d03f, Chief edge confirmed | Deployed |
+| Edge attack detection | ✅ VERIFIED | 23-lens unit test passing | Deployed |
+| Artifact leak (supabase/) | 🟡 INFERRED READY | Code verified PR #206, SPA fallback confirmed | Merge + deploy |
+| Supabase RLS | ✅ VERIFIED | 86 tables, audit 2026-10-06 | Deployed |
+| Leaked-password OFF | 🔴 BLOCKED | Both projects; 1-click toggle | Founder toggle |
+| Stripe webhooks | 🔴 BLOCKED | No HMAC verification | ~30 min implementation |
+| CSP hardening | 🔴 BLOCKED | Outstanding from prior gates | ~1-2 hours implementation |
+| GitHub App key | 🔴 BLOCKED | APP_PRIVATE_KEY_SHAPE_INVALID | Founder: paste full PEM |
+| Cross-tenant test | 🔴 BLOCKED | Not started | ~2 hours design + test |
+
+**RELEASE GATES:**
+
+1. **AUTH Gate** (unblocks DEPLOY + cascades): 🔴 BLOCKED
+   - Requires: 23 remaining routes (Phase 3) + cross-tenant test + stripe/CSP fixes
+   - Est: 3-4 hours (agents + manual fixes)
+   - Proof: Commit history + regression test suite
+
+2. **DEPLOY Gate** (production release): 🔴 HOLD
+   - Requires: AUTH cleared + founder approval + prod isolation verified
+   - Est: 1 hour post-AUTH
+   - Verification: Live traffic to jussco.company, worlds.json freshness, evidence-sync ✓
+
+3. **Cascading Founder Gates** (independent of AUTH):
+   - [ ] Cloudflare Access (PR #206): Approve preview URLs? (code ready, boundary test ✅)
+   - [ ] Se'kret Bip migration (PR #1136): Deploy when ready? (merged, untouched, rollback-safe)
+   - [ ] GitHub App key: Paste full PEM into FCR `production` secret
+   - [ ] Leaked-password: Toggle ON (Supabase dashboard, both projects)
+
+**NEXT FOUNDER DECISIONS (priority order):**
+1. Approve Phase 3 authorization agents to complete remediation + tests (autonomy question)
+2. Decide: Cloudflare Access for PR #206 (preview URLs)
+3. Provide GitHub App private key (PEM format) for APP_PRIVATE_KEY secret
+4. Leaked-password toggle (security hardening, no code change)
+5. Stripe webhook fix (implement + test; can run in parallel with Phase 3)
+6. CSP hardening (implement + test; can run in parallel with Phase 3)
+
+**DECISION FRAMEWORK:**
+- Authorization: Must reach 44/44 + cross-tenant test before production release
+- Security fixes (stripe/CSP): Can run in parallel; must be live before DEPLOY
+- Founder secrets: Can be entered anytime; evidence-sync requires GitHub App key
+- Cascading gates: Independent; enable SE'kret Bip rollout + GitHub integration + preview URLs
+
+---
+
 ## 2026-10-10 (Evening) — StoryEngine complete authorization audit: 142 VERIFIED / 44 GAPS / 37 remaining
 
 **AUTHORIZATION INVENTORY COMPLETE:**
@@ -108,6 +166,123 @@ StoryEngine AUTH gate blocks all cascades. Founder gates 1, 2, 3 are deferred pe
 - Supabase `founder-control-room`: RLS on; 38 tables deny-all to clients (server-only, correct). Leaked-password protection OFF (dashboard toggle; founder).
 - Supabase `Se'kret Bip`: RLS on all 86 public tables (VERIFIED). Anon-callable SECURITY DEFINER functions are auth.uid()-gated (low risk, VERIFIED). Anonymous-session policy coverage has gaps on non-private surfaces — details delivered to Juss directly, not recorded in public repos. No DB/config changes made (repo CLAUDE.md requires founder approval for migrations/RLS). Leaked-password protection OFF.
 - Perplexity evidence-ledger patch: reviewed, not yet implemented (see chat verdict).
+
+---
+
+## Release-Readiness Checklist (2026-10-11)
+
+**Use this checklist to track release-decision readiness. Update status as each item moves.**
+
+### Authorization Coverage
+
+- [ ] Studio routes (7/7) — COMPLETE ✅
+- [ ] High-risk routes (8+ routes) — COMPLETE ✅
+- [ ] Medium-risk routes (4+ routes) — COMPLETE ✅
+- [ ] Remaining 23 routes — IN PROGRESS 🔄 (Phase 3 agents working)
+- [ ] All 44 gaps remediated — PENDING (awaiting Phase 3)
+- [ ] Regression tests (394+ per class) — PASSING (380/383, 3 pre-existing)
+- [ ] Cross-tenant isolation test suite — BLOCKED (not started; ~2 hours)
+
+### Security Architecture
+
+- [ ] Edge rate limiting (Cloudflare `enforceChiefEdgeRateLimit`) — VERIFIED ✅
+- [ ] Edge attack detection (23-lens unit) — VERIFIED ✅
+- [ ] Artifact leak fix (supabase/ exclusion) — INFERRED READY 🟡 (code verified, PR #206 pending merge)
+- [ ] Supabase RLS enforcement — VERIFIED ✅ (all 86 tables)
+- [ ] Leaked-password protection — BLOCKED 🔴 (toggle OFF on both projects)
+- [ ] Stripe webhook HMAC verification — BLOCKED 🔴 (missing implementation)
+- [ ] CSP hardening (all responses) — BLOCKED 🔴 (missing implementation)
+- [ ] Production isolation (Cloudflare + Supabase) — UNKNOWN (requires post-deploy verification)
+
+### Governance & Verification
+
+- [ ] Evidence ledger complete — COMPLETE ✅ (docs/AUTHORIZATION_EVIDENCE_LEDGER.md)
+- [ ] VERIFIED/INFERRED/BLOCKED/UNKNOWN classified — COMPLETE ✅
+- [ ] Rollback procedures documented — COMPLETE ✅ (commit-tagged, revertible)
+- [ ] Authority boundaries established — COMPLETE ✅ (per-component, founder gates clear)
+
+### Release Gates
+
+**AUTH Gate (blocks DEPLOY + cascades):**
+- Status: 🔴 BLOCKED
+- Blocker 1: Phase 3 authorization (23 routes) — ETA Phase 3 completion
+- Blocker 2: Cross-tenant test suite — ETA ~2 hours
+- Blocker 3: Stripe webhook verification — ETA ~30 min
+- Blocker 4: CSP hardening — ETA ~1-2 hours
+- Unblock condition: 44/44 routes + cross-tenant denial test passing + security requirements live
+- Est. unblock: 3-4 hours (Phase 3 agents complete + manual fixes applied)
+
+**DEPLOY Gate (production release):**
+- Status: 🔴 HOLD (waiting on AUTH)
+- Prerequisites: AUTH cleared + founder approval + prod isolation verified
+- Proof required: Live traffic test, worlds.json freshness, evidence-sync working
+- Est. ready: 1 hour post-AUTH clearance
+
+**Cascading Gates (independent):**
+- [ ] Cloudflare Access approval (PR #206 preview URLs) — Founder decision
+- [ ] Se'kret Bip migration timing (PR #1136 deployed) — Founder decision
+- [ ] GitHub App private key (APP_PRIVATE_KEY PEM) — Founder entry
+- [ ] Leaked-password toggle (Supabase, both projects) — Founder action (1-click)
+
+### Founder Action Items (Priority Order)
+
+**IMMEDIATE (blocking AUTH):**
+1. [ ] Approve Phase 3 authorization agents to complete (autonomy decision)
+   - Agents will: remediate 23 routes + add regression tests per class
+   - Authority: Code review before merge still applies
+   - Est: ~2 hours work
+
+**DECISION REQUIRED (blocking DEPLOY):**
+2. [ ] Cloudflare Access: Approve preview URLs for PR #206? (YES/NO)
+   - Code ready, boundary test passing
+   - Decision: Enable Access for supabase/.assetsignore fix previews?
+
+3. [ ] Provide GitHub App private key (full PEM format)
+   - Recipient: FCR `production` secret `APP_PRIVATE_KEY`
+   - Effect: evidence-sync runs → worlds.json updates → Worker deploys
+
+4. [ ] Toggle leaked-password protection ON
+   - Location: Supabase dashboard (both Se'kret Bip + Founder Control Room)
+   - Action: 1-click toggle (no code change)
+   - Risk if deferred: Subscriber reuse detection disabled
+
+**PARALLEL WORK (can run while Phase 3 ongoing):**
+5. [ ] Implement Stripe webhook HMAC verification (~30 min)
+   - Must be live before DEPLOY
+   - Risk: Payment replay if webhook exposed
+
+6. [ ] Implement CSP hardening (~1-2 hours)
+   - Must be live before DEPLOY
+   - Coverage: All origin responses
+
+**POST-DEPLOY (verification):**
+7. [ ] Verify production isolation (Cloudflare + Supabase deployment state)
+   - Live traffic test to jussco.company
+   - Confirm worlds.json freshness
+   - Run evidence-sync; verify updates flow
+
+---
+
+## Truth Rules (Release-Readiness Decision)
+
+**Evidence Distinction (established 2026-10-10):**
+- Source-reviewed ≠ Runtime-verified
+- Passing tests on studio routes prove implementation; do NOT prove complete coverage across all 186 routes
+- All status claims must cite observability: VERIFIED (seen in run/log/diff) vs INFERRED vs BLOCKED vs UNKNOWN
+
+**Release Authorization Pattern:**
+- Repair audit success ≠ Release authorization
+- Project's capability contract is authoritative for readiness, not repair completion
+- StoryEngine AUTH gate blocks all cascades until resolved
+
+**Rollback Readiness:**
+- All fixes are revertible commits on `main`
+- Studio routes: Revert commits 33bd9c2, ac301f2
+- Edge defense: Revert PR #205 (already deployed)
+- Supabase RLS: Rollback via dashboard
+- Artifacts: Revert PR #206 (once merged)
+
+---
 
 Written the moment state changes. Newest first. Private-repo state lives in that repo's own `docs/claude/STATE.md`.
 Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
