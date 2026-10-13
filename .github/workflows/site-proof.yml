@@ -38,87 +38,78 @@ jobs:
       - name: Validate public outcome approval gate
         run: node scripts/verify-approved-stories.mjs
       - run: node scripts/verify-site.mjs
-      - name: Verify public custom domains
+      - name: Verify public custom domains in Chromium with exact-head freshness
         if: github.event_name != 'pull_request'
         shell: bash
         run: |
-          set -u
-          for attempt in $(seq 1 30); do
-            ok=1
-            echo "public-domain attempt ${attempt}/30"
-            for host in jussco.company www.jussco.company; do
-              body="$(curl -fsSL --connect-timeout 5 --max-time 15 "https://${host}/" 2>/tmp/jussco-curl.err)" || {
-                echo "${host}: unreachable"
-                cat /tmp/jussco-curl.err || true
-                ok=0
-                continue
+          node --input-type=module <<'NODE'
+          import { chromium } from 'playwright';
+          import { readFileSync } from 'node:fs';
+          const browser = await chromium.launch();
+          const files = ['worlds', 'systems', 'connectors'];
+          const expected = Object.fromEntries(files.map(name => [name, readFileSync(`site/data/${name}.json`)]));
+          const hosts = ['jussco.company', 'www.jussco.company'];
+          let verified = false;
+          try {
+            for (let attempt = 1; attempt <= 12 && !verified; attempt++) {
+              let allPassed = true;
+              for (const host of hosts) {
+                const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+                try {
+                  const response = await page.goto(`https://${host}/`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+                  const status = response?.status() ?? 0;
+                  console.log(`${host}: HTTP ${status} in Chromium, attempt ${attempt}/12; cf-ray=${response?.headers()['cf-ray'] ?? 'none'}`);
+                  if (status !== 200) { allPassed = false; continue; }
+                  await page.waitForSelector('.os-card', { timeout: 15000 });
+                  const body = await page.content();
+                  if (!body.includes('Turn thoughts into living works.') || !body.includes('Built to stand alone.')) {
+                    console.error(`${host}: expected public site markers missing`);
+                    allPassed = false;
+                  }
+                  const assets = await page.evaluate(async names => Promise.all(names.map(async name => {
+                    const response = await fetch(`/data/${name}.json`, { cache: 'no-store' });
+                    return { name, status: response.status, text: await response.text() };
+                  })), files);
+                  for (const asset of assets) {
+                    const matches = asset.status === 200 && Buffer.from(asset.text, 'utf8').equals(expected[asset.name]);
+                    console.log(`${host}: data/${asset.name}.json ${matches ? 'byte-exact' : 'MISMATCH'} at ${process.env.GITHUB_SHA?.slice(0, 7)}`);
+                    if (!matches) allPassed = false;
+                  }
+                  if (assets.every(x => x.status === 200)) {
+                    const data = Object.fromEntries(assets.map(x => [x.name, JSON.parse(x.text)]));
+                    const names = (data.systems.systems || []).filter(x => x.public !== false).map(x => x.name);
+                    const expectedNames = ['Truth Weaver','Truth Compass','Exact Match Engine','Living Truth','Proof Core'];
+                    if (JSON.stringify(names) !== JSON.stringify(expectedNames) || (data.connectors.lanes || []).length !== 4 ||
+                      Object.values(data.connectors.systems || {}).some(x => (x.bindings || []).some(y => y.state === 'connected')) ||
+                      !data.worlds.worlds?.some(x => x.name === 'Bip Jr')) {
+                      console.error(`${host}: live portfolio or connector registry assertions failed`);
+                      allPassed = false;
+                    }
+                  }
+                  const link = await page.locator('.os-card').first().locator('a.os-link').getAttribute('href');
+                  if (link !== 'https://truthweaver.jussco.company') {
+                    console.error(`${host}: Truth Weaver custom-domain link missing`);
+                    allPassed = false;
+                  }
+                } catch (e) {
+                  console.error(`${host}: browser proof failed: ${String(e).slice(0, 500)}`);
+                  allPassed = false;
+                } finally {
+                  await page.close();
+                }
               }
-              systems="$(curl -fsSL --connect-timeout 5 --max-time 15 "https://${host}/data/systems.json" 2>/tmp/jussco-systems-curl.err)" || {
-                echo "${host}: systems registry unreachable"
-                cat /tmp/jussco-systems-curl.err || true
-                ok=0
-                continue
-              }
-              connectors="$(curl -fsSL --connect-timeout 5 --max-time 15 "https://${host}/data/connectors.json" 2>/tmp/jussco-connectors-curl.err)" || {
-                echo "${host}: connector registry unreachable"
-                cat /tmp/jussco-connectors-curl.err || true
-                ok=0
-                continue
-              }
-              worlds="$(curl -fsSL --connect-timeout 5 --max-time 15 "https://${host}/data/worlds.json" 2>/tmp/jussco-worlds-curl.err)" || {
-                echo "${host}: worlds registry unreachable"
-                cat /tmp/jussco-worlds-curl.err || true
-                ok=0
-                continue
-              }
-              if grep -Fq 'Turn thoughts into living works.' <<<"${body}" && grep -Fq 'Built to stand alone.' <<<"${body}"; then
-                echo "${host}: canonical hero + standalone OS section verified"
-              else
-                echo "${host}: reachable but canonical site/OS fingerprints missing"
-                ok=0
-              fi
-              for expected in 'Truth Weaver' 'Truth Compass' 'Exact Match Engine' 'Living Truth' 'Proof Core'; do
-                if ! grep -Fq "${expected}" <<<"${systems}"; then
-                  echo "${host}: systems registry missing ${expected}"
-                  ok=0
-                fi
-              done
-              for expected in 'Exa' 'Notion' 'Linear' 'Slack'; do
-                if ! grep -Fq "${expected}" <<<"${connectors}"; then
-                  echo "${host}: connector registry missing ${expected}"
-                  ok=0
-                fi
-              done
-              if grep -Fq '"state": "connected"' <<<"${connectors}"; then
-                echo "${host}: connector registry contains unproven connected claim"
-                ok=0
-              fi
-              for expected in 'Bip Jr' 'PromptOS' 'SolContinuity' 'Untold Stories' 'SWEATS' 'SleepWealth Agent' 'Solwealth' 'Think Tank' 'Alexa Commerce Engine' 'Ayure'; do
-                if ! grep -Fq "${expected}" <<<"${worlds}"; then
-                  echo "${host}: worlds registry missing ${expected}"
-                  ok=0
-                fi
-              done
-              # Freshness: the live registries must be byte-identical to this commit, so a stale deploy cannot pass.
-              for registry in worlds systems connectors; do
-                live_file="/tmp/jussco-live-${registry}.json"
-                if curl -fsSL --connect-timeout 5 --max-time 15 -o "${live_file}" "https://${host}/data/${registry}.json" \
-                  && cmp -s "${live_file}" "site/data/${registry}.json"; then
-                  echo "${host}: data/${registry}.json matches ${GITHUB_SHA::7}"
-                else
-                  echo "${host}: data/${registry}.json does not yet match ${GITHUB_SHA::7}"
-                  ok=0
-                fi
-              done
-            done
-            if [ "${ok}" -eq 1 ]; then
-              echo "canonical domains + full portfolio + connector registries are live"
-              exit 0
-            fi
-            sleep 10
-          done
-          echo "canonical domains did not become healthy within the verification window"
-          exit 1
+              verified = allPassed;
+              if (!verified && attempt < 12) await new Promise(resolve => setTimeout(resolve, 10000));
+            }
+          } finally {
+            await browser.close();
+          }
+          if (!verified) {
+            console.error('Canonical domains failed real Chromium, registry freshness, or public-link proof');
+            process.exit(1);
+          }
+          console.log('Canonical domains + byte-exact registries + Truth Weaver link verified in Chromium');
+          NODE
       - name: Verify deployed portfolio in real browsers
         if: github.event_name != 'pull_request'
         run: |
