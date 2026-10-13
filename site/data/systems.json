@@ -14,6 +14,7 @@
       "public": true,
       "status": "repairing",
       "label": "Standalone OS · Published · Surface repair",
+      "publicUrl": "https://truthweaver.jussco.company",
       "role": "Reasoning and challenge OS for separating evidence from inference, generating competing hypotheses, and stress-testing decisions.",
       "builder": {
         "provider": "Lovable",

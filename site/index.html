@@ -601,7 +601,8 @@ function renderSystems(d){
       card.appendChild(cw);
     }
     if(x.embeddedIn&&x.embeddedIn.length){ var emb=document.createElement("div"); emb.className="os-embed"; var eb=document.createElement("b"); eb.textContent="Already embedded in"; emb.appendChild(eb); x.embeddedIn.forEach(function(e){ var sp=document.createElement("span"); sp.textContent=e.name; emb.appendChild(sp); }); card.appendChild(emb); }
-    if(x.builder&&x.builder.preview){ var a=document.createElement("a"); a.className="os-link"; a.href=x.builder.preview; a.textContent="Open builder preview ↗"; card.appendChild(a); }
+    var target=x.publicUrl || (x.builder && x.builder.preview);
+    if(target){ var a=document.createElement("a"); a.className="os-link"; a.href=target; a.textContent=x.publicUrl ? "Open "+x.name+" ↗" : "Open builder preview ↗"; card.appendChild(a); }
     osGrid.appendChild(card);
   });
   var stamp=document.getElementById("osStamp"); if(stamp) stamp.textContent=visible.length+" public standalone OS builds · internal carriers tracked separately"+(d.generatedAt?" · synced "+new Date(d.generatedAt).toISOString().slice(0,10):"");
