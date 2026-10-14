@@ -2,9 +2,9 @@ name: Juss & Co site browser proof
 on:
   push:
     branches: [main]
-    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/verify-approved-stories.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', '.github/workflows/site-proof.yml']
+    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/verify-games-production.mjs', 'scripts/verify-approved-stories.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', '.github/workflows/site-proof.yml']
   pull_request:
-    paths: ['site/**', 'scripts/verify-site.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', '.github/workflows/site-proof.yml']
+    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/verify-games-production.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', '.github/workflows/site-proof.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -37,10 +37,15 @@ jobs:
         run: node -e "const s=require('fs').readFileSync('site/index.html','utf8'); const good='<link rel=\"canonical\" href=\"https://jussco.company/\">'; const stale='https://jussray.github.io/jussray/'; if(!s.includes(good)||s.includes(stale)) process.exit(1); console.log('canonical Juss & Co URL valid')"
       - name: Validate public outcome approval gate
         run: node scripts/verify-approved-stories.mjs
-      - name: Verify source and Games production in Chromium
-        id: source_and_games
+      - name: Verify source and local Games interactions in Chromium
+        id: source_local
         continue-on-error: true
         run: node scripts/verify-site.mjs
+      - name: Verify Games production in Chromium
+        id: live_games
+        if: ${{ always() && github.event_name != 'pull_request' }}
+        continue-on-error: true
+        run: node scripts/verify-games-production.mjs
       - name: Verify public custom domains in Chromium with exact-head freshness
         id: live_domains
         if: ${{ always() && github.event_name != 'pull_request' }}
@@ -54,9 +59,9 @@ jobs:
           const files = ['worlds', 'systems', 'connectors'];
           const expected = Object.fromEntries(files.map(name => [name, readFileSync(`site/data/${name}.json`)]));
           const hosts = ['jussco.company', 'www.jussco.company'];
-          let verified = false;
+          let verified = false, botChallenge = false;
           try {
-            for (let attempt = 1; attempt <= 12 && !verified; attempt++) {
+            for (let attempt = 1; attempt <= 12 && !verified && !botChallenge; attempt++) {
               let allPassed = true;
               for (const host of hosts) {
                 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
@@ -64,7 +69,14 @@ jobs:
                   const response = await page.goto(`https://${host}/`, { waitUntil: 'domcontentloaded', timeout: 30000 });
                   const status = response?.status() ?? 0;
                   console.log(`${host}: HTTP ${status} in Chromium, attempt ${attempt}/12; cf-ray=${response?.headers()['cf-ray'] ?? 'none'}`);
-                  if (status !== 200) { allPassed = false; continue; }
+                  if (status !== 200) {
+                    allPassed = false;
+                    if (response?.headers()['cf-mitigated'] === 'challenge') {
+                      botChallenge = true;
+                      console.error(`${host}: Cloudflare managed challenge; automated production proof BLOCKED, not passed; cf-ray=${response?.headers()['cf-ray'] ?? 'none'}`);
+                    }
+                    continue;
+                  }
                   await page.waitForSelector('.os-card', { timeout: 15000 });
                   const body = await page.content();
                   if (!body.includes('Turn thoughts into living works.') || !body.includes('Built to stand alone.')) {
@@ -104,7 +116,7 @@ jobs:
                 }
               }
               verified = allPassed;
-              if (!verified && attempt < 12) await new Promise(resolve => setTimeout(resolve, 10000));
+              if (!verified && !botChallenge && attempt < 12) await new Promise(resolve => setTimeout(resolve, 10000));
             }
           } finally {
             await browser.close();
@@ -133,7 +145,11 @@ jobs:
             const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
             const errors = [];
             page.on('pageerror', e => errors.push(String(e)));
-            await page.goto(`https://${host}/`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+            const liveResponse = await page.goto(`https://${host}/`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+            if (liveResponse?.status() !== 200) {
+              const h = liveResponse?.headers() || {};
+              throw new Error(`${host}: HTTP ${liveResponse?.status() ?? 'no response'}; Cloudflare mitigation=${h['cf-mitigated'] ?? 'none'}; ray=${h['cf-ray'] ?? 'none'}`);
+            }
             await page.waitForFunction((expectedCount) => document.querySelectorAll('.card').length === expectedCount && document.querySelectorAll('.os-card').length === 5 && document.querySelectorAll('.os-connectors').length === 5, requiredWorlds.length, { timeout: 20000 });
             const worldNames = await page.locator('.card h3').allTextContents();
             const systemNames = await page.locator('.os-card h3').allTextContents();
@@ -155,7 +171,8 @@ jobs:
         if: always()
         shell: bash
         env:
-          SOURCE_AND_GAMES: ${{ steps.source_and_games.outcome }}
+          SOURCE_LOCAL: ${{ steps.source_local.outcome }}
+          LIVE_GAMES: ${{ steps.live_games.outcome }}
           LIVE_DOMAINS: ${{ steps.live_domains.outcome }}
           LIVE_PORTFOLIO: ${{ steps.live_portfolio.outcome }}
           RUN_EVENT: ${{ github.event_name }}
@@ -164,14 +181,16 @@ jobs:
             echo "### Independent browser proof outcomes"
             echo "| Required proof | Result |"
             echo "| --- | --- |"
-            echo "| Source + Games production Chromium | $SOURCE_AND_GAMES |"
+            echo "| Local source + Games interactions | $SOURCE_LOCAL |"
+            echo "| Games production Chromium | $LIVE_GAMES |"
             echo "| Live exact-head domains Chromium | $LIVE_DOMAINS |"
             echo "| Live portfolio Chromium | $LIVE_PORTFOLIO |"
             echo
             echo "A Cloudflare challenge is a failing production proof, not a pass."
           } >> "$GITHUB_STEP_SUMMARY"
-          test "$SOURCE_AND_GAMES" = "success" || { echo "::error::Source/Games proof not successful: $SOURCE_AND_GAMES"; exit 1; }
+          test "$SOURCE_LOCAL" = "success" || { echo "::error::Local source proof not successful: $SOURCE_LOCAL"; exit 1; }
           if [[ "$RUN_EVENT" != "pull_request" ]]; then
+            test "$LIVE_GAMES" = "success" || { echo "::error::Games production proof not successful: $LIVE_GAMES"; exit 1; }
             test "$LIVE_DOMAINS" = "success" || { echo "::error::Live domain proof not successful: $LIVE_DOMAINS"; exit 1; }
             test "$LIVE_PORTFOLIO" = "success" || { echo "::error::Live portfolio proof not successful: $LIVE_PORTFOLIO"; exit 1; }
           fi
