@@ -1,8 +1,7 @@
 name: Juss & Co site browser proof
 on:
   push:
-    # Review-only branch proof; no deployment commands are added.
-    branches: [main, 'fix/ci-separate-games-production-20261014']
+    branches: [main]
     paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/verify-games-production.mjs', 'scripts/verify-approved-stories.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', '.github/workflows/site-proof.yml']
   pull_request:
     paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/verify-games-production.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', '.github/workflows/site-proof.yml']
