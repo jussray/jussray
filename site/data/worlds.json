@@ -631,7 +631,10 @@
       "repo": "jussray/Ayure-",
       "st": "building",
       "label": "Private build",
-      "held": "Private product build · tracked internally",
+      "link": {
+        "text": "Explore AYURE public preview",
+        "url": "https://ayure.us/"
+      },
       "contact": {
         "email": "hello@jussbeautifulhair.com"
       },
