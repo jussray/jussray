@@ -12,13 +12,13 @@ My work sits where product judgment meets engineering: **human-centered products
 
 | Product | What it is | Current public state |
 |---|---|---|
-| [Se’kret Bip](https://github.com/jussray/Sekret-Bip) | Privacy-first teen/family product built around emotional growth, self-expression, intentional sharing, and relationship-based support | **Opening soon** |
-| [Founder Control Room](https://github.com/jussray/founder-control-room) | Founder operating plane for repository truth, approvals, governed actions, release control, evidence, rollback, and cross-project decisions | **Building** |
-| [Chief AI](https://github.com/jussray/chief-ai-machine) | Governed cognition and portable company-intelligence system that reasons, synthesizes, and proposes without silently owning consequential execution | **In progress** |
-| [PromptOS](https://github.com/jussray/promptos) | Prompt, skill, instruction, and mission runtime for turning founder intent into bounded reusable work | **Building** |
+| [Se’kret Bip](https://sekretbip.net/) | Privacy-first teen/family product for emotional growth, self-expression, and intentional family support; [public source](https://github.com/jussray/Sekret-Bip) | **Public preview accessible; member flows not independently verified** |
+| [Founder Control Room (FCR)](https://foundercontrolroom.org/) | Standalone founder operating platform for governed actions, approvals, evidence, release control, and rollback; [public source](https://github.com/jussray/founder-control-room) | **Public front door accessible; private workspace remains gated** |
+| [Chief AI](https://github.com/jussray/chief-ai-machine) | Standalone founder-intelligence system for portable company knowledge, reasoning, synthesis, and bounded Chief-owned capabilities; peers with FCR and PromptOS | **In progress; public source available** |
+| [PromptOS public overview](https://foundercontrolroom.org/#promptos) | Independent prompt, skill, instruction, and mission operating system; the source repository remains private | **Building; public overview available** |
 | [StoryEngine / L99](https://github.com/jussray/StoryEngine) | Creator system for writing, creating, preparing, publishing, and selling work with provenance, recovery, and release controls | **Building** |
-| [Juss Beautiful Hair](https://github.com/jussray/jussbeautifulhair-site) | Commerce storefront with Shopify-backed product and checkout flows | **[Live storefront](https://jussbeautifulhair.com)** |
-| [Sync Party](https://github.com/jussray/sync-party-game) | Real-time multiplayer party game with authoritative room state, synchronized reveal/scoring, reconnect, and replay contracts | **Live** |
+| [Juss Beautiful Hair](https://jussbeautifulhair.com/) | Independent commerce storefront with Shopify-backed catalog and checkout source; [public source](https://github.com/jussray/jussbeautifulhair-site) | **Live checkout not verified in this audit** |
+| [SYNC Party](https://sync.jussco.company/) | Standalone real-time party game; [public source](https://github.com/jussray/sync-party-game) | **Public game page accessible; multiplayer round not verified in this audit** |
 | [SolContinuity](https://github.com/jussray/solcontinuity) | Provider-aware continuity, quorum, failover, recovery, and portable evidence tooling | **Building** |
 
 These are separate products and systems. I do not present one project’s capability as another project’s feature unless the integration is actually implemented and verified.
