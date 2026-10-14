@@ -114,7 +114,7 @@ if (process.env.CI === 'true') {
     try { response = await live.goto('https://games.jussco.company/', { waitUntil: 'domcontentloaded', timeout: 25000 }); }
     catch (error) { lastError = String(error); if (attempt < 3) await new Promise(r => setTimeout(r, 4000)); }
   }
-  say(response?.status() === 200, `games production: exact domain HTTP 200${lastError && !response ? ' / '+lastError : ''}`);
+  say(response?.status() === 200, `games production: exact domain HTTP 200 (observed ${response?.status() ?? 'no response'}, final URL ${response?.url() ?? 'none'}, cf-ray ${response?.headers()['cf-ray'] ?? 'none'})${lastError && !response ? ' / '+lastError : ''}`);
   if (response?.status() === 200) {
     const title = await live.title();
     const body = await live.locator('main').innerText().catch(() => '');
