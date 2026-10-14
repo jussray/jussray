@@ -105,5 +105,25 @@ for (const vp of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile
   await ctx.close();
 }
 
+
+/* Games production: exact domain is checked in a real Chromium session on CI. */
+if (process.env.CI === 'true') {
+  const live = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  let response = null, lastError = '';
+  for (let attempt = 1; attempt <= 3 && !response; attempt++) {
+    try { response = await live.goto('https://games.jussco.company/', { waitUntil: 'domcontentloaded', timeout: 25000 }); }
+    catch (error) { lastError = String(error); if (attempt < 3) await new Promise(r => setTimeout(r, 4000)); }
+  }
+  say(response?.status() === 200, `games production: exact domain HTTP 200${lastError && !response ? ' / '+lastError : ''}`);
+  if (response?.status() === 200) {
+    const title = await live.title();
+    const body = await live.locator('main').innerText().catch(() => '');
+    say(title.includes('Juss & Co. Games') && ['LUMORA','Live Site SYNC','Chat SYNC','Lovable SYNC','Jungle Jinx'].every(name => body.includes(name)), 'games production: all latest hub content visible');
+    say((await live.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)) <= 0, 'games production: 390px viewport has no overflow');
+    await live.screenshot({ path: 'proof/site/games-production-mobile.png', fullPage: true });
+  }
+  await live.close();
+}
+
 await browser.close(); srv.close();
 console.log(failed ? `\n${failed} check(s) FAILED` : '\nall checks passed'); process.exit(failed ? 1 : 0);
