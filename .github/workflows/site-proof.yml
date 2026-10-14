@@ -37,7 +37,6 @@ jobs:
         run: node -e "const s=require('fs').readFileSync('site/index.html','utf8'); const good='<link rel=\"canonical\" href=\"https://jussco.company/\">'; const stale='https://jussray.github.io/jussray/'; if(!s.includes(good)||s.includes(stale)) process.exit(1); console.log('canonical Juss & Co URL valid')"
       - name: Validate public outcome approval gate
         run: node scripts/verify-approved-stories.mjs
-      - run: node scripts/verify-site.mjs
       - name: Verify public custom domains in Chromium with exact-head freshness
         if: github.event_name != 'pull_request'
         shell: bash
@@ -142,6 +141,9 @@ jobs:
           await browser.close();
           if (failed) process.exit(1);
           NODE
+      # Keep the exact Games production browser gate required, but run it after
+      # independent public-site deployment checks so a CF challenge cannot hide their evidence.
+      - run: node scripts/verify-site.mjs
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
