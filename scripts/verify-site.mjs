@@ -84,5 +84,26 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   say(errors.length === 0, `${vp.n}: no console errors${errors.length ? ' — ' + errors.join(' | ') : ''}`);
   await page.screenshot({ path: `proof/site/${vp.n}.png`, fullPage: true }); await ctx.close();
 }
+
+/* ---------- Games hub: code-level Playwright proof at exact source ---------- */
+for (const vp of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile', width: 390, height: 844 }]) {
+  const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height } });
+  const page = await ctx.newPage(); const errors = [];
+  page.on('pageerror', e => errors.push(String(e)));
+  const response = await page.goto(url + 'games/index.html', { waitUntil: 'load' });
+  say(response?.status() === 200, `games hub: ${vp.name} responds 200`);
+  const headings = await page.locator('article.card h3').allTextContents();
+  say(['SYNC', 'LUMORA', 'ChatQuest', 'Bip & Seek'].every(n => headings.includes(n)), `games hub: ${vp.name} all four worlds shown`);
+  const editions = await page.locator('.edition h4').allTextContents();
+  say(editions.length === 3 && ['Live Site SYNC', 'Chat SYNC', 'Lovable SYNC'].every(n => editions.some(x => x.includes(n))), `games hub: ${vp.name} distinct SYNC editions`);
+  const links = await page.locator('.edition a.action').evaluateAll(nodes => nodes.map(x => x.getAttribute('href')));
+  say(links.length === 3 && links.includes('https://sync.jussco.company/') && links.includes('https://sync.jussco.company/chat/') && links.includes('https://sync-playtest.lovable.app/'), `games hub: ${vp.name} canonical destinations`);
+  say((await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)) <= 0, `games hub: ${vp.name} no horizontal overflow`);
+  say(await page.locator('.card:has(h3:text("LUMORA")) a').count() === 0 && await page.locator('.card:has(h3:text("ChatQuest")) a').count() === 0, `games hub: ${vp.name} unreleased child games have no entry links`);
+  say(errors.length === 0, `games hub: ${vp.name} no JS errors`);
+  await page.screenshot({ path: `proof/site/games-${vp.name}.png`, fullPage: true });
+  await ctx.close();
+}
+
 await browser.close(); srv.close();
 console.log(failed ? `\n${failed} check(s) FAILED` : '\nall checks passed'); process.exit(failed ? 1 : 0);
