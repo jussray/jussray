@@ -162,7 +162,10 @@
       "repo": "jussray/sync-party-game",
       "st": "live",
       "label": "Live",
-      "held": "Live · link coming",
+      "link": {
+        "text": "Play SYNC Party",
+        "url": "https://sync.jussco.company"
+      },
       "contact": {
         "github": "https://github.com/jussray/sync-party-game",
         "email": "hello@jussbeautifulhair.com"
