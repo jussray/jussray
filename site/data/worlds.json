@@ -123,7 +123,7 @@
           "platform": "github",
           "ref": "jussray/jbh-private",
           "role": "additional carrier",
-          "visibility": "public"
+          "visibility": "private"
         },
         {
           "platform": "github",
@@ -236,8 +236,8 @@
       "st": "building",
       "label": "Building",
       "link": {
-        "text": "Follow the build",
-        "url": "https://github.com/jussray/promptos"
+        "text": "View public overview",
+        "url": "https://foundercontrolroom.org/#promptos"
       },
       "contact": {
         "github": "https://github.com/jussray/promptos",
@@ -249,7 +249,7 @@
           "platform": "github",
           "ref": "jussray/promptos",
           "role": "canonical source",
-          "visibility": "public"
+          "visibility": "private"
         }
       ],
       "display": {
