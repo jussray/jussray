@@ -114,6 +114,18 @@ if (process.env.CI === 'true') {
     try { response = await live.goto('https://games.jussco.company/', { waitUntil: 'domcontentloaded', timeout: 25000 }); }
     catch (error) { lastError = String(error); if (attempt < 3) await new Promise(r => setTimeout(r, 4000)); }
   }
+  // Cloudflare may present a legitimate browser challenge to hosted CI. Give
+  // the browser a bounded opportunity to finish it; never bypass, mock, or
+  // reclassify a 403 as success. The canonical document must still return 200.
+  if (response?.status() === 403 && response.headers()['cf-mitigated'] === 'challenge') {
+    console.log('games production: Cloudflare challenge observed; waiting for normal browser completion');
+    try {
+      await live.waitForFunction(() => document.title.includes('Juss & Co. Games'), null, { timeout: 20000 });
+      response = await live.reload({ waitUntil: 'domcontentloaded', timeout: 15000 });
+    } catch (error) {
+      lastError = 'Browser challenge incomplete: ' + String(error).slice(0, 180);
+    }
+  }
   if (response && response.status() !== 200) {
     const h = response.headers();
     const title = await live.title().catch(() => 'unavailable');
