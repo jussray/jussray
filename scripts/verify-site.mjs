@@ -117,7 +117,7 @@ if (process.env.CI === 'true') {
   const productionStatus = response?.status() ?? 0;
   let failureDetails = lastError && !response ? ` / navigation error=${lastError}` : '';
   if (response && productionStatus !== 200) {
-    const excerpt = (await response.text().catch(() => '')).replace(/\\s+/g, ' ').slice(0, 220);
+    const excerpt = (await response.text().catch(() => '')).replace(/\s+/g, ' ').slice(0, 220);
     failureDetails = `; cf-ray=${response.headers()['cf-ray'] ?? 'missing'}; final-url=${live.url()}; body=${excerpt}`;
   }
   say(productionStatus === 200, `games production: exact domain HTTP ${productionStatus} (expected 200)${failureDetails}`);
