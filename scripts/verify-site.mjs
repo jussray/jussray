@@ -114,6 +114,12 @@ if (process.env.CI === 'true') {
     try { response = await live.goto('https://games.jussco.company/', { waitUntil: 'domcontentloaded', timeout: 25000 }); }
     catch (error) { lastError = String(error); if (attempt < 3) await new Promise(r => setTimeout(r, 4000)); }
   }
+  if (response && response.status() !== 200) {
+    const h = response.headers();
+    const title = await live.title().catch(() => 'unavailable');
+    const snippet = (await live.locator('body').innerText().catch(() => '')).replace(/\s+/g, ' ').slice(0, 240);
+    console.error(`games production diagnostic: status=${response.status()} title=${JSON.stringify(title)} cf-mitigated=${h['cf-mitigated'] || 'none'} server=${h.server || 'none'} body=${JSON.stringify(snippet)}`);
+  }
   say(response?.status() === 200, `games production: exact domain HTTP 200 (observed ${response?.status() ?? 'no response'}, final URL ${response?.url() ?? 'none'}, cf-ray ${response?.headers()['cf-ray'] ?? 'none'})${lastError && !response ? ' / '+lastError : ''}`);
   if (response?.status() === 200) {
     const title = await live.title();
