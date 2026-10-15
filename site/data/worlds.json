@@ -5,9 +5,12 @@
     {
       "name": "Se'kret Bip",
       "repo": "jussray/Sekret-Bip",
-      "st": "soon",
-      "label": "Opening soon",
-      "held": "Opening soon · no public link yet",
+      "st": "progress",
+      "label": "Public preview",
+      "link": {
+        "text": "Visit Se'kret Bip preview",
+        "url": "https://sekretbip.jussco.company/"
+      },
       "contact": {
         "site": "https://sekretbip.net",
         "github": "https://github.com/jussray/Sekret-Bip",
