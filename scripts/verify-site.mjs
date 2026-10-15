@@ -56,6 +56,7 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   say((await page.innerText('#filters .chip[data-group=""] .n')) === String(EXPECTED_WORLDS.length).padStart(2,'0'), `${vp.n}: world count follows registry`);
   say((await page.innerText('#worldCountLead')) === `${EXPECTED_WORLDS.length} worlds. One shared belief.`, `${vp.n}: portfolio headline follows registry`);
   say(await page.locator('.navpill a[href="https://games.jussco.company/"]').count() === 1, `${vp.n}: Games hub has a direct primary navigation path`);
+  if (vp.n === 'tablet') say(await page.locator('.navpill a[href="https://games.jussco.company/"]').isVisible(), 'tablet: Games remains visible in compact navigation');
   say((await page.locator('.os-card').count()) === 5, `${vp.n}: five public standalone OS builds`);
   say(/legal-navigation and notice-research product/i.test(await page.locator('.os-card').first().innerText()), `${vp.n}: Truth Weaver public identity matches legal product`);
   say(JSON.stringify(await page.evaluate(() => [...document.querySelectorAll('.os-card h3')].map((e) => e.textContent))) === JSON.stringify(expectedOS), `${vp.n}: standalone OS identities preserved`);
