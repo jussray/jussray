@@ -3,7 +3,7 @@ import { chromium } from 'playwright';
 import { createServer } from 'node:http';
 import { readFileSync, existsSync, mkdirSync } from 'node:fs';
 import { extname, join } from 'node:path';
-const ROOT = new URL('../site/', import.meta.url).pathname; const MIME = { '.html': 'text/html', '.jpg': 'image/jpeg', '.json': 'application/json', '.png': 'image/png', '.svg': 'image/svg+xml' };
+const ROOT = new URL('../site/', import.meta.url).pathname; const MIME = { '.html': 'text/html', '.jpg': 'image/jpeg', '.json': 'application/json', '.png': 'image/png', '.svg': 'image/svg+xml', '.txt': 'text/plain; charset=utf-8' };
 const WORLD_REGISTRY = JSON.parse(readFileSync(join(ROOT, 'data/worlds.json'), 'utf8')); const EXPECTED_WORLDS = WORLD_REGISTRY.worlds.map((w) => w.name); const IDEA_WORLDS = WORLD_REGISTRY.worlds.filter((w) => w.display?.group === 'Ideas & systems').map((w) => w.name);
 const CONNECTOR_REGISTRY = JSON.parse(readFileSync(join(ROOT, 'data/connectors.json'), 'utf8')); const EXPECTED_CONNECTORS = CONNECTOR_REGISTRY.lanes.map((x) => x.name);
 const srv = createServer((q, r) => { let p = decodeURIComponent(q.url.split('?')[0]); if (p === '/') p = '/index.html'; const f = join(ROOT, p); if (!existsSync(f)) { r.writeHead(404); return r.end(); } r.writeHead(200, { 'content-type': MIME[extname(f)] || 'application/octet-stream' }); r.end(readFileSync(f)); });
@@ -11,6 +11,20 @@ await new Promise((res) => srv.listen(0, '127.0.0.1', res)); const url = `http:/
 mkdirSync('proof/site', { recursive: true });
 const browser = await chromium.launch(); let failed = 0; const say = (ok, m) => { console.log(`${ok ? 'ok ' : 'FAIL'} ${m}`); if (!ok) failed++; };
 const expectedOS = ['Truth Weaver', 'Truth Compass', 'Exact Match Engine', 'Living Truth', 'Proof Core'];
+// Verify the actual static disclosure path with Playwright, not only file existence.
+{
+  const page = await browser.newPage();
+  const response = await page.goto(new URL('.well-known/security.txt', url).href, { waitUntil: 'domcontentloaded' });
+  const body = response ? await response.text() : '';
+  const mime = response?.headers()['content-type'] || '';
+  say(response?.status() === 200, 'security.txt: HTTP 200');
+  say(mime.toLowerCase().startsWith('text/plain'), 'security.txt: text/plain response');
+  say(/^Contact: mailto:[^\r\n]+$/m.test(body), 'security.txt: private reporting contact');
+  const expiration = body.match(/^Expires: ([^\r\n]+)$/m);
+  say(Boolean(expiration && Date.parse(expiration[1]) > Date.now()), 'security.txt: future expiration');
+  await page.close();
+}
+
 for (const mode of ['abort', 'malformed']) {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } }); const page = await ctx.newPage();
   await page.route('**/data/connectors.json', (r) => mode === 'abort'
