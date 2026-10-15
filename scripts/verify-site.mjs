@@ -110,8 +110,8 @@ for (const vp of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile
 }
 
 
-/* Games production: exact domain is checked in a real Chromium session on CI. */
-if (process.env.CI === 'true') {
+/* Games production: main only. Branch/PR runs prove source without claiming deployment. */
+if (process.env.CI === 'true' && process.env.GITHUB_REF === 'refs/heads/main') {
   const live = await browser.newPage({ viewport: { width: 390, height: 844 } });
   let response = null, lastError = '';
   for (let attempt = 1; attempt <= 3 && !response; attempt++) {
