@@ -1,5 +1,6 @@
 // Exact-head Playwright proof for the Juss & Co site. Run: node scripts/verify-site.mjs
 import { chromium } from 'playwright';
+import { connectCloudflareBrowser } from './connect-cloudflare-browser.mjs';
 import { createServer } from 'node:http';
 import { readFileSync, existsSync, mkdirSync } from 'node:fs';
 import { extname, join } from 'node:path';
@@ -108,7 +109,8 @@ for (const vp of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile
 
 /* Games production: exact domain is checked in a real Chromium session on CI. */
 if (process.env.CI === 'true') {
-  const live = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  const productionBrowser = await connectCloudflareBrowser();
+  const live = await productionBrowser.newPage({ viewport: { width: 390, height: 844 } });
   let response = null, lastError = '';
   for (let attempt = 1; attempt <= 3 && !response; attempt++) {
     try { response = await live.goto('https://games.jussco.company/', { waitUntil: 'domcontentloaded', timeout: 25000 }); }
@@ -141,6 +143,7 @@ if (process.env.CI === 'true') {
     await live.screenshot({ path: 'proof/site/games-production-mobile.png', fullPage: true });
   }
   await live.close();
+  await productionBrowser.close();
 }
 
 await browser.close(); srv.close();

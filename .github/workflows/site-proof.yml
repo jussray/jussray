@@ -2,9 +2,9 @@ name: Juss & Co site browser proof
 on:
   push:
     branches: [main]
-    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/verify-approved-stories.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', '.github/workflows/site-proof.yml']
+    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/connect-cloudflare-browser.mjs', 'scripts/verify-approved-stories.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', '.github/workflows/site-proof.yml']
   pull_request:
-    paths: ['site/**', 'scripts/verify-site.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', '.github/workflows/site-proof.yml']
+    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/connect-cloudflare-browser.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', '.github/workflows/site-proof.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -40,17 +40,23 @@ jobs:
       - name: Verify source and Games production in Chromium
         id: source_and_games
         continue-on-error: true
+        env:
+          CF_ACCOUNT_ID: '9b59861bd1747cf7525571b4c51d2aa0'
+          CF_BROWSER_RUN_TOKEN: ${{ secrets.CF_BROWSER_RUN_TOKEN }}
         run: node scripts/verify-site.mjs
       - name: Verify public custom domains in Chromium with exact-head freshness
         id: live_domains
         if: ${{ always() && github.event_name != 'pull_request' }}
         continue-on-error: true
+        env:
+          CF_ACCOUNT_ID: '9b59861bd1747cf7525571b4c51d2aa0'
+          CF_BROWSER_RUN_TOKEN: ${{ secrets.CF_BROWSER_RUN_TOKEN }}
         shell: bash
         run: |
           node --input-type=module <<'NODE'
-          import { chromium } from 'playwright';
+          import { connectCloudflareBrowser } from './scripts/connect-cloudflare-browser.mjs';
           import { readFileSync } from 'node:fs';
-          const browser = await chromium.launch();
+          const browser = await connectCloudflareBrowser();
           const files = ['worlds', 'systems', 'connectors'];
           const expected = Object.fromEntries(files.map(name => [name, readFileSync(`site/data/${name}.json`)]));
           const hosts = ['jussco.company', 'www.jussco.company'];
@@ -119,11 +125,14 @@ jobs:
         id: live_portfolio
         if: ${{ always() && github.event_name != 'pull_request' }}
         continue-on-error: true
+        env:
+          CF_ACCOUNT_ID: '9b59861bd1747cf7525571b4c51d2aa0'
+          CF_BROWSER_RUN_TOKEN: ${{ secrets.CF_BROWSER_RUN_TOKEN }}
         run: |
           node --input-type=module <<'NODE'
-          import { chromium } from 'playwright';
+          import { connectCloudflareBrowser } from './scripts/connect-cloudflare-browser.mjs';
           import { readFileSync } from 'node:fs';
-          const browser = await chromium.launch();
+          const browser = await connectCloudflareBrowser();
           const worldRegistry = JSON.parse(readFileSync('site/data/worlds.json','utf8'));
           const requiredWorlds = worldRegistry.worlds.map(w => w.name);
           const requiredSystems = ['Truth Weaver','Truth Compass','Exact Match Engine','Living Truth','Proof Core'];
