@@ -93,7 +93,7 @@ for (const vp of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile
   const response = await page.goto(url + 'games/index.html', { waitUntil: 'load' });
   say(response?.status() === 200, `games hub: ${vp.name} responds 200`);
   const headings = await page.locator('article.card h3').allTextContents();
-  say(['SYNC', 'LUMORA', 'ChatQuest', 'Bip & Seek'].every(n => headings.includes(n)), `games hub: ${vp.name} all four worlds shown`);
+  say(JSON.stringify(headings) === JSON.stringify(['SYNC', 'LUMORA', 'ChatQuest', 'Bip & Seek']), `games hub: ${vp.name} exactly four approved worlds shown`);
   const editions = await page.locator('.edition h4').allTextContents();
   say(editions.length === 3 && ['Live Site SYNC', 'Chat SYNC', 'Lovable SYNC'].every(n => editions.some(x => x.includes(n))), `games hub: ${vp.name} distinct SYNC editions`);
   const links = await page.locator('.edition a.action').evaluateAll(nodes => nodes.map(x => x.getAttribute('href')));
@@ -136,7 +136,7 @@ if (process.env.CI === 'true') {
   if (response?.status() === 200) {
     const title = await live.title();
     const body = await live.locator('main').innerText().catch(() => '');
-    say(title.includes('Juss & Co. Games') && ['LUMORA','Live Site SYNC','Chat SYNC','Lovable SYNC','Jungle Jinx'].every(name => body.includes(name)), 'games production: all latest hub content visible');
+    say(title.includes('Juss & Co. Games') && ['LUMORA','Live Site SYNC','Chat SYNC','Lovable SYNC'].every(name => body.includes(name)) && !body.includes('Jungle Jinx'), 'games production: all latest hub content visible');
     say((await live.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)) <= 0, 'games production: 390px viewport has no overflow');
     await live.screenshot({ path: 'proof/site/games-production-mobile.png', fullPage: true });
   }
