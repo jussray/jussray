@@ -45,7 +45,7 @@ for (const mode of ['empty', 'mixed', 'unavailable']) {
   say(await page.locator('#outcome-empty').isVisible() === (mode !== 'mixed'), `outcomes: ${mode} empty state`);
   await ctx.close();
 }
-for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1112, m: true }, { n: 'mobile', w: 390, h: 844, m: true }]) {
+for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'laptop', w: 1024, h: 768 }, { n: 'tablet', w: 834, h: 1112, m: true }, { n: 'mobile', w: 390, h: 844, m: true }]) {
   const ctx = await browser.newContext({ viewport: { width: vp.w, height: vp.h }, isMobile: !!vp.m, hasTouch: !!vp.m }); const page = await ctx.newPage();
   const errors = []; page.on('pageerror', (e) => errors.push(String(e))); page.on('requestfailed', (r) => { if (!/fonts\.(googleapis|gstatic)\.com/.test(r.url())) errors.push(`${r.failure()?.errorText} ${r.url()}`); }); page.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) errors.push(m.text()); });
   await page.goto(url, { waitUntil: 'load' }); await page.waitForFunction((n) => document.querySelectorAll('.card').length === n, EXPECTED_WORLDS.length); await page.waitForFunction(() => document.querySelectorAll('.os-card').length === 5 && document.querySelectorAll('.os-connectors').length === 5); await page.waitForTimeout(300);
@@ -56,7 +56,8 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   say((await page.innerText('#filters .chip[data-group=""] .n')) === String(EXPECTED_WORLDS.length).padStart(2,'0'), `${vp.n}: world count follows registry`);
   say((await page.innerText('#worldCountLead')) === `${EXPECTED_WORLDS.length} worlds. One shared belief.`, `${vp.n}: portfolio headline follows registry`);
   say(await page.locator('.navpill a[href="https://games.jussco.company/"]').count() === 1, `${vp.n}: Games hub has a direct primary navigation path`);
-  if (vp.n === 'tablet') say(await page.locator('.navpill a[href="https://games.jussco.company/"]').isVisible(), 'tablet: Games remains visible in compact navigation');
+  if (vp.n === 'tablet' || vp.n === 'laptop') say(await page.locator('.navpill a[href="https://games.jussco.company/"]').isVisible(), `${vp.n}: Games remains visible in responsive navigation`);
+  if (vp.n === 'mobile') say(await page.locator('.hero a[href="https://games.jussco.company/"]').isVisible(), 'mobile: Games remains discoverable when primary navigation is hidden');
   say((await page.locator('.os-card').count()) === 5, `${vp.n}: five public standalone OS builds`);
   say(/legal-navigation and notice-research product/i.test(await page.locator('.os-card').first().innerText()), `${vp.n}: Truth Weaver public identity matches legal product`);
   say(JSON.stringify(await page.evaluate(() => [...document.querySelectorAll('.os-card h3')].map((e) => e.textContent))) === JSON.stringify(expectedOS), `${vp.n}: standalone OS identities preserved`);
