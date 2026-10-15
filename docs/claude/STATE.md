@@ -1,5 +1,18 @@
 # Claude session state — public portfolio
 
+## 2026-10-15 — Juss & Co public discovery fix (held, no release)
+
+- Goal: Keep the live company homepage design; make `games.jussco.company` discoverable in primary navigation, and derive the visible portfolio count from `site/data/worlds.json` instead of stale “Six worlds” copy.
+- Authoritative repo/runtime: `jussray/jussray` → Cloudflare Worker `jussray` on `jussco.company` and `www.jussco.company`.
+- Candidate branch: `fix/jussco-portfolio-discovery-20261015`. Reconciled with `main@92952c402c7540566617c23c7314833a6348be87` via non-force merge commit `ebb0c4068691b9eace12dc69474587978fc91d7e`; `main` might move again.
+- VERIFIED source diff: only `site/index.html` and `scripts/verify-site.mjs` are behavior/test changes; new Games primary link, responsive compact navigation, registry-backed status/count, desktop/laptop/tablet/mobile Playwright assertions. Today's main registry contains 17 worlds, including the public Se'kret Bip preview. Preserve standalone product identity and all production security controls.
+- VERIFIED browser-source preview (Cloudflare Browser Rendering with candidate HTML and main-derived registry fixtures): 390, 834, 980, 1024, 1100, 1200, 1280 and 1440 px rendered zero horizontal overflow, Games discovery, 17 cards and 5 standalone system cards. This is **not** an executed exact-head Playwright CI result and **not** proof the candidate deployed.
+- VERIFIED production baseline: Cloudflare Browser Rendering read both canonical domains and verified that 17 worlds render after asynchronous registry fetch. GitHub Actions run [38815608713](https://github.com/jussray/jussray/actions/runs/38815608713) on main `92952c4` failed: GitHub Chromium got HTTP 403 with `cf-mitigated: challenge` on `games.jussco.company` and the two company domains. Do not hide/suppress these failures or disable Bot Fight Mode.
+- VERIFIED separate provider witness workflow: `.github/workflows/provider-site-proof.yml` exists on main; green PR offline tests do **not** establish production. Provider production run requires an explicitly dispatched `main` workflow with scoped Cloudflare credentials and exact-head witness. No verified production witness for this candidate.
+- BLOCKED: no exact-head Playwright CI run for the discovery branch, no approved merge, no production deploy, no independent production witness. The changes remain reversible on the branch.
+- NEXT GATE: execute exact-head Playwright/required checks without treating Cloudflare 403 as a pass; verify provider-side production proof and destination behavior; only then authorize promotion of this focused candidate. Rollback: leave/delete this branch or revert its focused commits after release.
+- Continuity fingerprint: `jussco-public-discovery|2026-10-15|main-92952c4|candidate-existing-branch|17-worlds|bot-challenge-blocked`.
+
 ## 2026-10-11 — Release-readiness consolidation: 4 gates identified, 23 blockers mapped
 
 **AUTHORIZATION EVIDENCE LEDGER:** docs/AUTHORIZATION_EVIDENCE_LEDGER.md — comprehensive per-component tracking (VERIFIED / INFERRED / BLOCKED / UNKNOWN).
