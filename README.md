@@ -8,6 +8,8 @@ My work sits where product judgment meets engineering: **human-centered products
 
 **Start here:** [Juss & Co](https://jussco.company) · [LinkedIn](https://www.linkedin.com/in/juss-rayy-13ba691a1) · [GitHub](https://github.com/jussray)
 
+**Review the work:** [Selected product case studies](PORTFOLIO_CASE_STUDIES.md) — brief → judgment → build → evidence → safe-share boundary.
+
 ## Selected public work
 
 | Product | What it is | Current public state |
