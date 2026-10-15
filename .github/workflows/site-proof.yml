@@ -1,7 +1,7 @@
 name: Juss & Co site browser proof
 on:
   push:
-    branches: [main]
+    branches: [main, 'fix/**']
     paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/verify-approved-stories.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', '.github/workflows/site-proof.yml']
   pull_request:
     paths: ['site/**', 'scripts/verify-site.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', '.github/workflows/site-proof.yml']
@@ -37,13 +37,13 @@ jobs:
         run: node -e "const s=require('fs').readFileSync('site/index.html','utf8'); const good='<link rel=\"canonical\" href=\"https://jussco.company/\">'; const stale='https://jussray.github.io/jussray/'; if(!s.includes(good)||s.includes(stale)) process.exit(1); console.log('canonical Juss & Co URL valid')"
       - name: Validate public outcome approval gate
         run: node scripts/verify-approved-stories.mjs
-      - name: Verify source and Games production in Chromium
+      - name: Verify source Chromium (and Games production on main)
         id: source_and_games
         continue-on-error: true
         run: node scripts/verify-site.mjs
       - name: Verify public custom domains in Chromium with exact-head freshness
         id: live_domains
-        if: ${{ always() && github.event_name != 'pull_request' }}
+        if: ${{ always() && github.ref == 'refs/heads/main' }}
         continue-on-error: true
         shell: bash
         run: |
@@ -117,7 +117,7 @@ jobs:
           NODE
       - name: Verify deployed portfolio in real browsers
         id: live_portfolio
-        if: ${{ always() && github.event_name != 'pull_request' }}
+        if: ${{ always() && github.ref == 'refs/heads/main' }}
         continue-on-error: true
         run: |
           node --input-type=module <<'NODE'
@@ -158,20 +158,20 @@ jobs:
           SOURCE_AND_GAMES: ${{ steps.source_and_games.outcome }}
           LIVE_DOMAINS: ${{ steps.live_domains.outcome }}
           LIVE_PORTFOLIO: ${{ steps.live_portfolio.outcome }}
-          RUN_EVENT: ${{ github.event_name }}
+          RUN_REF: ${{ github.ref }}
         run: |
           {
             echo "### Independent browser proof outcomes"
             echo "| Required proof | Result |"
             echo "| --- | --- |"
-            echo "| Source + Games production Chromium | $SOURCE_AND_GAMES |"
+            echo "| Source Chromium (Games production on main only) | $SOURCE_AND_GAMES |"
             echo "| Live exact-head domains Chromium | $LIVE_DOMAINS |"
             echo "| Live portfolio Chromium | $LIVE_PORTFOLIO |"
             echo
             echo "A Cloudflare challenge is a failing production proof, not a pass."
           } >> "$GITHUB_STEP_SUMMARY"
           test "$SOURCE_AND_GAMES" = "success" || { echo "::error::Source/Games proof not successful: $SOURCE_AND_GAMES"; exit 1; }
-          if [[ "$RUN_EVENT" != "pull_request" ]]; then
+          if [[ "$RUN_REF" == "refs/heads/main" ]]; then
             test "$LIVE_DOMAINS" = "success" || { echo "::error::Live domain proof not successful: $LIVE_DOMAINS"; exit 1; }
             test "$LIVE_PORTFOLIO" = "success" || { echo "::error::Live portfolio proof not successful: $LIVE_PORTFOLIO"; exit 1; }
           fi
