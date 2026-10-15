@@ -16,6 +16,7 @@ const HOSTS = ['jussco.company', 'www.jussco.company'];
 const REGISTRIES = ['worlds', 'systems', 'connectors'];
 const BIP_URL = 'https://sekretbip.jussco.company/';
 const BUTTON_TEXT = "Visit Se'kret Bip preview";
+const ENTER_BIP = `setTimeout(() => { document.querySelector('[data-testid="web-welcome-enter"]')?.click(); }, 300);`;
 const OPEN_BIP_CARD = `(() => {let tries=0;const h=setInterval(() => {const card=Array.from(document.querySelectorAll('.card')).find(e => e.querySelector('h3')?.textContent?.trim() === "Se'kret Bip");if (card && card.querySelector('.go')) {card.querySelector('.go').click();clearInterval(h);}if (++tries > 30) clearInterval(h);},100);})();`;
 
 export function gitBlobSha(buffer) {
@@ -59,6 +60,28 @@ export function verifyDestinationMarkdown(content, kind) {
   }
   if (kind === 'bip' && !/title:\s*["']Se'kret Bip["']/.test(content)) throw new Error('Se\'kret Bip destination title mismatch');
   if (kind === 'games' && !/title:\s*["']Juss\s*&\s*Co\.? Games/i.test(content)) throw new Error('Games hub destination title mismatch');
+}
+
+export function verifyBipContent(html, stage) {
+  if (typeof html !== 'string' || !html.startsWith('<!DOCTYPE html>')) {
+    throw new Error('Se\\'kret Bip returned no rendered HTML');
+  }
+  if (/Sign in ・ Cloudflare Access|Just a moment|Origin DNS error|Error 1016/i.test(html)) {
+    throw new Error('Se\\'kret Bip returned an access challenge or DNS error');
+  }
+  if (stage === 'welcome') {
+    if (!html.includes('data-testid="web-welcome-shell"') ||
+        !html.includes('data-testid="web-welcome-enter"') ||
+        !html.includes('data-testid="web-welcome-sign-in"')) {
+      throw new Error('Se\\'kret Bip welcome entry controls are not rendered');
+    }
+  } else if (stage === 'age') {
+    if (!html.includes('How old are you?') || !html.includes('Choose an age bucket') || !html.includes("I'm a parent")) {
+      throw new Error('Se\\'kret Bip age-assurance selection did not render after Enter');
+    }
+  } else {
+    throw new Error('Unknown Se\\'kret Bip verification stage');
+  }
 }
 
 export function assertSha(value) {
@@ -133,11 +156,23 @@ export async function runProof({env=process.env, fetchImpl=fetch, root=ROOT}={})
       console.log(`VERIFIED ${host} ${viewport.width}px, Se'kret Bip public preview CTA`);
     }
   }
-  for (const [kind,url] of [['bip',BIP_URL],['games','https://games.jussco.company/']]) {
-    verifyDestinationMarkdown(await request('markdown',{url,actionTimeout:18_000}), kind);
-    witness.pageProof.push({host:new URL(url).hostname,publicDestination:true,rendered:true});
-    console.log(`VERIFIED public ${kind} destination`);
+  // A page title alone cannot prove the teen-facing app is rendered or usable.
+  // Verify real rendered HTML plus the harmless welcome -> age-gate transition.
+  verifyBipContent(await request('content',{url:BIP_URL,actionTimeout:20_000,waitForTimeout:1_200}),'welcome');
+  verifyBipContent(await request('content',{url:BIP_URL,actionTimeout:20_000,waitForTimeout:2_200,
+    addScriptTag:[{content:ENTER_BIP}]}),'age');
+  witness.pageProof.push({host:'sekretbip.jussco.company',publicDestination:true,rendered:true,stages:['welcome','age-selection']});
+  console.log('VERIFIED Se\\'kret Bip welcome and age-selection UI; no signup submitted');
+
+  const gamesUrl = 'https://games.jussco.company/';
+  const gamesMarkdown = await request('markdown',{url:gamesUrl,actionTimeout:18_000});
+  verifyDestinationMarkdown(gamesMarkdown,'games');
+  if (!gamesMarkdown.includes('# Choose your next adventure.') ||
+      !gamesMarkdown.includes('[Play Live SYNC ↗](https://sync.jussco.company/)')) {
+    throw new Error('Games hub public gameplay discovery markers missing');
   }
+  witness.pageProof.push({host:'games.jussco.company',publicDestination:true,rendered:true});
+  console.log('VERIFIED public Games hub and live SYNC discovery link');
   if (await fetchHead(env.GITHUB_TOKEN, fetchImpl) !== expectedHead) throw new Error('main moved during proof; evidence superseded');
   const folder = resolve(root,'proof/site');
   mkdirSync(folder,{recursive:true});
