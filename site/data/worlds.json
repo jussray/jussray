@@ -5,9 +5,12 @@
     {
       "name": "Se'kret Bip",
       "repo": "jussray/Sekret-Bip",
-      "st": "soon",
-      "label": "Opening soon",
-      "held": "Opening soon · no public link yet",
+      "st": "progress",
+      "label": "Public preview",
+      "link": {
+        "text": "Visit Se'kret Bip preview",
+        "url": "https://sekretbip.jussco.company/"
+      },
       "contact": {
         "site": "https://sekretbip.net",
         "github": "https://github.com/jussray/Sekret-Bip",
@@ -672,6 +675,61 @@
           [
             "Public state",
             "No public front door declared"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "MakeVideo",
+      "repo": "jussray/make-video-",
+      "st": "live",
+      "label": "Live studio",
+      "link": {
+        "text": "Create a video",
+        "url": "https://makevideo.jussco.company/"
+      },
+      "contact": {
+        "github": "https://github.com/jussray/make-video-",
+        "email": "founder@jussco.company"
+      },
+      "evidence": {},
+      "carriers": [
+        {
+          "platform": "github",
+          "ref": "jussray/make-video-",
+          "role": "canonical MakeVideo source",
+          "visibility": "public"
+        }
+      ],
+      "display": {
+        "group": "Stories & play",
+        "accent": "#9E72ED",
+        "img": "assets/w-story.jpg",
+        "alt": "Creative storytelling studio artwork",
+        "desc": "A browser-based Juss & Co. studio for storyboards, photo-motion shots, soundtracks and exported videos.",
+        "tags": [
+          "Video",
+          "Creative studio",
+          "Local-first"
+        ],
+        "tag": "Make the storyboard move.",
+        "blurb": "Arrange shots, add your own images and soundtrack, and export a playable animatic from your browser. AI rendering and automatic publication are not enabled.",
+        "facts": [
+          [
+            "Public studio",
+            "https://makevideo.jussco.company/"
+          ],
+          [
+            "Verified",
+            "Cloudflare hosted studio with browser export and Playwright checks"
+          ],
+          [
+            "Storage",
+            "Projects remain in this browser; exported files are user controlled"
+          ],
+          [
+            "Boundary",
+            "StoryEngine GPU rendering and publication remain separate"
           ]
         ]
       }
