@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { gitBlobSha, extractScrapedRegistry, verifyWorldRegistry, verifySiteMarkdown, verifyDestinationMarkdown, assertSha } from './verify-provider-site.mjs';
+import { gitBlobSha, extractScrapedRegistry, verifyWorldRegistry, verifySiteMarkdown, verifyDestinationMarkdown, verifyBipContent, assertSha } from './verify-provider-site.mjs';
 
 const bipLink = '[Visit Se\'kret Bip preview ↗](https://sekretbip.jussco.company/)';
 const site = `---\ntitle: "Juss & Co"\n---\nTurn thoughts into living works.\n### Se'kret Bip\n${bipLink}`;
@@ -39,4 +39,15 @@ test('standalone destinations reject challenge and unrelated pages',()=>{
 test('exact head rejects prefixes and invalid identities',()=>{
   assert.equal(assertSha('a'.repeat(40)),'a'.repeat(40));
   assert.throws(()=>assertSha('a'.repeat(7)),/40-character/);
+});
+
+test('Bip entrance requires real rendered welcome controls and advances to age setup',()=>{
+  const welcome='<!DOCTYPE html><html><body><div data-testid="web-welcome-shell"></div><button data-testid="web-welcome-enter"></button><button data-testid="web-welcome-sign-in"></button></body></html>';
+  const age='<!DOCTYPE html><html><body>How old are you? <button>Choose an age bucket</button> <a>I\'m a parent</a></body></html>';
+  assert.doesNotThrow(()=>verifyBipContent(welcome,'welcome'));
+  assert.doesNotThrow(()=>verifyBipContent(age,'age'));
+  assert.throws(()=>verifyBipContent('<!DOCTYPE html><body></body>','welcome'),/welcome entry controls/);
+  assert.throws(()=>verifyBipContent(welcome,'age'),/age-assurance/);
+  assert.throws(()=>verifyBipContent('<!DOCTYPE html><title>Sign in ・ Cloudflare Access</title>','welcome'),/access challenge/);
+  assert.throws(()=>verifyBipContent('---\ntitle: "Se\'kret Bip"\n---','welcome'),/no rendered HTML/);
 });
