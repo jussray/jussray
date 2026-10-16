@@ -84,12 +84,14 @@ export function verifyBipContent(html, stage) {
   }
 }
 
-const LAYOUT_SCRIPT = `(()=>{let n=0;const h=setInterval(()=>{const card=[...document.querySelectorAll('.card')].find(x=>x.querySelector('h3')?.textContent?.trim()==="Se'kret Bip");if(card?.querySelector('.go')){card.querySelector('.go').click();clearInterval(h)}if(++n>30)clearInterval(h)},100);setTimeout(()=>{const a=document.querySelector('#dCta a'),r=a?.getBoundingClientRect(),d=document.documentElement;d.dataset.proofLayout=JSON.stringify({vw:window.innerWidth,scroll:d.scrollWidth,cta:!!a,rect:r?{width:r.width,height:r.height}:null})},1200)})();`;
+const LAYOUT_SCRIPT = `(()=>{let n=0;const h=setInterval(()=>{const card=[...document.querySelectorAll('.card')].find(x=>x.querySelector('h3')?.textContent?.trim()==="Se'kret Bip");if(card?.querySelector('.go')){card.querySelector('.go').click();clearInterval(h)}if(++n>30)clearInterval(h)},100);setTimeout(()=>{const a=document.querySelector('#dCta a'),r=a?.getBoundingClientRect(),d=document.documentElement;d.dataset.proofLayout=JSON.stringify({vw:window.innerWidth,vh:window.innerHeight,scroll:d.scrollWidth,cta:!!a,rect:r?{width:r.width,height:r.height,left:r.left,right:r.right,top:r.top,bottom:r.bottom}:null})},1200)})();`;
 export function verifyLayoutHtml(html, viewportWidth) {
   const match = typeof html === 'string' && html.match(/data-proof-layout="([^"]+)"/);
   if (!match) throw new Error('No browser layout evidence captured');
   const data=JSON.parse(match[1].replaceAll('&quot;', '"').replaceAll('&amp;', '&'));
-  if (data.vw!==viewportWidth || data.scroll>viewportWidth+1 || !data.cta || data.rect?.width<=0 || data.rect?.height<=0)
+  if (data.vw!==viewportWidth || data.scroll>viewportWidth+1 || !data.cta || data.rect?.width<=0 || data.rect?.height<=0 ||
+      !Number.isFinite(data.vh) || data.rect.left<0 || data.rect.right>data.vw+1 ||
+      data.rect.top<0 || data.rect.bottom>data.vh+1)
     throw new Error('Live viewport overflows or CTA is not geometrically visible');
   return data;
 }
@@ -188,8 +190,8 @@ export async function runProof({env=process.env, fetchImpl=fetch, root=ROOT}={})
   // A page title alone cannot prove the teen-facing app is rendered or usable.
   // Verify real rendered HTML plus the harmless welcome -> age-gate transition.
   verifyBipContent(await request('content',{url:BIP_URL,actionTimeout:20_000,waitForTimeout:1_200}),'welcome');
-  verifyBipContent(await request('content',{url:BIP_URL,actionTimeout:20_000,waitForTimeout:2_200,
-    addScriptTag:[{content:ENTER_BIP}]}),'age');
+  verifyBipContent(await request('content',{url:BIP_URL,actionTimeout:20_000,waitForTimeout:5_200,
+    addScriptTag:[{content:ENTER_BIP}]),'age');
   witness.pageProof.push({host:'sekretbip.jussco.company',publicDestination:true,rendered:true,stages:['welcome','age-selection']});
   console.log('VERIFIED Se’kret Bip welcome and age-selection UI; no signup submitted');
 
