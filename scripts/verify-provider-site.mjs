@@ -107,7 +107,7 @@ export function assertFinalDestination(requested, actual) {
   const expected = requested === BIP_URL ? 'https://sekretbip.net/' : requested;
   let observed;
   try { observed = new URL(actual).href; } catch { throw new Error('Invalid provider final URL'); }
-  if (observed !== expected) throw new Error('Public route redirected to unexpected destination');
+  if (observed !== new URL(expected).href) throw new Error('Public route redirected to unexpected destination');
 }
 
 export function assertSha(value) {
