@@ -85,6 +85,34 @@ export function verifyBipContent(html, stage) {
 }
 
 const LAYOUT_SCRIPT = `(()=>{let n=0;const h=setInterval(()=>{const card=[...document.querySelectorAll('.card')].find(x=>x.querySelector('h3')?.textContent?.trim()==="Se'kret Bip");if(card?.querySelector('.go')){card.querySelector('.go').click();clearInterval(h)}if(++n>30)clearInterval(h)},100);setTimeout(()=>{const a=document.querySelector('#dCta a'),r=a?.getBoundingClientRect(),d=document.documentElement;d.dataset.proofLayout=JSON.stringify({vw:window.innerWidth,vh:window.innerHeight,scroll:d.scrollWidth,cta:!!a,rect:r?{width:r.width,height:r.height,left:r.left,right:r.right,top:r.top,bottom:r.bottom}:null})},1200)})();`;
+const HTML_HASH_SCRIPT = `setTimeout(async()=>{
+  try {
+    const response=await fetch('/index.html',{cache:'no-store'});
+    const source=await response.text();
+    const bytes=new TextEncoder().encode(source);
+    const prefix=new TextEncoder().encode('blob '+bytes.length+'\\0');
+    const payload=new Uint8Array(prefix.length+bytes.length);
+    payload.set(prefix);payload.set(bytes,prefix.length);
+    const hash=await crypto.subtle.digest('SHA-1',payload);
+    const sha=Array.from(new Uint8Array(hash)).map(x=>x.toString(16).padStart(2,'0')).join('');
+    document.documentElement.setAttribute('data-source-check',JSON.stringify({
+      http:response.status,bytes:bytes.length,gitBlobSha1:sha,url:response.url,
+    }));
+  } catch(error) {
+    document.documentElement.setAttribute('data-source-check',JSON.stringify({error:String(error).slice(0,160)}));
+  }
+},400);`;
+export function verifyHtmlSourceMatch(html,expectedHash,host) {
+  const match=typeof html==='string'&&html.match(/data-source-check="([^"]+)"/);
+  if(!match)throw new Error('Browser did not record full HTML source readback');
+  const result=JSON.parse(match[1].replaceAll('&quot;','"').replaceAll('&amp;','&'));
+  if(result.error || result.http!==200 || !Number.isInteger(result.bytes)||result.bytes<100 ||
+    result.gitBlobSha1!==expectedHash || new URL(result.url).hostname!==host) {
+    throw new Error('Public HTML source does not match checked-out Git blob');
+  }
+  return result.gitBlobSha1;
+}
+
 export function verifyLayoutHtml(html, viewportWidth) {
   const match = typeof html === 'string' && html.match(/data-proof-layout="([^"]+)"/);
   if (!match) throw new Error('No browser layout evidence captured');
@@ -183,6 +211,11 @@ export async function runProof({env=process.env, fetchImpl=fetch, root=ROOT}={})
       witness.registries.push({host,file:`data/${registry}.json`,gitBlobSha:liveHash,match:true});
       console.log(`VERIFIED ${host}/data/${registry}.json Git blob ${liveHash.slice(0,12)}`);
     }
+    const rawHtml=await request('content',{url:`https://${host}/`,actionTimeout:20_000,
+      waitForTimeout:2_500,addScriptTag:[{content:HTML_HASH_SCRIPT}]});
+    const htmlGitBlobSha=verifyHtmlSourceMatch(rawHtml,gitBlobSha(readFileSync(resolve(root,'site/index.html'))),host);
+    witness.pageProof.push({host,asset:'site/index.html',gitBlobSha:htmlGitBlobSha,match:true});
+    console.log(`VERIFIED ${host}/index.html Git blob ${htmlGitBlobSha.slice(0,12)}`);
     for (const viewport of [{width:1440,height:900},{width:390,height:844,isMobile:true,hasTouch:true}]) {
       const markdown = await request('markdown', {
         url:`https://${host}/`, viewport, actionTimeout:18_000,
