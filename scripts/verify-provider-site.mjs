@@ -138,6 +138,18 @@ export function assertFinalDestination(requested, actual) {
   if (observed !== new URL(expected).href) throw new Error('Public route redirected to unexpected destination');
 }
 
+export function makePartialReadbackWitness(expectedHead) {
+  return {
+    status:'PARTIAL_PUBLIC_READBACK',
+    deploymentShaAttested:false,
+    repo:REPO,
+    sourceSha:assertSha(expectedHead),
+    method:'Cloudflare REST Browser Rendering, public domains',
+    registries:[],
+    pageProof:[],
+  };
+}
+
 export function assertSha(value) {
   if (!/^[a-f0-9]{40}$/.test(value || '')) throw new Error('Expected an exact 40-character commit SHA');
   return value;
@@ -195,7 +207,7 @@ export async function runProof({env=process.env, fetchImpl=fetch, root=ROOT}={})
   if (await fetchHead(env.GITHUB_TOKEN, fetchImpl) !== expectedHead) throw new Error('main moved before proof; evidence is stale');
 
   // A source SHA and public file matches do not attest the deployed Worker version.
-  const witness = { status:'PARTIAL_PUBLIC_READBACK', deploymentShaAttested:false, repo:REPO, sourceSha:expectedHead, method:'Cloudflare REST Browser Rendering, public domains', registries:[], pageProof:[] };
+  const witness = makePartialReadbackWitness(expectedHead);
   const pace=createQuickActionPacer();
   const request = (endpoint, body) => cfRequest({accountId, token, endpoint, body, fetchImpl, pace});
   for (const host of HOSTS) {
