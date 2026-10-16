@@ -74,10 +74,11 @@ test('rate limiter spaces actions to protect Cloudflare Free quota',async()=>{
 
 test('mobile layout proof fails on overflow and missing CTA geometry',()=>{
   const embed=x=>'<html data-proof-layout="'+JSON.stringify(x).replaceAll('"','&quot;')+'"></html>';
-  const base={vw:390,scroll:390,cta:true,rect:{width:252,height:49}};
+  const base={vw:390,vh:844,scroll:390,cta:true,rect:{width:252,height:49,left:37,right:289,top:227,bottom:276}};
   assert.equal(verifyLayoutHtml(embed(base),390).scroll,390);
   assert.throws(()=>verifyLayoutHtml(embed({...base,scroll:410}),390),/overflows/);
   assert.throws(()=>verifyLayoutHtml(embed({...base,cta:false}),390),/CTA/);
+  assert.throws(()=>verifyLayoutHtml(embed({...base,rect:{...base.rect,right:500}}),390),/CTA/);
   assert.throws(()=>verifyLayoutHtml('<html></html>',390),/No browser layout/);
 });
 
