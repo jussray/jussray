@@ -64,7 +64,7 @@ test('GitHub API errors and missing token are not treated as empty approvals',as
 const enforcedRule={id:123,target:'branch',enforcement:'active',conditions:{ref_name:{include:['~DEFAULT_BRANCH'],exclude:[]}},
   bypass_actors:[],rules:[
     {type:'pull_request',parameters:{required_approving_review_count:1,dismiss_stale_reviews_on_push:true,require_last_push_approval:true,required_review_thread_resolution:true}},
-    {type:'required_status_checks',parameters:{required_status_checks:[{context:'Independent Review Evidence'},{context:'verify'}]}},
+    {type:'required_status_checks',parameters:{required_status_checks:[{context:'Independent Review Evidence'},{context:'Juss & Co Site Browser Proof'}]}},
     {type:'deletion'},{type:'non_fast_forward'}
   ]};
 
