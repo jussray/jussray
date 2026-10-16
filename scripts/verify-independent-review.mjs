@@ -32,6 +32,32 @@ export function reviewDecision({pull, reviews, expectedHead, minApprovals=1}) {
   return {ok:errors.length===0,errors,approvedCount:approved.length,exactHead:expectedHead};
 }
 
+export function rulesetDecision(rulesets) {
+  const errors=[];
+  if (!Array.isArray(rulesets)) return {ok:false,errors:['Missing repository ruleset evidence']};
+  const protectsMain=r=>r?.enforcement==='active' && r?.target==='branch' &&
+    (r?.conditions?.ref_name?.include||[]).some(n=>n==='~DEFAULT_BRANCH'||n==='~ALL'||n==='refs/heads/main') &&
+    !(r?.conditions?.ref_name?.exclude||[]).some(n=>n==='~DEFAULT_BRANCH'||n==='~ALL'||n==='refs/heads/main');
+  const active=rulesets.filter(protectsMain);
+  if (!active.length) errors.push('No active ruleset actually protects main');
+  if (active.some(r=>Array.isArray(r.bypass_actors) && r.bypass_actors.length>0))
+    errors.push('Main ruleset has configured bypass actors requiring authority review');
+  const allRules=active.flatMap(r=>r.rules||[]);
+  const approval=allRules.find(r=>r.type==='pull_request' &&
+    r.parameters?.required_approving_review_count>=1 &&
+    r.parameters?.dismiss_stale_reviews_on_push===true &&
+    r.parameters?.require_last_push_approval===true &&
+    r.parameters?.required_review_thread_resolution===true);
+  if (!approval) errors.push('Missing enforced independent PR approvals and last-push/stale-thread rules');
+  const checks=allRules.filter(r=>r.type==='required_status_checks').flatMap(r=>r.parameters?.required_status_checks||[]);
+  const contexts=new Set(checks.map(x=>x.context));
+  if (!contexts.has('Independent Review Evidence')) errors.push('Independent Review Evidence is not a required GitHub status check');
+  if (!contexts.has('verify')) errors.push('Existing production browser proof is not a required GitHub status check');
+  if (!allRules.some(r=>r.type==='non_fast_forward') || !allRules.some(r=>r.type==='deletion'))
+    errors.push('Main ruleset does not prevent force pushes and deletion');
+  return {ok:errors.length===0,errors};
+}
+
 async function apiGet(url,token,request=fetch){
   const abort=new AbortController();
   const timer=setTimeout(()=>abort.abort(),15_000);
@@ -60,6 +86,20 @@ export async function getReviewEvidence({repo,number,token,request=fetch}){
   throw new Error('Review pagination exceeded safe limit; refusing incomplete evidence');
 }
 
+export async function getRulesEvidence({repo,token,request=fetch}) {
+  const base='https://api.github.com/repos/'+repo+'/rulesets';
+  const list=await apiGet(base+'?includes_parents=true',token,request);
+  if (!Array.isArray(list)) throw new Error('GitHub returned incomplete ruleset inventory');
+  const details=[];
+  for (const item of list) {
+    if (item?.enforcement==='active' && item?.target==='branch') {
+      if (!Number.isInteger(item.id)) throw new Error('Ruleset missing stable ID');
+      details.push(await apiGet(base+'/'+item.id,token,request));
+    }
+  }
+  return details;
+}
+
 export async function runReviewGate(env=process.env,request=fetch){
   const repo=env.GITHUB_REPOSITORY;
   const number=Number(env.PR_NUMBER);
@@ -68,9 +108,10 @@ export async function runReviewGate(env=process.env,request=fetch){
     throw new Error('Missing authorized repository, PR number or read token');
   const evidence=await getReviewEvidence({repo,number,token:env.GITHUB_TOKEN,request});
   const result=reviewDecision({pull:evidence.pull,reviews:evidence.reviews,expectedHead:sha,minApprovals:1});
-  if (!result.ok) throw new Error('Independent review not verified: '+result.errors.join('; '));
-  console.log('REVIEW EVIDENCE VERIFIED: one or more independent human approvals at exact head '+sha.slice(0,12));
-  return result;
+  const rules=rulesetDecision(await getRulesEvidence({repo,token:env.GITHUB_TOKEN,request}));
+  if (!result.ok || !rules.ok) throw new Error('GitHub merge authority not verified: '+[...result.errors,...rules.errors].join('; '));
+  console.log('MERGE AUTHORITY EVIDENCE VERIFIED: active native branch rule plus independent current-head review '+sha.slice(0,12));
+  return {...result,nativeRulesetEnforced:true};
 }
 
 if (process.argv[1] && import.meta.url===pathToFileURL(process.argv[1]).href){
