@@ -17,9 +17,18 @@ A repository administrator must configure **Settings → Rules → Rulesets → 
 
 **Crucial bootstrap:** This repository currently has zero active rulesets and `main` is not protected. This new PR provides checks but cannot activate the real GitHub merge block. Do **not** mark this contract active until the ruleset is read back through GitHub after creation.
 
+## Safe two-stage bootstrap
+
+1. First enable native GitHub protection on `main` using the already-existing site/source check and **one qualified independent human review**, before accepting any merge. Keep bypass actors restricted.
+2. Review and merge this checker PR only through that native human-approval gate. The review authority job **must fail closed during bootstrap** because the trusted checker does not yet exist on `main`. Do not require the new checker context until after installation, and do not misrepresent this intentionally missing job as a successful control.
+3. Once checker files exist on protected `main`, update the active ruleset to require the exact `Independent Review Evidence` context and `Juss & Co Site Browser Proof` alongside any agreed source checks. Verify the ruleset readback and negative blocked-merge examples.
+4. Never load review-authority logic from PR head. The unit-test job may execute candidate code without write rights or secrets, but the review-evidence job must fetch `main` and fail closed if the trusted checker is absent.
+
+**Note:** If the existing site proof is red because of a legitimate Cloudflare challenge, do not promote changes by temporarily disabling the check. Restore equivalent non-bypassing proof and retain the failing check until its replacement is validated. A release decision remains blocked.
+
 ## Reviewer evidence CI
 
-`scripts/verify-independent-review.mjs` queries the GitHub PR and all review pages with a read-only `GITHUB_TOKEN` and fails closed for missing reviews, bots, author self-approval, wrong target, wrong head, stale approvals, unresolved change requests, incomplete pagination, and API errors. The workflow runs on PR updates and review events.
+`scripts/verify-independent-review.mjs` queries the GitHub PR and all review pages with a read-only `GITHUB_TOKEN` and fails closed for missing reviews, bots, author self-approval, wrong target, wrong head, stale approvals, unresolved change requests, incomplete pagination, and API errors. The workflow runs on PR updates and review events. Its authority job executes from trusted `main`, not unreviewed PR source; initial installation intentionally fails until bootstrapped.
 
 **Threat model:** A PR can edit its own scripts and workflows. This read-only checker is an *additional signal*, not a tamper-proof GitHub authority. Only native rulesets plus independent authorized review prevent the PR author from removing/bypassing the check or force-merging.
 
