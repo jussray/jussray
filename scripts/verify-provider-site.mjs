@@ -16,7 +16,7 @@ const HOSTS = ['jussco.company', 'www.jussco.company'];
 const REGISTRIES = ['worlds', 'systems', 'connectors'];
 const BIP_URL = 'https://sekretbip.jussco.company/';
 const BUTTON_TEXT = "Visit Se'kret Bip preview";
-const ENTER_BIP = `setTimeout(() => { document.querySelector('[data-testid="web-welcome-enter"]')?.click(); }, 300);`;
+const ENTER_BIP = `(()=>{let attempts=0;const timer=setInterval(()=>{const button=document.querySelector('[data-testid="web-welcome-enter"]');if(button&&!button.disabled){button.click();clearInterval(timer)}if(++attempts>45)clearInterval(timer)},100)})();`;
 const OPEN_BIP_CARD = `(() => {let tries=0;const h=setInterval(() => {const card=Array.from(document.querySelectorAll('.card')).find(e => e.querySelector('h3')?.textContent?.trim() === "Se'kret Bip");if (card && card.querySelector('.go')) {card.querySelector('.go').click();clearInterval(h);}if (++tries > 30) clearInterval(h);},100);})();`;
 
 export function gitBlobSha(buffer) {
@@ -84,29 +84,51 @@ export function verifyBipContent(html, stage) {
   }
 }
 
+const LAYOUT_SCRIPT = `(()=>{let n=0;const h=setInterval(()=>{const card=[...document.querySelectorAll('.card')].find(x=>x.querySelector('h3')?.textContent?.trim()==="Se'kret Bip");if(card?.querySelector('.go')){card.querySelector('.go').click();clearInterval(h)}if(++n>30)clearInterval(h)},100);setTimeout(()=>{const a=document.querySelector('#dCta a'),r=a?.getBoundingClientRect(),d=document.documentElement;d.dataset.proofLayout=JSON.stringify({vw:window.innerWidth,scroll:d.scrollWidth,cta:!!a,rect:r?{width:r.width,height:r.height}:null})},1200)})();`;
+export function verifyLayoutHtml(html, viewportWidth) {
+  const match = typeof html === 'string' && html.match(/data-proof-layout="([^"]+)"/);
+  if (!match) throw new Error('No browser layout evidence captured');
+  const data=JSON.parse(match[1].replaceAll('&quot;', '"').replaceAll('&amp;', '&'));
+  if (data.vw!==viewportWidth || data.scroll>viewportWidth+1 || !data.cta || data.rect?.width<=0 || data.rect?.height<=0)
+    throw new Error('Live viewport overflows or CTA is not geometrically visible');
+  return data;
+}
+export function createQuickActionPacer({intervalMs=11000, now=()=>Date.now(),sleep=ms=>new Promise(done=>setTimeout(done,ms))}={}) {
+  let next=0;
+  return async()=>{const delay=Math.max(0,next-now());if(delay>0)await sleep(delay);next=now()+intervalMs;};
+}
+
 export function assertSha(value) {
   if (!/^[a-f0-9]{40}$/.test(value || '')) throw new Error('Expected an exact 40-character commit SHA');
   return value;
 }
 
-async function cfRequest({accountId, token, endpoint, body, fetchImpl=fetch}) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 45_000);
-  try {
-    const response = await fetchImpl(`https://api.cloudflare.com/client/v4/accounts/${accountId}/browser-rendering/${endpoint}?cacheTTL=0`, {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-      signal: controller.signal,
-    });
-    // Never echo request headers, Cloudflare API response bodies, or token text.
-    if (!response.ok) throw new Error(`Browser Rendering ${endpoint}: HTTP ${response.status}`);
-    const payload = await response.json();
-    if (payload?.success !== true) throw new Error(`Browser Rendering ${endpoint}: provider returned unsuccessful result`);
-    return payload.result;
-  } finally {
-    clearTimeout(timer);
+async function cfRequest({accountId, token, endpoint, body, fetchImpl=fetch, pace}) {
+  for (let attempt=1; attempt<=3; attempt++) {
+    await pace();
+    const controller=new AbortController();
+    const timer=setTimeout(()=>controller.abort(),45_000);
+    try {
+      const response=await fetchImpl(`https://api.cloudflare.com/client/v4/accounts/${accountId}/browser-rendering/${endpoint}?cacheTTL=0`,{
+        method:'POST',
+        headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},
+        body:JSON.stringify(body),signal:controller.signal,
+      });
+      if(response.status===429 && attempt<3) {
+        const retry=Number(response.headers?.get?.('retry-after'));
+        await new Promise(done=>setTimeout(done,Number.isFinite(retry)&&retry>0?Math.min(60_000,Math.max(11_000,retry*1000)):11_000));
+        continue;
+      }
+      // Never echo request headers, cookies, response bodies, or token text.
+      if(!response.ok)throw new Error(`Browser Rendering ${endpoint}: HTTP ${response.status}`);
+      const payload=await response.json();
+      if(payload?.success!==true)throw new Error(`Browser Rendering ${endpoint}: provider unsuccessful`);
+      // API HTTP 200 is not proof the TARGET page returned HTTP 200.
+      if(payload.meta?.status!==200)throw new Error(`Public target ${endpoint}: HTTP ${payload.meta?.status??'unknown'}`);
+      return payload.result;
+    } finally {clearTimeout(timer);}
   }
+  throw new Error('Provider Quick Action retries exhausted');
 }
 
 async function fetchHead(token, fetchImpl=fetch) {
@@ -131,8 +153,10 @@ export async function runProof({env=process.env, fetchImpl=fetch, root=ROOT}={})
   if (checkoutHead !== expectedHead) throw new Error('Git checkout SHA differs from GitHub Actions exact head');
   if (await fetchHead(env.GITHUB_TOKEN, fetchImpl) !== expectedHead) throw new Error('main moved before proof; evidence is stale');
 
-  const witness = { status:'VERIFIED', repo:REPO, sha:expectedHead, method:'Cloudflare REST Browser Rendering, public domains', registries:[], pageProof:[] };
-  const request = (endpoint, body) => cfRequest({accountId, token, endpoint, body, fetchImpl});
+  // A source SHA and public file matches do not attest the deployed Worker version.
+  const witness = { status:'PARTIAL_PUBLIC_READBACK', deploymentShaAttested:false, repo:REPO, sourceSha:expectedHead, method:'Cloudflare REST Browser Rendering, public domains', registries:[], pageProof:[] };
+  const pace=createQuickActionPacer();
+  const request = (endpoint, body) => cfRequest({accountId, token, endpoint, body, fetchImpl, pace});
   for (const host of HOSTS) {
     for (const registry of REGISTRIES) {
       const source = readFileSync(resolve(root,`site/data/${registry}.json`));
@@ -152,7 +176,12 @@ export async function runProof({env=process.env, fetchImpl=fetch, root=ROOT}={})
         waitForTimeout:1_100, addScriptTag:[{content:OPEN_BIP_CARD}],
       });
       verifySiteMarkdown(markdown);
-      witness.pageProof.push({host,viewport:viewport.width,worldLink:BIP_URL,rendered:true});
+      if(viewport.width===390) {
+        const rendered=await request('content',{url:`https://${host}/`,viewport,actionTimeout:20_000,
+          waitForTimeout:1800,addScriptTag:[{content:LAYOUT_SCRIPT}]});
+        verifyLayoutHtml(rendered,390);
+      }
+      witness.pageProof.push({host,viewport:viewport.width,worldLink:BIP_URL,rendered:true,layoutChecked:viewport.width===390});
       console.log(`VERIFIED ${host} ${viewport.width}px, Se'kret Bip public preview CTA`);
     }
   }
@@ -178,7 +207,7 @@ export async function runProof({env=process.env, fetchImpl=fetch, root=ROOT}={})
   mkdirSync(folder,{recursive:true});
   const path = resolve(folder,`provider-${expectedHead}.json`);
   writeFileSync(path,JSON.stringify(witness,null,2)+'\n');
-  console.log(`VERIFIED independent provider-side production evidence at ${expectedHead.slice(0,12)}; ${witness.registries.length} registry hashes + ${witness.pageProof.length} page checks`);
+  console.log(`PUBLIC READBACK MATCHED at source ${expectedHead.slice(0,12)}; deployed SHA UNATTESTED; ${witness.registries.length} registry hashes + ${witness.pageProof.length} page checks`);
   return witness;
 }
 
