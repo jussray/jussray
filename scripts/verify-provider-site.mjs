@@ -103,7 +103,7 @@ export function assertSha(value) {
   return value;
 }
 
-async function cfRequest({accountId, token, endpoint, body, fetchImpl=fetch, pace}) {
+export async function cfRequest({accountId, token, endpoint, body, fetchImpl=fetch, pace=async()=>{}, sleep=ms=>new Promise(done=>setTimeout(done,ms))}) {
   for (let attempt=1; attempt<=3; attempt++) {
     await pace();
     const controller=new AbortController();
@@ -116,7 +116,7 @@ async function cfRequest({accountId, token, endpoint, body, fetchImpl=fetch, pac
       });
       if(response.status===429 && attempt<3) {
         const retry=Number(response.headers?.get?.('retry-after'));
-        await new Promise(done=>setTimeout(done,Number.isFinite(retry)&&retry>0?Math.min(60_000,Math.max(11_000,retry*1000)):11_000));
+        await sleep(Number.isFinite(retry)&&retry>0?Math.min(60_000,Math.max(11_000,retry*1000)):11_000);
         continue;
       }
       // Never echo request headers, cookies, response bodies, or token text.
