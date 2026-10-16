@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { gitBlobSha, extractScrapedRegistry, verifyWorldRegistry, verifySiteMarkdown, verifyDestinationMarkdown, verifyBipContent, assertSha, runProof, createQuickActionPacer, verifyLayoutHtml, cfRequest, assertFinalDestination } from './verify-provider-site.mjs';
+import { gitBlobSha, extractScrapedRegistry, verifyWorldRegistry, verifySiteMarkdown, verifyDestinationMarkdown, verifyBipContent, assertSha, runProof, createQuickActionPacer, verifyLayoutHtml, verifyHtmlSourceMatch, cfRequest, assertFinalDestination } from './verify-provider-site.mjs';
 
 const bipLink = '[Visit Se\'kret Bip preview ↗](https://sekretbip.jussco.company/)';
 const site = `---\ntitle: "Juss & Co"\n---\nTurn thoughts into living works.\n### Se'kret Bip\n${bipLink}`;
@@ -112,4 +112,16 @@ test('live final destinations are bound to approved public origins',()=>{
 test('browser response fails closed if the target redirected off-domain',async()=>{
   const fake=async()=>({ok:true,status:200,json:async()=>({success:true,meta:{status:200,finalUrl:'https://elsewhere.example/'},result:'valid-looking content'})});
   await assert.rejects(()=>cfRequest({accountId:'a'.repeat(32),token:'fake',endpoint:'content',body:{url:'https://jussco.company/'},fetchImpl:fake}),/unexpected destination/);
+});
+
+test('public raw HTML must match exact source Git blob and requested hostname',()=>{
+  const sha='a'.repeat(40);
+  const make=(p)=>'<html data-source-check="'+JSON.stringify(p).replaceAll('"','&quot;')+'"></html>';
+  const valid={http:200,bytes:69598,gitBlobSha1:sha,url:'https://jussco.company/'};
+  assert.equal(verifyHtmlSourceMatch(make(valid),sha,'jussco.company'),sha);
+  assert.throws(()=>verifyHtmlSourceMatch(make({...valid,gitBlobSha1:'b'.repeat(40)}),sha,'jussco.company'),/does not match/);
+  assert.throws(()=>verifyHtmlSourceMatch(make({...valid,url:'https://example.org/'}),sha,'jussco.company'),/does not match/);
+  assert.throws(()=>verifyHtmlSourceMatch(make({...valid,http:503}),sha,'jussco.company'),/does not match/);
+  assert.throws(()=>verifyHtmlSourceMatch(make({error:'blocked'}),sha,'jussco.company'),/does not match/);
+  assert.throws(()=>verifyHtmlSourceMatch('<html></html>',sha,'jussco.company'),/did not record/);
 });
