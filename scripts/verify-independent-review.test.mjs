@@ -95,3 +95,17 @@ test('end-to-end gate requires both current-head human approval AND enforced nat
   const noRules=async url=>({ok:true,json:async()=>url.includes('/rulesets?')?[]:url.includes('/reviews?')?[approval('independent')]:pr()});
   await assert.rejects(()=>runReviewGate(env,noRules),/No active ruleset/);
 });
+
+test('concurrent PR head movement invalidates a previously approved exact-head readback',async()=>{
+  let prReads=0;
+  const api=async url=>({ok:true,json:async()=>{
+    if(url.includes('/rulesets?')) return [{id:123,enforcement:'active',target:'branch'}];
+    if(url.endsWith('/rulesets/123')) return enforcedRule;
+    if(url.includes('/reviews?')) return [approval('independent')];
+    prReads++;
+    return prReads===1?pr():{...pr(),head:{sha:OLD}};
+  }});
+  const env={GITHUB_REPOSITORY:'jussray/jussray',PR_NUMBER:'28',PR_HEAD_SHA:H,GITHUB_TOKEN:'fake'};
+  await assert.rejects(()=>runReviewGate(env,api),/changed during evaluation/);
+  assert.equal(prReads,2);
+});
