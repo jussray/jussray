@@ -37,7 +37,7 @@ jobs:
         run: node -e "const s=require('fs').readFileSync('site/index.html','utf8'); const good='<link rel=\"canonical\" href=\"https://jussco.company/\">'; const stale='https://jussray.github.io/jussray/'; if(!s.includes(good)||s.includes(stale)) process.exit(1); console.log('canonical Juss & Co URL valid')"
       - name: Validate public outcome approval gate
         run: node scripts/verify-approved-stories.mjs
-      - name: Verify source and Games production in Chromium
+      - name: Verify source, disclosure, and Games fixtures in Chromium (live Games on non-PR CI)
         id: source_and_games
         continue-on-error: true
         run: node scripts/verify-site.mjs
@@ -164,7 +164,7 @@ jobs:
             echo "### Independent browser proof outcomes"
             echo "| Required proof | Result |"
             echo "| --- | --- |"
-            echo "| Source + Games production Chromium | $SOURCE_AND_GAMES |"
+            echo "| Site source/disclosure + local Games Chromium (live Games on non-PR CI) | $SOURCE_AND_GAMES |"
             echo "| Live exact-head domains Chromium | $LIVE_DOMAINS |"
             echo "| Live portfolio Chromium | $LIVE_PORTFOLIO |"
             echo
