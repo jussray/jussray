@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { gitBlobSha, extractScrapedRegistry, verifyWorldRegistry, verifySiteMarkdown, verifyDestinationMarkdown, verifyBipContent, assertSha, runProof, createQuickActionPacer, verifyLayoutHtml, verifyHtmlSourceMatch, cfRequest, assertFinalDestination } from './verify-provider-site.mjs';
+import { gitBlobSha, extractScrapedRegistry, verifyWorldRegistry, verifySiteMarkdown, verifyDestinationMarkdown, verifyBipContent, assertSha, runProof, createQuickActionPacer, verifyLayoutHtml, verifyHtmlSourceMatch, cfRequest, assertFinalDestination, makePartialReadbackWitness } from './verify-provider-site.mjs';
 
 const bipLink = '[Visit Se\'kret Bip preview ↗](https://sekretbip.jussco.company/)';
 const site = `---\ntitle: "Juss & Co"\n---\nTurn thoughts into living works.\n### Se'kret Bip\n${bipLink}`;
@@ -124,4 +124,15 @@ test('public raw HTML must match exact source Git blob and requested hostname',(
   assert.throws(()=>verifyHtmlSourceMatch(make({...valid,http:503}),sha,'jussco.company'),/does not match/);
   assert.throws(()=>verifyHtmlSourceMatch(make({error:'blocked'}),sha,'jussco.company'),/does not match/);
   assert.throws(()=>verifyHtmlSourceMatch('<html></html>',sha,'jussco.company'),/did not record/);
+});
+
+
+test('successful public readback still cannot claim exact deployed-SHA verification',()=>{
+  const receipt=makePartialReadbackWitness('a'.repeat(40));
+  assert.equal(receipt.status,'PARTIAL_PUBLIC_READBACK');
+  assert.equal(receipt.deploymentShaAttested,false);
+  assert.equal(receipt.sourceSha,'a'.repeat(40));
+  assert.deepEqual(receipt.registries,[]);
+  assert.deepEqual(receipt.pageProof,[]);
+  assert.throws(()=>makePartialReadbackWitness('short'),/40-character/);
 });
