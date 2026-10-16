@@ -120,8 +120,11 @@ for (const vp of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile
 }
 
 
-/* Games production: exact domain is checked in a real Chromium session on CI. */
-if (process.env.CI === 'true') {
+/* Games production is a live deployment gate, not a PR source gate.
+   PRs still exercise the local Games hub in desktop/mobile Chromium. Only
+   non-PR CI runs demand the public Games hostname, and a challenge remains red.
+   GITHUB_EVENT_NAME is supplied by GitHub Actions rather than request data. */
+if (process.env.CI === 'true' && process.env.GITHUB_EVENT_NAME !== 'pull_request') {
   const live = await browser.newPage({ viewport: { width: 390, height: 844 } });
   let response = null, lastError = '';
   for (let attempt = 1; attempt <= 3 && !response; attempt++) {
