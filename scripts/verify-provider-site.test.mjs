@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { gitBlobSha, extractScrapedRegistry, verifyWorldRegistry, verifySiteMarkdown, verifyDestinationMarkdown, verifyBipContent, assertSha, runProof, createQuickActionPacer, verifyLayoutHtml, cfRequest } from './verify-provider-site.mjs';
+import { gitBlobSha, extractScrapedRegistry, verifyWorldRegistry, verifySiteMarkdown, verifyDestinationMarkdown, verifyBipContent, assertSha, runProof, createQuickActionPacer, verifyLayoutHtml, cfRequest, assertFinalDestination } from './verify-provider-site.mjs';
 
 const bipLink = '[Visit Se\'kret Bip preview ↗](https://sekretbip.jussco.company/)';
 const site = `---\ntitle: "Juss & Co"\n---\nTurn thoughts into living works.\n### Se'kret Bip\n${bipLink}`;
@@ -92,8 +92,24 @@ test('provider HTTP 429 retries with bounded backoff, without leaking token',asy
   const fake=async()=>{
     n++;
     if(n===1)return {ok:false,status:429,headers:{get:()=> '15'}};
-    return {ok:true,status:200,json:async()=>({success:true,meta:{status:200},result:'public render'})};
+    return {ok:true,status:200,json:async()=>({success:true,meta:{status:200,finalUrl:'https://jussco.company'},result:'public render'})};
   };
   const value=await cfRequest({accountId:'b'.repeat(32),token:'fake',endpoint:'markdown',body:{url:'https://jussco.company'},fetchImpl:fake,sleep:async ms=>sleeps.push(ms)});
   assert.equal(value,'public render');assert.equal(n,2);assert.deepEqual(sleeps,[15000]);
+});
+
+
+test('live final destinations are bound to approved public origins',()=>{
+  assert.doesNotThrow(()=>assertFinalDestination('https://jussco.company/','https://jussco.company/'));
+  assert.doesNotThrow(()=>assertFinalDestination('https://www.jussco.company/','https://www.jussco.company/'));
+  assert.doesNotThrow(()=>assertFinalDestination('https://games.jussco.company/','https://games.jussco.company/'));
+  assert.doesNotThrow(()=>assertFinalDestination('https://sekretbip.jussco.company/','https://sekretbip.net/'));
+  assert.throws(()=>assertFinalDestination('https://jussco.company/','https://other.example/'),/unexpected destination/);
+  assert.throws(()=>assertFinalDestination('https://sekretbip.jussco.company/','https://attacker.example/'),/unexpected destination/);
+  assert.throws(()=>assertFinalDestination('https://jussco.company/',undefined),/final URL/);
+});
+
+test('browser response fails closed if the target redirected off-domain',async()=>{
+  const fake=async()=>({ok:true,status:200,json:async()=>({success:true,meta:{status:200,finalUrl:'https://elsewhere.example/'},result:'valid-looking content'})});
+  await assert.rejects(()=>cfRequest({accountId:'a'.repeat(32),token:'fake',endpoint:'content',body:{url:'https://jussco.company/'},fetchImpl:fake}),/unexpected destination/);
 });
