@@ -45,4 +45,9 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-        run: node scripts/verify-independent-review.mjs
+        run: |
+          if [[ ! -f scripts/verify-independent-review.mjs ]]; then
+            echo "::error::Trusted review checker not installed on protected main; bootstrap BLOCKED."
+            exit 1
+          fi
+          node scripts/verify-independent-review.mjs
