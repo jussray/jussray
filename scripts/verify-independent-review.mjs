@@ -109,6 +109,11 @@ export async function runReviewGate(env=process.env,request=fetch){
   const evidence=await getReviewEvidence({repo,number,token:env.GITHUB_TOKEN,request});
   const result=reviewDecision({pull:evidence.pull,reviews:evidence.reviews,expectedHead:sha,minApprovals:1});
   const rules=rulesetDecision(await getRulesEvidence({repo,token:env.GITHUB_TOKEN,request}));
+  // Guard against concurrent pushes between first PR readback and final witness.
+  const latest=await apiGet('https://api.github.com/repos/'+repo+'/pulls/'+number,env.GITHUB_TOKEN,request);
+  if (latest?.head?.sha!==sha || latest?.state!=='open' || latest?.draft || latest?.base?.ref!=='main') {
+    throw new Error('PR head or review authority changed during evaluation; evidence is stale');
+  }
   if (!result.ok || !rules.ok) throw new Error('GitHub merge authority not verified: '+[...result.errors,...rules.errors].join('; '));
   console.log('MERGE AUTHORITY EVIDENCE VERIFIED: active native branch rule plus independent current-head review '+sha.slice(0,12));
   return {...result,nativeRulesetEnforced:true};
