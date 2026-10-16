@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { gitBlobSha, extractScrapedRegistry, verifyWorldRegistry, verifySiteMarkdown, verifyDestinationMarkdown, verifyBipContent, assertSha, runProof } from './verify-provider-site.mjs';
+import { gitBlobSha, extractScrapedRegistry, verifyWorldRegistry, verifySiteMarkdown, verifyDestinationMarkdown, verifyBipContent, assertSha, runProof, createQuickActionPacer, verifyLayoutHtml, cfRequest } from './verify-provider-site.mjs';
 
 const bipLink = '[Visit Se\'kret Bip preview ↗](https://sekretbip.jussco.company/)';
 const site = `---\ntitle: "Juss & Co"\n---\nTurn thoughts into living works.\n### Se'kret Bip\n${bipLink}`;
@@ -62,4 +62,37 @@ test('production witness rejects non-main and non-manual contexts before checkou
   const safe={GITHUB_SHA:'a'.repeat(40),CLOUDFLARE_ACCOUNT_ID:'f'.repeat(32),CLOUDFLARE_BROWSER_RENDERING_TOKEN:'test-only'};
   await assert.rejects(()=>runProof({env:{...safe,GITHUB_REF:'refs/heads/feature',GITHUB_EVENT_NAME:'workflow_dispatch'}}),/only on a manually dispatched main/);
   await assert.rejects(()=>runProof({env:{...safe,GITHUB_REF:'refs/heads/main',GITHUB_EVENT_NAME:'pull_request'}}),/only on a manually dispatched main/);
+});
+
+
+test('rate limiter spaces actions to protect Cloudflare Free quota',async()=>{
+  let clock=100;const delays=[];
+  const pace=createQuickActionPacer({intervalMs:11000,now:()=>clock,sleep:async ms=>{delays.push(ms);clock+=ms}});
+  await pace();await pace();await pace();
+  assert.deepEqual(delays,[11000,11000]);
+});
+
+test('mobile layout proof fails on overflow and missing CTA geometry',()=>{
+  const embed=x=>'<html data-proof-layout="'+JSON.stringify(x).replaceAll('"','&quot;')+'"></html>';
+  const base={vw:390,scroll:390,cta:true,rect:{width:252,height:49}};
+  assert.equal(verifyLayoutHtml(embed(base),390).scroll,390);
+  assert.throws(()=>verifyLayoutHtml(embed({...base,scroll:410}),390),/overflows/);
+  assert.throws(()=>verifyLayoutHtml(embed({...base,cta:false}),390),/CTA/);
+  assert.throws(()=>verifyLayoutHtml('<html></html>',390),/No browser layout/);
+});
+
+test('provider HTTP 200 must not hide a failing target-page HTTP status',async()=>{
+  const fake=async()=>({ok:true,status:200,json:async()=>({success:true,meta:{status:503},result:'<html>Looks fine</html>'})});
+  await assert.rejects(()=>cfRequest({accountId:'a'.repeat(32),token:'fake',endpoint:'content',body:{url:'https://jussco.company'},fetchImpl:fake}),/target content: HTTP 503/);
+});
+
+test('provider HTTP 429 retries with bounded backoff, without leaking token',async()=>{
+  let n=0;const sleeps=[];
+  const fake=async()=>{
+    n++;
+    if(n===1)return {ok:false,status:429,headers:{get:()=> '15'}};
+    return {ok:true,status:200,json:async()=>({success:true,meta:{status:200},result:'public render'})};
+  };
+  const value=await cfRequest({accountId:'b'.repeat(32),token:'fake',endpoint:'markdown',body:{url:'https://jussco.company'},fetchImpl:fake,sleep:async ms=>sleeps.push(ms)});
+  assert.equal(value,'public render');assert.equal(n,2);assert.deepEqual(sleeps,[15000]);
 });
