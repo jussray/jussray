@@ -52,7 +52,7 @@ export function rulesetDecision(rulesets) {
   const checks=allRules.filter(r=>r.type==='required_status_checks').flatMap(r=>r.parameters?.required_status_checks||[]);
   const contexts=new Set(checks.map(x=>x.context));
   if (!contexts.has('Independent Review Evidence')) errors.push('Independent Review Evidence is not a required GitHub status check');
-  if (!contexts.has('verify')) errors.push('Existing production browser proof is not a required GitHub status check');
+  if (!contexts.has('Juss & Co Site Browser Proof')) errors.push('Existing production browser proof is not a required GitHub status check');
   if (!allRules.some(r=>r.type==='non_fast_forward') || !allRules.some(r=>r.type==='deletion'))
     errors.push('Main ruleset does not prevent force pushes and deletion');
   return {ok:errors.length===0,errors};
