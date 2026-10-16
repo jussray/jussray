@@ -10,7 +10,7 @@ A repository administrator must configure **Settings → Rules → Rulesets → 
 
 - Enforcement: **Active**. Target: repository default branch `main`.
 - Require a pull request before merging; require **at least one approving review from a separate authorized human**. Enable **dismiss stale approvals on new commits**, **last-push approval**, and **resolve all review conversations**.
-- Require exact-head checks by selecting the **actual contexts GitHub lists** for `Review Gate Unit Tests`, `Independent Review Evidence`, and relevant source/site proof jobs. Do not invent status check contexts.
+- Require exact-head checks by selecting the **actual contexts GitHub lists** for `Review Gate Unit Tests`, `Independent Review Evidence`, and `Juss & Co Site Browser Proof`. The existing browser-proof job has a unique name; do not select any unrelated generic `verify` job. Do not invent status check contexts.
 - Do not exempt admins, bots, GitHub Apps, or automation accounts from required pull requests and checks. Review and limit any break-glass bypass actor separately with an auditable incident process.
 - Block force pushes and deletion. Set applicable workflow-file ownership restrictions and preserve artifact/access secrets.
 - Inspect required deployments and source → production asset/Worker version linkage before declaring a production launch.
