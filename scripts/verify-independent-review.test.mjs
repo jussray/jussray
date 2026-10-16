@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {reviewDecision,getReviewEvidence,runReviewGate} from './verify-independent-review.mjs';
+import {reviewDecision,rulesetDecision,getReviewEvidence,getRulesEvidence,runReviewGate} from './verify-independent-review.mjs';
 
 const H='a'.repeat(40),OLD='b'.repeat(40);
 const pr=()=>({state:'open',draft:false,user:{login:'jussray'},head:{sha:H},base:{ref:'main'}});
@@ -61,9 +61,37 @@ test('GitHub API errors and missing token are not treated as empty approvals',as
   await assert.rejects(()=>getReviewEvidence({repo:'jussray/jussray',number:28,token:'x',request:async()=>({ok:false,status:403})}),/HTTP 403/);
   await assert.rejects(()=>getReviewEvidence({repo:'jussray/jussray',number:28}),/Missing scoped/);
 });
-test('end-to-end gate fetches same PR and verifies current-head approval',async()=>{
-  const api=async url=>({ok:true,json:async()=>url.includes('/reviews?')?[approval('independent')]:pr()});
+const enforcedRule={id:123,target:'branch',enforcement:'active',conditions:{ref_name:{include:['~DEFAULT_BRANCH'],exclude:[]}},
+  bypass_actors:[],rules:[
+    {type:'pull_request',parameters:{required_approving_review_count:1,dismiss_stale_reviews_on_push:true,require_last_push_approval:true,required_review_thread_resolution:true}},
+    {type:'required_status_checks',parameters:{required_status_checks:[{context:'Independent Review Evidence'},{context:'verify'}]}},
+    {type:'deletion'},{type:'non_fast_forward'}
+  ]};
+
+test('a missing or misconfigured native GitHub ruleset blocks release regardless of reviewer',()=>{
+  assert.equal(rulesetDecision([]).ok,false);
+  assert.equal(rulesetDecision([{...enforcedRule,enforcement:'evaluate'}]).ok,false);
+  assert.equal(rulesetDecision([{...enforcedRule,bypass_actors:[{actor_id:1}]}]).ok,false);
+  assert.equal(rulesetDecision([{...enforcedRule,rules:enforcedRule.rules.filter(r=>r.type!=='pull_request')}]).ok,false);
+  assert.equal(rulesetDecision([{...enforcedRule,conditions:{ref_name:{include:['refs/heads/feature'],exclude:[]}}}]).ok,false);
+  assert.equal(rulesetDecision([enforcedRule]).ok,true);
+});
+test('native ruleset readback rejects unlisted or denied admin evidence',async()=>{
+  const fake=async url=>({ok:true,json:async()=>url.endsWith('includes_parents=true')?[{id:123,enforcement:'active',target:'branch'}]:enforcedRule});
+  const data=await getRulesEvidence({repo:'jussray/jussray',token:'fake',request:fake});
+  assert.equal(rulesetDecision(data).ok,true);
+  await assert.rejects(()=>getRulesEvidence({repo:'jussray/jussray',token:'fake',request:async()=>({ok:false,status:403})}),/HTTP 403/);
+});
+test('end-to-end gate requires both current-head human approval AND enforced native ruleset',async()=>{
+  const api=async url=>({ok:true,json:async()=>{
+    if(url.includes('/rulesets?'))return [{id:123,enforcement:'active',target:'branch'}];
+    if(url.endsWith('/rulesets/123'))return enforcedRule;
+    if(url.includes('/reviews?'))return [approval('independent')];
+    return pr();
+  }});
   const env={GITHUB_REPOSITORY:'jussray/jussray',PR_NUMBER:'28',PR_HEAD_SHA:H,GITHUB_TOKEN:'fake'};
-  assert.equal((await runReviewGate(env,api)).ok,true);
+  assert.equal((await runReviewGate(env,api)).nativeRulesetEnforced,true);
   await assert.rejects(()=>runReviewGate({...env,PR_HEAD_SHA:OLD},api),/head changed/);
+  const noRules=async url=>({ok:true,json:async()=>url.includes('/rulesets?')?[]:url.includes('/reviews?')?[approval('independent')]:pr()});
+  await assert.rejects(()=>runReviewGate(env,noRules),/No active ruleset/);
 });
