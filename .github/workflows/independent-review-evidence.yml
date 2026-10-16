@@ -31,8 +31,11 @@ jobs:
     timeout-minutes: 5
     needs: unit
     steps:
+      # Authority code must NEVER be loaded from untrusted PR head.
+      # During bootstrap, before trusted code exists on main, fail closed.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
+          ref: main
           persist-credentials: false
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
