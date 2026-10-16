@@ -100,6 +100,16 @@ export function createQuickActionPacer({intervalMs=11000, now=()=>Date.now(),sle
   return async()=>{const delay=Math.max(0,next-now());if(delay>0)await sleep(delay);next=now()+intervalMs;};
 }
 
+export function assertFinalDestination(requested, actual) {
+  if (typeof requested !== 'string' || typeof actual !== 'string') {
+    throw new Error('Provider did not attest target final URL');
+  }
+  const expected = requested === BIP_URL ? 'https://sekretbip.net/' : requested;
+  let observed;
+  try { observed = new URL(actual).href; } catch { throw new Error('Invalid provider final URL'); }
+  if (observed !== expected) throw new Error('Public route redirected to unexpected destination');
+}
+
 export function assertSha(value) {
   if (!/^[a-f0-9]{40}$/.test(value || '')) throw new Error('Expected an exact 40-character commit SHA');
   return value;
@@ -127,6 +137,7 @@ export async function cfRequest({accountId, token, endpoint, body, fetchImpl=fet
       if(payload?.success!==true)throw new Error(`Browser Rendering ${endpoint}: provider unsuccessful`);
       // API HTTP 200 is not proof the TARGET page returned HTTP 200.
       if(payload.meta?.status!==200)throw new Error(`Public target ${endpoint}: HTTP ${payload.meta?.status??'unknown'}`);
+      assertFinalDestination(body.url,payload.meta?.finalUrl);
       return payload.result;
     } finally {clearTimeout(timer);}
   }
