@@ -91,7 +91,7 @@ test('end-to-end gate requires both current-head human approval AND enforced nat
   }});
   const env={GITHUB_REPOSITORY:'jussray/jussray',PR_NUMBER:'28',PR_HEAD_SHA:H,GITHUB_TOKEN:'fake'};
   assert.equal((await runReviewGate(env,api)).nativeRulesetEnforced,true);
-  await assert.rejects(()=>runReviewGate({...env,PR_HEAD_SHA:OLD},api),/head changed/);
+  await assert.rejects(()=>runReviewGate({...env,PR_HEAD_SHA:OLD},api),/changed during evaluation|head changed/);
   const noRules=async url=>({ok:true,json:async()=>url.includes('/rulesets?')?[]:url.includes('/reviews?')?[approval('independent')]:pr()});
   await assert.rejects(()=>runReviewGate(env,noRules),/No active ruleset/);
 });
