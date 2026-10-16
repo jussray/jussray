@@ -191,7 +191,7 @@ export async function runProof({env=process.env, fetchImpl=fetch, root=ROOT}={})
   // Verify real rendered HTML plus the harmless welcome -> age-gate transition.
   verifyBipContent(await request('content',{url:BIP_URL,actionTimeout:20_000,waitForTimeout:1_200}),'welcome');
   verifyBipContent(await request('content',{url:BIP_URL,actionTimeout:20_000,waitForTimeout:5_200,
-    addScriptTag:[{content:ENTER_BIP}]),'age');
+    addScriptTag:[{content:ENTER_BIP}]}),'age');
   witness.pageProof.push({host:'sekretbip.jussco.company',publicDestination:true,rendered:true,stages:['welcome','age-selection']});
   console.log('VERIFIED Se’kret Bip welcome and age-selection UI; no signup submitted');
 
