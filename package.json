@@ -1,0 +1,18 @@
+{
+  "name": "jussray",
+  "version": "1.0.0",
+  "description": "Juss & Co public runtime - Cloudflare Worker",
+  "type": "module",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@cloudflare/kv-asset-handler": "^0.3.1",
+    "@cloudflare/workers-types": "^4.20250101.0",
+    "@playwright/test": "^1.61.1",
+    "playwright": "^1.61.1",
+    "wrangler": "^3.89.0"
+  }
+}
