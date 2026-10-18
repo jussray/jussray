@@ -6,7 +6,8 @@
 - PROOF: guard 5/5 green on fixed tree; against defective 4a64e3c config 3 of 5 red (tests 1, 2, 5); tests 3-4 pass there by design (assets and routes unchanged by the defect).
 - RISK: security headers removed from runtime path; they return only through a reviewed PR (assets binding + CSP nonces). Guard is drift-only, not a full validator.
 - ROLLBACK: revert this change commit; defective commits stay in history.
-- NEXT GATE: draft PR with exact-head CI; merge and redeploy held for Juss.
+- GATE SCOPE (Juss ruling a, 2026-10-18): the CI-only production fetch of games.jussco.company in `scripts/verify-site.mjs` now runs on push events only, not pull_request, matching the live-domain steps. Local source/Games checks still run on every PR. The red gate on PR head 68c8221 (same gate red on main push runs 4a64e3c, ea7baef, efe19ea) is attributed to the production fetch: inferred, since the GitHub log was unavailable; reproduced locally with CI=true.
+- NEXT GATE: exact-head CI on the new head (draft PR); merge and redeploy held for Juss.
 
 ## 2026-10-09 — JussCo outcome showcase branch receipt
 - Branch: `feature/approved-outcome-showcase`; production `main` intentionally unchanged.
