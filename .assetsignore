@@ -62,3 +62,4 @@ tools/
 .github/workflows/
 playwright.config.cjs
 tests/
+supabase/
