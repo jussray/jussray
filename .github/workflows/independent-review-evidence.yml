@@ -1,0 +1,53 @@
+name: Independent Review Evidence
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+  pull_request_review:
+    types: [submitted, dismissed]
+permissions:
+  contents: read
+  pull-requests: read
+concurrency:
+  group: independent-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  unit:
+    name: Review Gate Unit Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      # Candidate code is untrusted. This workflow has read-only permissions and no secrets.
+      # Native branch rulesets, not this editable check, must enforce merger authority.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - run: node --test scripts/verify-independent-review.test.mjs
+  evidence:
+    name: Independent Review Evidence
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: unit
+    steps:
+      # Authority code must NEVER be loaded from untrusted PR head.
+      # During bootstrap, before trusted code exists on main, fail closed.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - name: Require current-head independent human approval
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          if [[ ! -f scripts/verify-independent-review.mjs ]]; then
+            echo "::error::Trusted review checker not installed on protected main; bootstrap BLOCKED."
+            exit 1
+          fi
+          node scripts/verify-independent-review.mjs
