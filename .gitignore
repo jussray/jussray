@@ -2,3 +2,5 @@ node_modules/
 proof/
 playwright-report/
 test-results/
+.wrangler/
+package-lock.json
