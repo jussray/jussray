@@ -1,9 +1,9 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "jussray",
-  "type": "service",
-  "main": "src/index.ts",
   "compatibility_date": "2026-10-01",
+  "preview_urls": true,
+  "previews": {},
   "assets": {
     "directory": "./site"
   },
@@ -16,13 +16,5 @@
       "pattern": "www.jussco.company",
       "custom_domain": true
     }
-  ],
-  "kv_namespaces": [
-    {
-      "binding": "METRICS_KV",
-      "id": "jussray-metrics",
-      "preview_id": "jussray-metrics-preview"
-    }
-  ],
-  "analytics_engine_dataset": "jussray_analytics"
+  ]
 }
