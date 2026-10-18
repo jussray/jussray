@@ -16,5 +16,13 @@
       "pattern": "www.jussco.company",
       "custom_domain": true
     }
-  ]
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "METRICS_KV",
+      "id": "jussray-metrics",
+      "preview_id": "jussray-metrics-preview"
+    }
+  ],
+  "analytics_engine_dataset": "jussray_analytics"
 }
