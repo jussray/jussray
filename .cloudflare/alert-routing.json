@@ -1,0 +1,129 @@
+{
+  "alert_routing": {
+    "version": "1.0",
+    "enabled": true,
+    "recipients": {
+      "juss": {
+        "email": "t2s9dswzpj@privaterelay.appleid.com",
+        "name": "Juss (Founder)",
+        "priority": "critical"
+      },
+      "ops_backup": {
+        "email": "ops-backup@jussco.company",
+        "name": "Operations Backup",
+        "priority": "high"
+      },
+      "incident_channel": {
+        "webhook_url": "https://alerts.internal/incidents",
+        "type": "webhook",
+        "priority": "all"
+      }
+    },
+    "escalation_policy": {
+      "enabled": true,
+      "levels": [
+        {
+          "level": 1,
+          "delay_minutes": 5,
+          "actions": [
+            {"type": "notify", "target": "juss", "method": "email", "urgency": "normal"},
+            {"type": "log", "destination": "incident_log"}
+          ],
+          "acknowledgement_required": true
+        },
+        {
+          "level": 2,
+          "delay_minutes": 15,
+          "condition": "level_1_not_acknowledged",
+          "actions": [
+            {"type": "notify", "target": ["juss", "ops_backup"], "method": ["email", "webhook"], "urgency": "urgent"},
+            {"type": "create_ticket", "severity": "high"}
+          ]
+        },
+        {
+          "level": 3,
+          "delay_minutes": 30,
+          "condition": "level_2_not_acknowledged",
+          "actions": [
+            {"type": "notify", "target": ["juss", "ops_backup"], "method": ["email", "webhook"], "urgency": "critical"},
+            {"type": "create_ticket", "severity": "critical"},
+            {"type": "page", "if_severity": "critical"}
+          ]
+        }
+      ]
+    },
+    "routing_rules": [
+      {
+        "severity": "critical",
+        "route_to": ["juss", "incident_channel"],
+        "escalate_after_minutes": 5,
+        "acknowledge_required": true,
+        "examples": ["TLS certificate expiring", "Worker error rate > 1%", "fcr_mail delivery rate < 98%"]
+      },
+      {
+        "severity": "high",
+        "route_to": ["juss", "incident_channel"],
+        "escalate_after_minutes": 15,
+        "acknowledge_required": true,
+        "examples": ["HTTPS enforcement failure", "Worker latency > 1000ms", "fcr_mail latency > 15s"]
+      },
+      {
+        "severity": "medium",
+        "route_to": "incident_channel",
+        "escalate_after_minutes": 30,
+        "acknowledge_required": false,
+        "examples": ["Response time degradation", "Cache hit rate below 95%"]
+      }
+    ],
+    "suppression": {
+      "enabled": true,
+      "rules": [
+        {
+          "id": "maintenance_window",
+          "pattern": "maintenance_in_progress",
+          "duration_minutes": 120,
+          "suppress_severity": ["low", "medium"]
+        }
+      ]
+    },
+    "grouping": {
+      "enabled": true,
+      "window_minutes": 5,
+      "rules": [
+        {"pattern": "worker_*", "group_by": "error_type", "max_group_size": 10},
+        {"pattern": "fcr_mail_*", "group_by": "severity", "max_group_size": 5}
+      ]
+    }
+  },
+  "incident_management": {
+    "enabled": true,
+    "auto_create_tickets": true,
+    "ticket_configuration": {
+      "project": "jussco-incidents",
+      "team": "engineering",
+      "severity_mapping": {
+        "critical": "p1",
+        "high": "p2",
+        "medium": "p3",
+        "low": "p4"
+      }
+    }
+  },
+  "notification_templates": {
+    "email": {
+      "subject": "[{{severity}}] {{title}} - {{timestamp}}",
+      "body": "Alert: {{title}}\nSeverity: {{severity}}\nTime: {{timestamp}}\nDetails: {{message}}\nAffected Service: {{service}}"
+    },
+    "webhook": {
+      "format": "json",
+      "includes": ["timestamp", "severity", "title", "message", "service", "alert_id"]
+    }
+  },
+  "dashboards": {
+    "enabled": true,
+    "urls": [
+      "https://jussco.company/monitoring/dashboard.html",
+      "https://jussco.company/monitoring/alerts"
+    ]
+  }
+}

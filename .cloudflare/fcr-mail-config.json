@@ -1,0 +1,65 @@
+{
+  "service": {
+    "name": "fcr_mail",
+    "environment": "production",
+    "enabled": true
+  },
+  "endpoints": {
+    "api": {
+      "url": "https://fcr-mail.internal/api/v1",
+      "timeout_seconds": 10,
+      "retry_policy": "exponential_backoff"
+    },
+    "health": {
+      "url": "https://fcr-mail.internal/health",
+      "interval_seconds": 60,
+      "timeout_seconds": 5
+    },
+    "metrics": {
+      "url": "https://fcr-mail.internal/metrics",
+      "interval_seconds": 300,
+      "timeout_seconds": 10
+    }
+  },
+  "logging": {
+    "enabled": true,
+    "kv_bucket": "jussray-metrics",
+    "log_level": "info",
+    "log_format": "json",
+    "retention_days": 30,
+    "metrics_to_track": ["email_sent_count", "email_failed_count", "delivery_latency_ms", "queue_depth", "api_response_time_ms", "error_rate_percent"]
+  },
+  "dashboard": {
+    "enabled": true,
+    "refresh_interval_seconds": 60,
+    "widgets": [
+      {"id": "delivery_rate", "metric": "delivery_rate_percent", "type": "gauge", "thresholds": {"critical": 98, "warning": 99, "healthy": 99.5}},
+      {"id": "latency", "metric": "delivery_latency_ms", "type": "line_chart", "slo_ms": 5000, "alert_threshold_ms": 15000},
+      {"id": "queue_depth", "metric": "queue_depth", "type": "number", "alert_threshold": 10000},
+      {"id": "error_rate", "metric": "error_rate_percent", "type": "gauge", "alert_threshold": 0.5}
+    ]
+  },
+  "alerts": {
+    "enabled": true,
+    "rules": [
+      {"id": "fcr_mail_health_check_failed", "condition": "health_check_status != 200", "severity": "critical", "message": "fcr_mail health check failed"},
+      {"id": "fcr_mail_delivery_rate_low", "condition": "delivery_rate_percent < 98.0", "severity": "critical", "message": "fcr_mail delivery rate below 98%"},
+      {"id": "fcr_mail_latency_high", "condition": "delivery_latency_ms > 15000", "severity": "high", "message": "fcr_mail latency exceeds 15 seconds"},
+      {"id": "fcr_mail_queue_backing_up", "condition": "queue_depth > 10000", "severity": "high", "message": "fcr_mail queue depth exceeds 10000"},
+      {"id": "fcr_mail_api_slow", "condition": "api_response_time_ms > 5000", "severity": "medium", "message": "fcr_mail API response time above 5 seconds"}
+    ]
+  },
+  "testing": {
+    "enabled": true,
+    "test_interval_minutes": 60,
+    "test_email": "test@jussco.company",
+    "alert_on_failure": true
+  },
+  "sla": {
+    "uptime_target_percent": 99.9,
+    "delivery_success_target_percent": 99.5,
+    "latency_p99_ms": 5000,
+    "tracking_enabled": true,
+    "reporting_enabled": true
+  }
+}
