@@ -1,9 +1,9 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "jussray",
+  "type": "service",
+  "main": "src/index.ts",
   "compatibility_date": "2026-10-01",
-  "preview_urls": true,
-  "previews": {},
   "assets": {
     "directory": "./site"
   },
