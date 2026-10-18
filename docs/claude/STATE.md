@@ -1,5 +1,41 @@
 # Claude session state — public portfolio
 
+## 2026-10-18 — Phase 2: Security & Email Strategy Complete
+
+**SUBTASK 1: security.txt (RFC 9116)** ✅ COMPLETE
+- File created: site/.well-known/security.txt
+- Content: Contact, Expires, Preferred-Languages per RFC 9116
+- Worker handler: Serves with text/plain MIME type + cache headers
+- Commit: 34aa117
+
+**SUBTASK 2: HSTS Header** ✅ COMPLETE
+- Header: Strict-Transport-Security: max-age=3600; includeSubdomains; preload
+- Implementation: src/index.ts Worker handler
+- Timeout: 1 hour (3600s) for rollback safety
+- Escalation: Set to 31536000 (1 year) after cert renewal test
+- Applies to: All responses including security.txt
+- Commit: 34aa117 (combined with Subtask 1)
+
+**SUBTASK 3: Email Strategy** ✅ COMPLETE (Pending email config gate)
+- Updated worlds.json: 9 public/live worlds now use support@jussco.company
+- Private worlds: Unchanged (keep hello@)
+- Company contact: Unchanged (hello@ for founder direct access)
+- Affected worlds: Founder Control Room, Chief AI, JBH, Sync Party, PromptOS, SolContinuity, SleepWealth Agent, Solwealth, Think Tank
+- Commit: 608796e
+
+**BLOCKER:** Cloudflare Email Routing configuration required
+- Action: Create support@jussco.company alias routing to hello@jussbeautifulhair.com
+- Gate: Founder decision (Juss)
+- Status: Pending
+
+**VERIFICATION REQUIRED:**
+- [ ] GET /.well-known/security.txt → 200 + text/plain
+- [ ] GET / → Strict-Transport-Security header present
+- [ ] Playwright test: HSTS header validation
+- [ ] Email alias configured (post-config)
+
+---
+
 ## 2026-10-11 — Release-readiness consolidation: 4 gates identified, 23 blockers mapped
 
 **AUTHORIZATION EVIDENCE LEDGER:** docs/AUTHORIZATION_EVIDENCE_LEDGER.md — comprehensive per-component tracking (VERIFIED / INFERRED / BLOCKED / UNKNOWN).
