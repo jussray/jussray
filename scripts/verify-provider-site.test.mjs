@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { gitBlobSha, extractScrapedRegistry, verifyWorldRegistry, verifySiteMarkdown, verifyDestinationMarkdown, verifyBipContent, assertSha, runProof } from './verify-provider-site.mjs';
+import { gitBlobSha, extractScrapedRegistry, verifyWorldRegistry, verifySiteMarkdown, verifyDestinationMarkdown, verifyBipContent, assertSha, runProof, runCanonicalProof, verifyCanonicalMarkdown } from './verify-provider-site.mjs';
 
 const bipLink = '[Visit Se\'kret Bip preview ↗](https://sekretbip.jussco.company/)';
 const site = `---\ntitle: "Juss & Co"\n---\nTurn thoughts into living works.\n### Se'kret Bip\n${bipLink}`;
@@ -62,4 +62,20 @@ test('production witness rejects non-main and non-manual contexts before checkou
   const safe={GITHUB_SHA:'a'.repeat(40),CLOUDFLARE_ACCOUNT_ID:'f'.repeat(32),CLOUDFLARE_BROWSER_RENDERING_TOKEN:'test-only'};
   await assert.rejects(()=>runProof({env:{...safe,GITHUB_REF:'refs/heads/feature',GITHUB_EVENT_NAME:'workflow_dispatch'}}),/only on a manually dispatched main/);
   await assert.rejects(()=>runProof({env:{...safe,GITHUB_REF:'refs/heads/main',GITHUB_EVENT_NAME:'pull_request'}}),/only on a manually dispatched main/);
+});
+
+
+test('canonical witness verifies actual public homepage, rejects Cloudflare challenges and fake facsimiles',()=>{
+  const sample='---\ntitle: "Juss & Co"\n---\nTurn thoughts into living works.\nhttps://www.jussco.company/assets/hero.jpg\nJuss & Co';
+  assert.doesNotThrow(()=>verifyCanonicalMarkdown(sample,'www.jussco.company'));
+  assert.throws(()=>verifyCanonicalMarkdown('Just a moment... '+sample,'www.jussco.company'),/not verified/);
+  assert.throws(()=>verifyCanonicalMarkdown(sample.replace('hero.jpg','fake.jpg'),'www.jussco.company'),/not verified/);
+});
+
+test('canonical provider witness rejects missing credentials, non-main branches and unapproved contexts',async()=>{
+  const env={GITHUB_SHA:'a'.repeat(40),GITHUB_REF:'refs/heads/main',GITHUB_EVENT_NAME:'workflow_dispatch'};
+  await assert.rejects(()=>runCanonicalProof({env}),/Missing scoped Cloudflare/);
+  const credentials={...env,CLOUDFLARE_ACCOUNT_ID:'f'.repeat(32),CLOUDFLARE_BROWSER_RENDERING_TOKEN:'test-only'};
+  await assert.rejects(()=>runCanonicalProof({env:{...credentials,GITHUB_REF:'refs/heads/feature'}}),/manually dispatched main/);
+  await assert.rejects(()=>runCanonicalProof({env:{...credentials,GITHUB_EVENT_NAME:'pull_request'}}),/manually dispatched main/);
 });
