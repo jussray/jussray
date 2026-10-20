@@ -36,7 +36,7 @@ jobs:
       - name: Validate connector fabric registry
         run: node -e "const d=JSON.parse(require('fs').readFileSync('site/data/connectors.json','utf8')); const ids=(d.lanes||[]).map(x=>x.id); const expected=['exa','notion','linear','slack']; const systems=d.systems||{}; const publicSystems=['Truth Weaver','Truth Compass','Exact Match Engine','Living Truth','Proof Core']; const bindings=Object.values(systems).flatMap(x=>x.bindings||[]); if(JSON.stringify(ids)!==JSON.stringify(expected)||!publicSystems.every(n=>Array.isArray(systems[n]?.bindings)&&systems[n].bindings.length===4)||bindings.some(x=>x.state==='connected')) process.exit(1); console.log('connector fabric registry valid; no unproven connected state')"
       - name: Verify canonical public URL
-        run: node -e "const s=require('fs').readFileSync('site/index.html','utf8'); const good='<link rel=\"canonical\" href=\"https://jussco.company/\">'; const stale='https://jussray.github.io/jussray/'; if(!s.includes(good)||s.includes(stale)) process.exit(1); console.log('canonical Juss & Co URL valid')"
+        run: node -e "const s=require('fs').readFileSync('site/index.html','utf8'); const good='<link rel=\"canonical\" href=\"https://www.jussco.company/\">'; const stale='https://jussray.github.io/jussray/'; if(!s.includes(good)||s.includes(stale)) process.exit(1); console.log('canonical Juss & Co URL valid')"
       - name: Validate public outcome approval gate
         run: node scripts/verify-approved-stories.mjs
       - name: Verify source and Games production in Chromium
@@ -67,6 +67,12 @@ jobs:
                   const status = response?.status() ?? 0;
                   console.log(`${host}: HTTP ${status} in Chromium, attempt ${attempt}/12; cf-ray=${response?.headers()['cf-ray'] ?? 'none'}`);
                   if (status !== 200) { allPassed = false; continue; }
+                  const actualHost = new URL(page.url()).hostname;
+                  const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
+                  if (actualHost !== 'www.jussco.company' || canonical !== 'https://www.jussco.company/') {
+                    console.error(`${host}: expected www redirect + canonical; got final host ${actualHost}, canonical ${canonical}`);
+                    allPassed = false;
+                  }
                   await page.waitForSelector('.os-card', { timeout: 15000 });
                   const body = await page.content();
                   if (!body.includes('Turn thoughts into living works.') || !body.includes('Built to stand alone.')) {
