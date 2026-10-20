@@ -38,6 +38,15 @@ try{
     const playtest=await exportView(page,'playtest');
     assert.equal(playtest.items.length,5);
     assert.equal(playtest.kind,'playtest');
+    assert(playtest.items.every(item=>item.state==='UNKNOWN'), 'Jungle Jinx unexecuted build/play gates must not be VERIFIED_SOURCE');
+    await page.locator('.game[data-game="seek"]').click();
+    const seek=await exportView(page,'playtest');
+    assert.equal(seek.items[1].state,'UNKNOWN', 'Roblox ProximityPrompt live touch path remains unknown');
+    assert.equal(seek.items[2].state,'VERIFIED_SOURCE', 'Documented server validation only');
+    await page.locator('.game[data-game="lumora"]').click();
+    const lumora=await exportView(page,'playtest');
+    assert.equal(lumora.items.at(-1).state,'UNKNOWN','Unverified save/reload cannot be source-verified');
+    await page.locator('.game[data-game="jinx"]').click();
     await page.screenshot({path:'proof/lab/playtest-'+vp.name+'.png',fullPage:true});
     await page.locator('#tab-canon').click();
     const canon=await exportView(page,'canon');
