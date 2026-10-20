@@ -58,6 +58,13 @@ function showGame(id){currentGame=id;currentStep=0;const g=games.find(x=>x.id===
 function drawSteps(){const g=games.find(x=>x.id===currentGame);$('steps').innerHTML=g.steps.map(([name],i)=>`<button class="step" data-step="${i}" ${i===currentStep?'aria-current="step"':''}>${i+1}. ${esc(name)}</button>`).join('');$('step-description').textContent=g.steps[currentStep][1];$('steps').querySelectorAll('.step').forEach(n=>n.addEventListener('click',()=>{currentStep=Number(n.dataset.step);drawSteps()}));$('prev-step').disabled=currentStep===0;$('next-step').disabled=currentStep===g.steps.length-1}
 $('game-cards').innerHTML=games.map(g=>`<button class="game" data-game="${g.id}" aria-pressed="false"><span class="emoji">${g.emoji}</span><strong>${esc(g.name)}</strong><small>${esc(g.desc)}</small><span class="badge">${esc(g.badge)}</span></button>`).join('');document.querySelectorAll('.game').forEach(n=>n.addEventListener('click',()=>showGame(n.dataset.game)));$('prev-step').addEventListener('click',()=>{currentStep=Math.max(0,currentStep-1);drawSteps()});$('next-step').addEventListener('click',()=>{currentStep=Math.min(games.find(g=>g.id===currentGame).steps.length-1,currentStep+1);drawSteps()});
 // Portable, source-labeled creative handoff for MakeVideo and MakeImage. No private data, no network.
+// Evidence labels describe the source of a step, NOT successful live gameplay.
+const playtestSourceEvidence={
+  sync:['VERIFIED_SOURCE','VERIFIED_SOURCE','VERIFIED_SOURCE','VERIFIED_SOURCE','VERIFIED_SOURCE'],
+  seek:['VERIFIED_SOURCE','UNKNOWN','VERIFIED_SOURCE','UNKNOWN','UNKNOWN'],
+  jinx:['UNKNOWN','UNKNOWN','UNKNOWN','UNKNOWN','UNKNOWN'],
+  lumora:['VERIFIED_SOURCE','VERIFIED_SOURCE','VERIFIED_SOURCE','VERIFIED_SOURCE','UNKNOWN']
+};
 function exportVisualExperience(){
   const kind=tabNodes.find(t=>t.getAttribute('aria-selected')==='true')?.dataset.tab||'architecture';
   const schema='jussco/visual-experience/v1';
@@ -69,7 +76,7 @@ function exportVisualExperience(){
   }else if(kind==='playtest'){
     const game=games.find(g=>g.id===currentGame);
     title=game.name+' Playtest Walkthrough';
-    items=game.steps.map(([label,desc],i)=>({id:'step'+(i+1),title:label,summary:desc,state:'VERIFIED_SOURCE'}));
+    items=game.steps.map(([label,desc],i)=>({id:'step'+(i+1),title:label,summary:desc,state:playtestSourceEvidence[game.id]?.[i]??'UNKNOWN'}));
   }else{
     title='Juss & Co. www-apex Canon Inspection';
     items=[
