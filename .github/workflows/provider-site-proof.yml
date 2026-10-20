@@ -6,6 +6,13 @@ on:
       - scripts/verify-provider-site.test.mjs
       - .github/workflows/provider-site-proof.yml
   workflow_dispatch:
+    inputs:
+      proof_scope:
+        description: "Choose full multi-destination proof or public canonical domains only"
+        required: true
+        default: full
+        type: choice
+        options: [full, canonical_domains]
 permissions:
   contents: read
 concurrency:
@@ -32,17 +39,26 @@ jobs:
           echo "::error::Production proof requires workflow_dispatch on main; refusing non-main dispatch."
           exit 1
       - name: Verify public production via Cloudflare Browser Rendering
-        if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' }}
+        if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && inputs.proof_scope == 'full' }}
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_BROWSER_RENDERING_TOKEN: ${{ secrets.CLOUDFLARE_BROWSER_RENDERING_TOKEN }}
           GITHUB_TOKEN: ${{ github.token }}
         run: node scripts/verify-provider-site.mjs
+      - name: Verify canonical domains and Games without weakening Cloudflare Bot Fight Mode
+        if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && inputs.proof_scope == 'canonical_domains' }}
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_BROWSER_RENDERING_TOKEN: ${{ secrets.CLOUDFLARE_BROWSER_RENDERING_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/verify-provider-site.mjs --canonical-only
       - name: Upload immutable per-commit production receipt
         if: ${{ always() && github.event_name == 'workflow_dispatch' }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: provider-site-proof-${{ github.sha }}
-          path: proof/site/provider-${{ github.sha }}.json
-          if-no-files-found: warn
+          path: |
+            proof/site/provider-${{ github.sha }}.json
+            proof/site/canonical-provider-${{ github.sha }}.json
+          if-no-files-found: error
           retention-days: 30
