@@ -1,9 +1,9 @@
-## 2026-10-20 — Sajay → Juss Digital rename: standing founder rule + receipt
-- RULE (Juss, repeated): the name "Sajay" is retired everywhere; the service brand is **Juss Digital**. Never reintroduce it in files, PR titles/bodies, or branch names.
-- REALITY @ main 520a073: 0 "Sajay" in any tracked file (VERIFIED, `git grep -i sajay origin/main`). Rename landed via PR #5 (squash de4fa59); PR #4 and #5 titles/bodies rewritten to Juss Digital.
-- Other branches: only `feat/juss-services-live` mentions it, in 3 negative guards (`!/Sajay|Juss Digital/`) that fail CI if the old name returns. Keep them; they enforce the rule.
-- OPEN (founder action): remote branch `fix/sajay-digital-money-page` still exists. Its tip 6f1f826 is identical to `fix/juss-digital-money-page`, so deleting it loses nothing. Agent deletion was blocked by the session safety classifier; Juss deletes it in GitHub → Branches.
-- NOT CHANGED (by design): 4 historical commit messages contain the old name; rewriting main history would need a force-push. Left as history.
+## 2026-10-20 — Juss Digital rename: standing founder rule + receipt
+- RULE (Juss, repeated): the former service name is retired everywhere; the brand is **Juss Digital**. Never reintroduce the former name in files, PR titles/bodies, or branch names — including in receipts like this one.
+- REALITY @ main 520a073: 0 occurrences of the former name in any tracked file (VERIFIED, case-insensitive `git grep` on `origin/main`). Rename landed via PR #5 (squash de4fa59); PR #4 and #5 titles/bodies rewritten to Juss Digital.
+- Other branches: only `feat/juss-services-live` contains it, in 3 negative CI guards that fail if the former name returns. Keep them; they enforce the rule.
+- OPEN (founder action): one remote branch still carries the former name — the `fix/<former-name>-digital-money-page` branch. Its tip 6f1f826 is identical to `fix/juss-digital-money-page`, so deleting it loses nothing. Agent deletion was blocked by the session safety classifier; Juss deletes it in GitHub → Branches.
+- NOT CHANGED (by design): 4 historical commit messages contain the former name; rewriting main history would need a force-push. Left as history.
 - Make onboarding (same session): BLOCKED. Make connector not connected at claude.ai/customize/connectors; `mcp.make.com` denied by the cloud environment network policy; make-skills plugin not installed. First scenario proposed: Juss Digital inquiry webhook → Sheet/Notion log → Gmail auto-reply → Slack ping, built inactive and tested before activation.
 - ROLLBACK: revert this entry's commit.
 
