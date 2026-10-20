@@ -14,8 +14,8 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const REPO = 'jussray/jussray';
 const HOSTS = ['jussco.company', 'www.jussco.company'];
 const REGISTRIES = ['worlds', 'systems', 'connectors'];
-const BIP_URL = 'https://sekretbip.jussco.company/';
-const BUTTON_TEXT = "Visit Se'kret Bip preview";
+const CANONICAL = 'https://www.jussco.company/';
+const COMPANY_QR_LABEL = 'Scan to explore';
 const ENTER_BIP = `setTimeout(() => { document.querySelector('[data-testid="web-welcome-enter"]')?.click(); }, 300);`;
 const OPEN_BIP_CARD = `(() => {let tries=0;const h=setInterval(() => {const card=Array.from(document.querySelectorAll('.card')).find(e => e.querySelector('h3')?.textContent?.trim() === "Se'kret Bip");if (card && card.querySelector('.go')) {card.querySelector('.go').click();clearInterval(h);}if (++tries > 30) clearInterval(h);},100);})();`;
 
@@ -36,8 +36,10 @@ export function extractScrapedRegistry(data) {
 export function verifyWorldRegistry(raw) {
   const parsed = JSON.parse(raw);
   const bip = parsed.worlds?.find(x => x.name === "Se'kret Bip");
-  if (!bip || bip.link?.url !== BIP_URL || bip.label !== 'Public preview' || bip.contact?.site !== 'https://sekretbip.net') {
-    throw new Error('Se\'kret Bip world must be a public preview with standalone product URL');
+  if (!bip || bip.st !== 'soon' || bip.label !== 'Opening soon' ||
+      bip.held !== 'Opening soon · no public link yet' ||
+      bip.contact?.site !== 'https://sekretbip.net' || bip.link?.url) {
+    throw new Error('Se\'kret Bip must remain a clearly gated upcoming product');
   }
 }
 
@@ -45,8 +47,11 @@ export function verifySiteMarkdown(content) {
   if (typeof content !== 'string' || !content.includes('Turn thoughts into living works.') || !content.includes("### Se'kret Bip")) {
     throw new Error('Rendered Juss & Co. site markers missing');
   }
-  if (!content.includes(`[${BUTTON_TEXT} ↗](${BIP_URL})`)) {
-    throw new Error('Se\'kret Bip card button missing from opened live drawer');
+  if (!content.includes('Opening soon · no public link yet')) {
+    throw new Error('Se\'kret Bip must not claim a public live preview');
+  }
+  if (!content.includes(COMPANY_QR_LABEL) || !content.includes('www.jussco.company')) {
+    throw new Error('Canonical company QR destination missing from live homepage');
   }
   if (/Just a moment|Performing security verification|Origin DNS error/i.test(content)) {
     throw new Error('Browser saw Cloudflare challenge / DNS error, not the public site');
@@ -82,6 +87,14 @@ export function verifyBipContent(html, stage) {
   } else {
     throw new Error('Unknown Se’kret Bip verification stage');
   }
+}
+
+export function assertReleaseContext(env) {
+  if (env.GITHUB_REF !== 'refs/heads/main' ||
+      !['push', 'workflow_dispatch'].includes(env.GITHUB_EVENT_NAME)) {
+    throw new Error('Independent production witness runs only after main push or manual main dispatch');
+  }
+  return true;
 }
 
 export function assertSha(value) {
@@ -124,9 +137,7 @@ export async function runProof({env=process.env, fetchImpl=fetch, root=ROOT}={})
     throw new Error('Missing scoped Cloudflare Browser Rendering token or account ID; production proof BLOCKED');
   }
   const expectedHead = assertSha(env.GITHUB_SHA);
-  if (env.GITHUB_REF !== 'refs/heads/main' || env.GITHUB_EVENT_NAME !== 'workflow_dispatch') {
-    throw new Error('This release witness runs only on a manually dispatched main branch');
-  }
+  assertReleaseContext(env);
   const checkoutHead = execFileSync('git', ['rev-parse','HEAD'], {cwd:root, encoding:'utf8'}).trim();
   if (checkoutHead !== expectedHead) throw new Error('Git checkout SHA differs from GitHub Actions exact head');
   if (await fetchHead(env.GITHUB_TOKEN, fetchImpl) !== expectedHead) throw new Error('main moved before proof; evidence is stale');
@@ -152,18 +163,13 @@ export async function runProof({env=process.env, fetchImpl=fetch, root=ROOT}={})
         waitForTimeout:1_100, addScriptTag:[{content:OPEN_BIP_CARD}],
       });
       verifySiteMarkdown(markdown);
-      witness.pageProof.push({host,viewport:viewport.width,worldLink:BIP_URL,rendered:true});
-      console.log(`VERIFIED ${host} ${viewport.width}px, Se'kret Bip public preview CTA`);
+      witness.pageProof.push({host,viewport:viewport.width,canonical:CANONICAL,companyQr:true,rendered:true});
+      console.log(`VERIFIED ${host} ${viewport.width}px, company page and canonical scan link`);
     }
   }
-  // A page title alone cannot prove the teen-facing app is rendered or usable.
-  // Verify real rendered HTML plus the harmless welcome -> age-gate transition.
-  verifyBipContent(await request('content',{url:BIP_URL,actionTimeout:20_000,waitForTimeout:1_200}),'welcome');
-  verifyBipContent(await request('content',{url:BIP_URL,actionTimeout:20_000,waitForTimeout:2_200,
-    addScriptTag:[{content:ENTER_BIP}]}),'age');
-  witness.pageProof.push({host:'sekretbip.jussco.company',publicDestination:true,rendered:true,stages:['welcome','age-selection']});
-  console.log('VERIFIED Se’kret Bip welcome and age-selection UI; no signup submitted');
-
+  // The independent Se'kret Bip runtime and age-assurance proof belongs to
+  // Se'kret Bip's release gate. Do not couple parent-site attestations to
+  // unrelated or unfinished product flows.
   const gamesUrl = 'https://games.jussco.company/';
   const gamesMarkdown = await request('markdown',{url:gamesUrl,actionTimeout:18_000});
   verifyDestinationMarkdown(gamesMarkdown,'games');

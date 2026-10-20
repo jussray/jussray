@@ -1,9 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { gitBlobSha, extractScrapedRegistry, verifyWorldRegistry, verifySiteMarkdown, verifyDestinationMarkdown, verifyBipContent, assertSha, runProof } from './verify-provider-site.mjs';
+import { gitBlobSha, extractScrapedRegistry, verifyWorldRegistry, verifySiteMarkdown, verifyDestinationMarkdown, verifyBipContent, assertSha, assertReleaseContext, runProof } from './verify-provider-site.mjs';
 
-const bipLink = '[Visit Se\'kret Bip preview ↗](https://sekretbip.jussco.company/)';
-const site = `---\ntitle: "Juss & Co"\n---\nTurn thoughts into living works.\n### Se'kret Bip\n${bipLink}`;
+const site = `---\ntitle: "Juss & Co"\n---\nTurn thoughts into living works.\n### Se'kret Bip\nOpening soon · no public link yet\nScan to explore www.jussco.company`;
 
 test('Git blob hash matches known Git SHA-1 format', () => {
   assert.equal(gitBlobSha(Buffer.from('hello\n')), 'ce013625030ba8dba906f756967f9e9ca394464a');
@@ -17,15 +16,16 @@ test('registry scraper requires a full unique pre element', () => {
 });
 
 test('world registry preserves standalone Bip and preview truth', () => {
-  const base={worlds:[{name:"Se'kret Bip",label:'Public preview',link:{url:'https://sekretbip.jussco.company/'},contact:{site:'https://sekretbip.net'}}]};
+  const base={worlds:[{name:"Se'kret Bip",st:'soon',label:'Opening soon',held:'Opening soon · no public link yet',contact:{site:'https://sekretbip.net'}}]};
   assert.doesNotThrow(()=>verifyWorldRegistry(JSON.stringify(base)));
   base.worlds[0].label='Live signup';
-  assert.throws(()=>verifyWorldRegistry(JSON.stringify(base)), /public preview/);
+  assert.throws(()=>verifyWorldRegistry(JSON.stringify(base)), /gated upcoming product/);
 });
 
-test('public parent-card CTA must actually appear in browser markdown', () => {
+test('public company QR and honest upcoming project state must appear in browser markdown', () => {
   assert.doesNotThrow(()=>verifySiteMarkdown(site));
-  assert.throws(()=>verifySiteMarkdown(site.replace(bipLink,'')),/card button/);
+  assert.throws(()=>verifySiteMarkdown(site.replace('Scan to explore','')),/QR destination/);
+  assert.throws(()=>verifySiteMarkdown(site.replace('Opening soon · no public link yet','Public signup live')),/must not claim/);
   assert.throws(()=>verifySiteMarkdown('Just a moment... '+site),/Cloudflare challenge/);
 });
 
@@ -58,8 +58,11 @@ test('production witness fails closed when provider credentials are missing',asy
   await assert.rejects(()=>runProof({env}),/Missing scoped Cloudflare/);
 });
 
-test('production witness rejects non-main and non-manual contexts before checkout or network',async()=>{
-  const safe={GITHUB_SHA:'a'.repeat(40),CLOUDFLARE_ACCOUNT_ID:'f'.repeat(32),CLOUDFLARE_BROWSER_RENDERING_TOKEN:'test-only'};
-  await assert.rejects(()=>runProof({env:{...safe,GITHUB_REF:'refs/heads/feature',GITHUB_EVENT_NAME:'workflow_dispatch'}}),/only on a manually dispatched main/);
-  await assert.rejects(()=>runProof({env:{...safe,GITHUB_REF:'refs/heads/main',GITHUB_EVENT_NAME:'pull_request'}}),/only on a manually dispatched main/);
+test('production witness accepts main push and manual main dispatch only',()=>{
+  assert.equal(assertReleaseContext({GITHUB_REF:'refs/heads/main',GITHUB_EVENT_NAME:'push'}),true);
+  assert.equal(assertReleaseContext({GITHUB_REF:'refs/heads/main',GITHUB_EVENT_NAME:'workflow_dispatch'}),true);
+  for (const [ref,event] of [
+    ['refs/heads/feature','push'],['refs/heads/feature','workflow_dispatch'],
+    ['refs/heads/main','pull_request'],['refs/heads/main','schedule']
+  ]) assert.throws(()=>assertReleaseContext({GITHUB_REF:ref,GITHUB_EVENT_NAME:event}),/only after main push/);
 });
