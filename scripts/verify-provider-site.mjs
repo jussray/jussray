@@ -14,8 +14,8 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const REPO = 'jussray/jussray';
 const HOSTS = ['jussco.company', 'www.jussco.company'];
 const REGISTRIES = ['worlds', 'systems', 'connectors'];
-const BIP_URL = 'https://sekretbip.jussco.company/';
-const BUTTON_TEXT = "Visit Se'kret Bip preview";
+const CANONICAL = 'https://www.jussco.company/';
+const COMPANY_QR_LABEL = 'Scan to explore';
 const ENTER_BIP = `setTimeout(() => { document.querySelector('[data-testid="web-welcome-enter"]')?.click(); }, 300);`;
 const OPEN_BIP_CARD = `(() => {let tries=0;const h=setInterval(() => {const card=Array.from(document.querySelectorAll('.card')).find(e => e.querySelector('h3')?.textContent?.trim() === "Se'kret Bip");if (card && card.querySelector('.go')) {card.querySelector('.go').click();clearInterval(h);}if (++tries > 30) clearInterval(h);},100);})();`;
 
@@ -36,8 +36,10 @@ export function extractScrapedRegistry(data) {
 export function verifyWorldRegistry(raw) {
   const parsed = JSON.parse(raw);
   const bip = parsed.worlds?.find(x => x.name === "Se'kret Bip");
-  if (!bip || bip.link?.url !== BIP_URL || bip.label !== 'Public preview' || bip.contact?.site !== 'https://sekretbip.net') {
-    throw new Error('Se\'kret Bip world must be a public preview with standalone product URL');
+  if (!bip || bip.st !== 'soon' || bip.label !== 'Opening soon' ||
+      bip.held !== 'Opening soon · no public link yet' ||
+      bip.contact?.site !== 'https://sekretbip.net' || bip.link?.url) {
+    throw new Error('Se\'kret Bip must remain a clearly gated upcoming product');
   }
 }
 
@@ -45,8 +47,11 @@ export function verifySiteMarkdown(content) {
   if (typeof content !== 'string' || !content.includes('Turn thoughts into living works.') || !content.includes("### Se'kret Bip")) {
     throw new Error('Rendered Juss & Co. site markers missing');
   }
-  if (!content.includes(`[${BUTTON_TEXT} ↗](${BIP_URL})`)) {
-    throw new Error('Se\'kret Bip card button missing from opened live drawer');
+  if (!content.includes('Opening soon · no public link yet')) {
+    throw new Error('Se\'kret Bip must not claim a public live preview');
+  }
+  if (!content.includes(COMPANY_QR_LABEL) || !content.includes('www.jussco.company')) {
+    throw new Error('Canonical company QR destination missing from live homepage');
   }
   if (/Just a moment|Performing security verification|Origin DNS error/i.test(content)) {
     throw new Error('Browser saw Cloudflare challenge / DNS error, not the public site');
@@ -82,6 +87,14 @@ export function verifyBipContent(html, stage) {
   } else {
     throw new Error('Unknown Se’kret Bip verification stage');
   }
+}
+
+export function assertReleaseContext(env) {
+  if (env.GITHUB_REF !== 'refs/heads/main' ||
+      !['push', 'workflow_dispatch'].includes(env.GITHUB_EVENT_NAME)) {
+    throw new Error('Independent production witness runs only after main push or manual main dispatch');
+  }
+  return true;
 }
 
 export function assertSha(value) {
@@ -124,9 +137,7 @@ export async function runProof({env=process.env, fetchImpl=fetch, root=ROOT}={})
     throw new Error('Missing scoped Cloudflare Browser Rendering token or account ID; production proof BLOCKED');
   }
   const expectedHead = assertSha(env.GITHUB_SHA);
-  if (env.GITHUB_REF !== 'refs/heads/main' || env.GITHUB_EVENT_NAME !== 'workflow_dispatch') {
-    throw new Error('This release witness runs only on a manually dispatched main branch');
-  }
+  assertReleaseContext(env);
   const checkoutHead = execFileSync('git', ['rev-parse','HEAD'], {cwd:root, encoding:'utf8'}).trim();
   if (checkoutHead !== expectedHead) throw new Error('Git checkout SHA differs from GitHub Actions exact head');
   if (await fetchHead(env.GITHUB_TOKEN, fetchImpl) !== expectedHead) throw new Error('main moved before proof; evidence is stale');
@@ -152,18 +163,13 @@ export async function runProof({env=process.env, fetchImpl=fetch, root=ROOT}={})
         waitForTimeout:1_100, addScriptTag:[{content:OPEN_BIP_CARD}],
       });
       verifySiteMarkdown(markdown);
-      witness.pageProof.push({host,viewport:viewport.width,worldLink:BIP_URL,rendered:true});
-      console.log(`VERIFIED ${host} ${viewport.width}px, Se'kret Bip public preview CTA`);
+      witness.pageProof.push({host,viewport:viewport.width,canonical:CANONICAL,companyQr:true,rendered:true});
+      console.log(`VERIFIED ${host} ${viewport.width}px, company page and canonical scan link`);
     }
   }
-  // A page title alone cannot prove the teen-facing app is rendered or usable.
-  // Verify real rendered HTML plus the harmless welcome -> age-gate transition.
-  verifyBipContent(await request('content',{url:BIP_URL,actionTimeout:20_000,waitForTimeout:1_200}),'welcome');
-  verifyBipContent(await request('content',{url:BIP_URL,actionTimeout:20_000,waitForTimeout:2_200,
-    addScriptTag:[{content:ENTER_BIP}]}),'age');
-  witness.pageProof.push({host:'sekretbip.jussco.company',publicDestination:true,rendered:true,stages:['welcome','age-selection']});
-  console.log('VERIFIED Se’kret Bip welcome and age-selection UI; no signup submitted');
-
+  // The independent Se'kret Bip runtime and age-assurance proof belongs to
+  // Se'kret Bip's release gate. Do not couple parent-site attestations to
+  // unrelated or unfinished product flows.
   const gamesUrl = 'https://games.jussco.company/';
   const gamesMarkdown = await request('markdown',{url:gamesUrl,actionTimeout:18_000});
   verifyDestinationMarkdown(gamesMarkdown,'games');
@@ -182,99 +188,6 @@ export async function runProof({env=process.env, fetchImpl=fetch, root=ROOT}={})
   return witness;
 }
 
-
-/**
- * Independent canonical-domain proof when external CI Chromium is challenged
- * by Cloudflare's automated traffic protections. Does not disable defenses.
- * It does not grant whole-portfolio or destination-app release authority.
- */
-export function verifyCanonicalMarkdown(content, host) {
-  if (typeof content !== 'string' ||
-      /Just a moment|Performing security verification|Origin DNS error|Error 1016/i.test(content) ||
-      !content.includes('Turn thoughts into living works.') ||
-      !content.includes('https://www.jussco.company/assets/hero.jpg') ||
-      !content.includes('Juss & Co')) {
-    throw new Error(host + ': canonical public homepage not verified');
-  }
-}
-
-export async function runCanonicalProof({env=process.env, fetchImpl=fetch, root=ROOT}={}) {
-  const accountId=env.CLOUDFLARE_ACCOUNT_ID, token=env.CLOUDFLARE_BROWSER_RENDERING_TOKEN;
-  if (!/^[a-f0-9]{32}$/.test(accountId||'') || !token) {
-    throw new Error('Missing scoped Cloudflare Browser Rendering token or account ID; canonical proof BLOCKED');
-  }
-  const expectedHead=assertSha(env.GITHUB_SHA);
-  if (env.GITHUB_REF!=='refs/heads/main' || env.GITHUB_EVENT_NAME!=='workflow_dispatch') {
-    throw new Error('Canonical witness runs only on a manually dispatched main branch');
-  }
-  const checkoutHead=execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim();
-  if (checkoutHead!==expectedHead || await fetchHead(env.GITHUB_TOKEN,fetchImpl)!==expectedHead) {
-    throw new Error('Canonical proof refused: current or checkout GitHub head differs');
-  }
-  const req=(endpoint,body)=>cfRequest({accountId,token,endpoint,body,fetchImpl});
-  const hosts=['jussco.company','www.jussco.company'];
-  const expectedCount=JSON.parse(readFileSync(resolve(root,'site/data/worlds.json'))).worlds.length;
-  const expectedOS=JSON.parse(readFileSync(resolve(root,'site/data/systems.json'))).systems.filter(s=>s.public!==false).length;
-  const witness={
-    schema:'jussco/canonical-provider-witness/v1',status:'VERIFIED_PROVIDER_BROWSER',
-    repo:REPO,sha:expectedHead,scope:'public-company-domains-and-games-only',
-    method:'Cloudflare Browser Rendering',registries:[],views:[],
-    exclusions:['External GitHub runner bot challenge remains unresolved',
-      'Does not establish all applications, payments, signups or other product releases',
-      'Does not grant deployment or publication authority']
-  };
-  for (const host of hosts) {
-    for (const name of REGISTRIES) {
-      const local=readFileSync(resolve(root,'site/data/'+name+'.json'));
-      const observed=extractScrapedRegistry(await req('scrape',{
-        url:'https://'+host+'/data/'+name+'.json',actionTimeout:20000,
-        elements:[{selector:'pre'}]
-      }));
-      const got=gitBlobSha(observed),want=gitBlobSha(local);
-      if (got!==want) throw new Error(host+'/'+name+': Git blob differs from exact head');
-      witness.registries.push({host,name,gitBlobSha:got,match:true});
-    }
-    const elements=await req('scrape',{
-      url:'https://'+host+'/',actionTimeout:22000,
-      waitForSelector:{selector:'.os-card',timeout:15000},
-      elements:[{selector:'.card h3'},{selector:'.os-card h3'},
-        {selector:'.os-connectors'},{selector:'.os-connectors span[data-state="connected"]'}]
-    });
-    const count=selector=>elements.find(e=>e?.selector===selector)?.results?.length??-1;
-    if (count('.card h3')!==expectedCount ||
-        count('.os-card h3')!==expectedOS ||
-        count('.os-connectors')!==expectedOS ||
-        count('.os-connectors span[data-state="connected"]')!==0) {
-      throw new Error(host+': public cards, standalone systems or connector truth mismatch');
-    }
-    for (const vp of [{width:1440,height:900},{width:390,height:844,isMobile:true,hasTouch:true}]) {
-      const m=await req('markdown',{url:'https://'+host+'/',viewport:vp,
-        actionTimeout:22000,waitForTimeout:700});
-      verifyCanonicalMarkdown(m,host);
-      witness.views.push({host,width:vp.width,height:vp.height,canonicalMarkers:true,
-        worlds:expectedCount,systems:expectedOS,connectedClaims:0});
-    }
-  }
-  const games=await req('markdown',{url:'https://games.jussco.company/',
-    viewport:{width:390,height:844,isMobile:true,hasTouch:true},actionTimeout:22000});
-  verifyDestinationMarkdown(games,'games');
-  if (!games.includes('Choose your next adventure.') ||
-      !games.includes('https://sync.jussco.company/')) {
-    throw new Error('Games Hub: public SYNC discovery markers missing');
-  }
-  witness.views.push({host:'games.jussco.company',width:390,gameDiscovery:true});
-  if (await fetchHead(env.GITHUB_TOKEN,fetchImpl)!==expectedHead) {
-    throw new Error('GitHub main moved during canonical verification');
-  }
-  const folder=resolve(root,'proof/site');mkdirSync(folder,{recursive:true});
-  const path=resolve(folder,'canonical-provider-'+expectedHead+'.json');
-  writeFileSync(path,JSON.stringify(witness,null,2)+'\n');
-  console.log('VERIFIED canonical Cloudflare browser witness '+expectedHead.slice(0,12)+
-    ': six exact registry blobs, four home viewports, and Games discovery');
-  return witness;
-}
-
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  const task=process.argv.includes('--canonical-only') ? runCanonicalProof() : runProof();
-  task.catch(error=>{console.error(`PROVIDER PROOF FAILED: ${error.message}`);process.exitCode=1;});
+  runProof().catch(error=>{console.error(`PROVIDER PROOF FAILED: ${error.message}`);process.exitCode=1;});
 }
