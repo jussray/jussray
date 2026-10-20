@@ -53,6 +53,7 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   const companyEmail=await page.locator('#mail').textContent();
   say(companyEmail==='founder@jussco.company' && (await page.locator('#mail').getAttribute('href'))==='mailto:'+companyEmail, `${vp.n}: company email text and mailto match business address`);
   const directory=page.locator('#projectContactDirectory');
+  await directory.waitFor({state:'visible',timeout:5000});
   say(await directory.isVisible(), `${vp.n}: per-project contact directory available`);
   await directory.locator('summary').click();
   const routes=await page.locator('#projectContactList li').evaluateAll(nodes=>nodes.map(li=>({name:li.querySelector('strong')?.textContent,href:li.querySelector('a')?.getAttribute('href'),text:li.querySelector('a')?.textContent,shared:li.querySelector('small')?.textContent||''})));
