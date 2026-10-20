@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { gitBlobSha, extractScrapedRegistry, verifyWorldRegistry, verifySiteMarkdown, verifyDestinationMarkdown, verifyBipContent, assertSha, runProof } from './verify-provider-site.mjs';
+import { gitBlobSha, extractScrapedRegistry, verifyWorldRegistry, verifySiteMarkdown, verifyDestinationMarkdown, verifyBipContent, assertSha, runProof, createQuickActionPacer, verifyLayoutHtml, verifyHtmlSourceMatch, cfRequest, assertFinalDestination, makePartialReadbackWitness } from './verify-provider-site.mjs';
 
 const bipLink = '[Visit Se\'kret Bip preview ↗](https://sekretbip.jussco.company/)';
 const site = `---\ntitle: "Juss & Co"\n---\nTurn thoughts into living works.\n### Se'kret Bip\n${bipLink}`;
@@ -62,4 +62,77 @@ test('production witness rejects non-main and non-manual contexts before checkou
   const safe={GITHUB_SHA:'a'.repeat(40),CLOUDFLARE_ACCOUNT_ID:'f'.repeat(32),CLOUDFLARE_BROWSER_RENDERING_TOKEN:'test-only'};
   await assert.rejects(()=>runProof({env:{...safe,GITHUB_REF:'refs/heads/feature',GITHUB_EVENT_NAME:'workflow_dispatch'}}),/only on a manually dispatched main/);
   await assert.rejects(()=>runProof({env:{...safe,GITHUB_REF:'refs/heads/main',GITHUB_EVENT_NAME:'pull_request'}}),/only on a manually dispatched main/);
+});
+
+
+test('rate limiter spaces actions to protect Cloudflare Free quota',async()=>{
+  let clock=100;const delays=[];
+  const pace=createQuickActionPacer({intervalMs:11000,now:()=>clock,sleep:async ms=>{delays.push(ms);clock+=ms}});
+  await pace();await pace();await pace();
+  assert.deepEqual(delays,[11000,11000]);
+});
+
+test('mobile layout proof fails on overflow and missing CTA geometry',()=>{
+  const embed=x=>'<html data-proof-layout="'+JSON.stringify(x).replaceAll('"','&quot;')+'"></html>';
+  const base={vw:390,vh:844,scroll:390,cta:true,rect:{width:252,height:49,left:37,right:289,top:227,bottom:276}};
+  assert.equal(verifyLayoutHtml(embed(base),390).scroll,390);
+  assert.throws(()=>verifyLayoutHtml(embed({...base,scroll:410}),390),/overflows/);
+  assert.throws(()=>verifyLayoutHtml(embed({...base,cta:false}),390),/CTA/);
+  assert.throws(()=>verifyLayoutHtml(embed({...base,rect:{...base.rect,right:500}}),390),/CTA/);
+  assert.throws(()=>verifyLayoutHtml('<html></html>',390),/No browser layout/);
+});
+
+test('provider HTTP 200 must not hide a failing target-page HTTP status',async()=>{
+  const fake=async()=>({ok:true,status:200,json:async()=>({success:true,meta:{status:503},result:'<html>Looks fine</html>'})});
+  await assert.rejects(()=>cfRequest({accountId:'a'.repeat(32),token:'fake',endpoint:'content',body:{url:'https://jussco.company'},fetchImpl:fake}),/target content: HTTP 503/);
+});
+
+test('provider HTTP 429 retries with bounded backoff, without leaking token',async()=>{
+  let n=0;const sleeps=[];
+  const fake=async()=>{
+    n++;
+    if(n===1)return {ok:false,status:429,headers:{get:()=> '15'}};
+    return {ok:true,status:200,json:async()=>({success:true,meta:{status:200,finalUrl:'https://jussco.company'},result:'public render'})};
+  };
+  const value=await cfRequest({accountId:'b'.repeat(32),token:'fake',endpoint:'markdown',body:{url:'https://jussco.company'},fetchImpl:fake,sleep:async ms=>sleeps.push(ms)});
+  assert.equal(value,'public render');assert.equal(n,2);assert.deepEqual(sleeps,[15000]);
+});
+
+
+test('live final destinations are bound to approved public origins',()=>{
+  assert.doesNotThrow(()=>assertFinalDestination('https://jussco.company/','https://jussco.company/'));
+  assert.doesNotThrow(()=>assertFinalDestination('https://www.jussco.company/','https://www.jussco.company/'));
+  assert.doesNotThrow(()=>assertFinalDestination('https://games.jussco.company/','https://games.jussco.company/'));
+  assert.doesNotThrow(()=>assertFinalDestination('https://sekretbip.jussco.company/','https://sekretbip.net/'));
+  assert.throws(()=>assertFinalDestination('https://jussco.company/','https://other.example/'),/unexpected destination/);
+  assert.throws(()=>assertFinalDestination('https://sekretbip.jussco.company/','https://attacker.example/'),/unexpected destination/);
+  assert.throws(()=>assertFinalDestination('https://jussco.company/',undefined),/final URL/);
+});
+
+test('browser response fails closed if the target redirected off-domain',async()=>{
+  const fake=async()=>({ok:true,status:200,json:async()=>({success:true,meta:{status:200,finalUrl:'https://elsewhere.example/'},result:'valid-looking content'})});
+  await assert.rejects(()=>cfRequest({accountId:'a'.repeat(32),token:'fake',endpoint:'content',body:{url:'https://jussco.company/'},fetchImpl:fake}),/unexpected destination/);
+});
+
+test('public raw HTML must match exact source Git blob and requested hostname',()=>{
+  const sha='a'.repeat(40);
+  const make=(p)=>'<html data-source-check="'+JSON.stringify(p).replaceAll('"','&quot;')+'"></html>';
+  const valid={http:200,bytes:69598,gitBlobSha1:sha,url:'https://jussco.company/'};
+  assert.equal(verifyHtmlSourceMatch(make(valid),sha,'jussco.company'),sha);
+  assert.throws(()=>verifyHtmlSourceMatch(make({...valid,gitBlobSha1:'b'.repeat(40)}),sha,'jussco.company'),/does not match/);
+  assert.throws(()=>verifyHtmlSourceMatch(make({...valid,url:'https://example.org/'}),sha,'jussco.company'),/does not match/);
+  assert.throws(()=>verifyHtmlSourceMatch(make({...valid,http:503}),sha,'jussco.company'),/does not match/);
+  assert.throws(()=>verifyHtmlSourceMatch(make({error:'blocked'}),sha,'jussco.company'),/does not match/);
+  assert.throws(()=>verifyHtmlSourceMatch('<html></html>',sha,'jussco.company'),/did not record/);
+});
+
+
+test('successful public readback still cannot claim exact deployed-SHA verification',()=>{
+  const receipt=makePartialReadbackWitness('a'.repeat(40));
+  assert.equal(receipt.status,'PARTIAL_PUBLIC_READBACK');
+  assert.equal(receipt.deploymentShaAttested,false);
+  assert.equal(receipt.sourceSha,'a'.repeat(40));
+  assert.deepEqual(receipt.registries,[]);
+  assert.deepEqual(receipt.pageProof,[]);
+  assert.throws(()=>makePartialReadbackWitness('short'),/40-character/);
 });
