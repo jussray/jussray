@@ -182,6 +182,99 @@ export async function runProof({env=process.env, fetchImpl=fetch, root=ROOT}={})
   return witness;
 }
 
+
+/**
+ * Independent canonical-domain proof when external CI Chromium is challenged
+ * by Cloudflare's automated traffic protections. Does not disable defenses.
+ * It does not grant whole-portfolio or destination-app release authority.
+ */
+export function verifyCanonicalMarkdown(content, host) {
+  if (typeof content !== 'string' ||
+      /Just a moment|Performing security verification|Origin DNS error|Error 1016/i.test(content) ||
+      !content.includes('Turn thoughts into living works.') ||
+      !content.includes('https://www.jussco.company/assets/hero.jpg') ||
+      !content.includes('Juss & Co')) {
+    throw new Error(host + ': canonical public homepage not verified');
+  }
+}
+
+export async function runCanonicalProof({env=process.env, fetchImpl=fetch, root=ROOT}={}) {
+  const accountId=env.CLOUDFLARE_ACCOUNT_ID, token=env.CLOUDFLARE_BROWSER_RENDERING_TOKEN;
+  if (!/^[a-f0-9]{32}$/.test(accountId||'') || !token) {
+    throw new Error('Missing scoped Cloudflare Browser Rendering token or account ID; canonical proof BLOCKED');
+  }
+  const expectedHead=assertSha(env.GITHUB_SHA);
+  if (env.GITHUB_REF!=='refs/heads/main' || env.GITHUB_EVENT_NAME!=='workflow_dispatch') {
+    throw new Error('Canonical witness runs only on a manually dispatched main branch');
+  }
+  const checkoutHead=execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim();
+  if (checkoutHead!==expectedHead || await fetchHead(env.GITHUB_TOKEN,fetchImpl)!==expectedHead) {
+    throw new Error('Canonical proof refused: current or checkout GitHub head differs');
+  }
+  const req=(endpoint,body)=>cfRequest({accountId,token,endpoint,body,fetchImpl});
+  const hosts=['jussco.company','www.jussco.company'];
+  const expectedCount=JSON.parse(readFileSync(resolve(root,'site/data/worlds.json'))).worlds.length;
+  const expectedOS=JSON.parse(readFileSync(resolve(root,'site/data/systems.json'))).systems.filter(s=>s.public!==false).length;
+  const witness={
+    schema:'jussco/canonical-provider-witness/v1',status:'VERIFIED_PROVIDER_BROWSER',
+    repo:REPO,sha:expectedHead,scope:'public-company-domains-and-games-only',
+    method:'Cloudflare Browser Rendering',registries:[],views:[],
+    exclusions:['External GitHub runner bot challenge remains unresolved',
+      'Does not establish all applications, payments, signups or other product releases',
+      'Does not grant deployment or publication authority']
+  };
+  for (const host of hosts) {
+    for (const name of REGISTRIES) {
+      const local=readFileSync(resolve(root,'site/data/'+name+'.json'));
+      const observed=extractScrapedRegistry(await req('scrape',{
+        url:'https://'+host+'/data/'+name+'.json',actionTimeout:20000,
+        elements:[{selector:'pre'}]
+      }));
+      const got=gitBlobSha(observed),want=gitBlobSha(local);
+      if (got!==want) throw new Error(host+'/'+name+': Git blob differs from exact head');
+      witness.registries.push({host,name,gitBlobSha:got,match:true});
+    }
+    const elements=await req('scrape',{
+      url:'https://'+host+'/',actionTimeout:22000,
+      waitForSelector:{selector:'.os-card',timeout:15000},
+      elements:[{selector:'.card h3'},{selector:'.os-card h3'},
+        {selector:'.os-connectors'},{selector:'.os-connectors span[data-state="connected"]'}]
+    });
+    const count=selector=>elements.find(e=>e?.selector===selector)?.results?.length??-1;
+    if (count('.card h3')!==expectedCount ||
+        count('.os-card h3')!==expectedOS ||
+        count('.os-connectors')!==expectedOS ||
+        count('.os-connectors span[data-state="connected"]')!==0) {
+      throw new Error(host+': public cards, standalone systems or connector truth mismatch');
+    }
+    for (const vp of [{width:1440,height:900},{width:390,height:844,isMobile:true,hasTouch:true}]) {
+      const m=await req('markdown',{url:'https://'+host+'/',viewport:vp,
+        actionTimeout:22000,waitForTimeout:700});
+      verifyCanonicalMarkdown(m,host);
+      witness.views.push({host,width:vp.width,height:vp.height,canonicalMarkers:true,
+        worlds:expectedCount,systems:expectedOS,connectedClaims:0});
+    }
+  }
+  const games=await req('markdown',{url:'https://games.jussco.company/',
+    viewport:{width:390,height:844,isMobile:true,hasTouch:true},actionTimeout:22000});
+  verifyDestinationMarkdown(games,'games');
+  if (!games.includes('Choose your next adventure.') ||
+      !games.includes('https://sync.jussco.company/')) {
+    throw new Error('Games Hub: public SYNC discovery markers missing');
+  }
+  witness.views.push({host:'games.jussco.company',width:390,gameDiscovery:true});
+  if (await fetchHead(env.GITHUB_TOKEN,fetchImpl)!==expectedHead) {
+    throw new Error('GitHub main moved during canonical verification');
+  }
+  const folder=resolve(root,'proof/site');mkdirSync(folder,{recursive:true});
+  const path=resolve(folder,'canonical-provider-'+expectedHead+'.json');
+  writeFileSync(path,JSON.stringify(witness,null,2)+'\n');
+  console.log('VERIFIED canonical Cloudflare browser witness '+expectedHead.slice(0,12)+
+    ': six exact registry blobs, four home viewports, and Games discovery');
+  return witness;
+}
+
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  runProof().catch(error=>{console.error(`PROVIDER PROOF FAILED: ${error.message}`);process.exitCode=1;});
+  const task=process.argv.includes('--canonical-only') ? runCanonicalProof() : runProof();
+  task.catch(error=>{console.error(`PROVIDER PROOF FAILED: ${error.message}`);process.exitCode=1;});
 }
