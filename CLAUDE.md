@@ -1,6 +1,6 @@
 # Claude Operating Contract — jussray/jussray
 
-This repository is Juss's public front: the GitHub profile README plus the canonical Juss & Co runtime at `https://jussco.company`.
+This repository is Juss's public front: the GitHub profile README plus the preferred canonical public URL `https://www.jussco.company/`. The apex `https://jussco.company/` redirects to the preferred `www` address.
 
 Juss & Co's public runtime is served by Cloudflare Worker `jussray` from `site/`. `wrangler.jsonc` is the deployment source of truth for the Worker name, static asset directory, Preview support, and the canonical custom domains `jussco.company` and `www.jussco.company`. GitHub Pages is not a deployment carrier or runtime authority for Juss & Co.
 
