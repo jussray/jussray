@@ -258,6 +258,13 @@ h1,h2,h3{text-wrap:balance}
 .addr{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 10px 10px 16px;border-radius:12px;border:1px solid var(--line-hot);background:rgba(6,6,28,.7)}
 .addr a{display:inline-flex;align-items:center;min-height:44px;font-family:var(--f-mono);font-size:13px;overflow-wrap:anywhere;min-width:0;color:var(--gold)}
 .copy{min-height:44px;padding:10px 14px;border-radius:10px;border:1px solid var(--line-hot);background:rgba(124,58,237,.25);color:#fff;font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;cursor:pointer}
+.project-contact-directory{border:1px solid var(--line);border-radius:12px;background:rgba(6,6,28,.7);padding:0 14px}
+.project-contact-directory summary{display:flex;align-items:center;min-height:44px;font-family:var(--f-mono);font-size:11px;letter-spacing:.04em;color:var(--cream);cursor:pointer}
+.project-contact-directory ul{list-style:none;margin:4px 0 12px;padding:0;max-height:280px;overflow:auto;display:grid;gap:8px}
+.project-contact-directory li{display:grid;gap:2px;padding:8px 0;border-top:1px solid var(--line);font-size:12px;min-width:0}
+.project-contact-directory strong{font-weight:600;color:var(--text)}
+.project-contact-directory a{color:var(--cyan);overflow-wrap:anywhere;min-height:44px;display:inline-flex;align-items:center}
+.project-contact-directory small{color:var(--muted);font-size:10px}
 .sig{display:grid;gap:14px;justify-items:start}
 .sig .brand{font-size:34px}
 .sig .tag{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
@@ -383,7 +390,7 @@ h1,h2,h3{text-wrap:balance}
         <p class="tag" id="dTag"></p>
         <p class="blurb" id="dBlurb"></p>
         <div class="cta" id="dCta"></div>
-        <div class="contacts" id="dContacts" hidden><div class="facts-h"><span>Founder contact</span></div><ul class="clist" id="dContactList"></ul></div>
+        <div class="contacts" id="dContacts" hidden><div class="facts-h"><span>Project contact</span></div><ul class="clist" id="dContactList"></ul></div>
       </div>
       <div>
         <div class="facts-h"><span>What is true today</span><span id="dIdx"></span></div>
@@ -490,6 +497,7 @@ h1,h2,h3{text-wrap:balance}
       </div>
       <div class="contact-col">
         <div class="addr"><a id="mail" href="mailto:founder@jussco.company">founder@jussco.company</a><button class="copy" type="button" id="copyBtn" aria-label="Copy Juss &amp; Co. founder email">Copy email</button></div>
+        <details class="project-contact-directory" id="projectContactDirectory" hidden><summary>Find a project’s contact email</summary><ul id="projectContactList"></ul></details>
         <a class="btn btn-gold" href="https://github.com/jussray">Follow the builds <span aria-hidden="true">↗</span></a>
         <a class="btn btn-ghost" href="#worlds">Explore all worlds</a>
       </div>
@@ -568,12 +576,30 @@ h1,h2,h3{text-wrap:balance}
   }
   WORLDS.forEach(function(w,i){renderWorldCard(w,i);});
   var LIVE = {};
+  function validContactEmail(v){return typeof v==="string" && /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(v);}
+  function renderProjectContactDirectory(worlds){
+    var box=document.getElementById("projectContactDirectory"), ul=document.getElementById("projectContactList");
+    if(!box||!ul)return;
+    ul.replaceChildren();
+    (worlds||[]).forEach(function(w){
+      var c=w.contact||{}, email=c.email||c.support;
+      if(!validContactEmail(email))return;
+      var li=document.createElement("li"), label=document.createElement("strong"), a=document.createElement("a");
+      label.textContent=w.name; a.href="mailto:"+email; a.textContent=email;
+      li.appendChild(label);li.appendChild(a);
+      if(email==="support@jussco.company"){
+        var shared=document.createElement("small");shared.textContent="Shared Juss & Co support";li.appendChild(shared);
+      }
+      ul.appendChild(li);
+    });
+    box.hidden=ul.children.length===0;
+  }
   function worldFromRegistry(L){var p=L.display||{};return{name:L.name,group:p.group||"Ideas & systems",st:L.st||"building",label:L.label||"Building",w:p.accent||"#8B5CF6",img:p.img||"assets/w-fcr.jpg",alt:p.alt||"",desc:p.desc||"",tags:Array.isArray(p.tags)?p.tags:[],tag:p.tag||"",blurb:p.blurb||p.desc||"",facts:Array.isArray(p.facts)?p.facts:[],held:L.held||"Tracked · no public link yet",link:(L.link&&L.link.url)?[L.link.text||"Open",L.link.url]:null};}
   fetch("data/worlds.json",{cache:"no-store"}).then(function(r){return r.ok?r.json():null;}).then(function(d){
     if(!d||!d.worlds)return;
     d.worlds.forEach(function(L){LIVE[L.name]=L;var idx=WORLDS.findIndex(function(w){return w.name===L.name;});if(idx<0&&L.display){var added=worldFromRegistry(L);WORLDS.push(added);idx=WORLDS.length-1;renderWorldCard(added,idx);}if(idx<0)return;var w=WORLDS[idx];if(L.st&&L.label){w.st=L.st;w.label=L.label;var b=cards[idx].querySelector(".badge");b.className="badge s-"+L.st;b.textContent=L.label;}if(L.link&&L.link.url){w.link=[L.link.text||"Open",L.link.url];w.held=null;}else if(L.held){w.held=L.held;w.link=null;}});
     var n=document.querySelector('#filters .chip[data-group=""] .n');if(n)n.textContent=String(WORLDS.length).padStart(2,"0");
-    if(d.company&&d.company.email)document.getElementById("mail").textContent=d.company.email;if(d.quotes&&d.quotes.length)setQuotes(d.quotes);var stamp=document.getElementById("liveStamp");if(stamp&&d.generatedAt)stamp.textContent="Status synced "+new Date(d.generatedAt).toUTCString().replace(/:\d\d GMT$/," UTC");if(current>=0){var k=current;current=-1;open(k);}
+    if(d.company&&validContactEmail(d.company.email)){var companyMail=document.getElementById("mail");companyMail.textContent=d.company.email;companyMail.href="mailto:"+d.company.email;}renderProjectContactDirectory(d.worlds);if(d.quotes&&d.quotes.length)setQuotes(d.quotes);var stamp=document.getElementById("liveStamp");if(stamp&&d.generatedAt)stamp.textContent="Status synced "+new Date(d.generatedAt).toUTCString().replace(/:\d\d GMT$/," UTC");if(current>=0){var k=current;current=-1;open(k);}
   }).catch(function(){});
 
 /* ---------- standalone OS registry ---------- */
@@ -645,6 +671,7 @@ Promise.all([
     keys.forEach(function(k){ var li=document.createElement("li"), b=document.createElement("b"); b.textContent=k; li.appendChild(b);
       var v=String(c[k]||""); if(!v || v[0]==="["){ var s=document.createElement("span"); s.className="pend"; s.textContent=(v||"pending").replace(/^\[|\]$/g,"")+" · pending"; li.appendChild(s); }
       else if(/^https?:/.test(v)){ var a=document.createElement("a"); a.href=v; a.textContent=v.replace(/^https?:\/\//,""); li.appendChild(a); }
+      else if(validContactEmail(v)){ var mail=document.createElement("a");mail.href="mailto:"+v;mail.textContent=v;li.appendChild(mail); }
       else { var t=document.createElement("span"); t.textContent=v; t.style.userSelect="all"; li.appendChild(t); }
       ul.appendChild(li); });
     box.hidden=false;
