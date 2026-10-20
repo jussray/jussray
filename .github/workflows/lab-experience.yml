@@ -1,0 +1,35 @@
+name: Engineering Lab source-bound browser proof
+on:
+  push:
+    branches: [main, feature/interactive-engineering-lab-20261020]
+    paths:
+      - 'site/lab/**'
+      - 'scripts/verify-lab-experience.mjs'
+      - '.github/workflows/lab-experience.yml'
+  pull_request:
+    paths:
+      - 'site/lab/**'
+      - 'scripts/verify-lab-experience.mjs'
+      - '.github/workflows/lab-experience.yml'
+permissions:
+  contents: read
+jobs:
+  browser-export-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm install --no-save --no-package-lock playwright@1.61.1
+      - run: npx playwright install chromium --with-deps
+      - name: Prove interactive lab and JSON output at desktop and mobile widths
+        run: node scripts/verify-lab-experience.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: engineering-lab-browser-proof-${{ github.sha }}
+          path: proof/lab/
+          if-no-files-found: warn
+          retention-days: 14
