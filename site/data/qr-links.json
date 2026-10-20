@@ -2,12 +2,11 @@
   "schema": "jussco/qr-registry/v1",
   "strategy": "first-party-direct-urls-only",
   "analytics": null,
-  "published": false,
   "records": [
     {
       "id": "jussco-company",
       "label": "Juss & Co.",
-      "url": "https://jussco.company/",
+      "url": "https://www.jussco.company/",
       "svg": "/assets/qr/jussco-company.svg"
     },
     {
@@ -34,5 +33,6 @@
       "url": "https://games.jussco.company/",
       "svg": "/assets/qr/jussco-games.svg"
     }
-  ]
+  ],
+  "runtime_verification": "unknown"
 }

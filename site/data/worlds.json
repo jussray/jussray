@@ -45,8 +45,9 @@
       "contact": {
         "site": "https://foundercontrolroom.org",
         "github": "https://github.com/jussray/founder-control-room",
-        "email": "support@jussco.company",
-        "linkedin": "https://www.linkedin.com/in/juss-rayy-13ba691a1"
+        "email": "support@foundercontrolroom.org",
+        "linkedin": "https://www.linkedin.com/in/juss-rayy-13ba691a1",
+        "founder": "founder@foundercontrolroom.org"
       },
       "evidence": {},
       "display": {
@@ -98,9 +99,10 @@
       },
       "contact": {
         "site": "https://jussbeautifulhair.com",
-        "email": "support@jussco.company",
+        "email": "support@jussbeautifulhair.com",
         "instagram": "[JBH INSTAGRAM URL]",
-        "facebook": "[JBH FACEBOOK PAGE URL]"
+        "facebook": "[JBH FACEBOOK PAGE URL]",
+        "hello": "hello@jussbeautifulhair.com"
       },
       "evidence": {},
       "display": {
@@ -142,7 +144,7 @@
       "held": "Coming soon · no public link yet",
       "contact": {
         "github": "https://github.com/jussray/StoryEngine",
-        "email": "hello@jussbeautifulhair.com"
+        "email": "support@jussco.company"
       },
       "evidence": {},
       "display": {
@@ -187,7 +189,7 @@
       "label": "Private build",
       "held": "Private build · tracked internally",
       "contact": {
-        "email": "hello@jussbeautifulhair.com"
+        "email": "support@sekretbip.net"
       },
       "evidence": {},
       "carriers": [
@@ -336,7 +338,7 @@
       "label": "Private build",
       "held": "Private storefront build · tracked internally",
       "contact": {
-        "email": "hello@jussbeautifulhair.com"
+        "email": "support@jussco.company"
       },
       "evidence": {},
       "carriers": [
@@ -383,7 +385,7 @@
       "label": "Private build",
       "held": "Private brand build · tracked internally",
       "contact": {
-        "email": "hello@jussbeautifulhair.com"
+        "email": "support@jussco.company"
       },
       "evidence": {},
       "carriers": [
@@ -583,7 +585,7 @@
       "label": "Private build",
       "held": "Private commerce build · tracked internally",
       "contact": {
-        "email": "hello@jussbeautifulhair.com"
+        "email": "support@jussco.company"
       },
       "evidence": {},
       "carriers": [
@@ -630,7 +632,7 @@
       "label": "Private build",
       "held": "Private product build · tracked internally",
       "contact": {
-        "email": "hello@jussbeautifulhair.com"
+        "email": "support@jussco.company"
       },
       "evidence": {},
       "carriers": [
@@ -674,14 +676,14 @@
   "company": {
     "name": "Juss & Co",
     "founder": "Juss",
-    "site": "https://jussco.company",
+    "site": "https://www.jussco.company",
     "github": "https://github.com/jussray",
-    "email": "hello@jussbeautifulhair.com",
+    "email": "founder@jussco.company",
     "linkedin": "https://www.linkedin.com/in/juss-rayy-13ba691a1",
     "facebook": "https://www.facebook.com/share/1cH3mxVRpi/?mibextid=wwXIfr",
     "youtube": "[YOUTUBE URL]",
     "support": "https://buymeacoffee.com/jussrayy",
-    "contact_source": "founder emails published by the live sites: jussbeautifulhair.com pages (Shipping/Privacy/Returns) and the Se'kret Bip app; hello@jussbeautifulhair.com is the legal contact in the FCR, Bip and StoryEngine repos"
+    "contact_source": "Cloudflare Email Routing rules checked for jussco.company, jussbeautifulhair.com, foundercontrolroom.org and sekretbip.net. Other portfolio projects use the shared Juss & Co support route. Configured mail routing is not proof of successful delivery or outbound sending."
   },
   "quotes": [
     {

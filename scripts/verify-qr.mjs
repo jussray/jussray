@@ -4,7 +4,7 @@ import path from 'node:path';
 const root = process.cwd();
 const info = JSON.parse(readFileSync(path.join(root,'site/data/qr-links.json'),'utf8'));
 const pairs = Object.entries({
-  'jussco-company':'https://jussco.company/',
+  'jussco-company':'https://www.jussco.company/',
   'juss-beautiful-hair':'https://jussbeautifulhair.com/',
   'sekret-bip':'https://sekretbip.net/',
   'founder-control-room':'https://foundercontrolroom.org/',
@@ -13,7 +13,7 @@ const pairs = Object.entries({
 assert.equal(info.schema,'jussco/qr-registry/v1');
 assert.equal(info.strategy,'first-party-direct-urls-only');
 assert.equal(info.analytics,null);
-assert.equal(info.published,false);
+assert.equal(info.runtime_verification,'unknown');
 assert.equal(info.records.length,pairs.length);
 for (const [id,url] of pairs) {
   const item=info.records.find(x=>x.id===id);
@@ -35,6 +35,7 @@ for (const [id,url] of pairs) {
 }
 const html=readFileSync(path.join(root,'site/index.html'),'utf8');
 assert.match(html, /src="assets\/qr\/jussco-company.svg"/);
-assert.match(html, /href="https:\/\/jussco.company\/"/);
+assert.match(html, /href="https:\/\/www.jussco.company\/"/);
+assert.match(html, /<link rel="canonical" href="https:\/\/www.jussco.company\/">/);
 assert.match(html, /Scan to explore/);
 console.log('5 first-party QR SVG assets validated structurally; direct destinations and quiet zones verified. Scan decode independently validated during asset build.');
