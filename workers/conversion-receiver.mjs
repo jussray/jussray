@@ -70,10 +70,12 @@ export default {
       if (!obj || Array.isArray(obj) || Object.keys(obj).length !== 1 || obj.probe !== 'health-v1') return answer(400);
       if (!env?.DB || typeof env.DB.prepare !== 'function') return answer(503);
       try {
-        const row = await env.DB.prepare(
-          "SELECT 1 AS ready FROM sqlite_master WHERE type = 'table' AND name = 'conversion_daily' LIMIT 1"
+        // Validates every required aggregate column without inserting or changing data.
+        // An empty table is healthy: .first() may return null, but the SELECT must succeed.
+        await env.DB.prepare(
+          'SELECT day, event, action, count FROM conversion_daily LIMIT 1'
         ).first();
-        return answer(row?.ready === 1 ? 204 : 503);
+        return answer(204);
       } catch { return answer(503); }
     }
     if (!validEvent(obj)) return answer(400);
