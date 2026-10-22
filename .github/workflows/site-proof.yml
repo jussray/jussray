@@ -2,9 +2,9 @@ name: Juss & Co site browser proof
 on:
   push:
     branches: [main]
-    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/verify-approved-stories.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', '.github/workflows/site-proof.yml']
+    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/verify-approved-stories.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/conversion-receiver.test.mjs', 'scripts/conversion-client-first-party.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', 'workers/**', 'wrangler.conversions.example.jsonc', '.github/workflows/site-proof.yml']
   pull_request:
-    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', '.github/workflows/site-proof.yml']
+    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/conversion-receiver.test.mjs', 'scripts/conversion-client-first-party.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', 'workers/**', 'wrangler.conversions.example.jsonc', '.github/workflows/site-proof.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -41,6 +41,8 @@ jobs:
         run: node scripts/verify-approved-stories.mjs
       - name: Test conversion tracking event and privacy contract
         run: node --test scripts/conversion-tracking.test.mjs
+      - name: Test first-party aggregation, abuse limits and privacy
+        run: node --test scripts/conversion-receiver.test.mjs scripts/conversion-client-first-party.test.mjs
       - name: Verify source and Games production in Chromium
         id: source_and_games
         continue-on-error: true
