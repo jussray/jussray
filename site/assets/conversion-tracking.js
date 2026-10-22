@@ -26,12 +26,29 @@
   document.addEventListener('click', event => {
     if (navigator.globalPrivacyControl === true || navigator.doNotTrack === '1' || window.doNotTrack === '1') return;
     const item = classify(event.target);
-    if (!item || !window.zaraz || typeof window.zaraz.track !== 'function') return;
+    if (!item) return;
+    // Only fixed enum values are sent. Never include contact details, destination URLs, cookies, or IDs.
+    const payload = {
+      event: item[0], project: 'juss-and-co', surface: 'front_door',
+      action: item[1], schema: 'v1'
+    };
     try {
-      const promise = window.zaraz.track(item[0], {
-        project: 'juss-and-co', surface: 'front_door', action: item[1], schema: 'v1'
-      });
-      if (promise && typeof promise.catch === 'function') promise.catch(() => {});
+      if (typeof window.fetch === 'function') {
+        const request = window.fetch('/_telemetry/v1', {
+          method: 'POST', credentials: 'omit', keepalive: true,
+          headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+        });
+        if (request && typeof request.catch === 'function') request.catch(() => {});
+      }
+    } catch { /* A missing or failing receiver must not block navigation. */ }
+    // Historical Zaraz event remains until analytics-destination configuration is reviewed;
+    // it currently has no configured destination. Never double-count this as a confirmed lead.
+    try {
+      if (window.zaraz && typeof window.zaraz.track === 'function') {
+        const { event, ...properties } = payload;
+        const promise = window.zaraz.track(event, properties);
+        if (promise && typeof promise.catch === 'function') promise.catch(() => {});
+      }
     } catch { /* Analytics must never interrupt a visitor's action. */ }
   }, { capture: true, passive: true });
 })();
