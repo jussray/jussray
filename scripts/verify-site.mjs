@@ -3,7 +3,7 @@ import { chromium } from 'playwright';
 import { createServer } from 'node:http';
 import { readFileSync, existsSync, mkdirSync } from 'node:fs';
 import { extname, join } from 'node:path';
-const ROOT = new URL('../site/', import.meta.url).pathname; const MIME = { '.html': 'text/html', '.jpg': 'image/jpeg', '.json': 'application/json', '.png': 'image/png', '.svg': 'image/svg+xml' };
+const ROOT = new URL('../site/', import.meta.url).pathname; const MIME = { '.html': 'text/html', '.jpg': 'image/jpeg', '.json': 'application/json', '.png': 'image/png', '.svg': 'image/svg+xml', '.js': 'text/javascript' };
 const WORLD_REGISTRY = JSON.parse(readFileSync(join(ROOT, 'data/worlds.json'), 'utf8')); const EXPECTED_WORLDS = WORLD_REGISTRY.worlds.map((w) => w.name); const IDEA_WORLDS = WORLD_REGISTRY.worlds.filter((w) => w.display?.group === 'Ideas & systems').map((w) => w.name);
 const CONNECTOR_REGISTRY = JSON.parse(readFileSync(join(ROOT, 'data/connectors.json'), 'utf8')); const EXPECTED_CONNECTORS = CONNECTOR_REGISTRY.lanes.map((x) => x.name);
 const srv = createServer((q, r) => { let p = decodeURIComponent(q.url.split('?')[0]); if (p === '/') p = '/index.html'; const f = join(ROOT, p); if (!existsSync(f)) { r.writeHead(404); return r.end(); } r.writeHead(200, { 'content-type': MIME[extname(f)] || 'application/octet-stream' }); r.end(readFileSync(f)); });
@@ -11,6 +11,28 @@ await new Promise((res) => srv.listen(0, '127.0.0.1', res)); const url = `http:/
 mkdirSync('proof/site', { recursive: true });
 const browser = await chromium.launch(); let failed = 0; const say = (ok, m) => { console.log(`${ok ? 'ok ' : 'FAIL'} ${m}`); if (!ok) failed++; };
 const expectedOS = ['Truth Weaver', 'Truth Compass', 'Exact Match Engine', 'Living Truth', 'Proof Core'];
+// Browser receipt: verify the actual HTML script attaches and emits fixed, non-personal fields.
+{
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  await ctx.addInitScript(() => {
+    window.__jcConversionEvents = [];
+    window.zaraz = { track(name, properties) { window.__jcConversionEvents.push({ name, properties }); } };
+  });
+  const page = await ctx.newPage();
+  const errors = [];
+  page.on('pageerror', (error) => errors.push(String(error)));
+  await page.goto(url, { waitUntil: 'load' });
+  await page.locator('#copyBtn').click();
+  await page.locator('.card').nth(3).click();
+  const receipt = await page.evaluate(() => window.__jcConversionEvents);
+  say(JSON.stringify(receipt.map((x) => x.name)) === JSON.stringify(['contact_click', 'world_detail_open']),
+    'conversion browser: copy contact and world card emit exact intended events');
+  say(receipt.length === 2 && receipt.every((x) => x.properties.project === 'juss-and-co' &&
+    Object.keys(x.properties).sort().join(',') === 'action,project,schema,surface'),
+    'conversion browser: fixed anonymized event properties');
+  say(errors.length === 0, 'conversion browser: tracking causes no page errors');
+  await ctx.close();
+}
 for (const mode of ['abort', 'malformed']) {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } }); const page = await ctx.newPage();
   await page.route('**/data/connectors.json', (r) => mode === 'abort'
