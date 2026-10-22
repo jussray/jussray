@@ -2,9 +2,9 @@ name: Juss & Co site browser proof
 on:
   push:
     branches: [main]
-    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/verify-approved-stories.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', '.github/workflows/site-proof.yml']
+    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/verify-approved-stories.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', '.github/workflows/site-proof.yml']
   pull_request:
-    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', '.github/workflows/site-proof.yml']
+    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', '.github/workflows/site-proof.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -39,6 +39,8 @@ jobs:
         run: node -e "const s=require('fs').readFileSync('site/index.html','utf8'); const good='<link rel=\"canonical\" href=\"https://www.jussco.company/\">'; const stale='https://jussray.github.io/jussray/'; if(!s.includes(good)||s.includes(stale)) process.exit(1); console.log('canonical Juss & Co URL valid')"
       - name: Validate public outcome approval gate
         run: node scripts/verify-approved-stories.mjs
+      - name: Test conversion tracking event and privacy contract
+        run: node --test scripts/conversion-tracking.test.mjs
       - name: Verify source and Games production in Chromium
         id: source_and_games
         continue-on-error: true
