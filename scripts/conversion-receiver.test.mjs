@@ -59,3 +59,44 @@ test('large, malformed, wrong-type, missing binding and failed DB do not persist
   assert.equal((await receiver.fetch(request(), { DB: { prepare() { throw Error('offline'); } } })).status, 503);
   assert.equal(DB.counts.size, 0);
 });
+
+test('read-only health probe verifies D1 schema without creating conversion rows', async () => {
+  const state = { reads: 0, writes: 0 };
+  const DB = { prepare(sql) {
+    assert.match(sql, /FROM sqlite_master/);
+    assert.match(sql, /conversion_daily/);
+    return {
+      async first() { state.reads += 1; return { ready: 1 }; },
+      async run() { state.writes += 1; throw Error('health probe must never write'); },
+    };
+  } };
+  const health = 'https://www.jussco.company/_telemetry/v1/health';
+  const response = await receiver.fetch(request({ probe: 'health-v1' }, health), { DB });
+  assert.equal(response.status, 204);
+  assert.equal(state.reads, 1);
+  assert.equal(state.writes, 0);
+  assert.equal(response.headers.get('cache-control'), 'no-store');
+});
+
+test('health probe rejects malformed requests, wrong origin, and missing schema', async () => {
+  const health = 'https://www.jussco.company/_telemetry/v1/health';
+  let reads = 0;
+  const DB = { prepare(sql) {
+    assert.match(sql, /FROM sqlite_master/);
+    return { async first() { reads += 1; return null; } };
+  } };
+  for (const [req, status] of [
+    [request({ probe: 'health-v2' }, health), 400],
+    [request({ probe: 'health-v1', email: 'private@example.org' }, health), 400],
+    [request({ probe: 'health-v1' }, health, 'https://evil.example'), 403],
+    [request({ probe: 'health-v1' }, health + '?anything=1'), 404],
+    [new Request(health, { method: 'GET', headers: { Origin: 'https://www.jussco.company' } }), 405],
+    [request({ probe: 'health-v1' }, health), 503],
+  ]) assert.equal((await receiver.fetch(req, { DB })).status, status);
+  assert.equal(reads, 1);
+  assert.equal((await receiver.fetch(request({ probe: 'health-v1' }, health), {})).status, 503);
+  assert.equal((await receiver.fetch(request({ probe: 'health-v1' }, health), {
+    DB: { prepare() { return { async first() { throw Error('database down'); } }; } },
+  })).status, 503);
+  assert.equal((await receiver.fetch(request({ probe: 'health-v1' }), { DB })).status, 400);
+});
