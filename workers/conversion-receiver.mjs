@@ -52,7 +52,9 @@ export function validEvent(body) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    if (url.hostname !== 'www.jussco.company' || url.pathname !== '/_telemetry/v1' || url.search) return answer(404);
+    const isHealthProbe = url.pathname === '/_telemetry/v1/health';
+    if (url.hostname !== 'www.jussco.company' ||
+        (url.pathname !== '/_telemetry/v1' && !isHealthProbe) || url.search) return answer(404);
     if (request.method !== 'POST') return answer(405, { Allow: 'POST' });
     if (request.headers.get('origin') !== 'https://www.jussco.company') return answer(403);
     const fetchSite = request.headers.get('sec-fetch-site');
@@ -63,6 +65,17 @@ export default {
     let obj;
     try { const raw = await limitedBody(request); if (raw === null) return answer(413); obj = JSON.parse(raw); }
     catch { return answer(400); }
+    if (isHealthProbe) {
+      // Explicit, read-only diagnostic. Cannot insert or simulate a customer conversion.
+      if (!obj || Array.isArray(obj) || Object.keys(obj).length !== 1 || obj.probe !== 'health-v1') return answer(400);
+      if (!env?.DB || typeof env.DB.prepare !== 'function') return answer(503);
+      try {
+        const row = await env.DB.prepare(
+          "SELECT 1 AS ready FROM sqlite_master WHERE type = 'table' AND name = 'conversion_daily' LIMIT 1"
+        ).first();
+        return answer(row?.ready === 1 ? 204 : 503);
+      } catch { return answer(503); }
+    }
     if (!validEvent(obj)) return answer(400);
     if (!env?.DB || typeof env.DB.prepare !== 'function') return answer(503);
     try {
