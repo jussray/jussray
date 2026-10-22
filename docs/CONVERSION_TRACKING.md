@@ -22,10 +22,11 @@ Global Privacy Control (`navigator.globalPrivacyControl`) and Do Not Track are h
 ## Proof and release gates
 
 1. Run `node --test scripts/conversion-tracking.test.mjs` to verify event classification, strict props, GPC/DNT suppression, spoofed hostnames, and failure isolation.
-2. Run the existing Chromium site proof `node scripts/verify-site.mjs` on the candidate; the script now includes event instrumentation readback in Chromium.
-3. Observe exact PR head SHA and all required GitHub checks. Do not promote tests on a former commit to current proof.
-4. Cloudflare Zaraz was observed with `autoInjectScript: true`, but **zero configured destination tools** as of 2026-10-22. Do not call this production conversion reporting until a privacy-reviewed sink is configured, events are verified at the receiver, and the current deployed script responds HTTP 200 with JavaScript MIME.
-5. Merge, Cloudflare deployment, provider changes, and publishing are separate authority gates; this review candidate does not execute them. Rollback is removal of the one HTML script reference; the JS file and tests can then be removed in a follow-up.
+2. Run `node scripts/verify-site.mjs` for deterministic exact-source Chromium proof only. It must not call public production domains; hosted-CI Cloudflare challenges are not source regressions.
+3. Run `node scripts/verify-provider-site.mjs` only from the dedicated provider workflow on `main`, using scoped Cloudflare Browser Rendering credentials. That is the fail-closed production browser witness for `jussco.company`, `www.jussco.company`, and the Games hub.
+4. Observe exact PR head SHA and all required GitHub checks. Do not promote tests on a former commit to current proof.
+5. Cloudflare Zaraz was observed with `autoInjectScript: true`, but **zero configured destination tools** as of 2026-10-22. Do not call this production conversion reporting until a privacy-reviewed sink is configured, events are verified at the receiver, and the current deployed script responds HTTP 200 with JavaScript MIME.
+6. Merge, Cloudflare deployment, provider changes, and publishing are separate authority gates; this review candidate does not execute them. Rollback is removal of the one HTML script reference; the JS file and tests can then be removed in a follow-up.
 
 ## Later project-specific expansion
 

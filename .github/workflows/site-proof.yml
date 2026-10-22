@@ -2,9 +2,9 @@ name: Juss & Co site browser proof
 on:
   push:
     branches: [main]
-    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/verify-approved-stories.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/conversion-receiver.test.mjs', 'scripts/conversion-client-first-party.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', 'workers/**', 'wrangler.conversions.example.jsonc', '.github/workflows/site-proof.yml']
+    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/verify-approved-stories.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/conversion-receiver.test.mjs', 'scripts/conversion-client-first-party.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'scripts/site-proof-boundary.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', 'workers/**', 'wrangler.conversions.example.jsonc', '.github/workflows/site-proof.yml']
   pull_request:
-    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/conversion-receiver.test.mjs', 'scripts/conversion-client-first-party.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', 'workers/**', 'wrangler.conversions.example.jsonc', '.github/workflows/site-proof.yml']
+    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/conversion-receiver.test.mjs', 'scripts/conversion-client-first-party.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'scripts/site-proof-boundary.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', 'workers/**', 'wrangler.conversions.example.jsonc', '.github/workflows/site-proof.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -43,150 +43,10 @@ jobs:
         run: node --test scripts/conversion-tracking.test.mjs
       - name: Test first-party aggregation, abuse limits and privacy
         run: node --test scripts/conversion-receiver.test.mjs scripts/conversion-client-first-party.test.mjs
-      - name: Verify source and Games production in Chromium
-        id: source_and_games
-        continue-on-error: true
+      - name: Verify source/provider proof responsibility boundary
+        run: node --test scripts/site-proof-boundary.test.mjs
+      - name: Verify exact-source site and Games locally in Chromium
         run: node scripts/verify-site.mjs
-      - name: Verify public custom domains in Chromium with exact-head freshness
-        id: live_domains
-        if: ${{ always() && github.event_name != 'pull_request' }}
-        continue-on-error: true
-        shell: bash
-        run: |
-          node --input-type=module <<'NODE'
-          import { chromium } from 'playwright';
-          import { readFileSync } from 'node:fs';
-          const browser = await chromium.launch();
-          const files = ['worlds', 'systems', 'connectors'];
-          const expected = Object.fromEntries(files.map(name => [name, readFileSync(`site/data/${name}.json`)]));
-          const hosts = ['jussco.company', 'www.jussco.company'];
-          let verified = false;
-          try {
-            for (let attempt = 1; attempt <= 12 && !verified; attempt++) {
-              let allPassed = true;
-              for (const host of hosts) {
-                const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
-                try {
-                  const response = await page.goto(`https://${host}/`, { waitUntil: 'domcontentloaded', timeout: 30000 });
-                  const status = response?.status() ?? 0;
-                  console.log(`${host}: HTTP ${status} in Chromium, attempt ${attempt}/12; cf-ray=${response?.headers()['cf-ray'] ?? 'none'}`);
-                  if (status !== 200) { allPassed = false; continue; }
-                  const actualHost = new URL(page.url()).hostname;
-                  const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
-                  if (actualHost !== 'www.jussco.company' || canonical !== 'https://www.jussco.company/') {
-                    console.error(`${host}: expected www redirect + canonical; got final host ${actualHost}, canonical ${canonical}`);
-                    allPassed = false;
-                  }
-                  await page.waitForSelector('.os-card', { timeout: 15000 });
-                  const body = await page.content();
-                  if (!body.includes('Turn thoughts into living works.') || !body.includes('Built to stand alone.')) {
-                    console.error(`${host}: expected public site markers missing`);
-                    allPassed = false;
-                  }
-                  const assets = await page.evaluate(async names => Promise.all(names.map(async name => {
-                    const response = await fetch(`/data/${name}.json`, { cache: 'no-store' });
-                    return { name, status: response.status, text: await response.text() };
-                  })), files);
-                  for (const asset of assets) {
-                    const matches = asset.status === 200 && Buffer.from(asset.text, 'utf8').equals(expected[asset.name]);
-                    console.log(`${host}: data/${asset.name}.json ${matches ? 'byte-exact' : 'MISMATCH'} at ${process.env.GITHUB_SHA?.slice(0, 7)}`);
-                    if (!matches) allPassed = false;
-                  }
-                  if (assets.every(x => x.status === 200)) {
-                    const data = Object.fromEntries(assets.map(x => [x.name, JSON.parse(x.text)]));
-                    const names = (data.systems.systems || []).filter(x => x.public !== false).map(x => x.name);
-                    const expectedNames = ['Truth Weaver','Truth Compass','Exact Match Engine','Living Truth','Proof Core'];
-                    if (JSON.stringify(names) !== JSON.stringify(expectedNames) || (data.connectors.lanes || []).length !== 4 ||
-                      Object.values(data.connectors.systems || {}).some(x => (x.bindings || []).some(y => y.state === 'connected')) ||
-                      !data.worlds.worlds?.some(x => x.name === 'Bip Jr')) {
-                      console.error(`${host}: live portfolio or connector registry assertions failed`);
-                      allPassed = false;
-                    }
-                  }
-                  const link = await page.locator('.os-card').first().locator('a.os-link').getAttribute('href');
-                  if (link !== 'https://truthweaver.jussco.company') {
-                    console.error(`${host}: Truth Weaver custom-domain link missing`);
-                    allPassed = false;
-                  }
-                } catch (e) {
-                  console.error(`${host}: browser proof failed: ${String(e).slice(0, 500)}`);
-                  allPassed = false;
-                } finally {
-                  await page.close();
-                }
-              }
-              verified = allPassed;
-              if (!verified && attempt < 12) await new Promise(resolve => setTimeout(resolve, 10000));
-            }
-          } finally {
-            await browser.close();
-          }
-          if (!verified) {
-            console.error('Canonical domains failed real Chromium, registry freshness, or public-link proof');
-            process.exit(1);
-          }
-          console.log('Canonical domains + byte-exact registries + Truth Weaver link verified in Chromium');
-          NODE
-      - name: Verify deployed portfolio in real browsers
-        id: live_portfolio
-        if: ${{ always() && github.event_name != 'pull_request' }}
-        continue-on-error: true
-        run: |
-          node --input-type=module <<'NODE'
-          import { chromium } from 'playwright';
-          import { readFileSync } from 'node:fs';
-          const browser = await chromium.launch();
-          const worldRegistry = JSON.parse(readFileSync('site/data/worlds.json','utf8'));
-          const requiredWorlds = worldRegistry.worlds.map(w => w.name);
-          const requiredSystems = ['Truth Weaver','Truth Compass','Exact Match Engine','Living Truth','Proof Core'];
-          const requiredConnectors = ['Exa','Notion','Linear','Slack'];
-          let failed = false;
-          for (const host of ['jussco.company','www.jussco.company']) {
-            const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
-            const errors = [];
-            page.on('pageerror', e => errors.push(String(e)));
-            await page.goto(`https://${host}/`, { waitUntil: 'domcontentloaded', timeout: 30000 });
-            await page.waitForFunction((expectedCount) => document.querySelectorAll('.card').length === expectedCount && document.querySelectorAll('.os-card').length === 5 && document.querySelectorAll('.os-connectors').length === 5, requiredWorlds.length, { timeout: 20000 });
-            const worldNames = await page.locator('.card h3').allTextContents();
-            const systemNames = await page.locator('.os-card h3').allTextContents();
-            const connectorText = (await page.locator('#systems').innerText()).toLowerCase();
-            const connectedClaims = await page.locator('.os-connectors span[data-state="connected"]').count();
-            const blockedClaims = await page.locator('.os-connectors span[data-state="blocked"]').count();
-            const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
-            const ok = requiredWorlds.every(n => worldNames.includes(n)) && requiredSystems.every(n => systemNames.includes(n)) && requiredConnectors.every(n => connectorText.includes(n.toLowerCase())) && connectedClaims === 0 && blockedClaims >= 4 && !worldNames.some(n => n.startsWith('ULTRATHINK')) && overflow === 0 && errors.length === 0;
-            console.log(`${host}: ${worldNames.length} worlds + ${systemNames.length} standalone systems + ${requiredConnectors.length} connector lanes; deployed-browser ${ok ? 'verified' : 'FAILED'}`);
-            if (!ok) failed = true;
-            await page.close();
-          }
-          await browser.close();
-          if (failed) process.exit(1);
-          NODE
-      # These continue-on-error flags allow all independent evidence to be collected.
-      # This final required gate fails for every failed or skipped applicable proof.
-      - name: Enforce all browser proof outcomes
-        if: always()
-        shell: bash
-        env:
-          SOURCE_AND_GAMES: ${{ steps.source_and_games.outcome }}
-          LIVE_DOMAINS: ${{ steps.live_domains.outcome }}
-          LIVE_PORTFOLIO: ${{ steps.live_portfolio.outcome }}
-          RUN_EVENT: ${{ github.event_name }}
-        run: |
-          {
-            echo "### Independent browser proof outcomes"
-            echo "| Required proof | Result |"
-            echo "| --- | --- |"
-            echo "| Source + Games production Chromium | $SOURCE_AND_GAMES |"
-            echo "| Live exact-head domains Chromium | $LIVE_DOMAINS |"
-            echo "| Live portfolio Chromium | $LIVE_PORTFOLIO |"
-            echo
-            echo "A Cloudflare challenge is a failing production proof, not a pass."
-          } >> "$GITHUB_STEP_SUMMARY"
-          test "$SOURCE_AND_GAMES" = "success" || { echo "::error::Source/Games proof not successful: $SOURCE_AND_GAMES"; exit 1; }
-          if [[ "$RUN_EVENT" != "pull_request" ]]; then
-            test "$LIVE_DOMAINS" = "success" || { echo "::error::Live domain proof not successful: $LIVE_DOMAINS"; exit 1; }
-            test "$LIVE_PORTFOLIO" = "success" || { echo "::error::Live portfolio proof not successful: $LIVE_PORTFOLIO"; exit 1; }
-          fi
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
