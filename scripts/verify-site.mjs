@@ -19,6 +19,8 @@ const expectedOS = ['Truth Weaver', 'Truth Compass', 'Exact Match Engine', 'Livi
     window.zaraz = { track(name, properties) { window.__jcConversionEvents.push({ name, properties }); } };
   });
   const page = await ctx.newPage();
+  // Deterministic first-party receiver fixture: PR checks must not call production.
+  await page.route('**/_telemetry/v1', (route) => route.fulfill({ status: 204, body: '' }));
   const errors = [];
   page.on('pageerror', (error) => errors.push(String(error)));
   await page.goto(url, { waitUntil: 'load' });
@@ -35,6 +37,8 @@ const expectedOS = ['Truth Weaver', 'Truth Compass', 'Exact Match Engine', 'Livi
 }
 for (const mode of ['abort', 'malformed']) {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } }); const page = await ctx.newPage();
+  // Deterministic first-party receiver fixture: PR checks must not call production.
+  await page.route('**/_telemetry/v1', (route) => route.fulfill({ status: 204, body: '' }));
   await page.route('**/data/connectors.json', (r) => mode === 'abort'
     ? r.abort()
     : r.fulfill({ status: 200, contentType: 'application/json', body: '{not json' }));
@@ -50,6 +54,8 @@ for (const mode of ['abort', 'malformed']) {
 for (const mode of ['empty', 'mixed', 'unavailable']) {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
   const page = await ctx.newPage();
+  // Deterministic first-party receiver fixture: PR checks must not call production.
+  await page.route('**/_telemetry/v1', (route) => route.fulfill({ status: 204, body: '' }));
   await page.route('**/data/approved-stories.json', (route) => {
     if (mode === 'unavailable') return route.abort();
     const stories = mode === 'empty' ? [] : [
@@ -69,6 +75,8 @@ for (const mode of ['empty', 'mixed', 'unavailable']) {
 }
 for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1112, m: true }, { n: 'mobile', w: 390, h: 844, m: true }]) {
   const ctx = await browser.newContext({ viewport: { width: vp.w, height: vp.h }, isMobile: !!vp.m, hasTouch: !!vp.m }); const page = await ctx.newPage();
+  // Deterministic first-party receiver fixture: PR checks must not call production.
+  await page.route('**/_telemetry/v1', (route) => route.fulfill({ status: 204, body: '' }));
   const errors = []; page.on('pageerror', (e) => errors.push(String(e))); page.on('requestfailed', (r) => { if (!/fonts\.(googleapis|gstatic)\.com/.test(r.url())) errors.push(`${r.failure()?.errorText} ${r.url()}`); }); page.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) errors.push(m.text()); });
   await page.goto(url, { waitUntil: 'load' }); await page.waitForFunction(() => document.querySelectorAll('.os-card').length === 5); await page.waitForTimeout(300);
   say((await page.locator('link[rel="canonical"]').count()) === 1 && (await page.locator('link[rel="canonical"]').getAttribute('href')) === 'https://www.jussco.company/', `${vp.n}: exactly one preferred www canonical tag`);
@@ -127,7 +135,9 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
 /* ---------- Games hub: code-level Playwright proof at exact source ---------- */
 for (const vp of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile', width: 390, height: 844 }]) {
   const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height } });
-  const page = await ctx.newPage(); const errors = [];
+  const page = await ctx.newPage();
+  // Deterministic first-party receiver fixture: PR checks must not call production.
+  await page.route('**/_telemetry/v1', (route) => route.fulfill({ status: 204, body: '' })); const errors = [];
   page.on('pageerror', e => errors.push(String(e)));
   const response = await page.goto(url + 'games/index.html', { waitUntil: 'load' });
   say(response?.status() === 200, `games hub: ${vp.name} responds 200`);
