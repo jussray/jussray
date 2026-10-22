@@ -63,10 +63,9 @@ test('large, malformed, wrong-type, missing binding and failed DB do not persist
 test('read-only health probe verifies D1 schema without creating conversion rows', async () => {
   const state = { reads: 0, writes: 0 };
   const DB = { prepare(sql) {
-    assert.match(sql, /FROM sqlite_master/);
-    assert.match(sql, /conversion_daily/);
+    assert.match(sql, /SELECT day, event, action, count FROM conversion_daily/);
     return {
-      async first() { state.reads += 1; return { ready: 1 }; },
+      async first() { state.reads += 1; return null; }, // An empty table is still healthy.
       async run() { state.writes += 1; throw Error('health probe must never write'); },
     };
   } };
@@ -82,8 +81,8 @@ test('health probe rejects malformed requests, wrong origin, and missing schema'
   const health = 'https://www.jussco.company/_telemetry/v1/health';
   let reads = 0;
   const DB = { prepare(sql) {
-    assert.match(sql, /FROM sqlite_master/);
-    return { async first() { reads += 1; return null; } };
+    assert.match(sql, /SELECT day, event, action, count FROM conversion_daily/);
+    return { async first() { reads += 1; throw Error('missing schema column'); } };
   } };
   for (const [req, status] of [
     [request({ probe: 'health-v2' }, health), 400],
