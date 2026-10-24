@@ -50,4 +50,8 @@ jobs:
             echo "::error::Trusted review checker not installed on protected main; bootstrap BLOCKED."
             exit 1
           fi
+          # A filename alone is insufficient: older main implementations
+          # could return success for pull_request refs without checking reviews.
+          # Require the independently-reviewed fail-closed module API on main.
+          node --input-type=module -e "import { reviewDecision, rulesetDecision } from './scripts/verify-independent-review.mjs'; if (typeof reviewDecision !== 'function' || typeof rulesetDecision !== 'function') process.exit(1)"
           node scripts/verify-independent-review.mjs
