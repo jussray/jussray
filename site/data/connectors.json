@@ -1,0 +1,134 @@
+{
+  "generatedAt": "2026-10-02T01:59:43Z",
+  "authorityRules": [
+    "Connector capability does not grant connector authorization.",
+    "Connector authorization does not grant host or standalone OS authority.",
+    "Embedded OS instances do not inherit the host project's connector grants.",
+    "Research and generated evidence cannot silently become verified truth.",
+    "Provider writes require explicit provider-specific authority and a receipt."
+  ],
+  "verification": {
+    "reviewedAt": "2026-10-02T01:59:43Z",
+    "decision": "ACCEPT_SOURCE_WIRING",
+    "runtimeAuthorization": "NOT_PROVEN",
+    "truthWeaver": {
+      "repo": "jussray/truth-weaver",
+      "base": "3878af5fab35a4d486df9625f6eaff8f20c0dceb",
+      "head": "878674f55c1e20edb8ca250e5acd82670d3db81b",
+      "ciRun": 36953280041,
+      "ciJob": 110670659337,
+      "ciConclusion": "success",
+      "ciCompletedAt": "2026-10-02T01:58:14Z",
+      "changedFiles": 5,
+      "mergeReview": "ACCEPT",
+      "proof": ["founder-intelligence", "lint", "typecheck", "unit-tests", "build", "playwright-e2e"],
+      "authorityReview": "No connector output can self-promote to VERIFIED LAW; no host authority is inherited; no runtime connection is claimed without credentials."
+    },
+    "truthCompass": {
+      "repo": "jussray/truth-compass",
+      "base": "4675f4ea5a1a5f132db55f23f663c25411233b21",
+      "head": "e797e9d6b54c449e235bb5281b94c1ed38745c41",
+      "ciRun": 36953287740,
+      "ciJob": 110670682759,
+      "ciConclusion": "success",
+      "ciCompletedAt": "2026-10-02T01:59:43Z",
+      "changedFiles": 5,
+      "mergeReview": "ACCEPT",
+      "proof": ["founder-intelligence", "lint", "typecheck", "unit-tests", "build", "playwright-e2e"],
+      "authorityReview": "Exa discovery is forced away from VERIFIED state; operational connectors remain non-authorizing and embedded instances do not inherit host connector authority."
+    },
+    "exactMatchEngine": {
+      "repo": "jussray/exact-match-engine",
+      "mergeReview": "BLOCKED",
+      "reason": "Published Lovable carrier and GitHub mirror are not currently in a safely synchronized editable state."
+    },
+    "base44StandaloneSystems": {
+      "systems": ["Living Truth", "Proof Core"],
+      "mergeReview": "NEEDS_SETUP",
+      "reason": "Notion, Linear and Slack are available as Base44 OAuth connectors but were observed unconnected; Exa is not wired in these carriers."
+    }
+  },
+  "lanes": [
+    {
+      "id": "exa",
+      "name": "Exa",
+      "role": "Research / discovery",
+      "portfolioState": "source_wired",
+      "authorization": "not_proven",
+      "note": "Source contracts are verified in Truth Weaver and Truth Compass. Runtime credentials or a live app binding are not claimed by this registry."
+    },
+    {
+      "id": "notion",
+      "name": "Notion",
+      "role": "Knowledge / specs / continuity",
+      "portfolioState": "source_wired",
+      "authorization": "not_proven",
+      "note": "Source contracts are verified in Truth Weaver and Truth Compass. Base44 exposes a Notion connector, but the inspected Base44 app reported it not connected."
+    },
+    {
+      "id": "linear",
+      "name": "Linear",
+      "role": "Execution / issues / milestones",
+      "portfolioState": "source_wired",
+      "authorization": "not_proven",
+      "note": "Source contracts are verified in Truth Weaver and Truth Compass. Base44 exposes a Linear connector, but the inspected Base44 app reported it not connected."
+    },
+    {
+      "id": "slack",
+      "name": "Slack",
+      "role": "Collaboration / runtime context",
+      "portfolioState": "source_wired",
+      "authorization": "not_proven",
+      "note": "Source contracts are verified in Truth Weaver and Truth Compass. Base44 exposes a Slack connector, but the inspected Base44 app reported it not connected."
+    }
+  ],
+  "systems": {
+    "Truth Weaver": {
+      "repo": "jussray/truth-weaver",
+      "verifiedHead": "878674f55c1e20edb8ca250e5acd82670d3db81b",
+      "bindings": [
+        { "id": "exa", "implementation": "source_wired", "state": "not_configured", "authority": "research_only" },
+        { "id": "notion", "implementation": "source_wired", "state": "needs_setup", "authority": "explicit_scope_required" },
+        { "id": "linear", "implementation": "source_wired", "state": "needs_setup", "authority": "explicit_scope_required" },
+        { "id": "slack", "implementation": "source_wired", "state": "needs_setup", "authority": "explicit_scope_required" }
+      ]
+    },
+    "Truth Compass": {
+      "repo": "jussray/truth-compass",
+      "verifiedHead": "e797e9d6b54c449e235bb5281b94c1ed38745c41",
+      "bindings": [
+        { "id": "exa", "implementation": "surface_wired", "state": "not_configured", "authority": "research_only" },
+        { "id": "notion", "implementation": "surface_wired", "state": "available", "authority": "explicit_scope_required" },
+        { "id": "linear", "implementation": "surface_wired", "state": "available", "authority": "explicit_scope_required" },
+        { "id": "slack", "implementation": "surface_wired", "state": "available", "authority": "explicit_scope_required" }
+      ]
+    },
+    "Exact Match Engine": {
+      "repo": "jussray/exact-match-engine",
+      "bindings": [
+        { "id": "exa", "implementation": "blocked", "state": "blocked", "blocker": "Published Lovable carrier and GitHub mirror are not currently in a safely synchronized editable state." },
+        { "id": "notion", "implementation": "blocked", "state": "blocked", "blocker": "Published Lovable carrier and GitHub mirror are not currently in a safely synchronized editable state." },
+        { "id": "linear", "implementation": "blocked", "state": "blocked", "blocker": "Published Lovable carrier and GitHub mirror are not currently in a safely synchronized editable state." },
+        { "id": "slack", "implementation": "blocked", "state": "blocked", "blocker": "Published Lovable carrier and GitHub mirror are not currently in a safely synchronized editable state." }
+      ]
+    },
+    "Living Truth": {
+      "builder": "Base44",
+      "bindings": [
+        { "id": "exa", "implementation": "not_wired", "state": "not_configured", "authority": "none" },
+        { "id": "notion", "implementation": "connector_available", "state": "needs_setup", "authority": "oauth_required" },
+        { "id": "linear", "implementation": "connector_available", "state": "needs_setup", "authority": "oauth_required" },
+        { "id": "slack", "implementation": "connector_available", "state": "needs_setup", "authority": "oauth_required" }
+      ]
+    },
+    "Proof Core": {
+      "builder": "Base44",
+      "bindings": [
+        { "id": "exa", "implementation": "not_wired", "state": "not_configured", "authority": "none" },
+        { "id": "notion", "implementation": "connector_available", "state": "needs_setup", "authority": "oauth_required" },
+        { "id": "linear", "implementation": "connector_available", "state": "needs_setup", "authority": "oauth_required" },
+        { "id": "slack", "implementation": "connector_available", "state": "needs_setup", "authority": "oauth_required" }
+      ]
+    }
+  }
+}

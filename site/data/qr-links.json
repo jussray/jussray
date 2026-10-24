@@ -1,0 +1,38 @@
+{
+  "schema": "jussco/qr-registry/v1",
+  "strategy": "first-party-direct-urls-only",
+  "analytics": null,
+  "records": [
+    {
+      "id": "jussco-company",
+      "label": "Juss & Co.",
+      "url": "https://www.jussco.company/",
+      "svg": "/assets/qr/jussco-company.svg"
+    },
+    {
+      "id": "juss-beautiful-hair",
+      "label": "Juss Beautiful Hair",
+      "url": "https://jussbeautifulhair.com/",
+      "svg": "/assets/qr/juss-beautiful-hair.svg"
+    },
+    {
+      "id": "sekret-bip",
+      "label": "Se'kret Bip",
+      "url": "https://sekretbip.net/",
+      "svg": "/assets/qr/sekret-bip.svg"
+    },
+    {
+      "id": "founder-control-room",
+      "label": "Founder Control Room",
+      "url": "https://foundercontrolroom.org/",
+      "svg": "/assets/qr/founder-control-room.svg"
+    },
+    {
+      "id": "jussco-games",
+      "label": "Juss & Co. Games",
+      "url": "https://games.jussco.company/",
+      "svg": "/assets/qr/jussco-games.svg"
+    }
+  ],
+  "runtime_verification": "unknown"
+}
