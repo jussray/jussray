@@ -383,3 +383,10 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
 - Founder working rules recorded in `CLAUDE.md` (this branch).
 - ultrathink-devil: not a new skill (≈70% duplicates ULTRATHINK- `reasoning-stack` Redteam/Lindy twins + juss-os law 1). Unique parts (consequence classes, planes, adaptive budget, ≤3 options) are being made executable in the private product repo. Pasted source was truncated after "Can a mode or untrusted" — remainder UNKNOWN.
 - Drift to resolve (founder decision): two juss-os versions exist — installed skill (79-line kernel, v3-DRAFT) vs `ULTRATHINK-` repo (110-line kernel). Neither recorded as FOUNDER ACCEPT.
+
+### Agent-readiness scan (2026-10-24) — branch `claude/new-session-qkil62`
+- Scanner items audited: only Link headers, API catalog (jussco) and MCP server card (Chief, real `/mcp` ProofMode) are truthful. OAuth/PRM, auth.md, A2A card, skills index, Web Bot Auth, WebMCP, DNS-AID rejected: nothing real behind them.
+- jussray `d74f8a5`: `scripts/verify-site.mjs` was a SyntaxError on main `374bc0d` (merge leftover) — Playwright site proof could not run. Fixed. Remaining pre-existing FAIL: "mobile: hero eyebrow sits below the art band" (147/148 ok), not addressed.
+- jussray `ec07255`: `/.well-known/api-catalog` + homepage Link headers + `scripts/agent-discovery.test.mjs` in site-proof CI. Proven under local wrangler dev only; live domain unreachable from session (proxy 403).
+- chief-ai-machine `5a36de2`: details in that repo's own history.
+- No PRs opened, nothing merged/deployed.
