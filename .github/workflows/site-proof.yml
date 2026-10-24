@@ -43,6 +43,8 @@ jobs:
         run: node --test scripts/conversion-tracking.test.mjs
       - name: Test first-party aggregation, abuse limits and privacy
         run: node --test scripts/conversion-receiver.test.mjs scripts/conversion-client-first-party.test.mjs
+      - name: Test GitHub webhook receiver (HMAC, request bounds, safe acknowledgements)
+        run: node --test tests/jussco-github-webhook.test.mjs
       - name: Verify source/provider proof responsibility boundary
         run: node --test scripts/site-proof-boundary.test.mjs
       - name: Verify exact-source site and Games locally in Chromium
