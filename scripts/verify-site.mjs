@@ -16,8 +16,11 @@ const browser = await chromium.launch(); let failed = 0; const say = (ok, m) => 
 
 const projectSlugs = portfolio.projects.map((project) => project.slug);
 const featuredSlugs = portfolio.projects.filter((project) => project.featured).map((project) => project.slug).sort();
+const worldOverlays = portfolio.featuredWorldOverlays || [];
+const overlaySlugs = worldOverlays.map((overlay) => overlay.slug);
 const declaredFeatured = [...portfolio.featuredWorlds].sort();
 const projectBySlug = new Map(portfolio.projects.map((project) => [project.slug, project]));
+const overlayBySlug = new Map(worldOverlays.map((overlay) => [overlay.slug, overlay]));
 const worldSlugByName = new Map([
   ["Se'kret Bip", 'sekret-bip'],
   ['Founder Control Room', 'founder-control-room'],
@@ -34,6 +37,7 @@ const worldSlugByName = new Map([
   ['Think Tank', 'think-tank'],
   ['Alexa Commerce Engine', 'alexa-commerce-engine'],
   ['Ayure', 'ayure'],
+  ['Solwealth', 'solwealth'],
 ]);
 const forbiddenProjectionTokens = ['jussray/jbh-private', 'jussray/exact-match-engine-', 'jussray/juss-protect-me', '6a9213ad92e06cfad8756b2b', '6a93e49bb1804a2648534bdf'];
 const projectionText = JSON.stringify(portfolio);
@@ -46,11 +50,19 @@ say(portfolio.source?.technicalInventory === 'site/data/systems.json', 'portfoli
 say(/non-authorizing/i.test(portfolio.authority || ''), 'portfolio: remains non-authorizing');
 say(portfolio.projects.length === 20, 'portfolio: 20 public-safe canonical project identities');
 say(new Set(projectSlugs).size === projectSlugs.length, 'portfolio: canonical slugs unique');
-say(JSON.stringify(featuredSlugs) === JSON.stringify(declaredFeatured), 'portfolio: featured-world declaration matches project flags');
+say(JSON.stringify([...featuredSlugs, ...overlaySlugs].sort()) === JSON.stringify(declaredFeatured), 'portfolio: featured-world declaration matches canonical flags plus noncanonical overlays');
+say(worldOverlays.every((overlay) =>
+  overlay.canonicalIdentity === false &&
+  overlay.source === 'site/data/worlds.json' &&
+  !projectBySlug.has(overlay.slug) &&
+  worlds.worlds.some((world) => worldSlugByName.get(world.name) === overlay.slug &&
+    world.name === overlay.name && world.repo === overlay.repository && world.label === overlay.publicLabel)
+), 'portfolio: experimental world overlays preserve canonical company boundary and match world registry');
 say(portfolio.featuredWorlds.length === worlds.worlds.length, 'portfolio: featured count matches worlds.json');
 say(worlds.worlds.every((world) => {
   const slug = worldSlugByName.get(world.name);
-  return slug && portfolio.featuredWorlds.includes(slug) && projectBySlug.get(slug)?.publicLabel === world.label;
+  return slug && portfolio.featuredWorlds.includes(slug) &&
+    (projectBySlug.get(slug) || overlayBySlug.get(slug))?.publicLabel === world.label;
 }), 'portfolio: featured public labels agree with worlds.json');
 say(!projectBySlug.get('storyengine')?.link && !projectBySlug.get('sekret-bip')?.link, 'portfolio: unopened front doors have no public product links');
 say(forbiddenProjectionTokens.every((token) => !projectionText.includes(token)), 'portfolio: internal/private/legacy carriers stay out of public projection');
