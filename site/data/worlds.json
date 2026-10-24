@@ -150,8 +150,8 @@
         "support": "[storyengine-support@jussco.company]",
         "creators": "[storyengine-creators@jussco.company]",
         "rights": "[storyengine-rights@jussco.company]"
-        "email": "support@jussco.company"
       },
+      "legacyRoutingNote": "Earlier shared contact candidate: support@jussco.company; not verified for delivery.",
       "evidence": {},
       "display": {
         "group": "Stories & play"
@@ -177,8 +177,8 @@
         "support": "[syncparty-support@jussco.company]",
         "partnerships": "[syncparty-partnerships@jussco.company]",
         "privacy": "[syncparty-privacy@jussco.company]"
-        "email": "support@jussco.company"
       },
+      "legacyRoutingNote": "Earlier shared contact candidate: support@jussco.company; not verified for delivery.",
       "evidence": {},
       "display": {
         "group": "Stories & play"
@@ -689,13 +689,13 @@
     "site": "https://www.jussco.company",
     "github": "https://github.com/jussray",
     "email": "[founder@jussco.company]",
-    "email": "founder@jussco.company",
+    "unverifiedEmailCandidate": "founder@jussco.company",
     "linkedin": "https://www.linkedin.com/in/juss-rayy-13ba691a1",
     "facebook": "https://www.facebook.com/share/1cH3mxVRpi/?mibextid=wwXIfr",
     "youtube": "[YOUTUBE URL]",
     "support": "https://buymeacoffee.com/jussrayy",
-    "contact_source": "Founder-declared contact routing. jussco.company has been created in the mail provider but DNS verification and inbound routing are not yet proven; bracketed addresses are pending and must not be treated as live."
-    "contact_source": "Cloudflare Email Routing rules checked for jussco.company, jussbeautifulhair.com, foundercontrolroom.org and sekretbip.net. Other portfolio projects use the shared Juss & Co support route. Configured mail routing is not proof of successful delivery or outbound sending."
+    "contact_source": "Founder-declared contact routing. jussco.company has been created in the mail provider but DNS verification and inbound routing are not yet proven; bracketed addresses are pending and must not be treated as live.",
+    "provider_routing_observation": "Cloudflare Email Routing rules checked for jussco.company, jussbeautifulhair.com, foundercontrolroom.org and sekretbip.net. Other portfolio projects use the shared Juss & Co support route. Configured mail routing is not proof of successful delivery or outbound sending."
   },
   "quotes": [
     {
