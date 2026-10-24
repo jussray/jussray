@@ -23,3 +23,8 @@ test('dedicated provider proof remains fail-closed production authority', () => 
   assert.match(providerProof, /https:\/\/games\.jussco\.company\//);
   assert.match(providerProof, /Missing scoped Cloudflare Browser Rendering token or account ID/);
 });
+
+test('PR path filter includes the publication-lock gate', () => {
+  const pr = sourceWorkflow.slice(sourceWorkflow.indexOf('  pull_request:'), sourceWorkflow.indexOf('  workflow_dispatch:'));
+  assert.match(pr, /scripts\/verify-approved-stories\.mjs/);
+});
