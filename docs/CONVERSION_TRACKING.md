@@ -61,3 +61,14 @@ LIMIT 500;
 A frontend click is a *signal*, not a deduplicated human, qualified lead, WhatsApp message, or financial outcome. No private or user-level details should be added to these metrics. Spoofable client-originated activity is not trusted proof; protect against abuse and monitor anomalies before treating counts as reliable.
 
 **Release gates:** Exact-head CI (including receiver tests), fresh source/PR review, dedicated D1 creation and id binding, no-risk Worker script upload, route scope verification for `www.jussco.company/_telemetry/v1*`, separately authorized merge/site deployment, live endpoint negative tests, test fixture with count readback, and report aggregation. Do not present a source PR as collection actually running. Rolling back the route stops all collection while leaving the static site intact. The D1 records and schema are never deleted as an implied rollback.
+
+## Read-only receiver health diagnostic — October 22, 2026
+
+The follow-up source patch proposes a narrowly scoped `POST /_telemetry/v1/health` endpoint, served by the existing `www.jussco.company/_telemetry/v1*` Worker route. The endpoint requires the same canonical browser Origin and `Sec-Fetch-Site` restrictions as normal event traffic, an exact JSON body `{"probe":"health-v1"}`, and a bound D1 database.
+
+- Success: `204 No Content` only if a read-only column-select query succeeds, even when the table is empty; absent table or columns, missing binding, D1 errors: `503`. Malformed body: `400`. Wrong origin: `403`. No conversion row is created for any probe outcome.
+- The independent production witness uses Cloudflare Browser Rendering to invoke the health POST on the canonical live page, then requires an actual `204` DOM receipt. A string matching `204` in a test fixture or repository source does not prove that the deployed Worker works.
+- A passing health probe means **route + Worker + D1 schema are reachable**. It does **not** establish that a genuine visitor made a contact request, that the event insert path was exercised, or that GitHub-hosted browsers can pass Cloudflare protection.
+- Production rollout still requires review/merge, testing at exact HEAD, deploying **only** the separate conversion receiver Worker, provider browser readback, and operator configuration of GitHub Actions Browser Rendering credentials. Do not silently substitute an uncredentialed self-attestation for the independent provider proof.
+
+Do not write test events to `conversion_daily`. Existing GitHub Actions 403 and missing-token blockers remain **FAILED/BLOCKED** until separately resolved.
