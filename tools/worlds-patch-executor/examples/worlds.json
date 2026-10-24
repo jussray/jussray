@@ -1,0 +1,69 @@
+{
+  "_comment": "Example: Juss portfolio structure. Replace with your own worlds.",
+  "worlds": [
+    {
+      "id": "chief-ai",
+      "repo": "github.com/jussray/chief-ai-machine",
+      "branch": "main",
+      "depends_on": ["l99"],
+      "governance": {
+        "owner": "Juss",
+        "merge_policy": "founder-approval",
+        "required_checks": ["typecheck", "unit"],
+        "requires_approval_from": ["Juss"],
+        "public_surface": ["src/workers/*", "src/types/*"]
+      }
+    },
+    {
+      "id": "l99",
+      "repo": "github.com/jussray/l99",
+      "branch": "main",
+      "depends_on": [],
+      "governance": {
+        "owner": "Juss",
+        "merge_policy": "founder-approval",
+        "required_checks": ["typecheck", "unit", "integrity-check"],
+        "requires_approval_from": ["Juss"],
+        "public_surface": ["src/verify/*"]
+      }
+    },
+    {
+      "id": "fcr",
+      "repo": "github.com/jussray/founder-control-room",
+      "branch": "main",
+      "depends_on": ["l99"],
+      "governance": {
+        "owner": "Juss",
+        "merge_policy": "founder-approval",
+        "required_checks": ["typecheck", "unit", "e2e"],
+        "requires_approval_from": ["Juss"],
+        "protected_paths": ["src/auth/*", "src/crypto/*"],
+        "public_surface": ["src/api/*"]
+      }
+    },
+    {
+      "id": "bip",
+      "repo": "github.com/jussray/Sekret-Bip",
+      "branch": "main",
+      "depends_on": ["l99"],
+      "governance": {
+        "owner": "Juss",
+        "merge_policy": "founder-approval",
+        "required_checks": ["typecheck", "unit"],
+        "requires_approval_from": ["Juss"]
+      }
+    },
+    {
+      "id": "storyengine",
+      "repo": "github.com/jussray/StoryEngine",
+      "branch": "main",
+      "depends_on": [],
+      "governance": {
+        "owner": "Juss",
+        "merge_policy": "founder-approval",
+        "required_checks": ["typecheck", "e2e"],
+        "requires_approval_from": ["Juss"]
+      }
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-01T21:58:00Z",
+  "generatedAt": "2026-10-02T22:48:47Z",
   "source": "founder-declared portfolio worlds + builder/repository carriers; evidence fields remain FCR-owned",
   "worlds": [
     {
@@ -45,11 +45,9 @@
       "contact": {
         "site": "https://foundercontrolroom.org",
         "github": "https://github.com/jussray/founder-control-room",
-        "email": "[fcr@jussco.company]",
-        "support": "[fcr-support@jussco.company]",
-        "partnerships": "[fcr-partnerships@jussco.company]",
-        "security": "[fcr-security@jussco.company]",
-        "linkedin": "https://www.linkedin.com/in/juss-rayy-13ba691a1"
+        "email": "support@foundercontrolroom.org",
+        "linkedin": "https://www.linkedin.com/in/juss-rayy-13ba691a1",
+        "founder": "founder@foundercontrolroom.org"
       },
       "evidence": {},
       "display": {
@@ -75,10 +73,7 @@
       },
       "contact": {
         "github": "https://github.com/jussray/chief-ai-machine",
-        "email": "[chief@jussco.company]",
-        "support": "[chief-support@jussco.company]",
-        "integrations": "[chief-integrations@jussco.company]",
-        "partnerships": "[chief-partnerships@jussco.company]"
+        "email": "support@jussco.company"
       },
       "evidence": {},
       "display": {
@@ -96,18 +91,18 @@
     {
       "name": "Juss Beautiful Hair",
       "repo": "jussray/jussbeautifulhair-site",
-      "st": "live",
-      "label": "Live",
+      "st": "progress",
+      "label": "Store open · awaiting first order",
       "link": {
         "text": "Shop the store",
         "url": "https://jussbeautifulhair.com"
       },
       "contact": {
         "site": "https://jussbeautifulhair.com",
-        "email": "hello@jussbeautifulhair.com",
-        "wholesale": "wholesale@jussbeautifulhair.com",
+        "email": "support@jussbeautifulhair.com",
         "instagram": "[JBH INSTAGRAM URL]",
-        "facebook": "[JBH FACEBOOK PAGE URL]"
+        "facebook": "[JBH FACEBOOK PAGE URL]",
+        "hello": "hello@jussbeautifulhair.com"
       },
       "evidence": {},
       "display": {
@@ -149,10 +144,7 @@
       "held": "Coming soon · no public link yet",
       "contact": {
         "github": "https://github.com/jussray/StoryEngine",
-        "email": "[storyengine@jussco.company]",
-        "support": "[storyengine-support@jussco.company]",
-        "creators": "[storyengine-creators@jussco.company]",
-        "rights": "[storyengine-rights@jussco.company]"
+        "email": "support@jussco.company"
       },
       "evidence": {},
       "display": {
@@ -175,10 +167,7 @@
       "held": "Live · link coming",
       "contact": {
         "github": "https://github.com/jussray/sync-party-game",
-        "email": "[syncparty@jussco.company]",
-        "support": "[syncparty-support@jussco.company]",
-        "partnerships": "[syncparty-partnerships@jussco.company]",
-        "privacy": "[syncparty-privacy@jussco.company]"
+        "email": "support@jussco.company"
       },
       "evidence": {},
       "display": {
@@ -200,7 +189,7 @@
       "label": "Private build",
       "held": "Private build · tracked internally",
       "contact": {
-        "email": "hello@jussbeautifulhair.com"
+        "email": "support@sekretbip.net"
       },
       "evidence": {},
       "carriers": [
@@ -251,7 +240,7 @@
       },
       "contact": {
         "github": "https://github.com/jussray/promptos",
-        "email": "hello@jussbeautifulhair.com"
+        "email": "support@jussco.company"
       },
       "evidence": {},
       "carriers": [
@@ -302,7 +291,7 @@
       },
       "contact": {
         "github": "https://github.com/jussray/solcontinuity",
-        "email": "hello@jussbeautifulhair.com"
+        "email": "support@jussco.company"
       },
       "evidence": {},
       "carriers": [
@@ -318,14 +307,14 @@
         "accent": "#14F195",
         "img": "assets/w-fcr.jpg",
         "alt": "Founder systems command-center artwork",
-        "desc": "A continuity system for carrying verified state across Solana-linked work.",
+        "desc": "Provider-aware continuity and resilience tooling with a platform-neutral JSON-RPC core and a Solana-first adapter.",
         "tags": [
-          "Solana",
           "Continuity",
+          "JSON-RPC",
           "Proof"
         ],
-        "tag": "Continuity that survives handoffs.",
-        "blurb": "A portfolio experiment in preserving state, evidence and continuity across decentralized workflows.",
+        "tag": "Continuity that survives provider failure and handoffs.",
+        "blurb": "A public continuity build for route diversity, quorum, failover, recovery and evidence. Solana is the first fully implemented adapter, not the product boundary.",
         "facts": [
           [
             "Source",
@@ -333,11 +322,11 @@
           ],
           [
             "Focus",
-            "Continuity + proof"
+            "Provider-aware continuity + proof"
           ],
           [
-            "Stage",
-            "Active build"
+            "Boundary",
+            "Platform-neutral core; Solana-specific transaction semantics stay adapter-scoped"
           ]
         ]
       }
@@ -349,7 +338,7 @@
       "label": "Private build",
       "held": "Private storefront build · tracked internally",
       "contact": {
-        "email": "hello@jussbeautifulhair.com"
+        "email": "support@jussco.company"
       },
       "evidence": {},
       "carriers": [
@@ -396,7 +385,7 @@
       "label": "Private build",
       "held": "Private brand build · tracked internally",
       "contact": {
-        "email": "hello@jussbeautifulhair.com"
+        "email": "support@jussco.company"
       },
       "evidence": {},
       "carriers": [
@@ -447,7 +436,7 @@
       },
       "contact": {
         "github": "https://github.com/jussray/SleepWealth-Agent",
-        "email": "hello@jussbeautifulhair.com"
+        "email": "support@jussco.company"
       },
       "evidence": {},
       "carriers": [
@@ -463,14 +452,65 @@
         "accent": "#6CCFF6",
         "img": "assets/w-bip.jpg",
         "alt": "Calm night-world artwork",
-        "desc": "A public agent experiment in the Juss portfolio.",
+        "desc": "A governed research agent whose implemented execution path is paper/simulation only.",
         "tags": [
           "Agents",
-          "Automation",
-          "Experiment"
+          "Research",
+          "Governance"
         ],
-        "tag": "An agent build under active exploration.",
-        "blurb": "A public experimental agent project, tracked here without claiming more than the source proves.",
+        "tag": "The machine proposes; the human owns the ceiling.",
+        "blurb": "A public governed-agent experiment with approval, risk and audit boundaries. Live account observation is a separate evidence plane and live order execution remains disabled.",
+        "facts": [
+          [
+            "Source",
+            "Public GitHub repository"
+          ],
+          [
+            "Execution",
+            "Paper / simulation only"
+          ],
+          [
+            "Boundary",
+            "Live order execution disabled"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "Solwealth",
+      "repo": "jussray/SolWealth-Meteora-",
+      "st": "building",
+      "label": "Building",
+      "link": {
+        "text": "Follow the build",
+        "url": "https://github.com/jussray/SolWealth-Meteora-"
+      },
+      "contact": {
+        "github": "https://github.com/jussray/SolWealth-Meteora-",
+        "email": "support@jussco.company"
+      },
+      "evidence": {},
+      "carriers": [
+        {
+          "platform": "github",
+          "ref": "jussray/SolWealth-Meteora-",
+          "role": "canonical source",
+          "visibility": "public"
+        }
+      ],
+      "display": {
+        "group": "Ideas & systems",
+        "accent": "#14F195",
+        "img": "assets/w-fcr.jpg",
+        "alt": "Founder systems command-center artwork",
+        "desc": "An independently runnable learning-agent experiment with its own mind, memory, evidence and developmental state.",
+        "tags": [
+          "Agents",
+          "Solana",
+          "Learning"
+        ],
+        "tag": "Learn, propose and remember without self-authorizing.",
+        "blurb": "Solwealth inherits documented principles from portfolio systems but runs independently. Its current lab is dry-run / Solana Devnet / Meteora-shaped, with signing, mainnet and real-money execution not implemented.",
         "facts": [
           [
             "Source",
@@ -478,11 +518,11 @@
           ],
           [
             "Stage",
-            "Active experiment"
+            "Active learning-agent experiment"
           ],
           [
-            "Claims",
-            "Runtime impact is not promoted without proof"
+            "Authority",
+            "No signing, mainnet or real-money execution"
           ]
         ]
       }
@@ -498,7 +538,7 @@
       },
       "contact": {
         "github": "https://github.com/jussray/THINK-TANK",
-        "email": "hello@jussbeautifulhair.com"
+        "email": "support@jussco.company"
       },
       "evidence": {},
       "carriers": [
@@ -514,14 +554,14 @@
         "accent": "#F5C14B",
         "img": "assets/w-fcr.jpg",
         "alt": "Founder systems command-center artwork",
-        "desc": "A public idea-and-experiment workspace for exploring what should exist next.",
+        "desc": "A deterministic local-first founder idea interview, challenge, scoring, synthesis and versioning loop.",
         "tags": [
           "Ideas",
-          "Research",
-          "Experiments"
+          "Decision support",
+          "Portability"
         ],
-        "tag": "Pressure-test the next idea.",
-        "blurb": "A compact public workspace for turning rough ideas into things that can be challenged and tested.",
+        "tag": "Pressure-test an idea without pretending heuristics are market proof.",
+        "blurb": "Think Tank turns founder answers into a durable Idea Record with deterministic critique, scoring, synthesis, recovery and portable export/import.",
         "facts": [
           [
             "Source",
@@ -529,11 +569,11 @@
           ],
           [
             "Stage",
-            "Building"
+            "Verified local-first V0"
           ],
           [
-            "Role",
-            "Idea + experiment workspace"
+            "Boundary",
+            "Deterministic heuristic workflow; not presented as production AI or market validation"
           ]
         ]
       }
@@ -545,7 +585,7 @@
       "label": "Private build",
       "held": "Private commerce build · tracked internally",
       "contact": {
-        "email": "hello@jussbeautifulhair.com"
+        "email": "support@jussco.company"
       },
       "evidence": {},
       "carriers": [
@@ -592,7 +632,7 @@
       "label": "Private build",
       "held": "Private product build · tracked internally",
       "contact": {
-        "email": "hello@jussbeautifulhair.com"
+        "email": "support@jussco.company"
       },
       "evidence": {},
       "carriers": [
@@ -636,14 +676,14 @@
   "company": {
     "name": "Juss & Co",
     "founder": "Juss",
-    "site": "https://jussco.company",
+    "site": "https://www.jussco.company",
     "github": "https://github.com/jussray",
-    "email": "[founder@jussco.company]",
+    "email": "founder@jussco.company",
     "linkedin": "https://www.linkedin.com/in/juss-rayy-13ba691a1",
     "facebook": "https://www.facebook.com/share/1cH3mxVRpi/?mibextid=wwXIfr",
     "youtube": "[YOUTUBE URL]",
     "support": "https://buymeacoffee.com/jussrayy",
-    "contact_source": "Founder-declared contact routing. jussco.company has been created in the mail provider but DNS verification and inbound routing are not yet proven; bracketed addresses are pending and must not be treated as live."
+    "contact_source": "Cloudflare Email Routing rules checked for jussco.company, jussbeautifulhair.com, foundercontrolroom.org and sekretbip.net. Other portfolio projects use the shared Juss & Co support route. Configured mail routing is not proof of successful delivery or outbound sending."
   },
   "quotes": [
     {
@@ -680,6 +720,6 @@
     }
   ],
   "quotes_source": "Juss's own lines: the Juss & Co mockup, the 'Day I Became a Coder' poster, and the jussray profile README ('The signal')",
-  "registryVersion": 2,
+  "registryVersion": 3,
   "canonicalization": "Worlds render once; standalone OS products live in systems.json; copies and supporting surfaces stay nested carriers."
 }

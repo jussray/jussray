@@ -8,10 +8,11 @@
 <meta property="og:description" content="A founder studio for a brighter tomorrow. Featured worlds, standalone systems, a complete portfolio map, and one proof protocol.">
 <meta property="og:image" content="assets/hero.jpg">
 <meta name="theme-color" content="#06061C">
-<link rel="canonical" href="https://jussco.company/">
+<link rel="canonical" href="https://www.jussco.company/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2306061C'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='%23F5C14B' font-family='Georgia'%3E%26%3C/text%3E%3C/svg%3E">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}</style>
 <title>Juss &amp; Co — Turn thoughts into living works.</title>
+<script src="/assets/conversion-tracking.js" defer></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Playfair+Display:wght@700;800&family=Kaushan+Script&family=Caveat:wght@700&family=Sora:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
@@ -186,7 +187,7 @@ h1,h2,h3{text-wrap:balance}
 .os-meta span,.os-embed span{font-family:var(--f-mono);font-size:9px;letter-spacing:.09em;text-transform:uppercase;padding:6px 8px;border-radius:999px;border:1px solid rgba(170,150,255,.2);color:var(--muted);background:rgba(255,255,255,.02)}
 .os-embed{display:flex;gap:7px;flex-wrap:wrap;padding-top:11px;border-top:1px solid rgba(170,150,255,.13)}
 .os-embed b{width:100%;font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-2);font-weight:700}
-.os-link{align-self:flex-start;color:var(--cyan);font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center;min-height:44px;padding:8px 2px}
+.os-link{align-self:flex-start;min-height:40px;display:inline-flex;align-items:center;color:var(--cyan);font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;padding:8px 2px}
 .surface-strip{margin-top:18px;border:1px dashed rgba(184,107,255,.35);border-radius:14px;padding:14px 16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;color:var(--muted);font-size:13px}
 .surface-strip b{color:#fff}.os-foot{margin-top:14px;color:var(--dim)}
 @media(max-width:900px){.os-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -256,8 +257,15 @@ h1,h2,h3{text-wrap:balance}
 .close p{margin-top:12px;color:var(--muted);max-width:40ch;font-size:15px}
 .contact-col{display:grid;gap:12px}
 .addr{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 10px 10px 16px;border-radius:12px;border:1px solid var(--line-hot);background:rgba(6,6,28,.7)}
-.addr span{font-family:var(--f-mono);font-size:13px;user-select:all;overflow-wrap:anywhere;min-width:0}
+.addr a{display:inline-flex;align-items:center;min-height:44px;font-family:var(--f-mono);font-size:13px;overflow-wrap:anywhere;min-width:0;color:var(--gold)}
 .copy{min-height:44px;padding:10px 14px;border-radius:10px;border:1px solid var(--line-hot);background:rgba(124,58,237,.25);color:#fff;font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;cursor:pointer}
+.project-contact-directory{border:1px solid var(--line);border-radius:12px;background:rgba(6,6,28,.7);padding:0 14px}
+.project-contact-directory summary{display:flex;align-items:center;min-height:44px;font-family:var(--f-mono);font-size:11px;letter-spacing:.04em;color:var(--cream);cursor:pointer}
+.project-contact-directory ul{list-style:none;margin:4px 0 12px;padding:0;max-height:280px;overflow:auto;display:grid;gap:8px}
+.project-contact-directory li{display:grid;gap:2px;padding:8px 0;border-top:1px solid var(--line);font-size:12px;min-width:0}
+.project-contact-directory strong{font-weight:600;color:var(--text)}
+.project-contact-directory a{color:var(--cyan);overflow-wrap:anywhere;min-height:44px;display:inline-flex;align-items:center}
+.project-contact-directory small{color:var(--muted);font-size:10px}
 .sig{display:grid;gap:14px;justify-items:start}
 .sig .brand{font-size:34px}
 .sig .tag{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
@@ -321,6 +329,7 @@ h1,h2,h3{text-wrap:balance}
       <a href="#systems" data-nav="systems">Systems</a>
       <a href="portfolio.html">Portfolio</a>
       <a href="#proof" data-nav="proof">Proof</a>
+      <a href="/creative-history.html">Creative history</a>
       <a href="#why" data-nav="why">The why</a>
       <a href="#contact" data-nav="contact">Contact</a>
     </nav>
@@ -341,6 +350,7 @@ h1,h2,h3{text-wrap:balance}
       <p class="lede">We build products, systems, stories and proof that help more people live, create, and belong. From idea to impact, we make thoughts real.</p>
       <div class="cta-row">
         <a class="btn btn-violet" href="#worlds">Explore the worlds <span aria-hidden="true">→</span></a>
+        <a class="btn btn-ghost" href="https://games.jussco.company/">🎮 Visit Juss &amp; Co. Games <span aria-hidden="true">↗</span></a>
         <a class="btn btn-ghost" href="#proof"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>See proof</a>
       </div>
       <ul class="pillars" style="list-style:none;margin-top:38px;padding:0">
@@ -382,7 +392,7 @@ h1,h2,h3{text-wrap:balance}
         <p class="tag" id="dTag"></p>
         <p class="blurb" id="dBlurb"></p>
         <div class="cta" id="dCta"></div>
-        <div class="contacts" id="dContacts" hidden><div class="facts-h"><span>Founder contact</span></div><ul class="clist" id="dContactList"></ul></div>
+        <div class="contacts" id="dContacts" hidden><div class="facts-h"><span>Project contact</span></div><ul class="clist" id="dContactList"></ul></div>
       </div>
       <div>
         <div class="facts-h"><span>What is true today</span><span id="dIdx"></span></div>
@@ -488,9 +498,14 @@ h1,h2,h3{text-wrap:balance}
         <p>Ideas, people and proof for a brighter tomorrow. Whether you want to collaborate, join a project, or just say hello, we'd love to hear from you.</p>
       </div>
       <div class="contact-col">
-        <div class="addr"><span id="mail">hello@jussbeautifulhair.com</span><button class="copy" type="button" id="copyBtn">Copy</button></div>
+        <div class="addr"><a id="mail" href="mailto:founder@jussco.company">founder@jussco.company</a><button class="copy" type="button" id="copyBtn" aria-label="Copy Juss &amp; Co. founder email">Copy email</button></div>
+        <details class="project-contact-directory" id="projectContactDirectory" hidden><summary>Find a project’s contact email</summary><ul id="projectContactList"></ul></details>
         <a class="btn btn-gold" href="https://github.com/jussray">Follow the builds <span aria-hidden="true">↗</span></a>
         <a class="btn btn-ghost" href="#worlds">Explore all worlds</a>
+        <a href="https://www.jussco.company/" class="company-qr" aria-label="Visit Juss and Co on the web, or scan the QR code" style="display:flex;align-items:center;gap:16px;max-width:350px;min-height:160px;padding:12px;margin-top:16px;text-decoration:none;background:rgba(9,6,35,.72);border:1px solid rgba(178,141,255,.5);border-radius:18px">
+          <img src="assets/qr/jussco-company.svg" alt="QR code for www.jussco.company" width="132" height="132" loading="lazy" decoding="async" style="width:132px;height:132px;flex:none;border-radius:8px;background:#fff">
+          <span style="display:grid;gap:5px;min-width:0"><strong style="font-size:16px;line-height:1.3;color:#F8F4FF">Scan to explore</strong><small style="font-size:12px;overflow-wrap:anywhere;color:#C4BEEC">www.jussco.company</small><small style="font-size:11px;line-height:1.4;color:#B9AADD">Open on your phone</small></span>
+        </a>
       </div>
       <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:start">
         <div class="sig">
@@ -535,11 +550,11 @@ h1,h2,h3{text-wrap:balance}
      tag:"Intent → bounded execution → evidence.", blurb:"The intelligence partner that starts with one question: what are you trying to move forward?",
      facts:[["Runtime","Deployed on Cloudflare Workers"],["Merged #142","MCP identity surface and credential membrane"],["Role","Defines intent; Control Room governs the doing"]],
      link:["Follow the build","https://github.com/jussray/chief-ai-machine"]},
-    {name:"Juss Beautiful Hair", group:"People & belonging", st:"live", label:"Live", w:"#FF4FB8", img:"assets/w-jbh.jpg",
+    {name:"Juss Beautiful Hair", group:"People & belonging", st:"progress", label:"Store open · awaiting first order", w:"#FF4FB8", img:"assets/w-jbh.jpg",
      alt:"A woman with long curly hair in warm light, hand at her cheek, confident and relaxed",
      desc:"Premium hair for real people. Confidence, culture and care.", tags:["Beauty","Commerce","Community"],
      tag:"Beauty commerce, built to convert.", blurb:"Curated human hair bundles, closures and frontals, shipped to your door.",
-     facts:[["Live","jussbeautifulhair.com"],["Claims audited","Unproven hair claims removed (#115, 29 Sep)"],["Checkout","Exact-head checkout gate passed in a real browser"]],
+     facts:[["Store","jussbeautifulhair.com"],["Claims audited","Unproven hair claims removed (#115, 29 Sep)"],["Checkout","Exact-head checkout gate passed in a real browser"]],
      link:["Shop the store","https://jussbeautifulhair.com"]},
     {name:"StoryEngine", group:"Stories & play", st:"building", label:"Building", w:"#F5C14B", img:"assets/w-story.jpg",
      alt:"Silhouette of a filmmaker behind a camera rig against a violet sunset city",
@@ -567,12 +582,30 @@ h1,h2,h3{text-wrap:balance}
   }
   WORLDS.forEach(function(w,i){renderWorldCard(w,i);});
   var LIVE = {};
+  function validContactEmail(v){return typeof v==="string" && /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(v);}
+  function renderProjectContactDirectory(worlds){
+    var box=document.getElementById("projectContactDirectory"), ul=document.getElementById("projectContactList");
+    if(!box||!ul)return;
+    ul.replaceChildren();
+    (worlds||[]).forEach(function(w){
+      var c=w.contact||{}, email=c.email||c.support;
+      if(!validContactEmail(email))return;
+      var li=document.createElement("li"), label=document.createElement("strong"), a=document.createElement("a");
+      label.textContent=w.name; a.href="mailto:"+email; a.textContent=email;
+      li.appendChild(label);li.appendChild(a);
+      if(email==="support@jussco.company"){
+        var shared=document.createElement("small");shared.textContent="Shared Juss & Co support";li.appendChild(shared);
+      }
+      ul.appendChild(li);
+    });
+    box.hidden=ul.children.length===0;
+  }
   function worldFromRegistry(L){var p=L.display||{};return{name:L.name,group:p.group||"Ideas & systems",st:L.st||"building",label:L.label||"Building",w:p.accent||"#8B5CF6",img:p.img||"assets/w-fcr.jpg",alt:p.alt||"",desc:p.desc||"",tags:Array.isArray(p.tags)?p.tags:[],tag:p.tag||"",blurb:p.blurb||p.desc||"",facts:Array.isArray(p.facts)?p.facts:[],held:L.held||"Tracked · no public link yet",link:(L.link&&L.link.url)?[L.link.text||"Open",L.link.url]:null};}
   fetch("data/worlds.json",{cache:"no-store"}).then(function(r){return r.ok?r.json():null;}).then(function(d){
     if(!d||!d.worlds)return;
     d.worlds.forEach(function(L){LIVE[L.name]=L;var idx=WORLDS.findIndex(function(w){return w.name===L.name;});if(idx<0&&L.display){var added=worldFromRegistry(L);WORLDS.push(added);idx=WORLDS.length-1;renderWorldCard(added,idx);}if(idx<0)return;var w=WORLDS[idx];if(L.st&&L.label){w.st=L.st;w.label=L.label;var b=cards[idx].querySelector(".badge");b.className="badge s-"+L.st;b.textContent=L.label;}if(L.link&&L.link.url){w.link=[L.link.text||"Open",L.link.url];w.held=null;}else if(L.held){w.held=L.held;w.link=null;}});
     var n=document.querySelector('#filters .chip[data-group=""] .n');if(n)n.textContent=String(WORLDS.length).padStart(2,"0");
-    if(d.company&&d.company.email&&d.company.email[0]!=="[")document.getElementById("mail").textContent=d.company.email;if(d.quotes&&d.quotes.length)setQuotes(d.quotes);var stamp=document.getElementById("liveStamp");if(stamp&&d.generatedAt)stamp.textContent="Status synced "+new Date(d.generatedAt).toUTCString().replace(/:\d\d GMT$/," UTC");if(current>=0){var k=current;current=-1;open(k);}
+    if(d.company&&validContactEmail(d.company.email)){var companyMail=document.getElementById("mail");companyMail.textContent=d.company.email;companyMail.href="mailto:"+d.company.email;}renderProjectContactDirectory(d.worlds);if(d.quotes&&d.quotes.length)setQuotes(d.quotes);var stamp=document.getElementById("liveStamp");if(stamp&&d.generatedAt)stamp.textContent="Status synced "+new Date(d.generatedAt).toUTCString().replace(/:\d\d GMT$/," UTC");if(current>=0){var k=current;current=-1;open(k);}
   }).catch(function(){});
 
 /* ---------- standalone OS registry ---------- */
@@ -601,15 +634,16 @@ function renderSystems(d){
       card.appendChild(cw);
     }
     if(x.embeddedIn&&x.embeddedIn.length){ var emb=document.createElement("div"); emb.className="os-embed"; var eb=document.createElement("b"); eb.textContent="Already embedded in"; emb.appendChild(eb); x.embeddedIn.forEach(function(e){ var sp=document.createElement("span"); sp.textContent=e.name; emb.appendChild(sp); }); card.appendChild(emb); }
-    if(x.builder&&x.builder.preview){ var a=document.createElement("a"); a.className="os-link"; a.href=x.builder.preview; a.textContent="Open builder preview ↗"; card.appendChild(a); }
+    var target=x.publicUrl || (x.builder && x.builder.preview);
+    if(target){ var a=document.createElement("a"); a.className="os-link"; a.href=target; a.textContent=x.publicUrl ? "Open "+x.name+" ↗" : "Open builder preview ↗"; card.appendChild(a); }
     osGrid.appendChild(card);
   });
   var stamp=document.getElementById("osStamp"); if(stamp) stamp.textContent=visible.length+" public standalone OS builds · internal carriers tracked separately"+(d.generatedAt?" · synced "+new Date(d.generatedAt).toISOString().slice(0,10):"");
   if(surfaceStrip && Array.isArray(d.supportingSurfaces) && d.supportingSurfaces.length){ surfaceStrip.hidden=false; surfaceStrip.innerHTML=""; var b=document.createElement("b"); b.textContent="Supporting surfaces:"; surfaceStrip.appendChild(b); d.supportingSurfaces.forEach(function(x){ var sp=document.createElement("span"); sp.textContent=x.name+" → "+x.parent+" · "+((x.builder&&x.builder.provider)||"tracked")+" · "+x.status; surfaceStrip.appendChild(sp); }); }
 }
 Promise.all([
-  fetch("data/systems.json",{cache:"no-store"}).then(function(r){ return r.ok?r.json():null; }),
-  fetch("data/connectors.json",{cache:"no-store"}).then(function(r){ return r.ok?r.json():null; })
+  fetch("data/systems.json",{cache:"no-store"}).then(function(r){ return r.ok?r.json():null; }).catch(function(){ return null; }),
+  fetch("data/connectors.json",{cache:"no-store"}).then(function(r){ return r.ok?r.json():null; }).catch(function(){ return null; })
 ]).then(function(pair){ connectorRegistry=pair[1]; renderSystems(pair[0]); }).catch(function(){});
 
 /* ---------- rotating founder quotes (data-driven, founder-declared) ---------- */
@@ -643,6 +677,7 @@ Promise.all([
     keys.forEach(function(k){ var li=document.createElement("li"), b=document.createElement("b"); b.textContent=k; li.appendChild(b);
       var v=String(c[k]||""); if(!v || v[0]==="["){ var s=document.createElement("span"); s.className="pend"; s.textContent=(v||"pending").replace(/^\[|\]$/g,"")+" · pending"; li.appendChild(s); }
       else if(/^https?:/.test(v)){ var a=document.createElement("a"); a.href=v; a.textContent=v.replace(/^https?:\/\//,""); li.appendChild(a); }
+      else if(validContactEmail(v)){ var mail=document.createElement("a");mail.href="mailto:"+v;mail.textContent=v;li.appendChild(mail); }
       else { var t=document.createElement("span"); t.textContent=v; t.style.userSelect="all"; li.appendChild(t); }
       ul.appendChild(li); });
     box.hidden=false;
@@ -749,11 +784,40 @@ Promise.all([
   /* ---------- copy ---------- */
   var cb=document.getElementById("copyBtn");
   cb.addEventListener("click", function(){
-    var el=document.getElementById("mail"), txt=el.textContent;
+    var el=document.getElementById("mail"), txt=el.href&&el.href.indexOf("mailto:")===0?el.href.slice(7):(el.href||el.textContent);
     function sel(){ var r=document.createRange(); r.selectNodeContents(el); var s=getSelection(); s.removeAllRanges(); s.addRange(r); cb.textContent="Selected"; }
     if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(function(){ cb.textContent="Copied"; }, sel); } else sel();
-    setTimeout(function(){ cb.textContent="Copy"; },2200);
+    setTimeout(function(){ cb.textContent="Copy email"; },2200);
   });
+})();
+</script>
+
+<!-- Approved outcomes: separate from operational world evidence; empty by default. -->
+<section class="sec wrap" id="outcomes" aria-labelledby="outcomes-title" style="border-top:1px solid var(--line)">
+  <div class="in">
+    <div class="kicker mono">THE OUTCOME EDIT</div>
+    <h2 class="h2" id="outcomes-title">Work worth <span class="gold">celebrating.</span></h2>
+    <p class="sec-note" style="margin-top:18px">Verified accomplishments shared with permission, from across the Juss &amp; Co worlds.</p>
+    <div id="outcome-stories" aria-live="polite" style="margin-top:28px;display:grid;gap:16px"></div>
+    <p id="outcome-empty" style="margin-top:24px;color:var(--muted)">The first approved stories are on their way. No private work is published automatically.</p>
+  </div>
+</section>
+<script>
+(function(){
+  var host=document.getElementById('outcome-stories'),empty=document.getElementById('outcome-empty');
+  fetch('/data/approved-stories.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw Error('unavailable');return r.json()}).then(function(data){
+    if(data.schema!=='jussco/approved-stories@v1'||!Array.isArray(data.stories))return;
+    data.stories.forEach(function(story){
+      if(!story||story.approved!==true||story.publicationApproved!==true||story.destination!=='jussco.company'||!story.proofUrl||!/^https:\/\//.test(story.proofUrl)||!story.title||!story.summary)return;
+      var card=document.createElement('article');card.style.cssText='border:1px solid var(--line);border-radius:18px;padding:24px;background:var(--ink)';
+      var label=document.createElement('p');label.className='mono';label.style.color='var(--gold)';label.textContent=story.project||'Juss & Co';
+      var title=document.createElement('h3');title.className='serif';title.style.cssText='font-size:clamp(23px,3vw,34px);margin:12px 0';title.textContent=story.title;
+      var summary=document.createElement('p');summary.style.color='var(--muted)';summary.textContent=story.summary;
+      var link=document.createElement('a');link.href=story.proofUrl;link.textContent='View public evidence';link.rel='noopener noreferrer';link.target='_blank';link.style.cssText='display:inline-block;margin-top:16px;color:var(--cyan)';
+      card.append(label,title,summary,link);host.appendChild(card);
+    });
+    empty.hidden=host.children.length>0;
+  }).catch(function(){/* Keep the honest empty state when the feed is unavailable. */});
 })();
 </script>
 </body>
