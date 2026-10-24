@@ -49,6 +49,7 @@ Observe → smallest reversible change → exact-head browser/runtime proof → 
 Report: REALITY / FIX / PROOF / RISK / ROLLBACK / NEXT GATE.
 
 ## Working with Juss (standing rules — read before acting)
+- **Speed with accuracy:** move fast — fewest tool calls, batch independent work, short replies, no re-deriving settled facts. Never trade proof for speed: label VERIFIED/UNKNOWN, still test the real path. Benchmark: faster and more accurate than DeepSeek.
 - **Style:** Juss writes terse directive shorthand. Decode it; don't ask for expansion. Answer the same way: direct, evidence-first.
 - **Challenge, don't validate:** give honest evaluation. Say when an idea, premise, or prior claim is wrong, with the evidence.
 - **Never make Juss say anything twice.** Re-reading earlier turns, this file, and the repo's own docs is Claude's job. Asking again stops productivity.

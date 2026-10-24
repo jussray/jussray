@@ -1,0 +1,12 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://www.jussco.company/.well-known/api-catalog",
+      "item": [
+        { "href": "https://www.jussco.company/data/worlds.json", "type": "application/json", "title": "Juss & Co portfolio worlds: status, public links, contacts (read-only static feed)" },
+        { "href": "https://www.jussco.company/data/systems.json", "type": "application/json", "title": "Juss & Co standalone systems registry (read-only static feed)" },
+        { "href": "https://www.jussco.company/data/connectors.json", "type": "application/json", "title": "Juss & Co connector lanes registry (read-only static feed)" }
+      ]
+    }
+  ]
+}
