@@ -12,9 +12,10 @@
       "name": "Truth Weaver",
       "kind": "standalone_os",
       "public": true,
-      "status": "repairing",
-      "label": "Standalone OS · Published · Surface repair",
-      "role": "Reasoning and challenge OS for separating evidence from inference, generating competing hypotheses, and stress-testing decisions.",
+      "status": "published",
+      "label": "Published legal research · Paid tools in preparation",
+      "publicUrl": "https://truthweaver.jussco.company",
+      "role": "Independent legal-navigation and notice-research product. Helps people organize legal questions, jurisdiction, official-source research, dates and uncertainty. Not legal advice; paid reports remain in preparation.",
       "builder": {
         "provider": "Lovable",
         "projectId": "8ef43cd3-8d93-4494-a685-59ce0f795614",

@@ -2,141 +2,89 @@
 
 ## Founder · Product & Full-Stack AI Systems Builder
 
-I take ambiguous product and AI ideas from **concept → interface → backend/API → data/auth → deployment → browser verification**.
+I turn ambiguous product ideas into **working, verifiable systems**: interface, backend, data/auth, AI behavior, deployment, and browser proof.
 
-I build human-centered products and founder-controlled systems that turn **intent into provable outcomes**. My strongest public proof sits across three active engineering surfaces:
+My work sits where product judgment meets engineering: **human-centered products, founder-controlled AI systems, commerce, creator tools, games, and verification infrastructure**.
 
-| Product | What I built | Public engineering proof |
+**Start here:** [Juss & Co](https://jussco.company) · [LinkedIn](https://www.linkedin.com/in/juss-rayy-13ba691a1) · [GitHub](https://github.com/jussray)
+
+**Review the work:** [Selected product case studies](PORTFOLIO_CASE_STUDIES.md) — brief → judgment → build → evidence → safe-share boundary.
+
+## Selected public work
+
+| Product | What it is | Current public state |
 |---|---|---|
-| [Se’kret Bip](https://github.com/jussray/Sekret-Bip) | Privacy-first teen/family product spanning React Native + Expo, TypeScript, Supabase auth/data/RLS, Cloudflare APIs, product flows, and production verification contracts | Mobile/web product architecture, auth/data boundaries, API/runtime topology, migrations, tests, and production Playwright paths |
-| [Founder Control Room](https://github.com/jussray/founder-control-room) | Full-stack founder operating surface for approvals, repository truth, AI capability coordination, release control, evidence, rollback, and provider integrations | TypeScript, Express, Cloudflare Workers/Pages, Supabase, GitHub/provider integrations, browser/E2E verification, and deployment controls |
-| [PromptOS](https://github.com/jussray/promptos) | Governed AI instruction/skill runtime that turns founder intent into bounded executable missions and reusable workflows | 5,000 selected recipes, 398 curated prompts, mission compiler, portable command contracts, and desktop/mobile browser proof |
+| [Se’kret Bip](https://sekretbip.net/) | Privacy-first teen/family product for emotional growth, self-expression, and intentional family support; [public source](https://github.com/jussray/Sekret-Bip) | **Public preview accessible; member flows not independently verified** |
+| [Founder Control Room (FCR)](https://foundercontrolroom.org/) | Standalone founder operating platform for governed actions, approvals, evidence, release control, and rollback; [public source](https://github.com/jussray/founder-control-room) | **Public front door accessible; private workspace remains gated** |
+| [Chief AI](https://github.com/jussray/chief-ai-machine) | Standalone founder-intelligence system for portable company knowledge, reasoning, synthesis, and bounded Chief-owned capabilities; peers with FCR and PromptOS | **In progress; public source available** |
+| [PromptOS public overview](https://foundercontrolroom.org/#promptos) | Independent prompt, skill, instruction, and mission operating system; the source repository remains private | **Building; public overview available** |
+| [StoryEngine / L99](https://github.com/jussray/StoryEngine) | Creator system for writing, creating, preparing, publishing, and selling work with provenance, recovery, and release controls | **Building** |
+| [Juss Beautiful Hair](https://jussbeautifulhair.com/) | Independent commerce storefront with Shopify-backed catalog and checkout source; [public source](https://github.com/jussray/jussbeautifulhair-site) | **Live checkout not verified in this audit** |
+| [SYNC Party](https://sync.jussco.company/) | Standalone real-time party game; [public source](https://github.com/jussray/sync-party-game) | **Public game page accessible; multiplayer round not verified in this audit** |
+| [SolContinuity](https://github.com/jussray/solcontinuity) | Provider-aware continuity, quorum, failover, recovery, and portable evidence tooling | **Building** |
 
-I work across the seam where **new model capability becomes a usable product**: product judgment, interface behavior, backend contracts, AI orchestration, data boundaries, infrastructure, verification, and iteration.
+These are separate products and systems. I do not present one project’s capability as another project’s feature unless the integration is actually implemented and verified.
 
-This GitHub is the public record of that work: focused changes, reviewable decisions, tests, verified milestones, documented risk, and reversible moves. A claim does not become true because it sounds compelling. **The evidence has to exist.**
+## Juss & Co outcome showcase (feature branch)
+
+The parent-company website at [jussco.company](https://jussco.company) is being extended with **The Outcome Edit**, a brand-preserving showcase for independently verified achievements across the portfolio. Each project retains its own brand, original publication, and source attribution. The parent-company feature is a separate distribution destination, not a claim that projects have merged.
+
+**Current state:** implemented on the `feature/approved-outcome-showcase` branch only. It is **not verified as deployed**. The public feed at `site/data/approved-stories.json` starts empty; no customer stories or testimonials have been published through this feature.
+
+The feed is checked by `scripts/verify-approved-stories.mjs` in `.github/workflows/site-proof.yml`, and `scripts/verify-site.mjs` contains browser regression cases. These checks are committed, **not yet reported as passing at the exact feature head**. **Publication lock active:** the CI validator requires an empty story feed until trusted consent and revocation controls are verified. A source-file approval flag is not authenticated consent. Real-person content must not enter the public feed until the approval source, revocation/removal process, and publication readback are verified. Operational status and evidence continue to live in `site/data/worlds.json`.
+
+## What I build
+
+- **Products:** concept → UX → implementation → deployment → real-path verification.
+- **AI systems:** bounded agents, orchestration, authority, evidence, continuity, and recovery.
+- **Full-stack systems:** TypeScript/JavaScript, React-family frontends, Node/Express services, Supabase/Postgres, Cloudflare, Shopify, and provider APIs.
+- **Verification:** focused tests, CI, deployment evidence, Playwright/browser proof, runtime readback, and rollback paths.
+- **Founder infrastructure:** systems that preserve intent while separating plans, actions, receipts, evidence, and verified outcomes.
+
+## How I work
+
+1. Preserve the actual goal.
+2. Find the real blocker before changing the system.
+3. Make the smallest reversible fix that solves the cause.
+4. Separate source, CI, deployment, runtime, browser/device, and outcome evidence.
+5. Keep consequential actions behind explicit authority.
+6. Verify the real path before calling the work done.
 
 > **Historical truth is immutable. Current truth must be re-observed.**
 
-## The signal
+That principle shows up across my repositories: a green test is not automatically a live product, a deployment is not automatically the right runtime, and an executed action is not automatically a successful outcome.
 
-Across my work, a small set of ideas repeats on purpose:
+## More public builds
 
-- **Proof before claim.**
-- **Activity is not accomplishment.**
-- **Execution truth is not outcome truth.**
-- **Historical truth stays immutable; current truth gets re-observed.**
-- **Standardize the laws of trust. Customize how trust feels.**
-- **Founder intent → execution → evidence → outcome.**
+- [THINK-TANK](https://github.com/jussray/THINK-TANK) — deterministic local-first founder idea interview, challenge, scoring, synthesis, and recovery loop.
+- [SleepWealth Agent](https://github.com/jussray/SleepWealth-Agent) — governed trading-agent research with paper/simulation execution boundaries.
+- [Solwealth](https://github.com/jussray/SolWealth-Meteora-) — independently runnable learning-agent experiment with dry-run / Devnet evidence loops.
+- [sekret-bip-demo](https://github.com/jussray/sekret-bip-demo) — bounded public demonstration surface, not the authoritative Se’kret Bip product source.
 
-These are not slogans pasted onto unrelated projects. They are operating principles that show up in product behavior, release evidence, recovery design, agent authority, and how I decide whether something is actually done.
+The fuller portfolio registry lives in [`site/data/worlds.json`](site/data/worlds.json) and [`site/data/systems.json`](site/data/systems.json). Repository existence alone is not a launch claim; exact source and runtime evidence wins when state changes.
 
-## Flagship product
+## Public proof boundaries
 
-### [Se’kret Bip](https://github.com/jussray/Sekret-Bip)
+Public repositories expose enough evidence to inspect the work without exposing private prompts, credentials, customer or teen data, database secrets, unreleased architecture, proprietary scoring, or internal safety thresholds.
 
-A privacy-first emotional growth and self-expression platform for teens and families.
-
-- Private by default
-- Intentional sharing by choice
-- Relationship-based family support instead of surveillance
-- Runtime permissions and evidence, not cosmetic privacy promises
-
-**Official site:** [sekretbip.net](https://sekretbip.net)  
-**Canonical active repository:** [jussray/Sekret-Bip](https://github.com/jussray/Sekret-Bip)
-
-Se’kret Bip is its own product. The other systems below support separate founder, publishing, commerce, and AI-workflow goals and must not be presented as Bip features unless exact product evidence proves an approved integration.
-
-## Public proof graph
-
-| Surface | Role | Authority |
-|---|---|---|
-| [Sekret-Bip](https://github.com/jussray/Sekret-Bip) | Active Se’kret Bip product development, documentation, tests, and release evidence | **Canonical product source of truth** |
-| [founder-control-room](https://github.com/jussray/founder-control-room) | Founder-gated approvals, change proposals, verification, evidence, and rollback | **Operational authority** |
-| [chief-ai-machine](https://github.com/jussray/chief-ai-machine) | Chief / Proof Mode / controlled AI execution work | **Product and execution-contract source** |
-| [promptos](https://github.com/jussray/promptos) | Prompt and agent operating contracts | **PromptOS source** |
-| [StoryEngine / L99](https://github.com/jussray/StoryEngine) | StoryEngine creator product powered by the L99 execution, provenance, recovery, and release runtime | **StoryEngine / L99 source** |
-| [sekret-bip-demo](https://github.com/jussray/sekret-bip-demo) | Controlled public demonstration of selected concepts | **Showcase only, non-authoritative** |
-| [do-not-use](https://github.com/jussray/do-not-use) | Preserved historical and prototype material | **Quarantined, not for development or deployment** |
-| [jussray](https://github.com/jussray/jussray) | This profile and public founder map | **Public identity front door** |
-
-## Portfolio lanes
-
-These are distinct products and systems. Anything not backed by a public repository, live site, or verified artifact should be read as **in development**, not as a launch claim.
-
-- **Chief AI** — a chief-of-staff intelligence layer that coordinates specialist analysis, challenges conclusions, and returns founder-ready decisions.
-- **Founder Control Room** — the evidence and execution-authority layer for approvals, repository truth, verification, release state, and rollback records.
-- **StoryEngine / L99** — one creator-product architecture for writing, creating, preparing, publishing, distributing, and selling works. **StoryEngine** is the market-facing product; **L99** is the runtime that handles state integrity, provenance-safe reuse, recovery, orchestration, validation, and observable release controls.
-- **Commerce systems** — Juss Beautiful Hair and Untold Stories storefront work focused on vendor-backed products, creator commerce, and direct economic participation.
-- **Goalfix + PromptOS** — reusable operating contracts for efficient AI repair, controlled execution, and evidence-based agent behavior.
-
-## Revenue experiments
-
-The current money-now **source carrier** is **[Juss Digital](docs/index.html)**. The separate **[Juss Picks + Call Offers](docs/picks/index.html)** experiment remains isolated and fail-closed for earning links that are not yet verified. These files are checked into `main`, but this repository does **not** currently report GitHub Pages as enabled, so neither standalone runtime is claimed live.
-
-- **Juss Digital:** the source offers focused $49 audit, $149 fix, and $399 build starting points with an inquiry path; source availability is not proof of payment or revenue.
-- **Live now:** the existing public Buy Me a Coffee support path.
-- **Amazon:** Influencer eligibility is verified; the exact consumer storefront/tracking URL still requires verification before activation.
-- **eBay:** Ambassador registration is verified; consumer tracking links still require generation and verification before activation.
-- **DOPPCALL:** the publisher account is verified approved and current home-service campaign demand is verified; campaign-level promotion approval, payout trigger, geography, traffic rules, and assigned tracking remain unverified.
-- **Rule:** no paid traffic until an organic path produces a verified tracked conversion or commission.
-
-Source readiness is not runtime readiness, and runtime readiness is not revenue. A file, page, click, solicitation, registration, or eligibility notice does not count as earned revenue.
-
-## Juss Receipts
-
-When a meaningful build deserves a public record, I use the same compact evidence shape:
+For meaningful builds, I use a compact receipt:
 
 ```text
-REALITY
-What was actually true.
-
-BUILD
-What changed.
-
-PROOF
-What demonstrates it worked.
-
-LEARNED
-What changed in the model or decision.
-
-NEXT
-The next exact gate.
+REALITY  → what is verified now
+FIX      → what changed
+PROOF    → what demonstrates it
+RISK     → what could still be wrong
+ROLLBACK → how to reverse safely
+NEXT     → the next exact gate
 ```
 
-The point is not to publish constantly. The point is to leave **artifacts worth finding later**.
+## Work with me
 
-## How I build
+I’m interested in aligned work and partnerships around **AI product systems, agent infrastructure, verification, privacy, teen/family products, creator tools, commerce, and community economic growth**.
 
-1. Preserve the original intent.
-2. Find the real blocker before changing the system.
-3. Choose the smallest reversible fix.
-4. Separate source, CI, deployment, runtime, browser, device, and outcome evidence.
-5. Require scoped authority for consequential actions.
-6. Use focused tests and Playwright evidence for real UI or browser-flow claims.
-7. Preserve historical proof while re-observing current truth.
-8. Report reality, build, proof, risk, rollback, and the next exact gate.
-
-## Public evidence boundaries
-
-Public GitHub surfaces controlled evidence without exposing private prompts, credentials, customer or teen data, database secrets, internal safety thresholds, proprietary scoring, unreleased architecture, or cloneable business logic.
-
-A green build is not automatically a live product. A deployment is not automatically the correct runtime. An executed action is not automatically a successful outcome. Claims stay bounded to the evidence plane that supports them.
-
-## Partnerships and support
-
-I am interested in aligned partnerships around teen wellbeing, privacy, responsible AI, family support, youth opportunity, creator development, commerce, and community economic growth.
-
-Sponsorship or support helps fund development. It does **not** grant ownership, licensing, resale rights, product control, endorsement rights, access to private systems, or rights to the Se’kret Bip name, characters, designs, code, or brand.
-
-**Support the work:** [Buy Me a Coffee](https://buymeacoffee.com/jussrayy)
-
-## Connect
-
+- [Juss & Co](https://jussco.company)
 - [LinkedIn](https://www.linkedin.com/in/juss-rayy-13ba691a1)
 - [Buy Me a Coffee](https://buymeacoffee.com/jussrayy)
-- [Facebook](https://www.facebook.com/share/1cH3mxVRpi/?mibextid=wwXIfr)
-- [GitHub](https://github.com/jussray)
 
 ---
 
