@@ -10,7 +10,42 @@ const srv = createServer((q, r) => { let p = decodeURIComponent(q.url.split('?')
 await new Promise((res) => srv.listen(0, '127.0.0.1', res)); const url = `http://127.0.0.1:${srv.address().port}/`;
 mkdirSync('proof/site', { recursive: true });
 const browser = await chromium.launch(); let failed = 0; const say = (ok, m) => { console.log(`${ok ? 'ok ' : 'FAIL'} ${m}`); if (!ok) failed++; };
+
+const projectSlugs = portfolio.projects.map((project) => project.slug);
+const featuredSlugs = portfolio.projects.filter((project) => project.featured).map((project) => project.slug).sort();
+const declaredFeatured = [...portfolio.featuredWorlds].sort();
+const projectBySlug = new Map(portfolio.projects.map((project) => [project.slug, project]));
+const worldSlugByName = new Map([
+  ["Se'kret Bip", 'sekret-bip'],
+  ['Founder Control Room', 'founder-control-room'],
+  ['Chief AI', 'chief-ai-machine'],
+  ['Juss Beautiful Hair', 'juss-beautiful-hair'],
+  ['StoryEngine', 'storyengine'],
+  ['Sync Party', 'sync-party'],
+]);
+const forbiddenProjectionTokens = ['jussray/jbh-private', 'jussray/exact-match-engine-', 'jussray/juss-protect-me', '6a9213ad92e06cfad8756b2b', '6a93e49bb1804a2648534bdf'];
+const projectionText = JSON.stringify(portfolio);
+const publicStandaloneSystems = systems.systems.filter((system) => system.public && system.kind === 'standalone_os').map((system) => system.name);
 const expectedOS = ['Truth Weaver', 'Truth Compass', 'Exact Match Engine', 'Living Truth', 'Proof Core'];
+
+say(portfolio.schemaVersion === 1, 'portfolio: schema v1');
+say(portfolio.source?.mergeSha === 'b037ecce18863eb0be35098508b3b1fcf95c049d', 'portfolio: bound to merged FCR identity map');
+say(portfolio.source?.technicalInventory === 'site/data/systems.json', 'portfolio: technical independence reconciles through systems inventory');
+say(/non-authorizing/i.test(portfolio.authority || ''), 'portfolio: remains non-authorizing');
+say(portfolio.projects.length === 20, 'portfolio: 20 public-safe canonical project identities');
+say(new Set(projectSlugs).size === projectSlugs.length, 'portfolio: canonical slugs unique');
+say(JSON.stringify(featuredSlugs) === JSON.stringify(declaredFeatured), 'portfolio: featured-world declaration matches project flags');
+say(portfolio.featuredWorlds.length === worlds.worlds.length, 'portfolio: featured count matches worlds.json');
+say(worlds.worlds.every((world) => {
+  const slug = worldSlugByName.get(world.name);
+  return slug && portfolio.featuredWorlds.includes(slug) && projectBySlug.get(slug)?.publicLabel === world.label;
+}), 'portfolio: featured public labels agree with worlds.json');
+say(!projectBySlug.get('storyengine')?.link && !projectBySlug.get('sekret-bip')?.link, 'portfolio: unopened front doors have no public product links');
+say(forbiddenProjectionTokens.every((token) => !projectionText.includes(token)), 'portfolio: internal/private/legacy carriers stay out of public projection');
+say(expectedOS.every((name) => publicStandaloneSystems.includes(name)), 'systems: public standalone technical identities remain represented');
+say(projectBySlug.get('proof-core')?.technicalForm === 'standalone_os_prototype', 'portfolio: Proof Core stays a prototype rather than being promoted to a company');
+say(['truth-compass', 'truth-weaver', 'exact-match-engine'].every((slug) => projectBySlug.get(slug)?.technicalForm === 'standalone_os'), 'portfolio: standalone system form is preserved without changing commercial role');
+
 // Browser receipt: verify the actual HTML script attaches and emits fixed, non-personal fields.
 {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
@@ -109,12 +144,14 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   say(JSON.stringify(await page.evaluate(() => [...document.querySelectorAll('.os-card h3')].map((e) => e.textContent))) === JSON.stringify(expectedOS), `${vp.n}: standalone OS identities preserved`);
   say((await page.locator('.os-card').first().locator('a.os-link').getAttribute('href')) === 'https://truthweaver.jussco.company', `${vp.n}: Truth Weaver card links to verified custom domain`);
   say((await page.evaluate(() => [...document.querySelectorAll('.os-kind')].every((e) => e.textContent === 'Standalone OS'))), `${vp.n}: every public system is labeled standalone OS`);
+  say((await page.evaluate(() => [...document.querySelectorAll('.os-card')].every((c) => c.querySelector('.os-embed') && /Already embedded in/i.test(c.querySelector('.os-embed').innerText)))), `${vp.n}: embedded relationships render without demoting identity`);
   say((await page.evaluate((names) => [...document.querySelectorAll('.os-card')].every((c) => { const text=c.innerText.toLowerCase(); return names.every((n) => text.includes(n.toLowerCase())); }), EXPECTED_CONNECTORS)), `${vp.n}: every standalone OS exposes Exa Notion Linear Slack fabric`);
   say((await page.evaluate(() => document.querySelector('.os-card:nth-child(3)')?.innerText.toLowerCase().includes('blocked'))), `${vp.n}: Exact Match connector fabric remains visibly blocked`);
   say((await page.evaluate(() => ![...document.querySelectorAll('.os-connectors span')].some((e) => e.dataset.state === 'connected'))), `${vp.n}: no connector claims connected without runtime proof`);
   say((await page.evaluate(() => [...document.querySelectorAll('.os-card')].every((c) => c.querySelector('.os-embed') && /already embedded in/i.test(c.querySelector('.os-embed').innerText)))), `${vp.n}: embedded relationships render without demoting identity`);
   say(!(await page.evaluate(() => document.getElementById('surfaceStrip').hidden)) && /Sync Playtest Signups/.test(await page.innerText('#surfaceStrip')) && /Sync Party/.test(await page.innerText('#surfaceStrip')), `${vp.n}: Sync supporting surface rolls up under Sync Party`);
-  say(!/ULTRATHINK/.test(await page.innerText('#systems')), `${vp.n}: internal ULTRATHINK carriers stay off public surface`);
+  say(!/ULTRATHINK/.test(await page.innerText('#systems')), `${vp.n}: internal ULTRATHINK carriers stay off public systems surface`);
+  say((await page.locator('a[href="portfolio.html"]').count()) === 1, `${vp.n}: complete portfolio is discoverable from primary nav`);
   say((await page.evaluate(() => [...document.images].filter((i) => i.complete && i.naturalWidth === 0).length)) === 0, `${vp.n}: no broken images`);
   say((await page.evaluate(() => [...document.querySelectorAll('a[href^="#"]')].map((a) => a.getAttribute('href')).filter((h) => h.length > 1 && !document.querySelector(h)).length)) === 0, `${vp.n}: no dead anchors`);
   say((await page.evaluate(() => [...document.querySelectorAll('a,button')].filter((e) => { const b = e.getBoundingClientRect(); return b.width > 0 && b.height < 40; }).length)) === 0, `${vp.n}: tap targets >= 40px`);
