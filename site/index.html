@@ -302,7 +302,7 @@ h1,h2,h3{text-wrap:balance}
 @media (max-width:640px){
   .navpill{display:none}
   .hero .in{padding-top:calc(330px + 22px);min-height:0}
-  .hero-bg{inset:0 0 auto 0;height:330px}
+  .hero-bg{inset:0 0 auto 0;height:330px;transform:none!important} /* stacked layout: parallax would slide the art over the copy */
   .hero-bg img{object-position:72% 40%}
   .hero::before{background:linear-gradient(180deg,rgba(6,6,28,.25) 0%,rgba(6,6,28,.2) 35%,rgba(6,6,28,.92) 62%,var(--void) 100%)}
   .h-brand{font-size:clamp(44px,13.5vw,72px)}
