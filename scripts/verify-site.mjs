@@ -70,7 +70,7 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   await servicePage.goto(`${url}services.html`, { waitUntil: 'load' });
   say((await servicePage.title()) === 'Work with Juss — Focused fixes, verified outcomes.', `${vp.n}: Juss services title`);
   const serviceText = await servicePage.locator('body').innerText();
-  say(/Work with Juss/.test(serviceText) && !/Sajay|Juss Digital/.test(serviceText), `${vp.n}: current Juss identity only`);
+  say(/Work with Juss/i.test(serviceText) && !/Sajay|Juss Digital/i.test(serviceText), `${vp.n}: current Juss identity only`);
   say(['$49','$149','$399'].every((x) => serviceText.includes(x)), `${vp.n}: three fixed-price service offers`);
   say((await servicePage.locator('a[href^="mailto:hello@jussbeautifulhair.com"]').count()) === 4, `${vp.n}: verified email inquiry paths`);
   say((await servicePage.locator('a[href*="linkedin.com/in/juss-rayy"]').count()) === 1, `${vp.n}: founder LinkedIn inquiry path`);
