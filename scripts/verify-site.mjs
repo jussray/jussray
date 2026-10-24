@@ -200,6 +200,10 @@ for (const vp of [{ n: 'portfolio-desktop', w: 1440, h: 900 }, { n: 'portfolio-m
   await page.waitForFunction(() => document.querySelectorAll('#projects .project').length === 20);
   say((await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)) === 0, `${vp.n}: no horizontal overflow`);
   say((await page.locator('#projects .project').count()) === 20, `${vp.n}: renders all 20 public-safe identities`);
+  say((await page.locator('#worldOverlays .project[data-noncanonical="true"]').count()) === worldOverlays.length &&
+    (await page.locator('#worldOverlays h3').allTextContents()).every((name) => worldOverlays.some((overlay) => overlay.name === name)) &&
+    (await page.locator('#worldOverlays .state').allTextContents()).every((label) => worldOverlays.some((overlay) => overlay.publicLabel === label)),
+    `${vp.n}: homepage-only experimental world is visible without becoming a canonical project`);
   const names = await page.locator('#projects .project h3').allTextContents();
   say(['AYURE', 'Truth Weaver Counsel', 'Exact Match Engine', 'Living Truth', 'Proof Core'].every((name) => names.includes(name)), `${vp.n}: reconciled projects are present`);
   say(((await page.textContent('#countLine')) || '').startsWith('20 of 20'), `${vp.n}: portfolio count is data-derived`);
@@ -208,6 +212,7 @@ for (const vp of [{ n: 'portfolio-desktop', w: 1440, h: 900 }, { n: 'portfolio-m
   const sync = page.locator('#projects .project', { has: page.locator('h3', { hasText: 'SYNC Party' }) });
   say((await sync.locator('.state').textContent()) === 'Live', `${vp.n}: Sync Party remains Live`);
   await page.click('button[data-category="Founder software"]'); await page.waitForTimeout(100);
+  say((await page.locator('#worldOverlays .project').count()) === 0, `${vp.n}: experimental worlds stay separate from canonical project category filters`);
   say((await page.locator('#projects .project').count()) === 10, `${vp.n}: category filter renders ten founder-software identities`);
   say(((await page.textContent('#countLine')) || '').startsWith('10 of 20'), `${vp.n}: filtered count updates`);
   say((await page.evaluate(() => [...document.querySelectorAll('a,button')].filter((e) => { const b = e.getBoundingClientRect(); return b.width > 0 && b.height < 40; }).length)) === 0, `${vp.n}: tap targets >= 40px`);
