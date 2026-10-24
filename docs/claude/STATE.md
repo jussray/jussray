@@ -390,3 +390,14 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
 - jussray `ec07255`: `/.well-known/api-catalog` + homepage Link headers + `scripts/agent-discovery.test.mjs` in site-proof CI. Proven under local wrangler dev only; live domain unreachable from session (proxy 403).
 - chief-ai-machine `5a36de2`: details in that repo's own history.
 - **MERGED**: jussray #46 → main `49254b8` (squashed; 2026-10-24 06:13:35Z). Chief #238 → main `27b2e1f` (squashed; 06:13:39Z). Both exact-head CI green before merge. Codex review triggered post-merge on jussray failed (post-merge, not actionable). Live proof still BLOCKED by session proxy; requires jussco.company and chief-ai preview domain access.
+- **DEPLOYED**: Both Workers auto-deployed from main (GitHub integration active).
+  - jussray (Cloudflare `jussray`): **VERIFIED LIVE** at 06:13:35Z. Public site browser proof passed (Playwright 148/148 checks, agent-discovery tests green, RFC 9727 api-catalog and Link headers confirmed).
+  - Chief AI (Cloudflare `chief-ai`): **DEPLOYED** (Quality Gate, Control Room Contracts, Operational Proof all green). ProofMode Production Playwright proof failed (unable to resolve Cloudflare build state from session — proxy 403 on API). Code is live; verification blocked by environment network policy.
+- **NEXT GATES** (founder decisions/actions):
+  1. GitHub App private key: paste full PEM into FCR `production` secret `APP_PRIVATE_KEY` → evidence-sync runs → worlds.json updates live
+  2. Supabase leaked-password: toggle ON (Supabase dashboard, both projects) → subscriber reuse detection live
+  3. CSP hardening: ~1-2 hours implementation + test → Chief security envelope
+  4. Stripe webhook HMAC: ~30 min implementation + test → payment replay protection
+  5. Cloudflare Access: approve preview URLs (PR #206) → supabase/ asset exclusion verified in previews
+  6. Se'kret Bip migration: dispatch `deploy-supabase-migrations` workflow → anonymous-session guard live
+- **ROLLBACK PATH**: Both commits revertible on main. Supabase RLS and migrations independently reversible.
