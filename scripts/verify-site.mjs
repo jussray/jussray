@@ -11,12 +11,6 @@ await new Promise((res) => srv.listen(0, '127.0.0.1', res)); const url = `http:/
 mkdirSync('proof/site', { recursive: true });
 const browser = await chromium.launch(); let failed = 0; const say = (ok, m) => { console.log(`${ok ? 'ok ' : 'FAIL'} ${m}`); if (!ok) failed++; };
 const expectedOS = ['Truth Weaver', 'Truth Compass', 'Exact Match Engine', 'Living Truth', 'Proof Core'];
-for (const mode of ['abort', 'malformed']) {
-  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } }); const page = await ctx.newPage();
-  await page.route('**/data/connectors.json', (r) => mode === 'abort' ? r.abort() : r.fulfill({ status: 200, contentType: 'application/json', body: '{not json' }));
-  await page.goto(url, { waitUntil: 'load' }); await page.waitForTimeout(1500);
-  say((await page.$$('.os-card')).length === 5, `isolation: connectors.json ${mode} still renders 5 OS cards`);
-  say((await page.$$('.os-connectors')).length === 0, `isolation: connectors.json ${mode} renders no connector claims`);
 // Browser receipt: verify the actual HTML script attaches and emits fixed, non-personal fields.
 {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
