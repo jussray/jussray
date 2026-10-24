@@ -24,7 +24,20 @@
     "sleepwealth-agent",
     "think-tank",
     "alexa-commerce-engine",
-    "ayure"
+    "ayure",
+    "solwealth"
+  ],
+  "featuredWorldOverlays": [
+    {
+      "slug": "solwealth",
+      "name": "Solwealth",
+      "publicLabel": "Building",
+      "role": "Independent learning-agent experiment",
+      "description": "A standalone experimental learning-agent world. It is visible on the homepage but is not promoted into the canonical 20-project identity map.",
+      "repository": "jussray/SolWealth-Meteora-",
+      "source": "site/data/worlds.json",
+      "canonicalIdentity": false
+    }
   ],
   "projects": [
     {
