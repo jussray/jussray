@@ -349,11 +349,9 @@ h1,h2,h3{text-wrap:balance}
       <div class="eyebrow mono">A founder studio for a brighter tomorrow</div>
       <h1 class="h-brand" id="h-hero">Juss &amp; Co</h1>
       <p class="h-line">Turn thoughts into <span class="script">living works.</span></p>
-      <p class="lede">We build products, systems, stories and proof that help more people live, create, and belong. From idea to impact, we make thoughts real.</p>
+      <p class="lede">Juss &amp; Co turns ideas into useful products, trusted systems, stories and play. Explore what is live, what is building, and what comes next.</p>
       <div class="cta-row">
-        <a class="btn btn-violet" href="#worlds">Explore the worlds <span aria-hidden="true">→</span></a>
-        <a class="btn btn-ghost" href="https://games.jussco.company/">🎮 Visit Juss &amp; Co. Games <span aria-hidden="true">↗</span></a>
-        <a class="btn btn-ghost" href="#proof"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>See proof</a>
+        <a class="btn btn-violet" href="#worlds">Explore what we build <span aria-hidden="true">→</span></a>
       </div>
       <ul class="pillars" style="list-style:none;margin-top:38px;padding:0">
         <li class="pillar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg><div><b>Ideas</b><span>become products</span></div></li>
@@ -376,7 +374,7 @@ h1,h2,h3{text-wrap:balance}
         <div class="kicker mono">The Juss &amp; Co universe</div>
         <h2 class="h2" id="h-worlds"><span class="ln">Different worlds.</span><span class="ln gold">A brighter tomorrow.</span></h2>
       </div>
-      <p class="sec-note"><strong style="color:var(--cream)">Six worlds. One shared belief.</strong> Each project is a living work, a world with its own purpose, people and possibilities. Grouped by what it is for: people &amp; belonging, ideas &amp; systems, stories &amp; play. <span id="liveStamp">Status is shown as it is on 30 Sep 2026.</span></p>
+      <p class="sec-note"><strong style="color:var(--cream)">One portfolio. Many worlds. One shared belief.</strong> Each project is a living work with its own purpose, people and possibilities. Browse by people &amp; belonging, ideas &amp; systems, or stories &amp; play. <span id="liveStamp">Registry snapshot loads below.</span></p>
       <a class="btn btn-gold-o" href="https://github.com/jussray">All builds on GitHub <span aria-hidden="true">↗</span></a>
     </div>
     <div class="filters" id="filters" role="group" aria-label="Filter worlds">
@@ -552,7 +550,7 @@ h1,h2,h3{text-wrap:balance}
      tag:"Intent → bounded execution → evidence.", blurb:"The intelligence partner that starts with one question: what are you trying to move forward?",
      facts:[["Runtime","Deployed on Cloudflare Workers"],["Merged #142","MCP identity surface and credential membrane"],["Role","Defines intent; Control Room governs the doing"]],
      link:["Follow the build","https://github.com/jussray/chief-ai-machine"]},
-    {name:"Juss Beautiful Hair", group:"People & belonging", st:"progress", label:"Store open · awaiting first order", w:"#FF4FB8", img:"assets/w-jbh.jpg",
+    {name:"Juss Beautiful Hair", group:"People & belonging", st:"progress", label:"Shop open", w:"#FF4FB8", img:"assets/w-jbh.jpg",
      alt:"A woman with long curly hair in warm light, hand at her cheek, confident and relaxed",
      desc:"Premium hair for real people. Confidence, culture and care.", tags:["Beauty","Commerce","Community"],
      tag:"Beauty commerce, built to convert.", blurb:"Curated human hair bundles, closures and frontals, shipped to your door.",
@@ -607,7 +605,7 @@ h1,h2,h3{text-wrap:balance}
     if(!d||!d.worlds)return;
     d.worlds.forEach(function(L){LIVE[L.name]=L;var idx=WORLDS.findIndex(function(w){return w.name===L.name;});if(idx<0&&L.display){var added=worldFromRegistry(L);WORLDS.push(added);idx=WORLDS.length-1;renderWorldCard(added,idx);}if(idx<0)return;var w=WORLDS[idx];if(L.st&&L.label){w.st=L.st;w.label=L.label;var b=cards[idx].querySelector(".badge");b.className="badge s-"+L.st;b.textContent=L.label;}if(L.link&&L.link.url){w.link=[L.link.text||"Open",L.link.url];w.held=null;}else if(L.held){w.held=L.held;w.link=null;}});
     var n=document.querySelector('#filters .chip[data-group=""] .n');if(n)n.textContent=String(WORLDS.length).padStart(2,"0");
-    if(d.company&&validContactEmail(d.company.email)){var companyMail=document.getElementById("mail");companyMail.textContent=d.company.email;companyMail.href="mailto:"+d.company.email;}renderProjectContactDirectory(d.worlds);if(d.quotes&&d.quotes.length)setQuotes(d.quotes);var stamp=document.getElementById("liveStamp");if(stamp&&d.generatedAt)stamp.textContent="Status synced "+new Date(d.generatedAt).toUTCString().replace(/:\d\d GMT$/," UTC");if(current>=0){var k=current;current=-1;open(k);}
+    if(d.company&&validContactEmail(d.company.email)){var companyMail=document.getElementById("mail");companyMail.textContent=d.company.email;companyMail.href="mailto:"+d.company.email;}renderProjectContactDirectory(d.worlds);if(d.quotes&&d.quotes.length)setQuotes(d.quotes);var stamp=document.getElementById("liveStamp");if(stamp&&d.generatedAt)stamp.textContent="Registry snapshot "+new Date(d.generatedAt).toUTCString().replace(/:\d\d GMT$/," UTC");if(current>=0){var k=current;current=-1;open(k);}
   }).catch(function(){});
 
 /* ---------- standalone OS registry ---------- */
