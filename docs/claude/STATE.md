@@ -389,4 +389,4 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
 - jussray `d74f8a5`: `scripts/verify-site.mjs` was a SyntaxError on main `374bc0d` (merge leftover) — Playwright site proof could not run. Fixed. Remaining pre-existing FAIL: "mobile: hero eyebrow sits below the art band" (147/148 ok), not addressed.
 - jussray `ec07255`: `/.well-known/api-catalog` + homepage Link headers + `scripts/agent-discovery.test.mjs` in site-proof CI. Proven under local wrangler dev only; live domain unreachable from session (proxy 403).
 - chief-ai-machine `5a36de2`: details in that repo's own history.
-- No PRs opened, nothing merged/deployed.
+- **MERGED**: jussray #46 → main `49254b8` (squashed; 2026-10-24 06:13:35Z). Chief #238 → main `27b2e1f` (squashed; 06:13:39Z). Both exact-head CI green before merge. Codex review triggered post-merge on jussray failed (post-merge, not actionable). Live proof still BLOCKED by session proxy; requires jussco.company and chief-ai preview domain access.
