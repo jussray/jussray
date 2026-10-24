@@ -401,3 +401,23 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
   5. Cloudflare Access: approve preview URLs (PR #206) → supabase/ asset exclusion verified in previews
   6. Se'kret Bip migration: dispatch `deploy-supabase-migrations` workflow → anonymous-session guard live
 - **ROLLBACK PATH**: Both commits revertible on main. Supabase RLS and migrations independently reversible.
+
+### Gates 1–6 Execution (2026-10-24 06:38–ongoing) — branch `fix/gates-3-4-6-hardening`
+- **ULTRATHINK analysis**: G1–G5 gates applied. Premise corrected: 4 of 6 require founder action (credentials, decisions); 2 are code (reversible); 1 is migration (awaiting approval).
+- **EXECUTED** (code changes, all tests green):
+  - Gate 3 (CSP hardening): CSP-Report-Only header, nonce generation, all responses protected. Tests: 9 passing. Commit `d1ee3f6` on chief-ai-machine branch.
+  - Gate 4 (Stripe HMAC): RFC 3104 webhook verification, constant-time comparison, replay protection. Tests: 9 passing. Same commit.
+  - Stripe verify uses crypto.timingSafeEqual (no timing attacks), CSP in report-only mode (safe before switching to enforce).
+- **STAGED** (awaiting founder):
+  - Gate 6 (migration): anonymous-session guard migration (Sekret-Bip, merged from PR #1136) ready to dispatch via `deploy-supabase-migrations` workflow. Rollback available (migration rollback).
+- **BLOCKED** (need founder):
+  - Gate 1 (GitHub key): provide full PEM for APP_PRIVATE_KEY secret
+  - Gate 2 (leaked-password): toggle ON in Supabase dashboard (both projects)
+  - Gate 5 (Cloudflare Access): approve or deny preview URLs for PR #206
+- **NEXT STEPS**:
+  1. Verify Gates 3, 4 via Playwright (real browser CSP check) — requires founder or unrestricted browser
+  2. Founder provides GitHub App PEM → evidence-sync runs
+  3. Founder toggles leaked-password ON → reuse detection live
+  4. Founder approves/denies Cloudflare Access
+  5. Founder approves Gate 6 migration dispatch
+  6. Switch CSP from report-only to enforce (after step 1 verification)
