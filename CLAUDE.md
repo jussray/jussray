@@ -59,3 +59,12 @@ Report: REALITY / FIX / PROOF / RISK / ROLLBACK / NEXT GATE.
 - **Repo audit-fix loop, on every project** (skill: `repo-audit-fix-loop`): probe/call the project → parallel read-only audits → verify every lead yourself → smallest patch on a fix branch with the narrowest test → before/after proof → commit, never merge (merge only when Juss approves it in the current turn and the exact head's required real-path checks are green) → report REALITY / FIX / PROOF / RISK / ROLLBACK / NEXT GATE.
 - **Video / visual work:** articulate founder intent before executing — synthesize it from what Juss has already said; don't ask Juss to clarify.
 - **"Cinema" means visual language** — cinematography, composition, depth, lighting, mood — not just aspect ratio. Founder Control Room (FCR) should enable cinematic visual storytelling on the level of Higgsfield-style AI video makers and Gemini, grounded in real cinema craft.
+
+## Runtime for Claude (observed on `main` 93706ba, 2026-10-26)
+jussray is **standalone**: it may link to and describe other apps only from `site/data/*.json` truth, never change them. Each linked app owns its own repo, runtime and claims.
+- Carrier: Cloudflare Worker `jussray` serving static assets from `site/` (`wrangler.jsonc`). `wrangler.games.jsonc` and `workers/` hold separate workers. There is no build step and no root `package.json`.
+- Local proof, no install needed (the same set `site-proof.yml` runs): `node --test scripts/wrangler-runtime-truth.test.mjs scripts/agent-discovery.test.mjs scripts/conversion-tracking.test.mjs scripts/conversion-receiver.test.mjs scripts/conversion-client-first-party.test.mjs scripts/site-proof-boundary.test.mjs`, `node scripts/verify-approved-stories.mjs`, `python3 tools/worlds-patch-executor/test_worlds_patch.py`.
+- Known gap (2026-10-26): `scripts/evidence-sync-proof.test.mjs` imports `vitest`, so `node --test` cannot load it, and no workflow runs it. Do not cite it as proof.
+- Browser proof: `npm i --no-save playwright@1.61.1 && npx playwright install chromium && node scripts/verify-site.mjs` (three widths). `tests/*.spec.cjs` run under `playwright.config.cjs` (`revenue-page.yml`).
+- CI: `site-proof.yml` (Wrangler/domain truth, registries, Playwright, canonical domains on `main`), `provider-site-proof.yml`, `qr-proof.yml`, `revenue-page.yml`.
+- Model lane: `.control-room/model-capabilities.v1.json` lists `anthropic/claude` as a **trial** lane with no authority. The exact model is chosen per invocation by the provider execution host.

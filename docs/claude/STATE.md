@@ -390,3 +390,9 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
 - jussray `ec07255`: `/.well-known/api-catalog` + homepage Link headers + `scripts/agent-discovery.test.mjs` in site-proof CI. Proven under local wrangler dev only; live domain unreachable from session (proxy 403).
 - chief-ai-machine `5a36de2`: details in that repo's own history.
 - No PRs opened, nothing merged/deployed.
+
+### Claude runtime + lane (2026-10-26) — branch `chore/claude-runtime-20261026`
+- Founder rule recorded: every app is standalone; never change one app for another.
+- jussray: `CLAUDE.md` gains "Runtime for Claude" (carrier, exact CI test set, browser proof, workflows); `.control-room/model-capabilities.v1.json` gains a trial `anthropic/claude` lane (no authority, no pinned version).
+- Pre-existing gap, not fixed: `scripts/evidence-sync-proof.test.mjs` imports `vitest`, cannot run under `node --test`, and is in no workflow.
+- Matching Claude docs and lanes were added in each other repo's own branch; their state lives in those repos. Nothing merged or deployed.
