@@ -396,3 +396,6 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
 - jussray: `CLAUDE.md` gains "Runtime for Claude" (carrier, exact CI test set, browser proof, workflows); `.control-room/model-capabilities.v1.json` gains a trial `anthropic/claude` lane (no authority, no pinned version).
 - Pre-existing gap, not fixed: `scripts/evidence-sync-proof.test.mjs` imports `vitest`, cannot run under `node --test`, and is in no workflow.
 - Matching Claude docs and lanes were added in each other repo's own branch; their state lives in those repos. Nothing merged or deployed.
+
+### Domain rule (2026-10-26)
+- Juss: `*.foundercontrolroom.org` = FCR code extensions; `*.jussco.company` = standalone apps/products. Recorded in CLAUDE.md.
