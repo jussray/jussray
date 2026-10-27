@@ -399,3 +399,4 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
 
 ### Domain rule (2026-10-26)
 - Juss: `*.foundercontrolroom.org` = FCR code extensions; `*.jussco.company` = standalone apps/products. Recorded in CLAUDE.md.
+- Brand rule (2026-10-26): FCR hosts show FCR code only; standalone apps keep their own identity. truthcompass/truthweaver.foundercontrolroom.org now served by founder-control-room Pages (verified render "Founder Control Room").
