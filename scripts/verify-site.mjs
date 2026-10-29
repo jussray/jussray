@@ -3,13 +3,17 @@ import { chromium } from 'playwright';
 import { createServer } from 'node:http';
 import { readFileSync, existsSync, mkdirSync } from 'node:fs';
 import { extname, join } from 'node:path';
-const ROOT = new URL('../site/', import.meta.url).pathname; const MIME = { '.html': 'text/html', '.jpg': 'image/jpeg', '.json': 'application/json', '.png': 'image/png', '.svg': 'image/svg+xml', '.js': 'text/javascript' };
+const ROOT = new URL('../site/', import.meta.url).pathname; const MIME = { '.html': 'text/html', '.jpg': 'image/jpeg', '.json': 'application/json', '.png': 'image/png', '.svg': 'image/svg+xml', '.js': 'text/javascript', '.txt': 'text/plain', '.xml': 'application/xml' };
 const WORLD_REGISTRY = JSON.parse(readFileSync(join(ROOT, 'data/worlds.json'), 'utf8')); const EXPECTED_WORLDS = WORLD_REGISTRY.worlds.map((w) => w.name); const IDEA_WORLDS = WORLD_REGISTRY.worlds.filter((w) => w.display?.group === 'Ideas & systems').map((w) => w.name);
 const CONNECTOR_REGISTRY = JSON.parse(readFileSync(join(ROOT, 'data/connectors.json'), 'utf8')); const EXPECTED_CONNECTORS = CONNECTOR_REGISTRY.lanes.map((x) => x.name);
 const srv = createServer((q, r) => { let p = decodeURIComponent(q.url.split('?')[0]); if (p === '/') p = '/index.html'; const f = join(ROOT, p); if (!existsSync(f)) { r.writeHead(404); return r.end(); } r.writeHead(200, { 'content-type': MIME[extname(f)] || 'application/octet-stream' }); r.end(readFileSync(f)); });
 await new Promise((res) => srv.listen(0, '127.0.0.1', res)); const url = `http://127.0.0.1:${srv.address().port}/`;
 mkdirSync('proof/site', { recursive: true });
 const browser = await chromium.launch(); let failed = 0; const say = (ok, m) => { console.log(`${ok ? 'ok ' : 'FAIL'} ${m}`); if (!ok) failed++; };
+const robots = readFileSync(join(ROOT, 'robots.txt'), 'utf8');
+const sitemap = readFileSync(join(ROOT, 'sitemap.xml'), 'utf8');
+say(/User-agent:\s*\*/i.test(robots) && /Allow:\s*\//i.test(robots) && robots.includes('https://www.jussco.company/sitemap.xml'), 'seo: robots allows crawl and declares canonical sitemap');
+say(['https://www.jussco.company/','https://www.jussco.company/services.html','https://www.jussco.company/creative-history.html','https://www.jussco.company/games/'].every((x) => sitemap.includes(`<loc>${x}</loc>`)), 'seo: sitemap lists canonical public pages');
 const expectedOS = ['Truth Weaver', 'Truth Compass', 'Exact Match Engine', 'Living Truth', 'Proof Core'];
 // Browser receipt: verify the actual HTML script attaches and emits fixed, non-personal fields.
 {
@@ -81,6 +85,15 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   page.on('requestfailed', (r) => { const abortedTelemetry = new URL(r.url()).pathname === '/_telemetry/v1' && r.failure()?.errorText === 'net::ERR_ABORTED'; if (!abortedTelemetry && !/fonts\.(googleapis|gstatic)\.com/.test(r.url())) errors.push(`${r.failure()?.errorText} ${r.url()}`); }); page.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) errors.push(m.text()); });
   await page.goto(url, { waitUntil: 'load' }); await page.waitForFunction(() => document.querySelectorAll('.os-card').length === 5); await page.waitForTimeout(300);
   say((await page.locator('link[rel="canonical"]').count()) === 1 && (await page.locator('link[rel="canonical"]').getAttribute('href')) === 'https://www.jussco.company/', `${vp.n}: exactly one preferred www canonical tag`);
+  say((await page.title()) === 'Juss & Co | Juss Rayy, Product & AI Systems Builder', `${vp.n}: search title binds Juss & Co to Juss Rayy`);
+  say((await page.locator('meta[name="description"]').getAttribute('content'))?.includes("Juss Rayy's founder studio"), `${vp.n}: meta description names founder and studio`);
+  say((await page.locator('meta[property="og:url"]').getAttribute('content')) === 'https://www.jussco.company/' && (await page.locator('meta[property="og:image"]').getAttribute('content')) === 'https://www.jussco.company/assets/hero.jpg', `${vp.n}: absolute canonical social metadata`);
+  say((await page.locator('meta[name="twitter:card"]').getAttribute('content')) === 'summary_large_image', `${vp.n}: twitter card metadata`);
+  const schema = JSON.parse(await page.locator('script[type="application/ld+json"]').textContent());
+  const schemaTypes = (schema['@graph'] || []).map((x) => x['@type']);
+  say(['Person','Organization','WebSite'].every((x) => schemaTypes.includes(x)), `${vp.n}: Person Organization WebSite structured data`);
+  say(/Juss Rayy/.test(await page.locator('.founder-line').innerText()) && /Full-Stack AI Systems Builder/.test(await page.locator('.founder-line').innerText()), `${vp.n}: visible founder identity`);
+  say((await page.locator('a[href="/services.html"]').count()) >= 3, `${vp.n}: Work with Juss path linked from homepage`);
   const companyEmail=await page.locator('#mail').textContent();
   say(companyEmail==='founder@jussco.company' && (await page.locator('#mail').getAttribute('href'))==='mailto:'+companyEmail, `${vp.n}: company email text and mailto match business address`);
   const directory=page.locator('#projectContactDirectory');
@@ -104,6 +117,7 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   const worldNames = await page.evaluate(() => [...document.querySelectorAll('.card h3')].map((e) => e.textContent));
   say(['Bip Jr','PromptOS','SolContinuity','Untold Stories','SWEATS','SleepWealth Agent','Think Tank','Alexa Commerce Engine','Ayure'].every((n) => worldNames.includes(n)), `${vp.n}: remaining portfolio worlds render`);
   say((await page.innerText('#filters .chip[data-group=""] .n')) === String(EXPECTED_WORLDS.length).padStart(2,'0'), `${vp.n}: world count follows registry`);
+  say((await page.locator('#worldSummaryCount').innerText()) === `${EXPECTED_WORLDS.length} worlds. One shared belief.`, `${vp.n}: public world summary follows registry`);
   say((await page.locator('.os-card').count()) === 5, `${vp.n}: five public standalone OS builds`);
   say(/legal-navigation and notice-research product/i.test(await page.locator('.os-card').first().innerText()), `${vp.n}: Truth Weaver public identity matches legal product`);
   say(JSON.stringify(await page.evaluate(() => [...document.querySelectorAll('.os-card h3')].map((e) => e.textContent))) === JSON.stringify(expectedOS), `${vp.n}: standalone OS identities preserved`);
@@ -133,7 +147,28 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   const q0 = await page.innerText('#qText'); await page.click('#qNext'); await page.waitForTimeout(600); say((await page.innerText('#qText')) !== q0, `${vp.n}: quote rotates`);
   say(/@/.test(await page.innerText('#mail')) && !/\[/.test(await page.innerText('#mail')), `${vp.n}: real company email rendered`);
   say(errors.length === 0, `${vp.n}: no console errors${errors.length ? ' — ' + errors.join(' | ') : ''}`);
-  await page.screenshot({ path: `proof/site/${vp.n}.png`, fullPage: true }); await ctx.close();
+  await page.screenshot({ path: `proof/site/${vp.n}.png`, fullPage: true });
+
+  const servicePage = await ctx.newPage();
+  const serviceErrors = [];
+  servicePage.on('pageerror', (e) => serviceErrors.push(String(e)));
+  servicePage.on('requestfailed', (r) => { if (!/fonts\.(googleapis|gstatic)\.com/.test(r.url())) serviceErrors.push(`${r.failure()?.errorText} ${r.url()}`); });
+  servicePage.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) serviceErrors.push(m.text()); });
+  await servicePage.goto(`${url}services.html`, { waitUntil: 'load' });
+  say((await servicePage.title()) === 'Work with Juss | Product & AI Systems Builder', `${vp.n}: services search title`);
+  say((await servicePage.locator('link[rel="canonical"]').getAttribute('href')) === 'https://www.jussco.company/services.html', `${vp.n}: services canonical URL`);
+  const serviceText = await servicePage.locator('body').innerText();
+  say(/Work with Juss Rayy/i.test(serviceText) && !/Sajay|Juss Digital/i.test(serviceText), `${vp.n}: current Juss identity only`);
+  say(['$49','$149','$399'].every((x) => serviceText.includes(x)), `${vp.n}: three fixed-price service offers`);
+  say((await servicePage.locator('a[href^="mailto:founder@jussco.company"]').count()) === 4, `${vp.n}: company email inquiry paths`);
+  say((await servicePage.locator('a[href*="linkedin.com/in/juss-rayy"]').count()) === 1, `${vp.n}: founder LinkedIn inquiry path`);
+  say((await servicePage.locator('a[href*="PORTFOLIO_CASE_STUDIES.md"]').count()) === 1, `${vp.n}: case-study proof path`);
+  say((await servicePage.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)) === 0, `${vp.n}: services no horizontal overflow`);
+  say(/not proof that payment was collected/i.test(serviceText), `${vp.n}: payment truth boundary visible`);
+  say(/Do not send passwords, API keys, payment credentials/i.test(serviceText), `${vp.n}: secret-sharing warning visible`);
+  say(serviceErrors.length === 0, `${vp.n}: services no console errors${serviceErrors.length ? ' — ' + serviceErrors.join(' | ') : ''}`);
+  await servicePage.screenshot({ path: `proof/site/services-${vp.n}.png`, fullPage: true });
+  await ctx.close();
 }
 
 /* ---------- Games hub: code-level Playwright proof at exact source ---------- */
