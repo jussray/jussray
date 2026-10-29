@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Builds for others — Juss &amp; Co</title>
+<meta name="description" content="Sites and systems Juss &amp; Co has built for other people. A build appears here only after its owner says yes.">
+<meta property="og:title" content="Builds for others — Juss &amp; Co">
+<meta property="og:description" content="Work built for people outside the studio. Shown only with the owner's yes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&amp;family=Fraunces:opsz,wght@9..144,600;9..144,800&amp;family=Manrope:wght@400;600;700&amp;family=Oswald:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+:root{
+  --midnight:#0a0820; --violet:#7c3aed; --violet-soft:#a78bfa;
+  --cyan:#22d3ee; --magenta:#e879f9; --gold:#e7b75c;
+  --text:#f4f1ff; --muted:#b9b2d9;
+  --line:rgba(167,139,250,.22); --card:rgba(18,14,51,.72);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;min-height:100vh;color:var(--text);background-color:var(--midnight);
+  background-image:
+    radial-gradient(1200px 700px at 85% -10%,rgba(124,58,237,.35),transparent 60%),
+    radial-gradient(900px 600px at -10% 30%,rgba(34,211,238,.16),transparent 60%),
+    radial-gradient(800px 700px at 110% 80%,rgba(232,121,249,.18),transparent 60%);
+  font-family:Manrope,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.6;
+}
+a{color:var(--cyan)}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+
+header.top{position:sticky;top:0;z-index:10;background:rgba(10,8,32,.78);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;padding-top:10px;padding-bottom:10px}
+.brand{font-family:Oswald,Impact,"Arial Narrow",sans-serif;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text);text-decoration:none;font-size:18px;min-height:44px;display:inline-flex;align-items:center}
+.brand span{background:linear-gradient(90deg,var(--violet-soft),var(--cyan),var(--magenta));-webkit-background-clip:text;background-clip:text;color:transparent}
+nav.links{display:flex;gap:6px;flex-wrap:wrap}
+nav.links a{color:var(--muted);text-decoration:none;font-size:14px;padding:8px 12px;border-radius:999px;border:1px solid transparent;min-height:40px;display:inline-flex;align-items:center}
+nav.links a:hover{color:var(--text);border-color:var(--line)}
+nav.links a[aria-current="page"]{color:var(--midnight);background:var(--gold);font-weight:700}
+
+.hero{padding:84px 0 52px}
+.eyebrow{font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);margin:0 0 18px}
+h1{
+  font-family:Oswald,Impact,"Arial Narrow",sans-serif;font-weight:700;text-transform:uppercase;
+  line-height:.9;margin:0;font-size:clamp(60px,14vw,176px);
+  background:linear-gradient(100deg,#fff 10%,var(--violet-soft) 45%,var(--cyan) 75%,var(--magenta));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  overflow-wrap:anywhere;
+}
+.lede{font-family:Fraunces,Georgia,serif;font-size:clamp(20px,2.4vw,28px);max-width:34ch;margin:26px 0 0}
+.note{font-family:Caveat,"Segoe Script","Comic Sans MS",cursive;color:var(--gold);font-size:clamp(22px,2.6vw,30px);margin:18px 0 0;display:inline-block;transform:rotate(-1.5deg)}
+
+section{padding:44px 0}
+h2{font-family:Fraunces,Georgia,serif;font-weight:800;font-size:clamp(30px,4.4vw,48px);line-height:1.1;margin:0 0 10px}
+.sub{color:var(--muted);max-width:60ch;margin:0 0 28px}
+
+.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+article.build{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;display:flex;flex-direction:column;gap:12px;position:relative;overflow:hidden}
+article.build::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,var(--violet),var(--cyan),var(--magenta))}
+.kind{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0}
+.build h3{font-family:Fraunces,Georgia,serif;font-size:26px;line-height:1.2;margin:0}
+.pill{align-self:flex-start;font-size:13px;font-weight:700;padding:6px 12px;border-radius:999px;border:1px solid}
+.pill.building{color:var(--gold);border-color:rgba(231,183,92,.5);background:rgba(231,183,92,.08)}
+.pill.built{color:var(--magenta);border-color:rgba(232,121,249,.5);background:rgba(232,121,249,.08)}
+.pill.live{color:var(--cyan);border-color:rgba(34,211,238,.5);background:rgba(34,211,238,.08)}
+.build h4{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:8px 0 0;font-weight:700}
+.build p{margin:0}
+.build ul{margin:0;padding-left:18px}
+.build li{margin:4px 0}
+.build .waits{color:var(--muted)}
+.build .note{font-size:24px;margin-top:6px}
+.build .visit{font-weight:700;min-height:44px;display:inline-flex;align-items:center}
+.empty{color:var(--muted);border:1px dashed var(--line);border-radius:18px;padding:28px;margin:0}
+
+.rules{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));padding:0;list-style:none;margin:0;counter-reset:step}
+.rules li{background:rgba(18,14,51,.5);border:1px solid var(--line);border-radius:16px;padding:20px 20px 20px 64px;position:relative;margin:0}
+.rules li::before{counter-increment:step;content:counter(step);position:absolute;left:18px;top:18px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:800;color:var(--midnight);background:linear-gradient(135deg,var(--gold),#fff1c7)}
+.rules strong{display:block;margin-bottom:4px}
+
+footer{padding:64px 0 48px;border-top:1px solid var(--line);margin-top:24px}
+.close{font-family:Oswald,Impact,"Arial Narrow",sans-serif;font-weight:700;text-transform:uppercase;font-size:clamp(40px,7vw,88px);line-height:.95;margin:0;overflow-wrap:anywhere}
+.fl{display:flex;gap:6px 18px;flex-wrap:wrap;margin-top:22px}
+.fl a{min-height:44px;display:inline-flex;align-items:center}
+.small{color:var(--muted);font-size:14px;margin:28px 0 0}
+
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="https://jussco.company/">Juss <span>&amp;</span> Co</a>
+    <nav class="links" aria-label="Site">
+      <a href="https://jussco.company/#worlds">Worlds</a>
+      <a href="#builds" aria-current="page">Builds</a>
+      <a href="https://jussco.company/#why">The why</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <div class="wrap">
+      <p class="eyebrow">Juss &amp; Co · Studio work</p>
+      <h1>Built for others.</h1>
+      <p class="lede">Sites and systems we build for people outside the studio. A name appears here only when its owner says yes.</p>
+      <p class="note">Turn thoughts into living works, for them too.</p>
+    </div>
+  </div>
+
+  <section id="builds">
+    <div class="wrap">
+      <h2>The builds</h2>
+      <p class="sub">Each card says what exists now. Anything still in progress is labelled that way.</p>
+      <div id="grid" class="grid" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section id="rules">
+    <div class="wrap">
+      <h2>How a build gets on this page</h2>
+      <p class="sub">We don't show a site or a client's name before it's ready to be seen.</p>
+      <ol class="rules">
+        <li><strong>The owner says yes.</strong>No name, logo or photo goes up without their go-ahead.</li>
+        <li><strong>The work is seen.</strong>It is live on its own domain, or the owner has reviewed the actual build.</li>
+        <li><strong>Status stays honest.</strong>Building means not launched. Built means finished but not on a domain yet. Live means it loads now. Nothing gets a status we haven't checked.</li>
+      </ol>
+    </div>
+  </section>
+</main>
+
+<footer id="contact">
+  <div class="wrap">
+    <p class="close">Let's build something real.</p>
+    <div class="fl">
+      <a href="https://jussco.company/">jussco.company</a>
+      <a href="https://github.com/jussray">GitHub</a>
+      <a href="https://www.linkedin.com/in/juss-rayy-13ba691a1">LinkedIn</a>
+    </div>
+    <p class="small">Status on this page is founder-declared and changes only when the work does.</p>
+  </div>
+</footer>
+
+<script>
+// One entry per build. Add a build only after its owner says yes.
+// status: "building" (not launched) | "built" (finished, no public domain yet) | "live" (needs url, checked before listing)
+const BUILDS = [
+  {
+    kind: "Site build",
+    title: "Laundry service, Nigeria",
+    client: "Name held until the owner says yes.",
+    status: "built",
+    statusLabel: "Built · not on a domain yet",
+    built: [
+      "Mobile-first static site, built and handed over",
+      "Own domain and public address not connected yet"
+    ],
+    waits: "Shows publicly once the owner says yes and a domain is connected.",
+    note: "Goes live on the owner's word."
+  },
+  {
+    kind: "Site build",
+    title: "Tattoo studio and novelty basket shop",
+    client: "Name held until the owner says yes.",
+    status: "building",
+    statusLabel: "Building · not launched",
+    built: [
+      "Static site draft: hero, basket photo, SEO head and structured data",
+      "Booking requested; status to confirm"
+    ],
+    waits: "Launch waits on owner sign-off for copy, photos and details.",
+    note: "Launches when the owner says go."
+  }
+];
+
+function el(tag, cls, text) {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text !== undefined) n.textContent = text;
+  return n;
+}
+
+const grid = document.getElementById("grid");
+if (!BUILDS.length) {
+  grid.replaceWith(el("p", "empty", "No public builds yet. The first one appears here when its owner says yes."));
+} else {
+  BUILDS.forEach(b => {
+    const card = el("article", "build");
+    card.append(
+      el("p", "kind", b.kind),
+      el("h3", "", b.title),
+      el("span", "pill " + b.status, b.statusLabel),
+      el("h4", "", "Client"),
+      el("p", "", b.client),
+      el("h4", "", "What exists now")
+    );
+    const list = el("ul");
+    b.built.forEach(t => list.append(el("li", "", t)));
+    card.append(list, el("p", "waits", b.waits));
+    if (b.status === "live" && b.url) {
+      const a = el("a", "visit", "Visit site ↗");
+      a.href = b.url;
+      a.rel = "noopener";
+      card.append(a);
+    }
+    card.append(el("p", "note", b.note));
+    grid.append(card);
+  });
+}
+</script>
+</body>
+</html>
