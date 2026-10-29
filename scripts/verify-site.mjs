@@ -13,7 +13,7 @@ const browser = await chromium.launch(); let failed = 0; const say = (ok, m) => 
 const robots = readFileSync(join(ROOT, 'robots.txt'), 'utf8');
 const sitemap = readFileSync(join(ROOT, 'sitemap.xml'), 'utf8');
 say(/User-agent:\s*\*/i.test(robots) && /Allow:\s*\//i.test(robots) && robots.includes('https://www.jussco.company/sitemap.xml'), 'seo: robots allows crawl and declares canonical sitemap');
-say(['https://www.jussco.company/','https://www.jussco.company/services.html','https://www.jussco.company/creative-history.html','https://www.jussco.company/games/'].every((x) => sitemap.includes(`<loc>${x}</loc>`)), 'seo: sitemap lists canonical public pages');
+say(['https://www.jussco.company/','https://www.jussco.company/services.html','https://www.jussco.company/work.html','https://www.jussco.company/creative-history.html','https://www.jussco.company/games/'].every((x) => sitemap.includes(`<loc>${x}</loc>`)), 'seo: sitemap lists canonical public pages');
 const expectedOS = ['Truth Weaver', 'Truth Compass', 'Exact Match Engine', 'Living Truth', 'Proof Core'];
 // Browser receipt: verify the actual HTML script attaches and emits fixed, non-personal fields.
 {
@@ -94,6 +94,7 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   say(['Person','Organization','WebSite'].every((x) => schemaTypes.includes(x)), `${vp.n}: Person Organization WebSite structured data`);
   say(/Juss Rayy/.test(await page.locator('.founder-line').innerText()) && /Full-Stack AI Systems Builder/.test(await page.locator('.founder-line').innerText()), `${vp.n}: visible founder identity`);
   say((await page.locator('a[href="/services.html"]').count()) >= 3, `${vp.n}: Work with Juss path linked from homepage`);
+  say((await page.locator('a[href="/work.html"]').count()) >= 2, `${vp.n}: Selected Work path linked from homepage`);
   const companyEmail=await page.locator('#mail').textContent();
   say(companyEmail==='founder@jussco.company' && (await page.locator('#mail').getAttribute('href'))==='mailto:'+companyEmail, `${vp.n}: company email text and mailto match business address`);
   const directory=page.locator('#projectContactDirectory');
@@ -190,6 +191,26 @@ for (const vp of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile
   say(await page.locator('.card:has(h3:text("LUMORA")) a').count() === 0 && await page.locator('.card:has(h3:text("ChatQuest")) a').count() === 0, `games hub: ${vp.name} unreleased child games have no entry links`);
   say(errors.length === 0, `games hub: ${vp.name} no JS errors`);
   await page.screenshot({ path: `proof/site/games-${vp.name}.png`, fullPage: true });
+  await ctx.close();
+}
+
+
+for (const vp of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile', width: 390, height: 844 }]) {
+  const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height }, isMobile: vp.name === 'mobile', hasTouch: vp.name === 'mobile' });
+  const page = await ctx.newPage();
+  const errors = [];
+  page.on('pageerror', (e) => errors.push(String(e)));
+  page.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) errors.push(m.text()); });
+  await page.goto(`${url}work.html`, { waitUntil: 'load' });
+  say((await page.title()) === 'Selected Work | Juss Rayy · Juss & Co', `work page: ${vp.name} title`);
+  say((await page.locator('link[rel="canonical"]').getAttribute('href')) === 'https://www.jussco.company/work.html', `work page: ${vp.name} canonical`);
+  say((await page.locator('article.card')).count() === 3, `work page: ${vp.name} three selected case studies`);
+  say((await page.locator('a[href="https://sekretbip.net/"]').count()) === 1, `work page: ${vp.name} Se’kret Bip public route`);
+  say((await page.locator('a[href="https://foundercontrolroom.org/"]').count()) === 1, `work page: ${vp.name} FCR public route`);
+  say((await page.locator('a[href="https://sync.jussco.company/"]').count()) === 1, `work page: ${vp.name} SYNC public route`);
+  say((await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)) <= 0, `work page: ${vp.name} no horizontal overflow`);
+  say(errors.length === 0, `work page: ${vp.name} no JS errors`);
+  await page.screenshot({ path: `proof/site/work-${vp.name}.png`, fullPage: true });
   await ctx.close();
 }
 
