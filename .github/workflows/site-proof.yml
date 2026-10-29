@@ -22,6 +22,8 @@ jobs:
           persist-credentials: false
       - name: Wrangler runtime-truth guard (static-assets baseline, no Worker script)
         run: node --test scripts/wrangler-runtime-truth.test.mjs
+      - name: Agent discovery only points at shipped public files
+        run: node --test scripts/agent-discovery.test.mjs
       - name: Verify worlds-patch executor truth gates
         run: python3 tools/worlds-patch-executor/test_worlds_patch.py
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020

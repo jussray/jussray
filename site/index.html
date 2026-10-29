@@ -3,15 +3,55 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="Juss & Co is a founder studio. Products, systems, stories and proof that help more people live, create and belong.">
-<meta property="og:title" content="Juss & Co — Turn thoughts into living works.">
-<meta property="og:description" content="A founder studio for a brighter tomorrow. Connected worlds, one proof protocol.">
-<meta property="og:image" content="assets/hero.jpg">
+<meta name="description" content="Juss & Co is Juss Rayy's founder studio building human-centered products, AI systems, commerce, creator tools and verifiable digital products.">
+<meta name="robots" content="index,follow">
+<meta property="og:title" content="Juss & Co | Juss Rayy, Product & AI Systems Builder">
+<meta property="og:description" content="Juss Rayy's founder studio for human-centered products, AI systems, commerce, creator tools and proof-backed digital work.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.jussco.company/">
+<meta property="og:image" content="https://www.jussco.company/assets/hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Juss & Co | Juss Rayy, Product & AI Systems Builder">
+<meta name="twitter:description" content="Human-centered products, AI systems, commerce, creator tools and proof-backed digital work.">
+<meta name="twitter:image" content="https://www.jussco.company/assets/hero.jpg">
 <meta name="theme-color" content="#06061C">
 <link rel="canonical" href="https://www.jussco.company/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2306061C'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='%23F5C14B' font-family='Georgia'%3E%26%3C/text%3E%3C/svg%3E">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}</style>
-<title>Juss &amp; Co — Turn thoughts into living works.</title>
+<title>Juss &amp; Co | Juss Rayy, Product &amp; AI Systems Builder</title>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://www.jussco.company/#juss-rayy",
+      "name": "Juss Rayy",
+      "url": "https://www.jussco.company/",
+      "jobTitle": "Founder, Product & Full-Stack AI Systems Builder",
+      "sameAs": [
+        "https://github.com/jussray",
+        "https://www.linkedin.com/in/juss-rayy-13ba691a1"
+      ],
+      "worksFor": { "@id": "https://www.jussco.company/#organization" }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://www.jussco.company/#organization",
+      "name": "Juss & Co",
+      "url": "https://www.jussco.company/",
+      "founder": { "@id": "https://www.jussco.company/#juss-rayy" }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.jussco.company/#website",
+      "url": "https://www.jussco.company/",
+      "name": "Juss & Co",
+      "publisher": { "@id": "https://www.jussco.company/#organization" }
+    }
+  ]
+}
+</script>
 <script src="/assets/conversion-tracking.js" defer></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -94,6 +134,7 @@ h1,h2,h3{text-wrap:balance}
 .h-line{margin-top:10px;font-family:var(--f-display);font-weight:400;text-transform:uppercase;font-size:clamp(28px,3.6vw,56px);line-height:1;color:#fff;letter-spacing:.01em;text-shadow:0 0 18px rgba(255,255,255,.25)}
 .h-line .script{font-family:var(--f-script);text-transform:none;letter-spacing:0;color:var(--gold);font-size:1.12em;text-shadow:0 0 22px rgba(245,193,75,.55);padding-left:.12em}
 .lede{margin-top:22px;max-width:52ch;font-size:clamp(16px,1.3vw,19px);color:#E4DFFB;line-height:1.55}
+.founder-line{margin-top:14px;color:var(--gold-2);font-size:14px;letter-spacing:.01em}.founder-line strong{color:var(--cream)}
 .cta-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:28px}
 .pillars{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:38px;max-width:640px}
 .pillar{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:center}
@@ -302,7 +343,7 @@ h1,h2,h3{text-wrap:balance}
 @media (max-width:640px){
   .navpill{display:none}
   .hero .in{padding-top:calc(330px + 22px);min-height:0}
-  .hero-bg{inset:0 0 auto 0;height:330px}
+  .hero-bg{inset:0 0 auto 0;height:330px;transform:none!important} /* stacked layout: parallax would slide the art over the copy */
   .hero-bg img{object-position:72% 40%}
   .hero::before{background:linear-gradient(180deg,rgba(6,6,28,.25) 0%,rgba(6,6,28,.2) 35%,rgba(6,6,28,.92) 62%,var(--void) 100%)}
   .h-brand{font-size:clamp(44px,13.5vw,72px)}
@@ -331,11 +372,12 @@ h1,h2,h3{text-wrap:balance}
       <a href="#worlds" data-nav="worlds">Worlds</a>
       <a href="#systems" data-nav="systems">Systems</a>
       <a href="#proof" data-nav="proof">Proof</a>
+      <a href="/services.html">Work with Juss</a>
       <a href="/creative-history.html">Creative history</a>
       <a href="#why" data-nav="why">The why</a>
       <a href="#contact" data-nav="contact">Contact</a>
     </nav>
-    <a class="btn btn-gold" href="#contact" style="min-height:44px;padding:10px 20px;font-size:14px">Contact <span aria-hidden="true">→</span></a>
+    <a class="btn btn-gold" href="/services.html" style="min-height:44px;padding:10px 20px;font-size:14px">Work with Juss <span aria-hidden="true">→</span></a>
   </div>
 </header>
 
@@ -350,8 +392,12 @@ h1,h2,h3{text-wrap:balance}
       <h1 class="h-brand" id="h-hero">Juss &amp; Co</h1>
       <p class="h-line">Turn thoughts into <span class="script">living works.</span></p>
       <p class="lede">Juss &amp; Co turns ideas into useful products, trusted systems, stories and play. Explore what is live, what is building, and what comes next.</p>
+      <p class="founder-line">Founded by <strong>Juss Rayy</strong> · Product &amp; Full-Stack AI Systems Builder.</p>
       <div class="cta-row">
-        <a class="btn btn-violet" href="#worlds">Explore what we build <span aria-hidden="true">→</span></a>
+        <a class="btn btn-gold" href="/services.html">Work with Juss <span aria-hidden="true">→</span></a>
+        <a class="btn btn-violet" href="#worlds">Explore the worlds <span aria-hidden="true">→</span></a>
+        <a class="btn btn-ghost" href="https://games.jussco.company/">🎮 Visit Juss &amp; Co. Games <span aria-hidden="true">↗</span></a>
+        <a class="btn btn-ghost" href="#proof"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>See proof</a>
       </div>
       <ul class="pillars" style="list-style:none;margin-top:38px;padding:0">
         <li class="pillar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg><div><b>Ideas</b><span>become products</span></div></li>
@@ -374,7 +420,7 @@ h1,h2,h3{text-wrap:balance}
         <div class="kicker mono">The Juss &amp; Co universe</div>
         <h2 class="h2" id="h-worlds"><span class="ln">Different worlds.</span><span class="ln gold">A brighter tomorrow.</span></h2>
       </div>
-      <p class="sec-note"><strong style="color:var(--cream)">One portfolio. Many worlds. One shared belief.</strong> Each project is a living work with its own purpose, people and possibilities. Browse by people &amp; belonging, ideas &amp; systems, or stories &amp; play. <span id="liveStamp">Registry snapshot loads below.</span></p>
+      <p class="sec-note"><strong style="color:var(--cream)" id="worldSummaryCount">Portfolio worlds. One shared belief.</strong> Each project is a living work with its own purpose, people and possibilities. Browse by people &amp; belonging, ideas &amp; systems, or stories &amp; play. <span id="liveStamp">Explore the current project listings.</span></p>
       <a class="btn btn-gold-o" href="https://github.com/jussray">All builds on GitHub <span aria-hidden="true">↗</span></a>
     </div>
     <div class="filters" id="filters" role="group" aria-label="Filter worlds">
@@ -407,10 +453,10 @@ h1,h2,h3{text-wrap:balance}
   <div class="in">
     <div class="sec-head">
       <div>
-        <div class="kicker mono">Standalone OS layer</div>
+        <div class="kicker mono">Independent products</div>
         <h2 class="h2" id="h-systems"><span class="ln">Built to stand alone.</span><span class="ln gold">Built to plug in.</span></h2>
       </div>
-      <p class="sec-note"><strong style="color:var(--cream)">Standalone does not mean isolated.</strong> These operating systems are products in their own right and can also be mounted inside Juss &amp; Co systems without giving up their identity or authority boundary.</p>
+      <p class="sec-note"><strong style="color:var(--cream)">Standalone does not mean isolated.</strong> Each product has its own purpose. Discover tools for organizing information, exploring questions, and making clearer decisions.</p>
     </div>
     <div class="os-grid" id="osGrid"></div>
     <div class="surface-strip" id="surfaceStrip" hidden></div>
@@ -461,9 +507,9 @@ h1,h2,h3{text-wrap:balance}
       </div>
     </div>
 
-    <div class="receipts" aria-label="Latest real receipts">
-      <div class="rc"><span class="badge s-live">Verified live</span><span>Juss Beautiful Hair, truthful product copy: PR #115 → main <code>2e79aaa</code>, redeployed 49 s after merge, 29 Sep.</span></div>
-      <div class="rc"><span class="badge s-building">Merged</span><span>Founder Control Room, cinematic Founder Home: PR #900 → main <code>2502a86</code>, 56/56 browser checks. Live serve not yet verified.</span></div>
+    <div class="receipts" aria-label="Explore our work">
+      <div class="rc"><span class="badge s-progress">Discover</span><span>Explore hair, care guidance, and support at Juss Beautiful Hair.</span></div>
+      <div class="rc"><span class="badge s-building">Building</span><span>Follow the ideas taking shape across the Juss &amp; Co worlds.</span></div>
     </div>
   </div>
 </section>
@@ -500,7 +546,8 @@ h1,h2,h3{text-wrap:balance}
       <div class="contact-col">
         <div class="addr"><a id="mail" href="mailto:founder@jussco.company">founder@jussco.company</a><button class="copy" type="button" id="copyBtn" aria-label="Copy Juss &amp; Co. founder email">Copy email</button></div>
         <details class="project-contact-directory" id="projectContactDirectory" hidden><summary>Find a project’s contact email</summary><ul id="projectContactList"></ul></details>
-        <a class="btn btn-gold" href="https://github.com/jussray">Follow the builds <span aria-hidden="true">↗</span></a>
+        <a class="btn btn-gold" href="/services.html">Work with Juss <span aria-hidden="true">→</span></a>
+        <a class="btn btn-ghost" href="https://github.com/jussray">Follow the builds <span aria-hidden="true">↗</span></a>
         <a class="btn btn-ghost" href="#worlds">Explore all worlds</a>
         <a href="https://www.jussco.company/" class="company-qr" aria-label="Visit Juss and Co on the web, or scan the QR code" style="display:flex;align-items:center;gap:16px;max-width:350px;min-height:160px;padding:12px;margin-top:16px;text-decoration:none;background:rgba(9,6,35,.72);border:1px solid rgba(178,141,255,.5);border-radius:18px">
           <img src="assets/qr/jussco-company.svg" alt="QR code for www.jussco.company" width="132" height="132" loading="lazy" decoding="async" style="width:132px;height:132px;flex:none;border-radius:8px;background:#fff">
@@ -520,7 +567,7 @@ h1,h2,h3{text-wrap:balance}
         </nav>
       </div>
     </div>
-    <div class="legal"><span>© 2026 Juss &amp; Co. Turn thoughts into living works.</span><span class="mono" style="letter-spacing:.14em">Proof before promises</span></div>
+    <div class="legal"><span>© 2026 Juss &amp; Co. Turn thoughts into living works.</span><a href="returns.html" style="color:inherit;display:inline-flex;align-items:center;min-height:44px">Returns policy (draft)</a><span class="mono" style="letter-spacing:.14em">Proof before promises</span></div>
   </div>
 </section>
 </main>
@@ -570,6 +617,33 @@ h1,h2,h3{text-wrap:balance}
      held:"Live · link coming"}
   ];
 
+  var PUBLIC_WORLD_COPY = {
+    "Se'kret Bip": ["A space to feel, share, and grow.", "A family world in development, designed around belonging and age-appropriate connection.", ["Family", "Wellness", "Connection"]],
+    "Founder Control Room": ["Move your next idea forward.", "A founder workspace in development for organizing ideas, projects, and progress.", ["Ideas", "Projects", "Founder tools"]],
+    "Chief AI": ["Think bigger. Build with direction.", "An intelligence partner in development to help founders explore ideas and plan their next steps.", ["AI", "Planning", "Founder tools"]],
+    "Juss Beautiful Hair": ["Confidence, culture and care.", "Explore hair options, current product details, care guidance, and support before you choose your look.", ["Beauty", "Hair", "Care"]],
+    "StoryEngine": ["Give your story a place to grow.", "Creative tools in development for shaping ideas into stories you can watch, read, and share.", ["Stories", "Media", "Creativity"]],
+    "Sync Party": ["Get in sync. Play together.", "A party game for friends: answer together and discover who is really in sync.", ["Friends", "Games", "Play"]],
+    "Bip Jr": ["A younger doorway into the Bip universe.", "A family experience in development around belonging, communication, and age-appropriate connection.", ["Family", "Kids", "Belonging"]],
+    "PromptOS": ["Give your ideas clearer direction.", "Tools in development to help turn ideas into useful prompts and focused work.", ["Ideas", "Prompts", "Focus"]],
+    "SolContinuity": ["Pick up where you left off.", "Continuity tools in development to help work carry on across interruptions and handoffs.", ["Continuity", "Recovery", "Resilience"]],
+    "Untold Stories": ["Stories deserve a place to live.", "A storefront in development connecting stories, culture, and commerce.", ["Stories", "Culture", "Commerce"]],
+    "SWEATS": ["Soft luxury with a point of view.", "An athleisure brand in development, exploring comfort, expression, and everyday style.", ["Style", "Comfort", "Fashion"]],
+    "SleepWealth Agent": ["Explore ideas through simulation.", "A research experiment limited to paper and simulation use. Live trading is disabled.", ["Research", "Simulation", "Learning"]],
+    "Solwealth": ["A space to explore and learn.", "A learning experiment. Real-money transactions are not available.", ["Research", "Learning", "Experiment"]],
+    "Think Tank": ["Give an idea a closer look.", "An early tool for exploring ideas, answering useful questions, and planning next steps. It does not establish market demand.", ["Ideas", "Questions", "Planning"]],
+    "Alexa Commerce Engine": ["Commerce with clearer direction.", "A project in development exploring ways to organize commerce workflows.", ["Commerce", "Organization", "Planning"]],
+    "Ayure": ["A new world taking shape.", "A product in development. More details will be shared as it takes shape.", ["Discovery", "Ideas", "Experience"]]
+  };
+  function applyPublicWorldCopy(w){
+    var copy=PUBLIC_WORLD_COPY[w.name];
+    w.tag=copy?copy[0]:w.name;
+    w.desc=copy?copy[1]:"A project in development. Explore more as details become available.";
+    w.blurb=w.desc; w.tags=copy?copy[2]:[];
+    w.facts=[];
+    return w;
+  }
+  WORLDS.forEach(applyPublicWorldCopy);
   var grid = document.getElementById("grid"), drawer = document.getElementById("drawer");
   var cards = [], current = -1;
   function renderWorldCard(w,i){
@@ -600,16 +674,23 @@ h1,h2,h3{text-wrap:balance}
     });
     box.hidden=ul.children.length===0;
   }
-  function worldFromRegistry(L){var p=L.display||{};return{name:L.name,group:p.group||"Ideas & systems",st:L.st||"building",label:L.label||"Building",w:p.accent||"#8B5CF6",img:p.img||"assets/w-fcr.jpg",alt:p.alt||"",desc:p.desc||"",tags:Array.isArray(p.tags)?p.tags:[],tag:p.tag||"",blurb:p.blurb||p.desc||"",facts:Array.isArray(p.facts)?p.facts:[],held:L.held||"Tracked · no public link yet",link:(L.link&&L.link.url)?[L.link.text||"Open",L.link.url]:null};}
+  function worldFromRegistry(L){var p=L.display||{};return applyPublicWorldCopy({name:L.name,group:p.group||"Ideas & systems",st:L.st||"building",label:L.label||"Building",w:p.accent||"#8B5CF6",img:p.img||"assets/w-fcr.jpg",alt:p.alt||"",desc:p.desc||"",tags:Array.isArray(p.tags)?p.tags:[],tag:p.tag||"",blurb:p.blurb||p.desc||"",facts:Array.isArray(p.facts)?p.facts:[],held:L.held||"Tracked · no public link yet",link:(L.link&&L.link.url)?[L.link.text||"Open",L.link.url]:null});}
   fetch("data/worlds.json",{cache:"no-store"}).then(function(r){return r.ok?r.json():null;}).then(function(d){
     if(!d||!d.worlds)return;
     d.worlds.forEach(function(L){LIVE[L.name]=L;var idx=WORLDS.findIndex(function(w){return w.name===L.name;});if(idx<0&&L.display){var added=worldFromRegistry(L);WORLDS.push(added);idx=WORLDS.length-1;renderWorldCard(added,idx);}if(idx<0)return;var w=WORLDS[idx];if(L.st&&L.label){w.st=L.st;w.label=L.label;var b=cards[idx].querySelector(".badge");b.className="badge s-"+L.st;b.textContent=L.label;}if(L.link&&L.link.url){w.link=[L.link.text||"Open",L.link.url];w.held=null;}else if(L.held){w.held=L.held;w.link=null;}});
-    var n=document.querySelector('#filters .chip[data-group=""] .n');if(n)n.textContent=String(WORLDS.length).padStart(2,"0");
-    if(d.company&&validContactEmail(d.company.email)){var companyMail=document.getElementById("mail");companyMail.textContent=d.company.email;companyMail.href="mailto:"+d.company.email;}renderProjectContactDirectory(d.worlds);if(d.quotes&&d.quotes.length)setQuotes(d.quotes);var stamp=document.getElementById("liveStamp");if(stamp&&d.generatedAt)stamp.textContent="Registry snapshot "+new Date(d.generatedAt).toUTCString().replace(/:\d\d GMT$/," UTC");if(current>=0){var k=current;current=-1;open(k);}
+    var n=document.querySelector('#filters .chip[data-group=""] .n');if(n)n.textContent=String(WORLDS.length).padStart(2,"0");var worldSummary=document.getElementById("worldSummaryCount");if(worldSummary)worldSummary.textContent=String(WORLDS.length)+" worlds. One shared belief.";
+    if(d.company&&validContactEmail(d.company.email)){var companyMail=document.getElementById("mail");companyMail.textContent=d.company.email;companyMail.href="mailto:"+d.company.email;}renderProjectContactDirectory(d.worlds);if(d.quotes&&d.quotes.length)setQuotes(d.quotes);var stamp=document.getElementById("liveStamp");if(stamp)stamp.textContent="Explore the current project listings.";if(current>=0){var k=current;current=-1;open(k);}
   }).catch(function(){});
 
 /* ---------- standalone OS registry ---------- */
-var osGrid=document.getElementById("osGrid"), surfaceStrip=document.getElementById("surfaceStrip"), connectorRegistry=null;
+var osGrid=document.getElementById("osGrid"), surfaceStrip=document.getElementById("surfaceStrip");
+var PUBLIC_SYSTEM_COPY={
+  "Truth Weaver":"Independent legal-navigation and notice-research product. Explore legal questions and official sources. Not legal advice; paid tools remain in preparation.",
+  "Truth Compass":"A product in development for keeping track of information and understanding what has changed.",
+  "Exact Match Engine":"A product in development for comparing information and understanding differences.",
+  "Living Truth":"A product in development for organizing information as it changes.",
+  "Proof Core":"An early product for checking information and tracing its sources."
+};
 function renderSystems(d){
   if(!osGrid || !d || !Array.isArray(d.systems)) return;
   osGrid.innerHTML="";
@@ -617,34 +698,18 @@ function renderSystems(d){
   visible.forEach(function(x){
     var card=document.createElement("article"); card.className="os-card";
     var top=document.createElement("div"); top.className="os-top";
-    var kind=document.createElement("span"); kind.className="os-kind"; kind.textContent="Standalone OS";
-    var state=document.createElement("span"); state.className="os-state"; state.textContent=x.label||x.status||"Tracked";
+    var kind=document.createElement("span"); kind.className="os-kind"; kind.textContent="Independent product";
+    var state=document.createElement("span"); state.className="os-state"; state.textContent=x.publicUrl?"Explore · paid tools in preparation":"In development";
     top.appendChild(kind); top.appendChild(state); card.appendChild(top);
     var h=document.createElement("h3"); h.textContent=x.name; card.appendChild(h);
-    var role=document.createElement("p"); role.className="os-role"; role.textContent=x.role||"Standalone operating system."; card.appendChild(role);
-    var meta=document.createElement("div"); meta.className="os-meta";
-    var provider=document.createElement("span"); provider.textContent=(x.builder&&x.builder.provider)||"Tracked"; meta.appendChild(provider);
-    if(x.repo&&x.repo.name){ var repo=document.createElement("span"); repo.textContent=x.repo.visibility==="private"?"Private repo":"Repo"; meta.appendChild(repo); }
-    card.appendChild(meta);
-    var connectorEntry=connectorRegistry&&connectorRegistry.systems&&connectorRegistry.systems[x.name];
-    var bindings=connectorEntry&&Array.isArray(connectorEntry.bindings)?connectorEntry.bindings:[];
-    if(bindings.length){
-      var cw=document.createElement("div"); cw.className="os-connectors"; var cwb=document.createElement("b"); cwb.textContent="Connector fabric"; cw.appendChild(cwb);
-      bindings.forEach(function(binding){ var lane=(connectorRegistry.lanes||[]).find(function(l){ return l.id===binding.id; }); var sp=document.createElement("span"); sp.dataset.connector=binding.id; sp.dataset.state=binding.state; sp.textContent=(lane?lane.name:binding.id)+" · "+String(binding.state||"unknown").replace(/_/g," "); cw.appendChild(sp); });
-      card.appendChild(cw);
-    }
-    if(x.embeddedIn&&x.embeddedIn.length){ var emb=document.createElement("div"); emb.className="os-embed"; var eb=document.createElement("b"); eb.textContent="Already embedded in"; emb.appendChild(eb); x.embeddedIn.forEach(function(e){ var sp=document.createElement("span"); sp.textContent=e.name; emb.appendChild(sp); }); card.appendChild(emb); }
-    var target=x.publicUrl || (x.builder && x.builder.preview);
-    if(target){ var a=document.createElement("a"); a.className="os-link"; a.href=target; a.textContent=x.publicUrl ? "Open "+x.name+" ↗" : "Open builder preview ↗"; card.appendChild(a); }
+    var role=document.createElement("p"); role.className="os-role"; role.textContent=PUBLIC_SYSTEM_COPY[x.name]||"A product in development."; card.appendChild(role);
+    if(x.publicUrl){ var a=document.createElement("a"); a.className="os-link"; a.href=x.publicUrl; a.textContent="Open "+x.name+" ↗"; card.appendChild(a); }
     osGrid.appendChild(card);
   });
-  var stamp=document.getElementById("osStamp"); if(stamp) stamp.textContent=visible.length+" public standalone OS builds · internal carriers tracked separately"+(d.generatedAt?" · synced "+new Date(d.generatedAt).toISOString().slice(0,10):"");
-  if(surfaceStrip && Array.isArray(d.supportingSurfaces) && d.supportingSurfaces.length){ surfaceStrip.hidden=false; surfaceStrip.innerHTML=""; var b=document.createElement("b"); b.textContent="Supporting surfaces:"; surfaceStrip.appendChild(b); d.supportingSurfaces.forEach(function(x){ var sp=document.createElement("span"); sp.textContent=x.name+" → "+x.parent+" · "+((x.builder&&x.builder.provider)||"tracked")+" · "+x.status; surfaceStrip.appendChild(sp); }); }
+  var stamp=document.getElementById("osStamp"); if(stamp) stamp.textContent=visible.length+" independent products. Each with its own purpose.";
+  if(surfaceStrip) surfaceStrip.hidden=true;
 }
-Promise.all([
-  fetch("data/systems.json",{cache:"no-store"}).then(function(r){ return r.ok?r.json():null; }).catch(function(){ return null; }),
-  fetch("data/connectors.json",{cache:"no-store"}).then(function(r){ return r.ok?r.json():null; }).catch(function(){ return null; })
-]).then(function(pair){ connectorRegistry=pair[1]; renderSystems(pair[0]); }).catch(function(){});
+fetch("data/systems.json",{cache:"no-store"}).then(function(r){return r.ok?r.json():null;}).then(renderSystems).catch(function(){});
 
 /* ---------- rotating founder quotes (data-driven, founder-declared) ---------- */
   var QUOTES=[{text:"A thought is not a result. Proof is a different kind of power.",note:"higher standards.\nbrighter tomorrows."}], qi=0, qTimer=null, qPaused=false;
@@ -662,14 +727,6 @@ Promise.all([
   qBox.addEventListener("focusin",function(){ qPaused=true; }); qBox.addEventListener("focusout",function(){ qPaused=false; });
   window.JC = { nextQuote:function(){ showQuote(qi+1,false); }, quoteIndex:function(){ return qi; }, quoteCount:function(){ return QUOTES.length; } };
   showQuote(0,false);
-  function evidenceRows(L){
-    var rows=[]; if(!L || !L.evidence) return rows; var e=L.evidence;
-    if(e.mainSha) rows.push(["Main", e.mainSha.slice(0,7)+(e.mainDate?" · "+e.mainDate.slice(0,10):"")]);
-    if(e.latestMergedPr) rows.push(["Latest merged", "#"+e.latestMergedPr.number+" "+e.latestMergedPr.title+(e.latestMergedPr.mergedAt?" · "+e.latestMergedPr.mergedAt.slice(0,10):"")]);
-    if(e.ci) rows.push(["CI on main", e.ci]);
-    if(L.carriers&&L.carriers.length) rows.push(["Tracked carriers",L.carriers.map(function(x){return x.ref||x.name||x.id||x.platform;}).join(" · ")]);
-    return rows;
-  }
   function renderContacts(L){
     var box=document.getElementById("dContacts"), ul=document.getElementById("dContactList"); ul.innerHTML="";
     var c=(L&&L.contact)||{}; var keys=Object.keys(c);
@@ -700,11 +757,11 @@ Promise.all([
     document.getElementById("dBlurb").textContent = w.blurb;
     document.getElementById("dIdx").textContent = String(i+1).padStart(2,"0")+" / "+String(WORLDS.length).padStart(2,"0");
     var f = document.getElementById("dFacts"); f.innerHTML = "";
-    w.facts.concat(evidenceRows(LIVE[w.name])).forEach(function(p,ix){ var li=document.createElement("li"), k=document.createElement("b"), v=document.createElement("span"); k.textContent=p[0]; v.textContent=p[1]; if(ix>=w.facts.length) li.className="evid"; li.appendChild(k); li.appendChild(v); f.appendChild(li); });
+    [["About",w.blurb],["Availability",w.label]].forEach(function(p,ix){ var li=document.createElement("li"), k=document.createElement("b"), v=document.createElement("span"); k.textContent=p[0]; v.textContent=p[1]; if(ix>=w.facts.length) li.className="evid"; li.appendChild(k); li.appendChild(v); f.appendChild(li); });
     renderContacts(LIVE[w.name]);
     var c = document.getElementById("dCta"); c.innerHTML = "";
-    if(w.link){ var a=document.createElement("a"); a.className="btn btn-violet"; a.href=w.link[1]; a.textContent=w.link[0]+" ↗"; c.appendChild(a); }
-    else { var s=document.createElement("span"); s.className="held"; s.textContent=w.held; c.appendChild(s); }
+    if(w.link){ var a=document.createElement("a"); a.className="btn btn-violet"; a.href=w.link[1]; a.textContent="Explore "+w.name+" ↗"; c.appendChild(a); }
+    else { var s=document.createElement("span"); s.className="held"; s.textContent="Public access is not available here yet."; c.appendChild(s); }
     if(drawer.hidden){ drawer.hidden = false; }
     else if(!reduce){ drawer.style.animation="none"; void drawer.offsetWidth; drawer.style.animation=""; }
     if(window.matchMedia("(max-width:900px)").matches){ drawer.scrollIntoView({block:"nearest",behavior:reduce?"auto":"smooth"}); }
@@ -720,10 +777,10 @@ Promise.all([
   /* ---------- proof protocol ---------- */
   var LONG = [
     "Say what you intend to build, who it is for, and what a useful result looks like. Written down, so it can be checked later.",
-    "Get the exact authority for the exact change. Intent is not permission: a merge, a deploy and a public claim each need their own approval.",
+    "Agree on the goal, the people involved, and the boundaries before work begins.",
     "Do the smallest reversible version. Build, test, ship or try, and keep the change small enough to undo.",
-    "Save what happened as it happened: commits, test output, screenshots, receipts. Evidence is kept even when the attempt fails.",
-    "Verify on the real path, in a real browser where a person would see it. Separate what passed from what merely ran.",
+    "Keep a clear record of what happened and what we learned.",
+    "Try the experience as a person would use it, and check whether it meets their needs.",
     "Move forward on what is verified, hold what is not, and say plainly which is which."
   ];
   var STEPS = [

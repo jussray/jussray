@@ -80,10 +80,16 @@ NEXT     → the next exact gate
 
 ## Work with me
 
-I’m interested in aligned work and partnerships around **AI product systems, agent infrastructure, verification, privacy, teen/family products, creator tools, commerce, and community economic growth**.
+I take on **paid, focused engagements** where the outcome can be verified rather than hand-waved.
 
-- [Juss & Co](https://jussco.company)
-- [LinkedIn](https://www.linkedin.com/in/juss-rayy-13ba691a1)
+**Current paid paths**
+- **[Chief AI Founder Intelligence](https://github.com/jussray/chief-ai-machine#founding-pilot--300)** — **$300 one time** today; approved lower-entry **$160/month** continuity pricing is pending verified Stripe recurring checkout, tax, and live-account activation.
+- **AI product repair + verification** — trace a real blocker across repo, CI, deployment, runtime, and browser behavior; make the smallest reversible fix; return proof and rollback.
+- **Founder operating-system setup** — structure approvals, evidence, release gates, and cross-tool execution using the patterns proven across Founder Control Room and the wider portfolio.
+
+**Support the public builds:** [GitHub Sponsors](https://github.com/sponsors/jussray)  
+**Talk about paid work:** [LinkedIn](https://www.linkedin.com/in/juss-rayy-13ba691a1) · [Juss & Co](https://jussco.company)
+
 - [Buy Me a Coffee](https://buymeacoffee.com/jussrayy)
 
 ---

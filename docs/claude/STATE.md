@@ -1,3 +1,12 @@
+## 2026-10-28 — Sauce Guard customer-copy repair (source candidate)
+
+- Authority: founder requested implementation after rendered public-page inspection. Reuse existing branch; no new PR, production deployment, billing, routing, secrets, or customer-data action.
+- Scope: customer-facing copy only; keep availability limits, consent/security checks, payment behavior, and current visual canon.
+- Proof: desktop/mobile Playwright exercised the changed local presentation. This is source/UI proof, not production adoption or payment proof. Local backend-free JBH proof intentionally leaves signup unavailable; Protect checkout proof invokes the actual payment module with no payment credentials.
+- Continuity: exact URL + exposed copy + category baseline acquired from live pages; public sites still require release and subsequent live readback. No browser fingerprint manipulation or customer tracking added.
+- Rollback: revert the focused Sauce Guard repair commit; do not restore old deployment, checkout, or credential settings.
+- Next gate: review the focused diff and current required checks before founder-authorized release; exact candidate approval remains separate.
+
 ## 2026-10-20 — Juss Digital rename: standing founder rule + receipt
 - RULE (Juss, repeated): the former service name is retired everywhere; the brand is **Juss Digital**. Never reintroduce the former name in files, PR titles/bodies, or branch names — including in receipts like this one.
 - REALITY @ main 520a073: 0 occurrences of the former name in any tracked file (VERIFIED, case-insensitive `git grep` on `origin/main`). Rename landed via PR #5 (squash de4fa59); PR #4 and #5 titles/bodies rewritten to Juss Digital.
@@ -383,3 +392,10 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
 - Founder working rules recorded in `CLAUDE.md` (this branch).
 - ultrathink-devil: not a new skill (≈70% duplicates ULTRATHINK- `reasoning-stack` Redteam/Lindy twins + juss-os law 1). Unique parts (consequence classes, planes, adaptive budget, ≤3 options) are being made executable in the private product repo. Pasted source was truncated after "Can a mode or untrusted" — remainder UNKNOWN.
 - Drift to resolve (founder decision): two juss-os versions exist — installed skill (79-line kernel, v3-DRAFT) vs `ULTRATHINK-` repo (110-line kernel). Neither recorded as FOUNDER ACCEPT.
+
+### Agent-readiness scan (2026-10-24) — branch `claude/new-session-qkil62`
+- Scanner items audited: only Link headers, API catalog (jussco) and MCP server card (Chief, real `/mcp` ProofMode) are truthful. OAuth/PRM, auth.md, A2A card, skills index, Web Bot Auth, WebMCP, DNS-AID rejected: nothing real behind them.
+- jussray `d74f8a5`: `scripts/verify-site.mjs` was a SyntaxError on main `374bc0d` (merge leftover) — Playwright site proof could not run. Fixed. Remaining pre-existing FAIL: "mobile: hero eyebrow sits below the art band" (147/148 ok), not addressed.
+- jussray `ec07255`: `/.well-known/api-catalog` + homepage Link headers + `scripts/agent-discovery.test.mjs` in site-proof CI. Proven under local wrangler dev only; live domain unreachable from session (proxy 403).
+- chief-ai-machine `5a36de2`: details in that repo's own history.
+- No PRs opened, nothing merged/deployed.
