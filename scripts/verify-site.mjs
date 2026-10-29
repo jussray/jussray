@@ -159,5 +159,23 @@ for (const vp of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile
 }
 
 
+/* ---------- Builds for others: honest status, no unconsented client names ---------- */
+for (const vp of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile', width: 390, height: 844 }]) {
+  const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height } });
+  const page = await ctx.newPage();
+  await page.route('**/_telemetry/v1', (route) => route.fulfill({ status: 204, body: '' }));
+  const errors = [];
+  page.on('pageerror', e => errors.push(String(e)));
+  const response = await page.goto(url + 'builds.html', { waitUntil: 'load' });
+  say(response?.status() === 200, `builds: ${vp.name} responds 200`);
+  const pills = await page.locator('article.build .pill').allTextContents();
+  say(pills.length === 2 && pills.includes('Built · not on a domain yet') && pills.includes('Building · not launched'), `builds: ${vp.name} two builds with honest status`);
+  say(!/Pappa|Razzy|Bleeding/i.test(await page.locator('body').innerText()), `builds: ${vp.name} no unconsented client names`);
+  say((await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)) <= 0, `builds: ${vp.name} no horizontal overflow`);
+  say(errors.length === 0, `builds: ${vp.name} no JS errors`);
+  await page.screenshot({ path: `proof/site/builds-${vp.name}.png`, fullPage: true });
+  await ctx.close();
+}
+
 await browser.close(); srv.close();
 console.log(failed ? `\n${failed} check(s) FAILED` : '\nall checks passed'); process.exit(failed ? 1 : 0);
