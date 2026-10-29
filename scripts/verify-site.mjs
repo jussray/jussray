@@ -204,7 +204,7 @@ for (const vp of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile
   await page.goto(`${url}work.html`, { waitUntil: 'load' });
   say((await page.title()) === 'Selected Work | Juss Rayy · Juss & Co', `work page: ${vp.name} title`);
   say((await page.locator('link[rel="canonical"]').getAttribute('href')) === 'https://www.jussco.company/work.html', `work page: ${vp.name} canonical`);
-  say((await page.locator('article.card')).count() === 3, `work page: ${vp.name} three selected case studies`);
+  say((await page.locator('article.card').count()) === 3, `work page: ${vp.name} three selected case studies`);
   say((await page.locator('a[href="https://sekretbip.net/"]').count()) === 1, `work page: ${vp.name} Se’kret Bip public route`);
   say((await page.locator('a[href="https://foundercontrolroom.org/"]').count()) === 1, `work page: ${vp.name} FCR public route`);
   say((await page.locator('a[href="https://sync.jussco.company/"]').count()) === 1, `work page: ${vp.name} SYNC public route`);
