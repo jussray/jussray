@@ -83,7 +83,7 @@ NEXT     → the next exact gate
 I take on **paid, focused engagements** where the outcome can be verified rather than hand-waved.
 
 **Current paid paths**
-- **[Chief AI Founder Intelligence](https://github.com/jussray/chief-ai-machine#founding-pilot--300)** — **$300 one time** today; approved lower-entry **$199/month** continuity pricing is pending verified Stripe recurring checkout, tax, and live-account activation.
+- **[Chief AI Founder Intelligence](https://github.com/jussray/chief-ai-machine#founding-pilot--300)** — **$300 one time** today; approved lower-entry **$150/month** continuity pricing is pending verified Stripe recurring checkout, tax, and live-account activation.
 - **AI product repair + verification** — trace a real blocker across repo, CI, deployment, runtime, and browser behavior; make the smallest reversible fix; return proof and rollback.
 - **Founder operating-system setup** — structure approvals, evidence, release gates, and cross-tool execution using the patterns proven across Founder Control Room and the wider portfolio.
 
