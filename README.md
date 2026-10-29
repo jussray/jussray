@@ -83,7 +83,7 @@ NEXT     → the next exact gate
 I take on **paid, focused engagements** where the outcome can be verified rather than hand-waved.
 
 **Current paid paths**
-- **[$300 Chief AI Founder Intelligence pilot](https://github.com/jussray/chief-ai-machine#founding-pilot--300)** — for the first 3 paying users; turn scattered prompts, decisions, workflows, and AI context into a portable company-intelligence system, including an inventory, workspace setup, reusable assets, portable export, and one follow-up review.
+- **[Chief AI Founder Intelligence](https://github.com/jussray/chief-ai-machine#founding-pilot--300)** — first 3 founding customers can choose **$300 one time** or the lower-entry **$199/month** continuity subscription; includes company-intelligence setup, reusable assets, portable export, and a review loop.
 - **AI product repair + verification** — trace a real blocker across repo, CI, deployment, runtime, and browser behavior; make the smallest reversible fix; return proof and rollback.
 - **Founder operating-system setup** — structure approvals, evidence, release gates, and cross-tool execution using the patterns proven across Founder Control Room and the wider portfolio.
 
