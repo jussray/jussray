@@ -1,0 +1,31 @@
+{
+  "schema": "jussco/ai-crawler-contract@v1",
+  "canonicalOrigin": "https://www.jussco.company",
+  "policy": {
+    "searchDiscovery": "allow",
+    "referenceUse": "allow_with_attribution",
+    "aiInput": "commercial_license_required",
+    "modelTraining": "commercial_license_required",
+    "bulkCollection": "commercial_license_required",
+    "datasetReuse": "commercial_license_required"
+  },
+  "licensing": {
+    "page": "https://www.jussco.company/licensing.html",
+    "manifest": "https://www.jussco.company/data/licensable-assets.json",
+    "contact": "founder@jussco.company"
+  },
+  "excludedData": [
+    "private-user-data",
+    "customer-data",
+    "child-or-teen-data",
+    "guardian-or-family-data",
+    "private-messages",
+    "auth-or-payment-data",
+    "credentials",
+    "private-analytics",
+    "internal-prompts",
+    "internal-receipts",
+    "unreleased-architecture"
+  ],
+  "authority": "Crawler and licensing metadata never grants authentication, deployment, publication, merge, payment, or mutation authority."
+}
