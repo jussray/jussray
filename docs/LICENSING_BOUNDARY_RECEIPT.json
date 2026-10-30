@@ -4,24 +4,30 @@
   "repository": "jussray/jussray",
   "branch": "feat/licensable-assets-boundary-20261030",
   "baseMainSha": "1ad6dd0b842e1052a532b59844f8fa7752ed70a1",
-  "candidateSourceHead": "1856fb3354b576cc15f598e13f06721a8c621f86",
-  "fingerprint": "sha256:2f3bd34084ff098c66a3acefd1987c84d24417656b380c7aa676d1f0a74dc423",
-  "continuityCookie": "jussco-licensing-boundary:2f3bd34084ff098c66a3acef",
-  "supersedesFingerprint": "sha256:c92217c13b8f6dd159e289b932472230d7526f02a6ced67c5035e4dbec14f2c0",
+  "candidateSourceHead": "089f29448b0682be9744b1416765de89af134725",
+  "fingerprint": "sha256:d43c3b687ce2a93703384e3328710800d1261f198a4036c5fd48af9afddc530c",
+  "continuityCookie": "jussco-licensing-boundary:d43c3b687ce2a93703384e33",
+  "supersedesFingerprint": "sha256:2f3bd34084ff098c66a3acefd1987c84d24417656b380c7aa676d1f0a74dc423",
   "coveredSourceRule": "The fingerprint covers the candidate source head and non-receipt source files listed below. The receipt commit itself is not part of the covered source set, so recording this receipt does not invalidate the covered source fingerprint.",
   "authorityNotice": "Fingerprint and continuity cookie preserve evidence continuity only. They do not grant merge, deploy, publication, payment, data-access, provider, or mutation authority.",
   "truth": {
     "sourceReadback": "VERIFIED",
-    "deterministicBoundaryChecks": "VERIFIED_22_OF_22",
+    "deterministicBoundaryChecks": "VERIFIED_24_OF_24",
     "playwrightSourceAndRequiredGate": "VERIFIED",
     "playwrightExecution": "NOT_RUN",
     "providerCI": "NOT_RUN",
     "cloudflarePayPerCrawl": "NOT_ENABLED",
     "deployment": "NOT_AUTHORIZED",
-    "productionRuntime": "NOT_VERIFIED"
+    "productionRuntime": "PRE_CANDIDATE_DEPLOYMENT_VERIFIED"
+  },
+  "providerReality": {
+    "cloudflareWorker": "jussray",
+    "latestObservedProductionDeploymentCreatedOn": "2026-10-29T19:50:35.683107Z",
+    "latestObservedProductionVersion": "c4506e8d-7fc4-4ebb-85a6-d385a2a2853e",
+    "conclusion": "The observed production deployment predates this licensing candidate. No claim is made that the candidate is deployed."
   },
   "diffAudit": {
-    "sourceBranchAheadOfBaseByCommits": 13,
+    "sourceBranchAheadOfBaseByCommits": 16,
     "sourceBranchBehindBaseByCommits": 0,
     "unexpectedChangedFiles": [],
     "intendedChangedFiles": [
@@ -32,6 +38,7 @@
       "site/_headers",
       "site/crawlers.json",
       "site/data/licensable-assets.json",
+      "site/index.html",
       "site/licensing.html",
       "site/llms.txt",
       "site/robots.txt",
@@ -39,7 +46,7 @@
     ]
   },
   "checks": {
-    "passed": 22,
+    "passed": 24,
     "failed": 0,
     "summary": [
       "sanitized export schema, fixed grain, six unique public records",
@@ -52,8 +59,10 @@
       "LLM discovery states public visibility is not a license grant",
       "API catalog and sitemap expose bounded public licensing surfaces",
       "licensing page has canonical URL, licensing CTA, and visible private-data exclusion",
+      "JussCo homepage exposes a restrained human licensing path beside existing contact actions",
       "existing required site-proof workflow invokes the licensing data-quality gate",
-      "existing required site-proof workflow invokes desktop/mobile Playwright licensing-page proof"
+      "existing required site-proof workflow invokes desktop/mobile Playwright licensing-page proof",
+      "Playwright source verifies the homepage-to-licensing path before testing the licensing page"
     ]
   },
   "sourceFiles": {
@@ -81,11 +90,14 @@
     "site/sitemap.xml": {
       "gitBlobSha": "608a7aa6cc25ee21bc9908d7fcd670be2d82a591"
     },
+    "site/index.html": {
+      "gitBlobSha": "c633ebcb4b9e6662529381698ecd0689db871015"
+    },
     "scripts/licensable-assets.test.mjs": {
       "gitBlobSha": "d843c44b110aeae4f83b40b12c4ebc5215174f51"
     },
     "scripts/verify-licensing-page.mjs": {
-      "gitBlobSha": "5d01a62982c0e74ed420ee871ad020e3679d5042"
+      "gitBlobSha": "814f181d792bf0938d1fddcda69ea6974520e022"
     },
     ".github/workflows/site-proof.yml": {
       "gitBlobSha": "9beac69874d843293278ac366c96334cc7c151b4"
