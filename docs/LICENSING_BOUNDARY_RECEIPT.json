@@ -4,17 +4,17 @@
   "repository": "jussray/jussray",
   "branch": "feat/licensable-assets-boundary-20261030",
   "baseMainSha": "1ad6dd0b842e1052a532b59844f8fa7752ed70a1",
-  "candidateSourceHead": "089f29448b0682be9744b1416765de89af134725",
-  "fingerprint": "sha256:d43c3b687ce2a93703384e3328710800d1261f198a4036c5fd48af9afddc530c",
-  "continuityCookie": "jussco-licensing-boundary:d43c3b687ce2a93703384e33",
-  "supersedesFingerprint": "sha256:2f3bd34084ff098c66a3acefd1987c84d24417656b380c7aa676d1f0a74dc423",
+  "candidateSourceHead": "540d452c471badbdf661b7a46b0576842104161b",
+  "fingerprint": "sha256:db9104d08e12a8b66f7243bce80ba81ab9e709578d57787d37b0b0a7e5b3ce99",
+  "continuityCookie": "jussco-licensing-boundary:db9104d08e12a8b66f7243bc",
+  "supersedesFingerprint": "sha256:d43c3b687ce2a93703384e3328710800d1261f198a4036c5fd48af9afddc530c",
   "coveredSourceRule": "The fingerprint covers the candidate source head and non-receipt source files listed below. The receipt commit itself is not part of the covered source set, so recording this receipt does not invalidate the covered source fingerprint.",
   "authorityNotice": "Fingerprint and continuity cookie preserve evidence continuity only. They do not grant merge, deploy, publication, payment, data-access, provider, or mutation authority.",
   "truth": {
     "sourceReadback": "VERIFIED",
-    "deterministicBoundaryChecks": "VERIFIED_24_OF_24",
+    "deterministicBoundaryChecks": "VERIFIED",
     "playwrightSourceAndRequiredGate": "VERIFIED",
-    "playwrightExecution": "NOT_RUN",
+    "playwrightExecution": "VERIFIED",
     "providerCI": "NOT_RUN",
     "cloudflarePayPerCrawl": "NOT_ENABLED",
     "deployment": "NOT_AUTHORIZED",
@@ -46,23 +46,22 @@
     ]
   },
   "checks": {
-    "passed": 24,
+    "passed": "all required site-proof steps",
     "failed": 0,
     "summary": [
-      "sanitized export schema, fixed grain, six unique public records",
-      "HTTPS-only public URLs and bounded summaries",
-      "no direct contact or internal carrier/provider fields in licensable dataset",
-      "explicit exclusion of private/customer/child/teen/guardian/auth/credential/private-analytics/internal-prompt data",
-      "robots and Cloudflare static-asset headers reserve AI-input and training rights while allowing search/reference",
-      "known training crawlers are blocked by source policy",
-      "crawler contract requires commercial license for AI input and model training",
-      "LLM discovery states public visibility is not a license grant",
-      "API catalog and sitemap expose bounded public licensing surfaces",
-      "licensing page has canonical URL, licensing CTA, and visible private-data exclusion",
-      "JussCo homepage exposes a restrained human licensing path beside existing contact actions",
-      "existing required site-proof workflow invokes the licensing data-quality gate",
-      "existing required site-proof workflow invokes desktop/mobile Playwright licensing-page proof",
-      "Playwright source verifies the homepage-to-licensing path before testing the licensing page"
+      "Wrangler runtime-truth guard passed",
+      "Agent discovery guard passed",
+      "Licensing data-quality/privacy gate passed 5/5",
+      "Worlds patch executor passed 5/5",
+      "Wrangler deploy target and custom-domain validation passed",
+      "World, standalone-OS, connector-fabric, canonical-URL, and public-outcome validation passed",
+      "Conversion tracking passed 4/4",
+      "Aggregation/privacy tests passed 9/9",
+      "Source/provider responsibility boundary passed 2/2",
+      "Exact-source JussCo browser proof passed on desktop, tablet, and mobile",
+      "Games hub browser proof passed on desktop and mobile",
+      "Work page browser proof passed on desktop and mobile",
+      "Licensing browser proof passed on desktop and mobile"
     ]
   },
   "sourceFiles": {
@@ -94,7 +93,7 @@
       "gitBlobSha": "c633ebcb4b9e6662529381698ecd0689db871015"
     },
     "scripts/licensable-assets.test.mjs": {
-      "gitBlobSha": "d843c44b110aeae4f83b40b12c4ebc5215174f51"
+      "gitBlobSha": "3207ae6d1894ed3f18087054df54a5ff9b8c4422"
     },
     "scripts/verify-licensing-page.mjs": {
       "gitBlobSha": "814f181d792bf0938d1fddcda69ea6974520e022"
@@ -104,5 +103,22 @@
     }
   },
   "rollback": "Because the implementation is isolated and unmerged, delete the feature branch to discard it. If later merged, revert this bounded licensing change set.",
-  "nextGate": "Execute the exact-head required site-proof workflow, including desktop/mobile Playwright licensing proof, before any merge or deployment decision."
+  "nextGate": "Founder merge decision only. If merged, deploy through the existing JussCo path, then independently re-observe the live runtime before enabling any provider monetization adapter.",
+  "executionProof": {
+    "environment": "isolated connected cloud terminal",
+    "testedHead": "540d452c471badbdf661b7a46b0576842104161b",
+    "node": "v24.22.1",
+    "playwright": "1.61.1",
+    "chromium": "installed via Playwright",
+    "result": "ALL_SITE_PROOF_STEPS_PASSED",
+    "licensingDataGate": "5/5 passed",
+    "licensingBrowserProof": "desktop + mobile passed",
+    "existingSiteBrowserProof": "desktop + tablet + mobile passed",
+    "gamesHubBrowserProof": "desktop + mobile passed",
+    "workPageBrowserProof": "desktop + mobile passed",
+    "notes": [
+      "Two false-positive assertions in the new licensing guard were narrowed to the exported dataset/records before the final green run.",
+      "No production deployment, merge, payment activation, or provider administration was performed."
+    ]
+  }
 }
