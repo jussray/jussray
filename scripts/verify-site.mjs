@@ -95,6 +95,15 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   say(/Juss Rayy/.test(await page.locator('.founder-line').innerText()) && /Full-Stack AI Systems Builder/.test(await page.locator('.founder-line').innerText()), `${vp.n}: visible founder identity`);
   say((await page.locator('a[href="/services.html"]').count()) >= 3, `${vp.n}: Work with Juss path linked from homepage`);
   say((await page.locator('a[href="/work.html"]').count()) >= 2, `${vp.n}: Selected Work path linked from homepage`);
+  const portfolioDownload = page.locator('#portfolioDownload');
+  say(await portfolioDownload.count() === 1, `${vp.n}: The Why has exactly one portfolio download button`);
+  say(await portfolioDownload.getAttribute('href') === 'https://github.com/jussray/jussray/raw/refs/heads/main/AI_EVALUATION_PORTFOLIO_PACKET.md' &&
+    await portfolioDownload.getAttribute('target') === '_blank' &&
+    (await portfolioDownload.getAttribute('rel'))?.split(/\s+/).includes('noopener') &&
+    (await portfolioDownload.getAttribute('rel'))?.split(/\s+/).includes('noreferrer'),
+    `${vp.n}: portfolio packet link opens in a safe new tab`);
+  say((await portfolioDownload.innerText()).includes('Download my portfolio packet') && await portfolioDownload.isVisible(),
+    `${vp.n}: portfolio download button is visible and accurately labeled`);
   const companyEmail=await page.locator('#mail').textContent();
   say(companyEmail==='founder@jussco.company' && (await page.locator('#mail').getAttribute('href'))==='mailto:'+companyEmail, `${vp.n}: company email text and mailto match business address`);
   const directory=page.locator('#projectContactDirectory');
