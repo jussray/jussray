@@ -1,0 +1,68 @@
+{
+  "schema": "jussco/licensing-boundary-receipt@v1",
+  "recordedAt": "2026-10-30",
+  "repository": "jussray/jussray",
+  "branch": "feat/licensable-assets-boundary-20261030",
+  "baseMainSha": "1ad6dd0b842e1052a532b59844f8fa7752ed70a1",
+  "candidateSourceHead": "6e89f5379c8a052f53ddea1711ae799e583934ea",
+  "fingerprint": "sha256:c92217c13b8f6dd159e289b932472230d7526f02a6ced67c5035e4dbec14f2c0",
+  "continuityCookie": "jussco-licensing-boundary:c92217c13b8f6dd159e289b9",
+  "authorityNotice": "Fingerprint and continuity cookie preserve evidence continuity only. They do not grant merge, deploy, publication, payment, data-access, or provider authority.",
+  "truth": {
+    "sourceReadback": "VERIFIED",
+    "deterministicBoundaryChecks": "VERIFIED",
+    "providerCI": "NOT_RUN",
+    "deployment": "NOT_AUTHORIZED",
+    "productionRuntime": "NOT_VERIFIED"
+  },
+  "checks": {
+    "total": 18,
+    "passed": 18,
+    "failed": 0,
+    "summary": [
+      "sanitized export schema and unique records",
+      "HTTPS-only public URLs and bounded summaries",
+      "no direct contact or internal carrier fields in dataset",
+      "explicit exclusion of private/customer/child/teen/guardian/auth/credential/private-analytics/internal-prompt data",
+      "robots and Cloudflare static-asset headers reserve AI-input and training rights",
+      "crawler contract requires commercial license for AI input/training",
+      "LLM discovery points to the sanitized licensing manifest and states public visibility is not a license grant",
+      "API catalog and sitemap expose only bounded public licensing surfaces",
+      "existing site-proof workflow invokes the licensing privacy gate"
+    ]
+  },
+  "sourceFiles": {
+    "site/data/licensable-assets.json": {
+      "gitBlobSha": "1db4bd6a102db784783fbd58cddd63c7b991325a"
+    },
+    "site/robots.txt": {
+      "gitBlobSha": "e4a5a23fa1f4833a4b0154158d40a0d98d684ec3"
+    },
+    "site/_headers": {
+      "gitBlobSha": "cc3ca991e4730ff220429532065695606ca66e68"
+    },
+    "site/llms.txt": {
+      "gitBlobSha": "f04531e920ca07f7d7f17adc68c77948c44f5b35"
+    },
+    "site/crawlers.json": {
+      "gitBlobSha": "36c5d060e142c1391e247029cc69a8db6ef77d0f"
+    },
+    "site/.well-known/api-catalog": {
+      "gitBlobSha": "2c66f5ed9425753be3583931b289a08fe68251ef"
+    },
+    "site/licensing.html": {
+      "gitBlobSha": "8fe79ce73ab671cf8d268a441c466aaee37ac971"
+    },
+    "site/sitemap.xml": {
+      "gitBlobSha": "608a7aa6cc25ee21bc9908d7fcd670be2d82a591"
+    },
+    "scripts/licensable-assets.test.mjs": {
+      "gitBlobSha": "d843c44b110aeae4f83b40b12c4ebc5215174f51"
+    },
+    ".github/workflows/site-proof.yml": {
+      "gitBlobSha": "15561a96d7637cb355674c8797ba274ce35413b9"
+    }
+  },
+  "rollback": "Because this work is isolated and unmerged, delete the feature branch to discard it. If later merged, revert the licensing-boundary commits as one bounded change set.",
+  "nextGate": "Run the repository's exact-head site-proof workflow and browser proof for this candidate before any merge or deployment decision."
+}
