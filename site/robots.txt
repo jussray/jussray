@@ -1,4 +1,35 @@
+# Juss & Co public discovery policy.
+# Search and attributed reference are welcome. Commercial AI ingestion,
+# training, bulk extraction, dataset reuse, and derivative use require
+# a separate written license.
+# robots.txt and Content-Signal express use policy; they are not authentication.
+
 User-agent: *
+Content-Signal: search=yes, ai-input=no, ai-train=no, use=reference
 Allow: /
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: Amazonbot
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
 
 Sitemap: https://www.jussco.company/sitemap.xml
