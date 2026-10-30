@@ -2,9 +2,9 @@ name: Juss & Co site browser proof
 on:
   push:
     branches: [main]
-    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/verify-approved-stories.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/conversion-receiver.test.mjs', 'scripts/conversion-client-first-party.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'scripts/site-proof-boundary.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', 'workers/**', 'wrangler.conversions.example.jsonc', '.github/workflows/site-proof.yml']
+    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/verify-approved-stories.mjs', 'scripts/licensable-assets.test.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/conversion-receiver.test.mjs', 'scripts/conversion-client-first-party.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'scripts/site-proof-boundary.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', 'workers/**', 'wrangler.conversions.example.jsonc', '.github/workflows/site-proof.yml']
   pull_request:
-    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/conversion-receiver.test.mjs', 'scripts/conversion-client-first-party.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'scripts/site-proof-boundary.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', 'workers/**', 'wrangler.conversions.example.jsonc', '.github/workflows/site-proof.yml']
+    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/licensable-assets.test.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/conversion-receiver.test.mjs', 'scripts/conversion-client-first-party.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'scripts/site-proof-boundary.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', 'workers/**', 'wrangler.conversions.example.jsonc', '.github/workflows/site-proof.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -24,6 +24,8 @@ jobs:
         run: node --test scripts/wrangler-runtime-truth.test.mjs
       - name: Agent discovery only points at shipped public files
         run: node --test scripts/agent-discovery.test.mjs
+      - name: Licensing export is sanitized and rights are reserved
+        run: node --test scripts/licensable-assets.test.mjs
       - name: Verify worlds-patch executor truth gates
         run: python3 tools/worlds-patch-executor/test_worlds_patch.py
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
@@ -32,13 +34,13 @@ jobs:
       - run: npm i --no-save --no-audit --no-fund playwright@1.61.1 && npx playwright install chromium --with-deps
       - run: node -e "const c=JSON.parse(require('fs').readFileSync('wrangler.jsonc','utf8')); const routes=c.routes||[]; const expected=['jussco.company','www.jussco.company']; const actual=routes.filter(r=>r?.custom_domain===true).map(r=>r.pattern).sort(); if(c.name!=='jussray'||c.assets?.directory!=='./site'||JSON.stringify(actual)!==JSON.stringify(expected)) process.exit(1); console.log('wrangler deploy target + custom domains valid')"
       - name: Validate world registry
-        run: node -e "const d=JSON.parse(require('fs').readFileSync('site/data/worlds.json','utf8')); const worlds=d.worlds||[]; const names=worlds.map(x=>x.name); const required=['Se\'kret Bip','Founder Control Room','Chief AI','Juss Beautiful Hair','StoryEngine','Sync Party','Bip Jr','PromptOS','SolContinuity','Untold Stories','SWEATS','SleepWealth Agent','Solwealth','Think Tank','Alexa Commerce Engine','Ayure']; if(d.registryVersion<3||new Set(names).size!==names.length||!required.every(x=>names.includes(x))) process.exit(1); console.log(names.length+'-world portfolio registry valid')"
+        run: node -e "const d=JSON.parse(require('fs').readFileSync('site/data/worlds.json','utf8')); const worlds=d.worlds||[]; const names=worlds.map(x=>x.name); const required=['Se\\'kret Bip','Founder Control Room','Chief AI','Juss Beautiful Hair','StoryEngine','Sync Party','Bip Jr','PromptOS','SolContinuity','Untold Stories','SWEATS','SleepWealth Agent','Solwealth','Think Tank','Alexa Commerce Engine','Ayure']; if(d.registryVersion<3||new Set(names).size!==names.length||!required.every(x=>names.includes(x))) process.exit(1); console.log(names.length+'-world portfolio registry valid')"
       - name: Validate standalone OS registry
         run: node -e "const d=JSON.parse(require('fs').readFileSync('site/data/systems.json','utf8')); const pub=(d.systems||[]).filter(x=>x.public!==false); const names=pub.map(x=>x.name); const expected=['Truth Weaver','Truth Compass','Exact Match Engine','Living Truth','Proof Core']; const internal=(d.systems||[]).filter(x=>x.public===false); if(JSON.stringify(names)!==JSON.stringify(expected)||!pub.every(x=>x.kind==='standalone_os')||!pub.every(x=>Array.isArray(x.embeddedIn)&&x.embeddedIn.length)||internal.length<2||!d.rules?.embeddedDoesNotMeanComponentOnly) process.exit(1); console.log('standalone OS registry + embedded relationships valid')"
       - name: Validate connector fabric registry
         run: node -e "const d=JSON.parse(require('fs').readFileSync('site/data/connectors.json','utf8')); const ids=(d.lanes||[]).map(x=>x.id); const expected=['exa','notion','linear','slack']; const systems=d.systems||{}; const publicSystems=['Truth Weaver','Truth Compass','Exact Match Engine','Living Truth','Proof Core']; const bindings=Object.values(systems).flatMap(x=>x.bindings||[]); if(JSON.stringify(ids)!==JSON.stringify(expected)||!publicSystems.every(n=>Array.isArray(systems[n]?.bindings)&&systems[n].bindings.length===4)||bindings.some(x=>x.state==='connected')) process.exit(1); console.log('connector fabric registry valid; no unproven connected state')"
       - name: Verify canonical public URL
-        run: node -e "const s=require('fs').readFileSync('site/index.html','utf8'); const good='<link rel=\"canonical\" href=\"https://www.jussco.company/\">'; const stale='https://jussray.github.io/jussray/'; if(!s.includes(good)||s.includes(stale)) process.exit(1); console.log('canonical Juss & Co URL valid')"
+        run: node -e "const s=require('fs').readFileSync('site/index.html','utf8'); const good='<link rel=\\\"canonical\\\" href=\\\"https://www.jussco.company/\\\">'; const stale='https://jussray.github.io/jussray/'; if(!s.includes(good)||s.includes(stale)) process.exit(1); console.log('canonical Juss & Co URL valid')"
       - name: Validate public outcome approval gate
         run: node scripts/verify-approved-stories.mjs
       - name: Test conversion tracking event and privacy contract
