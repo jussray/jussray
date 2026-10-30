@@ -1,5 +1,10 @@
 # Agent discovery: point crawlers and AI agents at the real, public,
 # read-only data feeds. Only list resources that exist in site/.
+# Content-Signal reserves generative ingestion/training rights while keeping
+# ordinary search and attributed reference discoverable.
+/*
+  Content-Signal: search=yes, ai-input=no, ai-train=no, use=reference
+
 /
   Link: </.well-known/api-catalog>; rel="api-catalog", </data/worlds.json>; rel="describedby"; type="application/json"
 
@@ -8,3 +13,12 @@
 
 /.well-known/api-catalog
   Content-Type: application/linkset+json
+
+/data/licensable-assets.json
+  Content-Type: application/json; charset=utf-8
+
+/crawlers.json
+  Content-Type: application/json; charset=utf-8
+
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
