@@ -47,7 +47,7 @@ test('licensable export has stable schema, grain and unique records', () => {
 test('licensable export contains no direct contact, credential or internal-carrier fields', () => {
   walk(manifest.dataset);
   assert.doesNotMatch(JSON.stringify(manifest.dataset), /mailto:|@[a-z0-9.-]+\.[a-z]{2,}/i);
-  assert.doesNotMatch(serialized, /private repo|private carrier|projectid|appid|builder preview/i);
+  assert.doesNotMatch(JSON.stringify(records), /private repo|private carrier|projectid|appid|builder preview/i);
 });
 
 test('excluded data classes explicitly cover private and child-family data', () => {
