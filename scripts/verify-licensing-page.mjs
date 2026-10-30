@@ -47,6 +47,9 @@ for (const vp of [
   const errors = [];
   page.on('pageerror', (e) => errors.push(String(e)));
   page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
+  const home = await page.goto(base, { waitUntil: 'load' });
+  say(home?.status() === 200, 'licensing: ' + vp.name + ' homepage responds 200');
+  say((await page.locator('a[href="/licensing.html"]').count()) === 1, 'licensing: ' + vp.name + ' homepage exposes licensing path');
   const response = await page.goto(base + 'licensing.html', { waitUntil: 'load' });
   say(response?.status() === 200, 'licensing: ' + vp.name + ' responds 200');
   say((await page.title()) === 'Data & AI Licensing | Juss & Co', 'licensing: ' + vp.name + ' title');
