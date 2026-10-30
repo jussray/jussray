@@ -1,0 +1,92 @@
+{
+  "schema": "jussco/licensable-assets@v1",
+  "updatedAt": "2026-10-30",
+  "canonicalOrigin": "https://www.jussco.company",
+  "licenseContact": "founder@jussco.company",
+  "policy": {
+    "publicDiscovery": "allowed",
+    "searchIndexing": "allowed",
+    "referenceUse": "allowed_with_attribution",
+    "aiInput": "commercial_license_required",
+    "aiTraining": "commercial_license_required",
+    "bulkExtraction": "commercial_license_required",
+    "datasetReuse": "commercial_license_required",
+    "derivativeOrCompetingUse": "commercial_license_required"
+  },
+  "excludedData": [
+    "private user or customer records",
+    "child, teen, guardian, family, or private-message data",
+    "authentication, security, payment, or credential records",
+    "private analytics or behavioral telemetry",
+    "internal prompts, safety thresholds, receipts, or unreleased architecture"
+  ],
+  "dataset": {
+    "id": "jussco-public-product-catalog-v1",
+    "title": "Juss & Co public product catalog",
+    "grain": "one public Juss & Co product or public-facing system per record",
+    "description": "Sanitized first-party metadata prepared for licensing discussions. This export intentionally omits contacts, private carrier references, builder IDs, internal receipts, user data, and unreleased architecture.",
+    "records": [
+      {
+        "id": "sekret-bip",
+        "name": "Se'kret Bip",
+        "kind": "product",
+        "category": "People & belonging",
+        "status": "Opening soon",
+        "publicUrl": "https://sekretbip.net",
+        "summary": "Privacy-first teen and family product focused on emotional growth, self-expression, and intentional family support.",
+        "provenance": "jussray/Sekret-Bip"
+      },
+      {
+        "id": "founder-control-room",
+        "name": "Founder Control Room",
+        "kind": "system",
+        "category": "Ideas & systems",
+        "status": "Building",
+        "publicUrl": "https://foundercontrolroom.org",
+        "summary": "Founder operating platform for governed actions, approvals, evidence, release control, and rollback.",
+        "provenance": "jussray/founder-control-room"
+      },
+      {
+        "id": "juss-beautiful-hair",
+        "name": "Juss Beautiful Hair",
+        "kind": "commerce",
+        "category": "People & belonging",
+        "status": "Store open",
+        "publicUrl": "https://jussbeautifulhair.com",
+        "summary": "Independent hair-commerce storefront with a public catalog and direct customer shopping experience.",
+        "provenance": "jussray/jussbeautifulhair-site"
+      },
+      {
+        "id": "sync-party",
+        "name": "SYNC Party",
+        "kind": "game",
+        "category": "Stories & play",
+        "status": "Live",
+        "publicUrl": "https://sync.jussco.company/",
+        "summary": "Real-time social party game designed for shared play and conversation.",
+        "provenance": "jussray/sync-party-game"
+      },
+      {
+        "id": "promptos",
+        "name": "PromptOS",
+        "kind": "system",
+        "category": "Ideas & systems",
+        "status": "Building",
+        "publicUrl": "https://github.com/jussray/promptos",
+        "summary": "Prompt, skill, instruction, and mission operating system for turning founder intent into bounded reusable workflows.",
+        "provenance": "jussray/promptos"
+      },
+      {
+        "id": "truth-weaver",
+        "name": "Truth Weaver",
+        "kind": "product",
+        "category": "Ideas & systems",
+        "status": "Published",
+        "publicUrl": "https://truthweaver.jussco.company",
+        "summary": "Legal-navigation and notice-research product for organizing legal questions, jurisdiction, official-source research, dates, and uncertainty.",
+        "provenance": "jussray/truth-weaver"
+      }
+    ]
+  },
+  "notice": "This manifest identifies material that may be discussed for commercial licensing. It is not itself a license grant. Written agreement is required for AI training, AI-input ingestion, bulk extraction, dataset reuse, or derivative and competing uses."
+}
