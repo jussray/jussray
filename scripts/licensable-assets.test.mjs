@@ -57,7 +57,7 @@ test('excluded data classes explicitly cover private and child-family data', () 
   }
 });
 
-test('crawler signals permit search/reference while reserving AI ingestion and training', () => {
+test('crawler signals permit search and attributed AI input while reserving model training', () => {
   const signal = /Content-Signal:\s*search=yes,\s*ai-input=yes,\s*ai-train=no,\s*use=reference/i;
   assert.match(robots, signal);
   assert.match(headers, signal);
