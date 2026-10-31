@@ -7,7 +7,7 @@
     "publicDiscovery": "allowed",
     "searchIndexing": "allowed",
     "referenceUse": "allowed_with_attribution",
-    "aiInput": "commercial_license_required",
+    "aiInput": "allowed_with_attribution",
     "aiTraining": "commercial_license_required",
     "bulkExtraction": "commercial_license_required",
     "datasetReuse": "commercial_license_required",
@@ -88,5 +88,5 @@
       }
     ]
   },
-  "notice": "This manifest identifies material that may be discussed for commercial licensing. It is not itself a license grant. Written agreement is required for AI training, AI-input ingestion, bulk extraction, dataset reuse, or derivative and competing uses."
+  "notice": "This manifest identifies material that may be discussed for commercial licensing. It is not itself a license grant. Query-time AI answers and attributed references are allowed; a written agreement is required for AI training, fine-tuning, bulk extraction, dataset reuse, or derivative and competing uses."
 }

@@ -7,8 +7,8 @@ Licensing contact: founder@jussco.company
 
 ## Public-use policy
 
-Search indexing, linking, and short attributed reference excerpts are allowed.
-AI-model training, fine-tuning, bulk extraction, dataset reuse, generative AI ingestion, reproduction, and derivative or competing use require a separate written commercial license.
+Search indexing, linking, short attributed excerpts, and query-time AI answers grounded in these public pages are allowed.
+AI-model training, fine-tuning, bulk extraction, dataset reuse, reproduction, and derivative or competing use require a separate written commercial license.
 
 Public visibility is not a license grant.
 

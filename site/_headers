@@ -1,9 +1,9 @@
 # Agent discovery: point crawlers and AI agents at the real, public,
 # read-only data feeds. Only list resources that exist in site/.
-# Content-Signal reserves generative ingestion/training rights while keeping
-# ordinary search and attributed reference discoverable.
+# Content-Signal permits attributed query-time AI use while reserving
+# model training, bulk exports, and other separately licensed rights.
 /*
-  Content-Signal: search=yes, ai-input=no, ai-train=no, use=reference
+  Content-Signal: search=yes, ai-input=yes, ai-train=no, use=reference
 
 /
   Link: </.well-known/api-catalog>; rel="api-catalog", </data/worlds.json>; rel="describedby"; type="application/json"

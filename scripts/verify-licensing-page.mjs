@@ -58,6 +58,9 @@ for (const vp of [
   const body = (await page.locator('body').innerText()).toLowerCase();
   say(body.includes('never included') && body.includes('private user or customer records') && body.includes('child or teen data'), 'licensing: ' + vp.name + ' private-data exclusion visible');
   say(body.includes('public access is not a blanket license') && body.includes('written commercial permission'), 'licensing: ' + vp.name + ' rights boundary visible');
+  say(body.includes('search and ai answers stay open') && body.includes('fine-tuning'), 'licensing: ' + vp.name + ' search vs training distinction visible');
+  say((await page.locator('a.cta').innerText()).trim() === 'Request an AI Training License', 'licensing: ' + vp.name + ' request-only CTA');
+  say(body.includes('no checkout is active') && (await page.locator('a[href*="stripe.com"],a[href*="shopify.com"]').count()) === 0, 'licensing: ' + vp.name + ' no purchase link');
   say((await page.locator('a[href="/data/licensable-assets.json"]').count()) === 1 &&
       (await page.locator('a[href="/llms.txt"]').count()) === 1 &&
       (await page.locator('a[href="/crawlers.json"]').count()) === 1, 'licensing: ' + vp.name + ' machine-readable policy links');

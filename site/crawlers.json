@@ -4,7 +4,7 @@
   "policy": {
     "searchDiscovery": "allow",
     "referenceUse": "allow_with_attribution",
-    "aiInput": "commercial_license_required",
+    "aiInput": "allow_with_attribution",
     "modelTraining": "commercial_license_required",
     "bulkCollection": "commercial_license_required",
     "datasetReuse": "commercial_license_required"

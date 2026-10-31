@@ -58,11 +58,13 @@ test('excluded data classes explicitly cover private and child-family data', () 
 });
 
 test('crawler signals permit search/reference while reserving AI ingestion and training', () => {
-  const signal = /Content-Signal:\s*search=yes,\s*ai-input=no,\s*ai-train=no,\s*use=reference/i;
+  const signal = /Content-Signal:\s*search=yes,\s*ai-input=yes,\s*ai-train=no,\s*use=reference/i;
   assert.match(robots, signal);
   assert.match(headers, signal);
   assert.equal(crawlers.policy.searchDiscovery, 'allow');
-  assert.equal(crawlers.policy.aiInput, 'commercial_license_required');
+  assert.equal(crawlers.policy.aiInput, 'allow_with_attribution');
+  assert.equal(manifest.policy.aiInput, 'allowed_with_attribution');
+  assert.equal(manifest.policy.aiTraining, 'commercial_license_required');
   assert.equal(crawlers.policy.modelTraining, 'commercial_license_required');
 });
 
