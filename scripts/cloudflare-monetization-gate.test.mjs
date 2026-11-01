@@ -13,7 +13,8 @@ test('JussCo max-priced x402 offer stays within documented token precision and c
   assert.equal(plan.gateway.proposedScheme, 'exact');
   assert.equal(plan.gateway.proposedPriceUSD, '100.00');
   assert.equal(plan.gateway.proposedPriceAtomicUnits, '100000000');
-  assert.equal(BigInt(plan.gateway.proposedPriceAtomicUnits), BigInt(plan.gateway.proposedPriceUSD.replace('.', '').padEnd(8, '0')) / 100n);
+  const [whole, fraction] = plan.gateway.proposedPriceUSD.split('.');
+  assert.equal(BigInt(plan.gateway.proposedPriceAtomicUnits), BigInt(whole) * 1000000n + BigInt(fraction.padEnd(6, '0')));
   assert.equal(wrangler.name, 'jussray');
   assert.equal(wrangler.assets.directory, './site');
 });
