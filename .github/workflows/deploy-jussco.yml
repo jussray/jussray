@@ -1,0 +1,75 @@
+name: Juss & Co Cloudflare release
+on:
+  workflow_run:
+    workflows: ['Juss & Co site browser proof']
+    types: [completed]
+
+permissions:
+  contents: read
+  checks: read
+  actions: read
+
+concurrency:
+  group: jussco-production-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: exact-head-cloudflare-release
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' && github.event.workflow_run.head_repository.full_name == github.repository }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: jussco-production
+    env:
+      TARGET_SHA: ${{ github.event.workflow_run.head_sha }}
+      GH_TOKEN: ${{ github.token }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+    steps:
+      - name: Exact-head checkout; no persisted GitHub credentials
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ env.TARGET_SHA }}
+          persist-credentials: false
+      - name: Stop if main moved or any observed check is red, pending, or missing
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$TARGET_SHA"
+          latest="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq '.object.sha')"
+          test "$TARGET_SHA" = "$latest"
+          gh api "repos/$GITHUB_REPOSITORY/commits/$TARGET_SHA/check-runs?per_page=100" > check-runs.json
+          python3 - <<'PY'
+          import json, os, sys
+          d=json.load(open('check-runs.json'))
+          checks=d.get('check_runs', [])
+          if d.get('total_count', 0)>len(checks):
+              sys.exit('BLOCKED: check runs pagination incomplete; no automatic deployment')
+          own_run='/actions/runs/'+os.environ['GITHUB_RUN_ID']+'/'
+          checks=[c for c in checks if own_run not in (c.get('details_url') or '')]
+          if not checks:
+              sys.exit('BLOCKED: no completed exact-head check runs')
+          latest={}
+          for check in sorted(checks, key=lambda c: c.get('started_at') or ''):
+              latest[check['name']]=check
+          bad=[name for name,c in latest.items() if c.get('status')!='completed' or c.get('conclusion')!='success']
+          if bad:
+              sys.exit('BLOCKED: non-green exact-head checks: '+', '.join(bad))
+          print('Exact main SHA and all visible checks green:', os.environ['TARGET_SHA'])
+          PY
+          rm check-runs.json
+      - name: Require scoped Cloudflare deployment credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$CLOUDFLARE_API_TOKEN" || { echo 'BLOCKED: missing CLOUDFLARE_API_TOKEN'; exit 1; }
+          test -n "$CLOUDFLARE_ACCOUNT_ID" || { echo 'BLOCKED: missing CLOUDFLARE_ACCOUNT_ID'; exit 1; }
+      - name: Deploy first-party public evidence API (no private data)
+        run: npx --yes wrangler@4 deploy --config wrangler.evidence.jsonc
+      - name: Deploy canonical Juss & Co static assets
+        run: npx --yes wrangler@4 deploy --config wrangler.jsonc
+      - name: Source SHA and deployment action receipt
+        shell: bash
+        run: |
+          echo "Deployment attempted from exact main SHA: $TARGET_SHA" >> "$GITHUB_STEP_SUMMARY"
+          echo "Public provider readback is a separate post-release witness." >> "$GITHUB_STEP_SUMMARY"
