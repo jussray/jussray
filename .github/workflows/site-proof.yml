@@ -2,9 +2,9 @@ name: Juss & Co site browser proof
 on:
   push:
     branches: [main]
-    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/verify-approved-stories.mjs', 'scripts/licensable-assets.test.mjs', 'scripts/verify-licensing-page.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/conversion-receiver.test.mjs', 'scripts/conversion-client-first-party.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'scripts/site-proof-boundary.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', 'workers/**', 'wrangler.conversions.example.jsonc', '.github/workflows/site-proof.yml']
+    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/dynamic-portfolio.test.mjs', 'scripts/verify-approved-stories.mjs', 'scripts/licensable-assets.test.mjs', 'scripts/verify-licensing-page.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/conversion-receiver.test.mjs', 'scripts/conversion-client-first-party.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'scripts/site-proof-boundary.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', 'workers/**', 'wrangler.conversions.example.jsonc', '.github/workflows/site-proof.yml']
   pull_request:
-    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/licensable-assets.test.mjs', 'scripts/verify-licensing-page.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/conversion-receiver.test.mjs', 'scripts/conversion-client-first-party.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'scripts/site-proof-boundary.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', 'workers/**', 'wrangler.conversions.example.jsonc', '.github/workflows/site-proof.yml']
+    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/dynamic-portfolio.test.mjs', 'scripts/licensable-assets.test.mjs', 'scripts/verify-licensing-page.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/conversion-receiver.test.mjs', 'scripts/conversion-client-first-party.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'scripts/site-proof-boundary.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', 'workers/**', 'wrangler.conversions.example.jsonc', '.github/workflows/site-proof.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -26,6 +26,8 @@ jobs:
         run: node --test scripts/agent-discovery.test.mjs
       - name: Licensing export is sanitized and rights are reserved
         run: node --test scripts/licensable-assets.test.mjs
+      - name: Verify dynamic public evidence and release gates
+        run: node --test scripts/dynamic-portfolio.test.mjs
       - name: Verify worlds-patch executor truth gates
         run: python3 tools/worlds-patch-executor/test_worlds_patch.py
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
