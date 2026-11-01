@@ -38,9 +38,9 @@ export function verifyWorldRegistry(raw) {
   const parsed = JSON.parse(raw);
   const bip = parsed.worlds?.find(x => x.name === "Se'kret Bip");
   if (!bip || bip.st !== 'soon' || bip.label !== 'Opening soon' ||
-      bip.held !== 'Opening soon · no public link yet' ||
-      bip.contact?.site !== 'https://sekretbip.net' || bip.link?.url) {
-    throw new Error('Se\'kret Bip must remain a clearly gated upcoming product');
+      bip.contact?.site !== 'https://sekretbip.net' ||
+      bip.link?.url !== 'https://sekretbip.net') {
+    throw new Error('Se\'kret Bip must remain labeled upcoming while its public preview is accessible');
   }
 }
 
@@ -48,8 +48,8 @@ export function verifySiteMarkdown(content) {
   if (typeof content !== 'string' || !content.includes('Turn thoughts into living works.') || !content.includes("### Se'kret Bip")) {
     throw new Error('Rendered Juss & Co. site markers missing');
   }
-  if (!content.includes('Opening soon · no public link yet')) {
-    throw new Error('Se\'kret Bip must not claim a public live preview');
+  if (!content.includes('Opening soon')) {
+    throw new Error('Se\'kret Bip must retain its upcoming product label');
   }
   if (!content.includes(COMPANY_QR_LABEL) || !content.includes('www.jussco.company')) {
     throw new Error('Canonical company QR destination missing from live homepage');
@@ -103,8 +103,8 @@ export function verifyReceiverHealthHtml(content) {
 
 export function assertReleaseContext(env) {
   if (env.GITHUB_REF !== 'refs/heads/main' ||
-      !['push', 'workflow_dispatch'].includes(env.GITHUB_EVENT_NAME)) {
-    throw new Error('Independent production witness runs only after main push or manual main dispatch');
+      !['workflow_run', 'workflow_dispatch'].includes(env.GITHUB_EVENT_NAME)) {
+    throw new Error('Independent production witness runs only after main release or manual main dispatch');
   }
   return true;
 }
