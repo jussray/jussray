@@ -57,7 +57,19 @@ jobs:
               sys.exit('BLOCKED: non-green exact-head checks: '+', '.join(bad))
           print('Exact main SHA and all visible checks green:', os.environ['TARGET_SHA'])
           PY
-          rm check-runs.json
+          # Commit status contexts from external providers are a separate evidence plane.
+          gh api "repos/$GITHUB_REPOSITORY/commits/$TARGET_SHA/status" > commit-status.json
+          python3 - <<'PY'
+          import json,sys
+          state=json.load(open('commit-status.json'))
+          if state.get('total_count', 0) and state.get('state') != 'success':
+              sys.exit('BLOCKED: non-green commit status contexts')
+          PY
+          rm check-runs.json commit-status.json
+      - name: Set up Node for Wrangler
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
       - name: Require scoped Cloudflare deployment credentials
         shell: bash
         run: |
