@@ -42,10 +42,13 @@ test("current homepage does not promote code activity into product launch claims
   assert.doesNotMatch(page, /Store open · awaiting first order/);
   assert.match(page, /Registry snapshot/);
 });
-test("registry contains no invented evidence or unverified order claim", () => {
+test("registry accepts only bounded source observations, never product or order claims", () => {
   const data = JSON.parse(read("site/data/worlds.json"));
   assert.equal(data.worlds.length, 16);
-  assert.equal(data.worlds.every(w => !w.evidence || Object.keys(w.evidence).length === 0), true);
+  assert.equal(data.worlds.every(w => !w.evidence || Object.keys(w.evidence).length === 0 ||
+    (w.evidence.contract === "juss/fcr-portfolio-evidence@v1" &&
+      w.evidence.authority === "observation-only" &&
+      !("launchStatus" in w.evidence) && !("purchaseCount" in w.evidence))), true);
   assert.equal(data.worlds.find(w => w.name === "Juss Beautiful Hair").label.includes("awaiting first order"), false);
 });
 test("Cloudflare deployment is gated by exact-head site proof and no red checks", () => {
