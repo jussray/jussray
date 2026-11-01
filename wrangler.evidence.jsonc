@@ -1,0 +1,10 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "jussco-public-evidence",
+  "main": "workers/public-evidence.mjs",
+  "compatibility_date": "2026-10-01",
+  "routes": [
+    { "pattern": "www.jussco.company/api/public-evidence", "zone_name": "jussco.company" },
+    { "pattern": "jussco.company/api/public-evidence", "zone_name": "jussco.company" }
+  ]
+}
