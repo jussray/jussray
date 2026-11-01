@@ -1,7 +1,8 @@
 name: Juss & Co site browser proof
 on:
   push:
-    branches: [main]
+    # Existing licensing branch needs exact-head CI without a new pull request.
+    branches: [main, 'feat/licensable-assets-boundary-20261030']
     paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/verify-approved-stories.mjs', 'scripts/licensable-assets.test.mjs', 'scripts/verify-licensing-page.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/conversion-receiver.test.mjs', 'scripts/conversion-client-first-party.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'scripts/site-proof-boundary.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', 'workers/**', 'wrangler.conversions.example.jsonc', '.github/workflows/site-proof.yml']
   pull_request:
     paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/licensable-assets.test.mjs', 'scripts/verify-licensing-page.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/conversion-receiver.test.mjs', 'scripts/conversion-client-first-party.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'scripts/site-proof-boundary.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', 'workers/**', 'wrangler.conversions.example.jsonc', '.github/workflows/site-proof.yml']
