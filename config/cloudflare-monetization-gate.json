@@ -1,0 +1,53 @@
+{
+  "schema": "jussco/cloudflare-monetization-gate@v1",
+  "recordedAt": "2026-10-31",
+  "status": "HELD_NOT_LIVE",
+  "scope": {
+    "repository": "jussray/jussray",
+    "zone": "jussco.company",
+    "cloudflareWorker": "jussray"
+  },
+  "gateway": {
+    "enabled": false,
+    "proposedScheme": "exact",
+    "proposedPriceUSD": "100.00",
+    "proposedPriceAtomicUnits": "100000000",
+    "receivingWallet": null,
+    "premiumResourceUrls": [],
+    "candidateRules": [],
+    "releaseGates": {
+      "sellerAndZoneEligibility": "UNVERIFIED",
+      "licensedResourceOwnership": "UNVERIFIED",
+      "namedPremiumResources": "NOT_IMPLEMENTED",
+      "receivingWalletOwnership": "UNVERIFIED",
+      "signedPaymentContextJWTAtOrigin": "NOT_IMPLEMENTED",
+      "endToEndPaidAndUnpaidTests": "NOT_RUN",
+      "founderReleaseAuthorization": "NOT_GRANTED"
+    }
+  },
+  "payPerCrawl": {
+    "enabled": false,
+    "priceUSD": null,
+    "dynamicPricing": false,
+    "selectedCrawlerActions": [],
+    "publicDiscoveryFree": true
+  },
+  "enterpriseTraining": {
+    "testMonthlyPriceUSD": "1500.00",
+    "checkoutEnabled": false,
+    "signedLicenseRequired": true,
+    "privateDataIncluded": false
+  },
+  "publicNeverCharge": [
+    "/",
+    "/index.html",
+    "/licensing.html",
+    "/robots.txt",
+    "/sitemap.xml",
+    "/llms.txt",
+    "/crawlers.json",
+    "/data/licensable-assets.json",
+    "/.well-known/api-catalog"
+  ],
+  "authority": "This is non-executable, repository-only intent. Do not PUT it to Cloudflare or interpret it as a verified provider state. No payment rule may be enabled without every release gate independently verified, a real premium origin, and explicit release authorization."
+}
