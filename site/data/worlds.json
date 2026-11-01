@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-29T19:30:00Z",
-  "source": "founder-declared portfolio worlds + builder/repository carriers; evidence fields remain FCR-owned",
+  "generatedAt": "2026-11-01T19:20:00Z",
+  "source": "Founder-declared public registry snapshot. Public GitHub source activity is separately fetched, and does not authorize status or customer outcome changes.",
   "worlds": [
     {
       "name": "Se'kret Bip",
@@ -15,7 +15,19 @@
       },
       "evidence": {},
       "display": {
-        "group": "People & belonging"
+        "group": "People & belonging",
+        "desc": "Teen-first journaling, creative expression and companion experiences under development.",
+        "blurb": "Public preview information is available; member journeys and production readiness require separate verification.",
+        "facts": [
+          [
+            "Public front door",
+            "sekretbip.net"
+          ],
+          [
+            "Member journeys",
+            "Not independently verified by this portfolio registry"
+          ]
+        ]
       },
       "carriers": [
         {
@@ -54,7 +66,19 @@
       },
       "evidence": {},
       "display": {
-        "group": "Ideas & systems"
+        "group": "Ideas & systems",
+        "desc": "Founder-controlled workflows for decisions, approvals and evidence.",
+        "blurb": "The public front door is listed. Sign-in and private operating features require current independent verification.",
+        "facts": [
+          [
+            "Public front door",
+            "foundercontrolroom.org"
+          ],
+          [
+            "Private workspace",
+            "Access and runtime behavior separately verified"
+          ]
+        ]
       },
       "carriers": [
         {
@@ -80,7 +104,19 @@
       },
       "evidence": {},
       "display": {
-        "group": "Ideas & systems"
+        "group": "Ideas & systems",
+        "desc": "Founder-intelligence tooling with bounded capabilities and evidence trails.",
+        "blurb": "Source development and public front doors are distinct from verified end-to-end capability.",
+        "facts": [
+          [
+            "Source",
+            "Public GitHub repository"
+          ],
+          [
+            "Capability",
+            "Production behavior must be tested independently"
+          ]
+        ]
       },
       "carriers": [
         {
@@ -95,7 +131,7 @@
       "name": "Juss Beautiful Hair",
       "repo": "jussray/jussbeautifulhair-site",
       "st": "progress",
-      "label": "Store open · awaiting first order",
+      "label": "Storefront listed · orders unverified",
       "link": {
         "text": "Shop the store",
         "url": "https://jussbeautifulhair.com"
@@ -109,7 +145,23 @@
       },
       "evidence": {},
       "display": {
-        "group": "People & belonging"
+        "group": "People & belonging",
+        "desc": "Independent Juss Beautiful Hair storefront.",
+        "blurb": "Storefront information is public. Successful checkout, order fulfillment and revenue are separate verification steps.",
+        "facts": [
+          [
+            "Store",
+            "jussbeautifulhair.com"
+          ],
+          [
+            "Orders",
+            "Not verified by this portfolio site"
+          ],
+          [
+            "Checkout",
+            "Requires live transaction-path evidence"
+          ]
+        ]
       },
       "carriers": [
         {
@@ -151,7 +203,19 @@
       },
       "evidence": {},
       "display": {
-        "group": "Stories & play"
+        "group": "Stories & play",
+        "desc": "Creator tools for writing, media and publishing.",
+        "blurb": "Source is in development; a deployed page does not establish all publishing flows as ready.",
+        "facts": [
+          [
+            "Source",
+            "Public GitHub repository"
+          ],
+          [
+            "Product release",
+            "Not verified by this portfolio registry"
+          ]
+        ]
       },
       "carriers": [
         {
@@ -173,7 +237,19 @@
       },
       "evidence": {},
       "display": {
-        "group": "Stories & play"
+        "group": "Stories & play",
+        "desc": "Party-game experience for answering together and comparing responses.",
+        "blurb": "The public game route exists; full multi-user rounds are separately verified.",
+        "facts": [
+          [
+            "Public route",
+            "sync.jussco.company"
+          ],
+          [
+            "Multiplayer",
+            "End-to-end game round not verified by this portfolio registry"
+          ]
+        ]
       },
       "carriers": [
         {
