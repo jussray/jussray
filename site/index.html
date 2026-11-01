@@ -509,9 +509,9 @@ h1,h2,h3{text-wrap:balance}
       </div>
     </div>
 
-    <div class="receipts" aria-label="Latest real receipts">
-      <div class="rc"><span class="badge s-live">Verified live</span><span>Juss Beautiful Hair, truthful product copy: PR #115 → main <code>2e79aaa</code>, redeployed 49 s after merge, 29 Sep.</span></div>
-      <div class="rc"><span class="badge s-building">Merged</span><span>Founder Control Room, cinematic Founder Home: PR #900 → main <code>2502a86</code>, 56/56 browser checks. Live serve not yet verified.</span></div>
+    <div class="receipts" aria-label="Public evidence boundaries">
+      <div class="rc"><span class="badge s-building">Evidence</span><span>A public storefront is not proof of a paid order or completed fulfillment.</span></div>
+      <div class="rc"><span class="badge s-building">Verification</span><span>Commits, passing source tests and live customer outcomes are separate evidence.</span></div>
     </div>
   </div>
 </section>
@@ -580,7 +580,7 @@ h1,h2,h3{text-wrap:balance}
   "use strict";
   var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* ---------- worlds: real state as of 30 Sep 2026 ---------- */
+  /* ---------- public fallback; latest authored registry controls rendered claims ---------- */
   var WORLDS = [
     {name:"Se'kret Bip", group:"People & belonging", st:"soon", label:"Opening soon", w:"#B86BFF", img:"assets/w-bip.jpg",
      alt:"A teen girl in a purple hoodie lies on her bed at night, smiling at her phone while a soft cloud companion floats beside her",
@@ -592,31 +592,31 @@ h1,h2,h3{text-wrap:balance}
      alt:"A founder seen from behind at a desk of glowing monitors, a sunset over mountains and a city beyond the window",
      desc:"A system to turn ideas into products, proof and long-term impact.", tags:["Productivity","AI","Founder tools"],
      tag:"The founder operating environment.", blurb:"Agents propose, the founder approves, and every change leaves a receipt. Same truth, higher outcomes.",
-     facts:[["Merged #900","Cinematic Founder Home, 56 of 56 browser checks"],["Merged #902","Capability market fed from relay receipts"],["Not yet live","API deploy pending, so sign-in is offline"]],
+     facts:[["Public front door","foundercontrolroom.org"],["Private workspace","Sign-in and member behavior require current verification"]],
      link:["Follow the build","https://github.com/jussray/founder-control-room"]},
     {name:"Chief AI", group:"Ideas & systems", st:"progress", label:"In progress", w:"#5EA8FF", img:"assets/w-chief.jpg",
      alt:"Profile of a woman lit by violet circuitry and light, eyes forward",
      desc:"A founder intelligence partner that helps you think bigger and build faster.", tags:["AI agents","Automation","Intelligence"],
      tag:"Intent → bounded execution → evidence.", blurb:"The intelligence partner that starts with one question: what are you trying to move forward?",
-     facts:[["Runtime","Deployed on Cloudflare Workers"],["Merged #142","MCP identity surface and credential membrane"],["Role","Defines intent; Control Room governs the doing"]],
+     facts:[["Source","Public GitHub repository"],["Runtime","Cloudflare configuration and application behavior are separate evidence"],["Role","Founder intelligence system"]],
      link:["Follow the build","https://github.com/jussray/chief-ai-machine"]},
-    {name:"Juss Beautiful Hair", group:"People & belonging", st:"progress", label:"Store open · awaiting first order", w:"#FF4FB8", img:"assets/w-jbh.jpg",
+    {name:"Juss Beautiful Hair", group:"People & belonging", st:"progress", label:"Storefront listed · orders unverified", w:"#FF4FB8", img:"assets/w-jbh.jpg",
      alt:"A woman with long curly hair in warm light, hand at her cheek, confident and relaxed",
      desc:"Premium hair for real people. Confidence, culture and care.", tags:["Beauty","Commerce","Community"],
      tag:"Beauty commerce, built to convert.", blurb:"Curated human hair bundles, closures and frontals, shipped to your door.",
-     facts:[["Store","jussbeautifulhair.com"],["Claims audited","Unproven hair claims removed (#115, 29 Sep)"],["Checkout","Exact-head checkout gate passed in a real browser"]],
+     facts:[["Store","jussbeautifulhair.com"],["Orders","Not verified by the company catalog"],["Checkout","Live purchase flow needs independent proof"]],
      link:["Shop the store","https://jussbeautifulhair.com"]},
     {name:"StoryEngine", group:"Stories & play", st:"building", label:"Building", w:"#F5C14B", img:"assets/w-story.jpg",
      alt:"Silhouette of a filmmaker behind a camera rig against a violet sunset city",
      desc:"A media engine for real stories. Ideas to impact through content.", tags:["Media","Storytelling","Education"],
      tag:"Narrative, media and cinematic creation.", blurb:"Tools that turn ideas into stories you can watch, read and share.",
-     facts:[["Merged #122","Security fix on main"],["Live server","Waiting on redeploy to the latest main"]],
+     facts:[["Source","Public GitHub repository"],["Release","Deployment and publishing behavior need separate verification"]],
      held:"Coming soon · no public link yet"},
     {name:"Sync Party", group:"Stories & play", st:"live", label:"Live", w:"#3BE3FF", img:"assets/w-sync.jpg",
      alt:"Friends crowd around a tablet, laughing, neon reactions glowing around them",
      desc:"Get in sync. Play together. Real connection in a digital world.", tags:["Social","Games","Community"],
      tag:"Get in sync. Play together.", blurb:"A party game for friends in the same room: answer together and find out who is really in sync.",
-     facts:[["Live","Game runtime deployed 28 Sep; live per founder, 30 Sep"],["Stage","Public link being added"]],
+     facts:[["Public route","sync.jussco.company"],["Gameplay","Multiplayer rounds are not proven by a domain connection"]],
      held:"Live · link coming"}
   ];
 
@@ -651,12 +651,57 @@ h1,h2,h3{text-wrap:balance}
     box.hidden=ul.children.length===0;
   }
   function worldFromRegistry(L){var p=L.display||{};return{name:L.name,group:p.group||"Ideas & systems",st:L.st||"building",label:L.label||"Building",w:p.accent||"#8B5CF6",img:p.img||"assets/w-fcr.jpg",alt:p.alt||"",desc:p.desc||"",tags:Array.isArray(p.tags)?p.tags:[],tag:p.tag||"",blurb:p.blurb||p.desc||"",facts:Array.isArray(p.facts)?p.facts:[],held:L.held||"Tracked · no public link yet",link:(L.link&&L.link.url)?[L.link.text||"Open",L.link.url]:null};}
-  fetch("data/worlds.json",{cache:"no-store"}).then(function(r){return r.ok?r.json():null;}).then(function(d){
-    if(!d||!d.worlds)return;
-    d.worlds.forEach(function(L){LIVE[L.name]=L;var idx=WORLDS.findIndex(function(w){return w.name===L.name;});if(idx<0&&L.display){var added=worldFromRegistry(L);WORLDS.push(added);idx=WORLDS.length-1;renderWorldCard(added,idx);}if(idx<0)return;var w=WORLDS[idx];if(L.st&&L.label){w.st=L.st;w.label=L.label;var b=cards[idx].querySelector(".badge");b.className="badge s-"+L.st;b.textContent=L.label;}if(L.link&&L.link.url){w.link=[L.link.text||"Open",L.link.url];w.held=null;}else if(L.held){w.held=L.held;w.link=null;}});
-    var n=document.querySelector('#filters .chip[data-group=""] .n');if(n)n.textContent=String(WORLDS.length).padStart(2,"0");var worldSummary=document.getElementById("worldSummaryCount");if(worldSummary)worldSummary.textContent=String(WORLDS.length)+" worlds. One shared belief.";
-    if(d.company&&validContactEmail(d.company.email)){var companyMail=document.getElementById("mail");companyMail.textContent=d.company.email;companyMail.href="mailto:"+d.company.email;}renderProjectContactDirectory(d.worlds);if(d.quotes&&d.quotes.length)setQuotes(d.quotes);var stamp=document.getElementById("liveStamp");if(stamp&&d.generatedAt)stamp.textContent="Status synced "+new Date(d.generatedAt).toUTCString().replace(/:\d\d GMT$/," UTC");if(current>=0){var k=current;current=-1;open(k);}
-  }).catch(function(){});
+  // This authored registry provides displayed claims; source activity is separate.
+  fetch("data/worlds.json",{cache:"no-store"}).then(function(r){if(!r.ok)throw Error("registry unavailable");return r.json();}).then(function(d){
+    if(!d||!Array.isArray(d.worlds))throw Error("invalid public registry");
+    d.worlds.forEach(function(L){
+      if(!L||typeof L.name!=="string")return;
+      LIVE[L.name]=L;
+      var idx=WORLDS.findIndex(function(w){return w.name===L.name;});
+      if(idx<0&&L.display){var added=worldFromRegistry(L);WORLDS.push(added);idx=WORLDS.length-1;renderWorldCard(added,idx);}
+      if(idx<0)return;
+      var w=WORLDS[idx],p=L.display||{},card=cards[idx];
+      if(typeof L.st==="string"&&typeof L.label==="string"){w.st=L.st;w.label=L.label;}
+      ["group","desc","tag","blurb","alt"].forEach(function(k){if(typeof p[k]==="string")w[k]=p[k];});
+      if(typeof p.accent==="string"&&/^#[0-9a-f]{6}$/i.test(p.accent))w.w=p.accent;
+      if(typeof p.img==="string"&&/^assets\/[a-z0-9-]+\.(jpg|png|webp|svg)$/i.test(p.img))w.img=p.img;
+      if(Array.isArray(p.tags))w.tags=p.tags.filter(function(t){return typeof t==="string";});
+      // No fallback to obsolete product claims when a registry entry has no facts.
+      w.facts=Array.isArray(p.facts)?p.facts.filter(function(f){return Array.isArray(f)&&f.length===2&&f.every(function(v){return typeof v==="string";});}):[];
+      w.link=L.link&&typeof L.link.url==="string"&&/^https:\/\//.test(L.link.url)?[L.link.text||"Open",L.link.url]:null;
+      w.held=w.link?null:(typeof L.held==="string"?L.held:"Public entry not confirmed");
+      card.style.setProperty("--w",w.w);
+      var badge=card.querySelector(".badge");badge.className="badge s-"+w.st;badge.textContent=w.label;
+      card.querySelector(".grp").textContent=w.group;card.querySelector(".desc").textContent=w.desc||"";
+      var img=card.querySelector("img");img.src=w.img;img.alt=w.alt||"";
+      var tags=card.querySelector(".tags");tags.replaceChildren();
+      w.tags.forEach(function(tag){var span=document.createElement("span");span.textContent=tag;tags.appendChild(span);});
+    });
+    var n=document.querySelector('#filters .chip[data-group=""] .n');if(n)n.textContent=String(WORLDS.length).padStart(2,"0");
+    var summary=document.getElementById("worldSummaryCount");if(summary)summary.textContent=String(WORLDS.length)+" worlds. One shared belief.";
+    if(d.company&&validContactEmail(d.company.email)){var mail=document.getElementById("mail");mail.textContent=d.company.email;mail.href="mailto:"+d.company.email;}
+    renderProjectContactDirectory(d.worlds);
+    if(d.quotes&&d.quotes.length)setQuotes(d.quotes);
+    var stamp=document.getElementById("liveStamp");
+    if(stamp)stamp.textContent=d.generatedAt&&!isNaN(Date.parse(d.generatedAt))?
+      "Registry snapshot "+new Date(d.generatedAt).toISOString().slice(0,10)+" · live outcomes verified separately":
+      "Registry snapshot date unavailable · live outcomes verified separately";
+    if(current>=0){var k=current;current=-1;open(k);}
+  }).catch(function(){var stamp=document.getElementById("liveStamp");if(stamp)stamp.textContent="Registry unavailable · showing reference information";});
+
+  // Dynamic public SOURCE evidence only. Never changes launches, commerce or private statuses.
+  var PUBLIC_SOURCE={};
+  fetch("/api/public-evidence",{cache:"no-store"}).then(function(r){return r.ok?r.json():null;}).then(function(feed){
+    if(!feed||feed.schema!=="jussco/public-evidence@v1"||!Array.isArray(feed.sources))return;
+    feed.sources.forEach(function(s){
+      if(s&&typeof s.name==="string"&&typeof s.repo==="string"&&/^[0-9a-f]{40}$/i.test(s.sha||"")&&
+         s.kind==="public_source_commit_only"&&Number.isFinite(Date.parse(s.committedAt))){
+        var L=LIVE[s.name];
+        if(L&&L.repo===s.repo)PUBLIC_SOURCE[s.name]=s;
+      }
+    });
+    if(current>=0){var k=current;current=-1;open(k);}
+  }).catch(function(){/* Last-known public registry remains available when dynamic service is offline. */});
 
 /* ---------- standalone OS registry ---------- */
 var osGrid=document.getElementById("osGrid"), surfaceStrip=document.getElementById("surfaceStrip"), connectorRegistry=null;
@@ -683,7 +728,7 @@ function renderSystems(d){
       bindings.forEach(function(binding){ var lane=(connectorRegistry.lanes||[]).find(function(l){ return l.id===binding.id; }); var sp=document.createElement("span"); sp.dataset.connector=binding.id; sp.dataset.state=binding.state; sp.textContent=(lane?lane.name:binding.id)+" · "+String(binding.state||"unknown").replace(/_/g," "); cw.appendChild(sp); });
       card.appendChild(cw);
     }
-    if(x.embeddedIn&&x.embeddedIn.length){ var emb=document.createElement("div"); emb.className="os-embed"; var eb=document.createElement("b"); eb.textContent="Already embedded in"; emb.appendChild(eb); x.embeddedIn.forEach(function(e){ var sp=document.createElement("span"); sp.textContent=e.name; emb.appendChild(sp); }); card.appendChild(emb); }
+    if(x.embeddedIn&&x.embeddedIn.length){ var emb=document.createElement("div"); emb.className="os-embed"; var eb=document.createElement("b"); eb.textContent="Founder-declared integrations"; emb.appendChild(eb); x.embeddedIn.forEach(function(e){ var sp=document.createElement("span"); sp.textContent=e.name; emb.appendChild(sp); }); card.appendChild(emb); }
     var target=x.publicUrl || (x.builder && x.builder.preview);
     if(target){ var a=document.createElement("a"); a.className="os-link"; a.href=target; a.textContent=x.publicUrl ? "Open "+x.name+" ↗" : "Open builder preview ↗"; card.appendChild(a); }
     osGrid.appendChild(card);
@@ -717,6 +762,8 @@ Promise.all([
     if(e.mainSha) rows.push(["Main", e.mainSha.slice(0,7)+(e.mainDate?" · "+e.mainDate.slice(0,10):"")]);
     if(e.latestMergedPr) rows.push(["Latest merged", "#"+e.latestMergedPr.number+" "+e.latestMergedPr.title+(e.latestMergedPr.mergedAt?" · "+e.latestMergedPr.mergedAt.slice(0,10):"")]);
     if(e.ci) rows.push(["CI on main", e.ci]);
+    var source=PUBLIC_SOURCE[L.name];
+    if(source)rows.push(["Public source · not a deployment", source.sha.slice(0,7)+" · "+source.committedAt.slice(0,10)]);
     if(L.carriers&&L.carriers.length) rows.push(["Tracked carriers",L.carriers.map(function(x){return x.ref||x.name||x.id||x.platform;}).join(" · ")]);
     return rows;
   }
