@@ -29,7 +29,7 @@ These are separate products and systems. I do not present one project’s capabi
 
 The parent-company website at [jussco.company](https://jussco.company) is being extended with **The Outcome Edit**, a brand-preserving showcase for independently verified achievements across the portfolio. Each project retains its own brand, original publication, and source attribution. The parent-company feature is a separate distribution destination, not a claim that projects have merged.
 
-**Current state:** implemented on the `feature/approved-outcome-showcase` branch only. It is **not verified as deployed**. The public feed at `site/data/approved-stories.json` starts empty; no customer stories or testimonials have been published through this feature.
+**Current state:** the Outcome Edit section and an empty, approval-locked public feed are present on `main` in source. This does **not** prove the section is live. The public feed at `site/data/approved-stories.json` starts empty; no customer stories or testimonials have been published through this feature.
 
 The feed is checked by `scripts/verify-approved-stories.mjs` in `.github/workflows/site-proof.yml`, and `scripts/verify-site.mjs` contains browser regression cases. These checks are committed, **not yet reported as passing at the exact feature head**. **Publication lock active:** the CI validator requires an empty story feed until trusted consent and revocation controls are verified. A source-file approval flag is not authenticated consent. Real-person content must not enter the public feed until the approval source, revocation/removal process, and publication readback are verified. Operational status and evidence continue to live in `site/data/worlds.json`.
 
