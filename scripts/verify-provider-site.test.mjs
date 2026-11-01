@@ -16,7 +16,7 @@ test('registry scraper requires a full unique pre element', () => {
 });
 
 test('world registry preserves standalone Bip and preview truth', () => {
-  const base={worlds:[{name:"Se'kret Bip",st:'soon',label:'Opening soon',held:'Opening soon · no public link yet',contact:{site:'https://sekretbip.net'}}]};
+  const base={worlds:[{name:"Se'kret Bip",st:'soon',label:'Opening soon',contact:{site:'https://sekretbip.net'},link:{url:'https://sekretbip.net'}}]};
   assert.doesNotThrow(()=>verifyWorldRegistry(JSON.stringify(base)));
   base.worlds[0].label='Live signup';
   assert.throws(()=>verifyWorldRegistry(JSON.stringify(base)), /gated upcoming product/);
@@ -25,7 +25,7 @@ test('world registry preserves standalone Bip and preview truth', () => {
 test('public company QR and honest upcoming project state must appear in browser markdown', () => {
   assert.doesNotThrow(()=>verifySiteMarkdown(site));
   assert.throws(()=>verifySiteMarkdown(site.replace('Scan to explore','')),/QR destination/);
-  assert.throws(()=>verifySiteMarkdown(site.replace('Opening soon · no public link yet','Public signup live')),/must not claim/);
+  assert.throws(()=>verifySiteMarkdown(site.replace('Opening soon','Public signup live')),/must not claim/);
   assert.throws(()=>verifySiteMarkdown('Just a moment... '+site),/Cloudflare challenge/);
 });
 
@@ -58,13 +58,13 @@ test('production witness fails closed when provider credentials are missing',asy
   await assert.rejects(()=>runProof({env}),/Missing scoped Cloudflare/);
 });
 
-test('production witness accepts main push and manual main dispatch only',()=>{
-  assert.equal(assertReleaseContext({GITHUB_REF:'refs/heads/main',GITHUB_EVENT_NAME:'push'}),true);
+test('production witness accepts completed main release and manual main dispatch only',()=>{
+  assert.equal(assertReleaseContext({GITHUB_REF:'refs/heads/main',GITHUB_EVENT_NAME:'workflow_run'}),true);
   assert.equal(assertReleaseContext({GITHUB_REF:'refs/heads/main',GITHUB_EVENT_NAME:'workflow_dispatch'}),true);
   for (const [ref,event] of [
-    ['refs/heads/feature','push'],['refs/heads/feature','workflow_dispatch'],
-    ['refs/heads/main','pull_request'],['refs/heads/main','schedule']
-  ]) assert.throws(()=>assertReleaseContext({GITHUB_REF:ref,GITHUB_EVENT_NAME:event}),/only after main push/);
+    ['refs/heads/feature','workflow_run'],['refs/heads/feature','workflow_dispatch'],
+    ['refs/heads/main','pull_request'],['refs/heads/main','push'],['refs/heads/main','schedule']
+  ]) assert.throws(()=>assertReleaseContext({GITHUB_REF:ref,GITHUB_EVENT_NAME:event}),/only after main release/);
 });
 
 test('provider health proof requires live HTML and actual 204 response', () => {
