@@ -38,8 +38,8 @@ export function verifyWorldRegistry(raw) {
   const parsed = JSON.parse(raw);
   const bip = parsed.worlds?.find(x => x.name === "Se'kret Bip");
   if (!bip || bip.st !== 'soon' || bip.label !== 'Opening soon' ||
-      bip.held !== 'Opening soon · no public link yet' ||
-      bip.contact?.site !== 'https://sekretbip.net' || bip.link?.url) {
+      bip.contact !== 'https://sekretbip.net' ||
+      bip.link?.url !== 'https://sekretbip.net') {
     throw new Error('Se\'kret Bip must remain a clearly gated upcoming product');
   }
 }
@@ -48,7 +48,11 @@ export function verifySiteMarkdown(content) {
   if (typeof content !== 'string' || !content.includes('Turn thoughts into living works.') || !content.includes("### Se'kret Bip")) {
     throw new Error('Rendered Juss & Co. site markers missing');
   }
-  if (!content.includes('Opening soon · no public link yet')) {
+  // The public landing-page link is allowed; the application itself remains marked "Opening soon".
+  // Scope the marker to the Bip card instead of accepting the phrase anywhere on the page.
+  const bipHeading = content.indexOf("### Se'kret Bip");
+  const bipCardLead = content.slice(Math.max(0, bipHeading - 250), bipHeading);
+  if (bipHeading < 0 || !bipCardLead.includes('Opening soon')) {
     throw new Error('Se\'kret Bip must not claim a public live preview');
   }
   if (!content.includes(COMPANY_QR_LABEL) || !content.includes('www.jussco.company')) {

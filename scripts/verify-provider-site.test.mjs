@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { gitBlobSha, extractScrapedRegistry, verifyWorldRegistry, verifySiteMarkdown, verifyDestinationMarkdown, verifyBipContent, assertSha, assertReleaseContext, verifyReceiverHealthHtml, runProof } from './verify-provider-site.mjs';
 
-const site = `---\ntitle: "Juss & Co"\n---\nTurn thoughts into living works.\n### Se'kret Bip\nOpening soon · no public link yet\nScan to explore www.jussco.company`;
+const site = `---\ntitle: "Juss & Co"\n---\nTurn thoughts into living works.\nOpening soon\n\nPeople & belonging\n\n### Se'kret Bip\nScan to explore www.jussco.company`;
 
 test('Git blob hash matches known Git SHA-1 format', () => {
   assert.equal(gitBlobSha(Buffer.from('hello\n')), 'ce013625030ba8dba906f756967f9e9ca394464a');
@@ -16,16 +16,22 @@ test('registry scraper requires a full unique pre element', () => {
 });
 
 test('world registry preserves standalone Bip and preview truth', () => {
-  const base={worlds:[{name:"Se'kret Bip",st:'soon',label:'Opening soon',held:'Opening soon · no public link yet',contact:{site:'https://sekretbip.net'}}]};
+  const base={worlds:[{name:"Se'kret Bip",st:'soon',label:'Opening soon',contact:'https://sekretbip.net',link:{text:'Visit Se’kret Bip',url:'https://sekretbip.net'}}]};
   assert.doesNotThrow(()=>verifyWorldRegistry(JSON.stringify(base)));
   base.worlds[0].label='Live signup';
+  assert.throws(()=>verifyWorldRegistry(JSON.stringify(base)), /gated upcoming product/);
+  base.worlds[0].label='Opening soon';
+  base.worlds[0].link.url='https://app.sekretbip.net';
+  assert.throws(()=>verifyWorldRegistry(JSON.stringify(base)), /gated upcoming product/);
+  base.worlds[0].link.url='https://sekretbip.net';
+  base.worlds[0].contact='https://unapproved.example';
   assert.throws(()=>verifyWorldRegistry(JSON.stringify(base)), /gated upcoming product/);
 });
 
 test('public company QR and honest upcoming project state must appear in browser markdown', () => {
   assert.doesNotThrow(()=>verifySiteMarkdown(site));
   assert.throws(()=>verifySiteMarkdown(site.replace('Scan to explore','')),/QR destination/);
-  assert.throws(()=>verifySiteMarkdown(site.replace('Opening soon · no public link yet','Public signup live')),/must not claim/);
+  assert.throws(()=>verifySiteMarkdown(site.replace('Opening soon','Public signup live')),/must not claim/);
   assert.throws(()=>verifySiteMarkdown('Just a moment... '+site),/Cloudflare challenge/);
 });
 
