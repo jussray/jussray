@@ -47,3 +47,12 @@ test('no unbacked auth/agent discovery files are published', () => {
     assert.equal(existsSync(join(SITE, p)), false, `${p} would advertise a capability jussco.company does not have`);
   }
 });
+
+test('global static responses declare safe MIME-sniffing and referrer headers', () => {
+  const wildcardRule = headers.split(/^\/\r?\n/m)[0];
+  assert.match(wildcardRule, /^\/\*\r?\n/m);
+  assert.match(wildcardRule, /^  X-Content-Type-Options: nosniff$/m);
+  assert.match(wildcardRule, /^  Referrer-Policy: strict-origin-when-cross-origin$/m);
+  assert.match(wildcardRule, /^  Content-Signal: search=yes, ai-input=yes, ai-train=no, use=reference$/m);
+  assert.doesNotMatch(wildcardRule, /Access-Control-Allow-Origin:\s*\*/i);
+});

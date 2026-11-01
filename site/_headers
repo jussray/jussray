@@ -4,6 +4,8 @@
 # model training, bulk exports, and other separately licensed rights.
 /*
   Content-Signal: search=yes, ai-input=yes, ai-train=no, use=reference
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
 
 /
   Link: </.well-known/api-catalog>; rel="api-catalog", </data/worlds.json>; rel="describedby"; type="application/json"
