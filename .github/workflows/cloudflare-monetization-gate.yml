@@ -1,0 +1,34 @@
+name: JussCo Cloudflare monetization release gate
+
+on:
+  push:
+    branches: [main, 'feat/**']
+    paths:
+      - 'config/cloudflare-monetization-gate.json'
+      - 'scripts/cloudflare-monetization-gate.test.mjs'
+      - '.github/workflows/cloudflare-monetization-gate.yml'
+  pull_request:
+    paths:
+      - 'config/cloudflare-monetization-gate.json'
+      - 'scripts/cloudflare-monetization-gate.test.mjs'
+      - '.github/workflows/cloudflare-monetization-gate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fail-closed-policy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out exact event SHA
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Set up Node 24
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - name: Verify source-only monetization gate
+        run: node --test scripts/cloudflare-monetization-gate.test.mjs
