@@ -1,9 +1,9 @@
 // Fail-closed independent-review evidence check.
-// Advisory until a GitHub ruleset actually requires a PR + approvals + exact-head checks.
+// Advisory until an active native ruleset requires PRs and strict systematic checks.
 // Runs from trusted main checkout, never from an unreviewed PR branch.
 import { pathToFileURL } from 'node:url';
 
-export function reviewDecision({pull, reviews, expectedHead, minApprovals=1}) {
+export function reviewDecision({pull, reviews, expectedHead}) {
   const errors=[];
   if (!/^[0-9a-f]{40}$/.test(expectedHead || '')) errors.push('Missing exact expected head SHA');
   if (pull?.state !== 'open' || pull?.draft) errors.push('PR must be open and ready for review');
@@ -28,8 +28,8 @@ export function reviewDecision({pull, reviews, expectedHead, minApprovals=1}) {
   const blocked=[...decisive.values()].some(r=>r.state==='CHANGES_REQUESTED');
   if (blocked) errors.push('An independent reviewer has unresolved requested changes');
   const approved=[...decisive.entries()].filter(([_,r])=>r.state==='APPROVED' && r.sha===expectedHead).map(([name])=>name);
-  if (approved.length<minApprovals) errors.push('Not enough independent human approvals on current exact head');
-  return {ok:errors.length===0,errors,approvedCount:approved.length,exactHead:expectedHead};
+  // Human GitHub approval is optional under the founder's systematic-review policy.
+  return {ok:errors.length===0,errors,approvedCount:approved.length,exactHead:expectedHead,reviewMode:'systematic-zero-human-approvals'};
 }
 
 export function rulesetDecision(rulesets) {
@@ -44,15 +44,16 @@ export function rulesetDecision(rulesets) {
     errors.push('Main ruleset has configured bypass actors requiring authority review');
   const allRules=active.flatMap(r=>r.rules||[]);
   const approval=allRules.find(r=>r.type==='pull_request' &&
-    r.parameters?.required_approving_review_count>=1 &&
-    r.parameters?.dismiss_stale_reviews_on_push===true &&
-    r.parameters?.require_last_push_approval===true &&
+    r.parameters?.required_approving_review_count===0 &&
     r.parameters?.required_review_thread_resolution===true);
-  if (!approval) errors.push('Missing enforced independent PR approvals and last-push/stale-thread rules');
-  const checks=allRules.filter(r=>r.type==='required_status_checks').flatMap(r=>r.parameters?.required_status_checks||[]);
+  if (!approval) errors.push('Missing protected PR rule with zero required human approvals and resolved review threads');
+  const checkRules=allRules.filter(r=>r.type==='required_status_checks');
+  if (!checkRules.some(r=>r.parameters?.strict_required_status_checks_policy===true))
+    errors.push('Required checks are not strict against current base');
+  const checks=checkRules.flatMap(r=>r.parameters?.required_status_checks||[]);
   const contexts=new Set(checks.map(x=>x.context));
-  if (!contexts.has('Independent Review Evidence')) errors.push('Independent Review Evidence is not a required GitHub status check');
-  if (!contexts.has('Juss & Co Site Browser Proof')) errors.push('Existing production browser proof is not a required GitHub status check');
+  for (const required of ['Independent Review Evidence','Review Gate Unit Tests','Juss & Co Site Browser Proof','Repo Reality / exact-head'])
+    if (!contexts.has(required)) errors.push('Missing required systematic review check: '+required);
   if (!allRules.some(r=>r.type==='non_fast_forward') || !allRules.some(r=>r.type==='deletion'))
     errors.push('Main ruleset does not prevent force pushes and deletion');
   return {ok:errors.length===0,errors};
@@ -107,7 +108,7 @@ export async function runReviewGate(env=process.env,request=fetch){
   if (repo!=='jussray/jussray' || !env.GITHUB_TOKEN || !Number.isSafeInteger(number)||number<1)
     throw new Error('Missing authorized repository, PR number or read token');
   const evidence=await getReviewEvidence({repo,number,token:env.GITHUB_TOKEN,request});
-  const result=reviewDecision({pull:evidence.pull,reviews:evidence.reviews,expectedHead:sha,minApprovals:1});
+  const result=reviewDecision({pull:evidence.pull,reviews:evidence.reviews,expectedHead:sha});
   const rules=rulesetDecision(await getRulesEvidence({repo,token:env.GITHUB_TOKEN,request}));
   // Guard against concurrent pushes between first PR readback and final witness.
   const latest=await apiGet('https://api.github.com/repos/'+repo+'/pulls/'+number,env.GITHUB_TOKEN,request);
@@ -115,8 +116,8 @@ export async function runReviewGate(env=process.env,request=fetch){
     throw new Error('PR head or review authority changed during evaluation; evidence is stale');
   }
   if (!result.ok || !rules.ok) throw new Error('GitHub merge authority not verified: '+[...result.errors,...rules.errors].join('; '));
-  console.log('MERGE AUTHORITY EVIDENCE VERIFIED: active native branch rule plus independent current-head review '+sha.slice(0,12));
-  return {...result,nativeRulesetEnforced:true};
+  console.log('SYSTEMATIC REVIEW POLICY READBACK VERIFIED: '+sha.slice(0,12)+'; no founder release authorization issued');
+  return {...result,nativeRulesetEnforced:true,releaseAuthorized:false};
 }
 
 if (process.argv[1] && import.meta.url===pathToFileURL(process.argv[1]).href){
