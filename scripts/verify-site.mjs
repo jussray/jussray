@@ -3,7 +3,7 @@ import { chromium } from 'playwright';
 import { createServer } from 'node:http';
 import { readFileSync, existsSync, mkdirSync } from 'node:fs';
 import { extname, join } from 'node:path';
-const ROOT = new URL('../site/', import.meta.url).pathname; const MIME = { '.html': 'text/html', '.jpg': 'image/jpeg', '.json': 'application/json', '.png': 'image/png', '.svg': 'image/svg+xml', '.js': 'text/javascript', '.txt': 'text/plain', '.xml': 'application/xml' };
+const ROOT = new URL('../site/', import.meta.url).pathname; const MIME = { '.html': 'text/html', '.jpg': 'image/jpeg', '.json': 'application/json', '.png': 'image/png', '.svg': 'image/svg+xml', '.js': 'text/javascript', '.txt': 'text/plain', '.xml': 'application/xml', '.pdf': 'application/pdf' };
 const WORLD_REGISTRY = JSON.parse(readFileSync(join(ROOT, 'data/worlds.json'), 'utf8')); const EXPECTED_WORLDS = WORLD_REGISTRY.worlds.map((w) => w.name); const IDEA_WORLDS = WORLD_REGISTRY.worlds.filter((w) => w.display?.group === 'Ideas & systems').map((w) => w.name);
 const CONNECTOR_REGISTRY = JSON.parse(readFileSync(join(ROOT, 'data/connectors.json'), 'utf8')); const EXPECTED_CONNECTORS = CONNECTOR_REGISTRY.lanes.map((x) => x.name);
 const srv = createServer((q, r) => { let p = decodeURIComponent(q.url.split('?')[0]); if (p === '/') p = '/index.html'; const f = join(ROOT, p); if (!existsSync(f)) { r.writeHead(404); return r.end(); } r.writeHead(200, { 'content-type': MIME[extname(f)] || 'application/octet-stream' }); r.end(readFileSync(f)); });
@@ -104,6 +104,17 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
     `${vp.n}: portfolio packet link opens in a safe new tab`);
   say((await portfolioDownload.innerText()).includes('Download my portfolio packet') && await portfolioDownload.isVisible(),
     `${vp.n}: portfolio download button is visible and accurately labeled`);
+  const resources=page.locator('#resources');
+  say(await resources.count() === 1 && await resources.isVisible(), `${vp.n}: public resources visible`);
+  for (const name of ['juss-co-company-overview.pdf','juss-co-selected-work-evidence.pdf']) {
+    const link=resources.locator('a[href="/downloads/'+name+'"]');
+    say(await link.count() === 1 && await link.getAttribute('target') === '_blank' &&
+      (await link.getAttribute('rel'))?.includes('noopener') && (await link.getAttribute('rel'))?.includes('noreferrer'),
+      `${vp.n}: ${name} safe new-tab link`);
+    const pdf=await page.request.get(url+'downloads/'+name);
+    say(pdf.status() === 200 && (await pdf.body()).subarray(0,8).toString() === '%PDF-1.4',
+      `${vp.n}: ${name} actual PDF`);
+  }
   const companyEmail=await page.locator('#mail').textContent();
   say(companyEmail==='founder@jussco.company' && (await page.locator('#mail').getAttribute('href'))==='mailto:'+companyEmail, `${vp.n}: company email text and mailto match business address`);
   const directory=page.locator('#projectContactDirectory');
