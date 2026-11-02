@@ -16,6 +16,8 @@ Public visibility is not a license grant.
 
 - https://www.jussco.company/
 - https://www.jussco.company/work.html
+- https://www.jussco.company/downloads/juss-co-company-overview.pdf
+- https://www.jussco.company/downloads/juss-co-selected-work-evidence.pdf
 - https://www.jussco.company/services.html
 - https://www.jussco.company/data/licensable-assets.json
 

@@ -22,3 +22,8 @@
 
 /llms.txt
   Content-Type: text/plain; charset=utf-8
+
+/downloads/*.pdf
+  Content-Type: application/pdf
+  X-Content-Type-Options: nosniff
+  Content-Disposition: inline
