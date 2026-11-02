@@ -84,6 +84,34 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   const errors = []; page.on('pageerror', (e) => errors.push(String(e))); // Chromium may abort a non-blocking keepalive POST when this test closes the page; only that exact abort is excluded.
   page.on('requestfailed', (r) => { const abortedTelemetry = new URL(r.url()).pathname === '/_telemetry/v1' && r.failure()?.errorText === 'net::ERR_ABORTED'; if (!abortedTelemetry && !/fonts\.(googleapis|gstatic)\.com/.test(r.url())) errors.push(`${r.failure()?.errorText} ${r.url()}`); }); page.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) errors.push(m.text()); });
   await page.goto(url, { waitUntil: 'load' }); await page.waitForFunction(() => document.querySelectorAll('.os-card').length === 5); await page.waitForTimeout(300);
+  // Scroll-glass regression: fixed viewport stars must outlive the hero on mobile and desktop.
+  const starBefore = await page.evaluate(() => {
+    const canvas = document.querySelector('#stars');
+    const bounds = canvas.getBoundingClientRect();
+    const css = getComputedStyle(canvas);
+    return { inBody: canvas.parentElement === document.body, position: css.position,
+      top: bounds.top, left: bounds.left, width: bounds.width, height: bounds.height };
+  });
+  say(starBefore.inBody && starBefore.position === 'fixed' && Math.abs(starBefore.top) <= 1
+    && starBefore.width >= vp.w - 2, `${vp.n}: sparkling sky is viewport-fixed outside the hero`);
+  await page.evaluate(() => window.scrollTo(0, document.querySelector('#why').offsetTop));
+  await page.waitForTimeout(100);
+  const starAfter = await page.evaluate(() => {
+    const b = document.querySelector('#stars').getBoundingClientRect();
+    const glass = document.querySelector('.card');
+    const blur = getComputedStyle(glass).backdropFilter || getComputedStyle(glass).webkitBackdropFilter || '';
+    const worldBackground = getComputedStyle(document.querySelector('#worlds')).backgroundColor;
+    const alpha = worldBackground.match(/rgba?\\(([^)]+)\\)/);
+    const components = alpha ? alpha[1].split(',').map(x => Number(x.trim())) : [];
+    return { top: b.top, left: b.left, width: b.width, height: b.height, scrollY: window.scrollY,
+      blur: blur.includes('blur('), worldAlpha: components.length === 4 ? components[3] : 1 };
+  });
+  say(starAfter.scrollY > 100 && Math.abs(starAfter.top - starBefore.top) <= 1
+    && Math.abs(starAfter.left - starBefore.left) <= 1
+    && Math.abs(starAfter.height - starBefore.height) <= 2, `${vp.n}: stationary stars remain in viewport after deep scrolling`);
+  say(starAfter.blur && starAfter.worldAlpha < .5,
+    `${vp.n}: frosted glass cards and translucent worlds reveal the starfield`);
+  await page.evaluate(() => window.scrollTo(0, 0));
   say((await page.locator('link[rel="canonical"]').count()) === 1 && (await page.locator('link[rel="canonical"]').getAttribute('href')) === 'https://www.jussco.company/', `${vp.n}: exactly one preferred www canonical tag`);
   say((await page.title()) === 'Juss & Co | Juss Rayy, Product & AI Systems Builder', `${vp.n}: search title binds Juss & Co to Juss Rayy`);
   say((await page.locator('meta[name="description"]').getAttribute('content'))?.includes("Juss Rayy's founder studio"), `${vp.n}: meta description names founder and studio`);
