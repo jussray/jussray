@@ -32,3 +32,11 @@ test('PR path filter includes the publication-lock gate', () => {
 test('GitHub webhook receiver test runs in site-proof CI', () => {
   assert.match(sourceWorkflow, /run: node --test tests\/jussco-github-webhook\.test\.mjs/);
 });
+
+test('webhook receiver test file changes trigger both push and PR site proof', () => {
+  const push = sourceWorkflow.slice(sourceWorkflow.indexOf('  push:'), sourceWorkflow.indexOf('  pull_request:'));
+  const pr = sourceWorkflow.slice(sourceWorkflow.indexOf('  pull_request:'), sourceWorkflow.indexOf('  workflow_dispatch:'));
+  assert.match(push, /tests\/jussco-github-webhook\.test\.mjs/);
+  assert.match(pr, /tests\/jussco-github-webhook\.test\.mjs/);
+  assert.match(sourceWorkflow, /run: node --test tests\/jussco-github-webhook\.test\.mjs/);
+});
