@@ -152,7 +152,11 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   say(!/ULTRATHINK/.test(await page.innerText('#systems')), `${vp.n}: internal ULTRATHINK carriers stay off public surface`);
   say((await page.evaluate(() => [...document.images].filter((i) => i.complete && i.naturalWidth === 0).length)) === 0, `${vp.n}: no broken images`);
   say((await page.evaluate(() => [...document.querySelectorAll('a[href^="#"]')].map((a) => a.getAttribute('href')).filter((h) => h.length > 1 && !document.querySelector(h)).length)) === 0, `${vp.n}: no dead anchors`);
-  say((await page.evaluate(() => [...document.querySelectorAll('a,button')].filter((e) => { const b = e.getBoundingClientRect(); return b.width > 0 && b.height < 40; }).length)) === 0, `${vp.n}: tap targets >= 40px`);
+  const smallTargets=await page.evaluate(() => [...document.querySelectorAll('a,button')].map((e) => {
+    const box=e.getBoundingClientRect();
+    return { element:e.tagName.toLowerCase(), id:e.id, className:typeof e.className==='string'?e.className:'', label:(e.textContent||'').trim().slice(0,70), width:Math.round(box.width), height:Math.round(box.height) };
+  }).filter((x) => x.width > 0 && x.height < 40));
+  say(smallTargets.length===0, `${vp.n}: tap targets >= 40px${smallTargets.length?'; undersized: '+JSON.stringify(smallTargets):''}`);
   await page.click('.card:nth-child(4)'); await page.waitForTimeout(200);
   say((await page.innerText('#dName')) === 'Juss Beautiful Hair', `${vp.n}: drawer opens JBH`);
   say(/jussbeautifulhair\.com/.test((await page.getAttribute('#dCta a', 'href')) || ''), `${vp.n}: JBH link present`);
