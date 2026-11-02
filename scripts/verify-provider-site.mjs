@@ -37,10 +37,12 @@ export function extractScrapedRegistry(data) {
 export function verifyWorldRegistry(raw) {
   const parsed = JSON.parse(raw);
   const bip = parsed.worlds?.find(x => x.name === "Se'kret Bip");
+  // A public informational front door is not an attested member launch.
   if (!bip || bip.st !== 'soon' || bip.label !== 'Opening soon' ||
-      bip.held !== 'Opening soon · no public link yet' ||
-      bip.contact?.site !== 'https://sekretbip.net' || bip.link?.url) {
-    throw new Error('Se\'kret Bip must remain a clearly gated upcoming product');
+      bip.contact?.site !== 'https://sekretbip.net' ||
+      bip.link?.url !== 'https://sekretbip.net' ||
+      bip.held !== undefined) {
+    throw new Error("Se'kret Bip must stay upcoming with its verified public front door, not a live signup claim");
   }
 }
 
@@ -48,8 +50,9 @@ export function verifySiteMarkdown(content) {
   if (typeof content !== 'string' || !content.includes('Turn thoughts into living works.') || !content.includes("### Se'kret Bip")) {
     throw new Error('Rendered Juss & Co. site markers missing');
   }
-  if (!content.includes('Opening soon · no public link yet')) {
-    throw new Error('Se\'kret Bip must not claim a public live preview');
+  const bipSection = content.split("### Se'kret Bip")[1]?.split(/\n#{2,3} /)[0] ?? '';
+  if (!bipSection.includes('Opening soon') || /Public signup live|Member app live|Sign up now/i.test(bipSection)) {
+    throw new Error("Se'kret Bip must remain upcoming; an informational public link does not prove member launch");
   }
   if (!content.includes(COMPANY_QR_LABEL) || !content.includes('www.jussco.company')) {
     throw new Error('Canonical company QR destination missing from live homepage');
@@ -142,6 +145,20 @@ async function fetchHead(token, fetchImpl=fetch) {
   return assertSha((await response.json()).object?.sha);
 }
 
+// Matching published JSON with source proves public readback, not the Cloudflare
+// Worker deployment's provenance or the entire site's behavior.
+export function createProviderWitness(sourceSha) {
+  return {
+    status:'PARTIAL_PUBLIC_READBACK',
+    deploymentShaAttested:false,
+    repo:REPO,
+    sha:assertSha(sourceSha),
+    method:'Cloudflare REST Browser Rendering, public domains',
+    registries:[],
+    pageProof:[]
+  };
+}
+
 export async function runProof({env=process.env, fetchImpl=fetch, root=ROOT}={}) {
   const accountId = env.CLOUDFLARE_ACCOUNT_ID;
   const token = env.CLOUDFLARE_BROWSER_RENDERING_TOKEN;
@@ -154,7 +171,7 @@ export async function runProof({env=process.env, fetchImpl=fetch, root=ROOT}={})
   if (checkoutHead !== expectedHead) throw new Error('Git checkout SHA differs from GitHub Actions exact head');
   if (await fetchHead(env.GITHUB_TOKEN, fetchImpl) !== expectedHead) throw new Error('main moved before proof; evidence is stale');
 
-  const witness = { status:'VERIFIED', repo:REPO, sha:expectedHead, method:'Cloudflare REST Browser Rendering, public domains', registries:[], pageProof:[] };
+  const witness = createProviderWitness(expectedHead);
   const request = (endpoint, body) => cfRequest({accountId, token, endpoint, body, fetchImpl});
   for (const host of HOSTS) {
     for (const registry of REGISTRIES) {
@@ -205,7 +222,7 @@ export async function runProof({env=process.env, fetchImpl=fetch, root=ROOT}={})
   mkdirSync(folder,{recursive:true});
   const path = resolve(folder,`provider-${expectedHead}.json`);
   writeFileSync(path,JSON.stringify(witness,null,2)+'\n');
-  console.log(`VERIFIED independent provider-side production evidence at ${expectedHead.slice(0,12)}; ${witness.registries.length} registry hashes + ${witness.pageProof.length} page checks`);
+  console.log(`MATCHED public provider-side readback to checkout at ${expectedHead.slice(0,12)}; ${witness.registries.length} registry hashes + ${witness.pageProof.length} page checks`);
   return witness;
 }
 

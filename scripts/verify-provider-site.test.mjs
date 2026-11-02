@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { gitBlobSha, extractScrapedRegistry, verifyWorldRegistry, verifySiteMarkdown, verifyDestinationMarkdown, verifyBipContent, assertSha, assertReleaseContext, verifyReceiverHealthHtml, runProof } from './verify-provider-site.mjs';
+import { gitBlobSha, extractScrapedRegistry, verifyWorldRegistry, verifySiteMarkdown, verifyDestinationMarkdown, verifyBipContent, assertSha, assertReleaseContext, verifyReceiverHealthHtml, createProviderWitness, runProof } from './verify-provider-site.mjs';
 
-const site = `---\ntitle: "Juss & Co"\n---\nTurn thoughts into living works.\n### Se'kret Bip\nOpening soon · no public link yet\nScan to explore www.jussco.company`;
+const site = `---\ntitle: "Juss & Co"\n---\nTurn thoughts into living works.\n### Se'kret Bip\nOpening soon\n[Visit Se’kret Bip ↗](https://sekretbip.net)\nScan to explore www.jussco.company`;
 
 test('Git blob hash matches known Git SHA-1 format', () => {
   assert.equal(gitBlobSha(Buffer.from('hello\n')), 'ce013625030ba8dba906f756967f9e9ca394464a');
@@ -15,18 +15,34 @@ test('registry scraper requires a full unique pre element', () => {
   assert.throws(()=>extractScrapedRegistry([{selector:'pre',results:[{text:'abc'},{text:'def'}]}]), /exactly one/);
 });
 
-test('world registry preserves standalone Bip and preview truth', () => {
-  const base={worlds:[{name:"Se'kret Bip",st:'soon',label:'Opening soon',held:'Opening soon · no public link yet',contact:{site:'https://sekretbip.net'}}]};
+test('world registry distinguishes public front door from a released member app', () => {
+  const base={worlds:[{name:"Se'kret Bip",st:'soon',label:'Opening soon',contact:{site:'https://sekretbip.net'},link:{text:'Visit Se’kret Bip',url:'https://sekretbip.net'}}]};
   assert.doesNotThrow(()=>verifyWorldRegistry(JSON.stringify(base)));
-  base.worlds[0].label='Live signup';
-  assert.throws(()=>verifyWorldRegistry(JSON.stringify(base)), /gated upcoming product/);
+  base.worlds[0].link.url='https://invalid.example';
+  assert.throws(()=>verifyWorldRegistry(JSON.stringify(base)), /upcoming with its verified public front door/);
+  base.worlds[0].link.url='https://sekretbip.net';
+  base.worlds[0].st='live';
+  assert.throws(()=>verifyWorldRegistry(JSON.stringify(base)), /upcoming with its verified public front door/);
+  base.worlds[0].st='soon';
+  base.worlds[0].held='Opening soon · no public link yet';
+  assert.throws(()=>verifyWorldRegistry(JSON.stringify(base)), /upcoming with its verified public front door/);
 });
 
 test('public company QR and honest upcoming project state must appear in browser markdown', () => {
   assert.doesNotThrow(()=>verifySiteMarkdown(site));
   assert.throws(()=>verifySiteMarkdown(site.replace('Scan to explore','')),/QR destination/);
-  assert.throws(()=>verifySiteMarkdown(site.replace('Opening soon · no public link yet','Public signup live')),/must not claim/);
+  assert.throws(()=>verifySiteMarkdown(site.replace('Opening soon','Public signup live')),/must remain upcoming/);
   assert.throws(()=>verifySiteMarkdown('Just a moment... '+site),/Cloudflare challenge/);
+});
+
+test('public provider receipt does not falsely attest to a deployment SHA', () => {
+  const sha='a'.repeat(40);
+  const receipt=createProviderWitness(sha);
+  assert.equal(receipt.sha,sha);
+  assert.equal(receipt.status,'PARTIAL_PUBLIC_READBACK');
+  assert.equal(receipt.deploymentShaAttested,false);
+  assert.deepEqual(receipt.registries,[]);
+  assert.throws(()=>createProviderWitness('abc'),/40-character/);
 });
 
 test('standalone destinations reject challenge and unrelated pages',()=>{
