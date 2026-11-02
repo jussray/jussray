@@ -43,10 +43,11 @@ export function rulesetDecision(rulesets) {
   if (active.some(r=>Array.isArray(r.bypass_actors) && r.bypass_actors.length>0))
     errors.push('Main ruleset has configured bypass actors requiring authority review');
   const allRules=active.flatMap(r=>r.rules||[]);
-  const approval=allRules.find(r=>r.type==='pull_request' &&
-    r.parameters?.required_approving_review_count===0 &&
-    r.parameters?.required_review_thread_resolution===true);
-  if (!approval) errors.push('Missing protected PR rule with zero required human approvals and resolved review threads');
+  const prRules=allRules.filter(r=>r.type==='pull_request');
+  if (!prRules.length || !prRules.some(r=>r.parameters?.required_review_thread_resolution===true))
+    errors.push('Missing protected PR rule with resolved review threads');
+  if (prRules.some(r=>r.parameters?.required_approving_review_count!==0))
+    errors.push('An active main ruleset requires a human GitHub approval, contradicting systematic-review policy');
   const checkRules=allRules.filter(r=>r.type==='required_status_checks');
   if (!checkRules.some(r=>r.parameters?.strict_required_status_checks_policy===true))
     errors.push('Required checks are not strict against current base');
