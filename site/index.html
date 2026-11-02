@@ -48,6 +48,45 @@
       "url": "https://www.jussco.company/",
       "name": "Juss & Co",
       "publisher": { "@id": "https://www.jussco.company/#organization" }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.jussco.company/#webpage",
+      "url": "https://www.jussco.company/",
+      "isPartOf": { "@id": "https://www.jussco.company/#website" },
+      "about": { "@id": "https://www.jussco.company/#organization" },
+      "mainEntity": { "@id": "https://www.jussco.company/#public-faq" }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.jussco.company/#public-faq",
+      "isPartOf": { "@id": "https://www.jussco.company/#webpage" },
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is Juss & Co?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A founder-led studio building consumer products, creator tools, commerce experiences and AI-enabled systems, with public evidence separated from unverified plans."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Are all listed products available now?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Portfolio records describe project state at a published point in time. Visit the relevant product and check current access, functionality and terms before relying on availability claims."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Where can I review the source and work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "See the selected case studies and public GitHub portfolio. A public repository does not by itself verify a live deployment, customer outcome or payment path."
+          }
+        }
+      ]
     }
   ]
 }

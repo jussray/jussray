@@ -32,3 +32,22 @@ test('robots policy and contact routing have not been silently changed',()=>{
   assert.match(robots,/User-agent: GPTBot\nDisallow: \/\n/);
   assert.match(html,/href="mailto:founder@jussco\.company"/);
 });
+
+test('structured public answers match visible FAQ and avoid unverified availability claims',()=>{
+  const start=html.indexOf('<script type="application/ld+json">');
+  const end=html.indexOf('</script>',start);
+  assert.ok(start>=0&&end>start);
+  const graph=JSON.parse(html.slice(start+'<script type="application/ld+json">'.length,end))['@graph'];
+  const questions=graph.find((item)=>item['@type']==='FAQPage');
+  assert.ok(questions);
+  assert.deepEqual(questions.mainEntity.map((item)=>item.name),[
+    'What is Juss & Co?',
+    'Are all listed products available now?',
+    'Where can I review the source and work?',
+  ]);
+  for(const label of questions.mainEntity.map((item)=>item.name)){
+    const escaped=label.replaceAll('&','&amp;');
+    assert.ok(html.includes('<summary>'+escaped+'</summary>'));
+  }
+  assert.ok(JSON.stringify(questions).includes('public repository does not by itself verify'));
+});
