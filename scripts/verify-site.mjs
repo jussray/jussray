@@ -92,6 +92,10 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
     return { inBody: canvas.parentElement === document.body, position: css.position,
       top: bounds.top, left: bounds.left, width: bounds.width, height: bounds.height };
   });
+  const twinkleFrameA = await page.locator('#stars').evaluate((canvas) => canvas.toDataURL('image/png'));
+  await page.waitForTimeout(450);
+  const twinkleFrameB = await page.locator('#stars').evaluate((canvas) => canvas.toDataURL('image/png'));
+  say(twinkleFrameA !== twinkleFrameB, `${vp.n}: the star canvas continues visibly animating`);
   say(starBefore.inBody && starBefore.position === 'fixed' && Math.abs(starBefore.top) <= 1
     && starBefore.width >= vp.w - 2, `${vp.n}: sparkling sky is viewport-fixed outside the hero`);
   await page.evaluate(() => window.scrollTo(0, document.querySelector('#why').offsetTop));
