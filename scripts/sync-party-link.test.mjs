@@ -7,7 +7,7 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const SITE = new URL('../site/', import.meta.url);
-const SYNC_URL = 'https://sync.jussco.company';
+const SYNC_URL = 'https://sync.jussco.company/';
 
 test('worlds.json declares the verified SYNC Party link', () => {
   const registry = JSON.parse(readFileSync(fileURLToPath(new URL('data/worlds.json', SITE)), 'utf8'));
