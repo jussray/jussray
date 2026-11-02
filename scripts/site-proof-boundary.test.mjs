@@ -40,3 +40,14 @@ test('webhook receiver test file changes trigger both push and PR site proof', (
   assert.match(pr, /tests\/jussco-github-webhook\.test\.mjs/);
   assert.match(sourceWorkflow, /run: node --test tests\/jussco-github-webhook\.test\.mjs/);
 });
+
+test('trust-checker bootstrap is pinned to tested source and cannot skip CI', () => {
+  for (const section of [
+    sourceWorkflow.slice(sourceWorkflow.indexOf('  push:'),sourceWorkflow.indexOf('  pull_request:')),
+    sourceWorkflow.slice(sourceWorkflow.indexOf('  pull_request:'),sourceWorkflow.indexOf('  workflow_dispatch:'))
+  ]) {
+    assert.match(section,/scripts\/verify-independent-review\.mjs/);
+    assert.match(section,/scripts\/verify-independent-review\.test\.mjs/);
+  }
+  assert.match(sourceWorkflow,/node --test scripts\/verify-independent-review\.test\.mjs/);
+});
