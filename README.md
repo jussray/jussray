@@ -8,7 +8,7 @@ My work sits where product judgment meets engineering: **human-centered products
 
 **Start here:** [Juss & Co](https://jussco.company) · [LinkedIn](https://www.linkedin.com/in/juss-rayy-13ba691a1) · [GitHub](https://github.com/jussray)
 
-**Review the work:** [Selected product case studies](PORTFOLIO_CASE_STUDIES.md) — brief → judgment → build → evidence → safe-share boundary.
+**Review the work:** [Selected product case studies](PORTFOLIO_CASE_STUDIES.md) · [AI evaluation evidence packet](AI_EVALUATION_PORTFOLIO_PACKET.md) — judgment → evidence → safe-share boundary.
 
 ## Selected public work
 
@@ -24,6 +24,14 @@ My work sits where product judgment meets engineering: **human-centered products
 | [SolContinuity](https://github.com/jussray/solcontinuity) | Provider-aware continuity, quorum, failover, recovery, and portable evidence tooling | **Building** |
 
 These are separate products and systems. I do not present one project’s capability as another project’s feature unless the integration is actually implemented and verified.
+
+## Juss & Co outcome showcase (feature branch)
+
+The parent-company website at [jussco.company](https://jussco.company) is being extended with **The Outcome Edit**, a brand-preserving showcase for independently verified achievements across the portfolio. Each project retains its own brand, original publication, and source attribution. The parent-company feature is a separate distribution destination, not a claim that projects have merged.
+
+**Current state:** implemented on the `feature/approved-outcome-showcase` branch only. It is **not verified as deployed**. The public feed at `site/data/approved-stories.json` starts empty; no customer stories or testimonials have been published through this feature.
+
+The feed is checked by `scripts/verify-approved-stories.mjs` in `.github/workflows/site-proof.yml`, and `scripts/verify-site.mjs` contains browser regression cases. These checks are committed, **not yet reported as passing at the exact feature head**. **Publication lock active:** the CI validator requires an empty story feed until trusted consent and revocation controls are verified. A source-file approval flag is not authenticated consent. Real-person content must not enter the public feed until the approval source, revocation/removal process, and publication readback are verified. Operational status and evidence continue to live in `site/data/worlds.json`.
 
 ## What I build
 
@@ -72,10 +80,16 @@ NEXT     → the next exact gate
 
 ## Work with me
 
-I’m interested in aligned work and partnerships around **AI product systems, agent infrastructure, verification, privacy, teen/family products, creator tools, commerce, and community economic growth**.
+I take on **paid, focused engagements** where the outcome can be verified rather than hand-waved.
 
-- [Juss & Co](https://jussco.company)
-- [LinkedIn](https://www.linkedin.com/in/juss-rayy-13ba691a1)
+**Current paid paths**
+- **[Chief AI Founder Intelligence](https://github.com/jussray/chief-ai-machine#founding-pilot--300)** — **$300 one time** today; approved lower-entry **$160/month** continuity pricing is pending verified Stripe recurring checkout, tax, and live-account activation.
+- **AI product repair + verification** — trace a real blocker across repo, CI, deployment, runtime, and browser behavior; make the smallest reversible fix; return proof and rollback.
+- **Founder operating-system setup** — structure approvals, evidence, release gates, and cross-tool execution using the patterns proven across Founder Control Room and the wider portfolio.
+
+**Support the public builds:** [GitHub Sponsors](https://github.com/sponsors/jussray)  
+**Talk about paid work:** [LinkedIn](https://www.linkedin.com/in/juss-rayy-13ba691a1) · [Juss & Co](https://jussco.company)
+
 - [Buy Me a Coffee](https://buymeacoffee.com/jussrayy)
 
 ---
