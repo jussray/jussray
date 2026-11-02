@@ -135,3 +135,16 @@ test('missing checks and non-strict status configuration block governance',()=>{
     ? {...r,parameters:{...r.parameters,strict_required_status_checks_policy:false}}:r);
   assert.equal(rulesetDecision([{...enforcedRule,rules:lax}]).ok,false);
 });
+
+test('multiple active main rulesets cannot hide a required human approval',()=>{
+  const conflicting={...enforcedRule,id:456,rules:[
+    {type:'pull_request',parameters:{required_approving_review_count:1,required_review_thread_resolution:true}}
+  ]};
+  assert.equal(rulesetDecision([enforcedRule,conflicting]).ok,false);
+});
+
+test('missing resolved-conversation requirement is blocked even at zero approvals',()=>{
+  const rules=enforcedRule.rules.map(r=>r.type==='pull_request'
+    ? {...r,parameters:{required_approving_review_count:0,required_review_thread_resolution:false}}:r);
+  assert.equal(rulesetDecision([{...enforcedRule,rules}]).ok,false);
+});
