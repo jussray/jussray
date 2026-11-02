@@ -21,6 +21,9 @@ test('public resource questions are accessible and status dates are not falsely 
   assert.equal((html.match(/<details>/g)||[]).length>=3,true);
   assert.doesNotMatch(html,/Status is shown as it is on 30 Sep 2026/);
   assert.doesNotMatch(html,/Status synced /);
+  assert.doesNotMatch(html,/What is true today/);
+  assert.doesNotMatch(html,/A beauty brand pays for the systems/);
+  assert.match(html,/historical receipt does not establish current uptime/);
   assert.match(html,/product availability requires direct verification/);
   assert.match(html,/Standalone OS registry unavailable; current status is unverified/);
 });
