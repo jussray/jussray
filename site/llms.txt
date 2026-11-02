@@ -1,7 +1,7 @@
 # Juss & Co
 
 Canonical site: https://www.jussco.company/
-Licensing: https://www.jussco.company/licensing.html
+Licensing: https://www.jussco.company/licensing
 Licensable public-data manifest: https://www.jussco.company/data/licensable-assets.json
 Licensing contact: founder@jussco.company
 
@@ -15,8 +15,8 @@ Public visibility is not a license grant.
 ## Safe public sources
 
 - https://www.jussco.company/
-- https://www.jussco.company/work.html
-- https://www.jussco.company/services.html
+- https://www.jussco.company/work
+- https://www.jussco.company/services
 - https://www.jussco.company/data/licensable-assets.json
 
 ## Never part of the licensing export
