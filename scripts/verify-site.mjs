@@ -101,7 +101,7 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
     const glass = document.querySelector('.card');
     const blur = getComputedStyle(glass).backdropFilter || getComputedStyle(glass).webkitBackdropFilter || '';
     const worldBackground = getComputedStyle(document.querySelector('#worlds')).backgroundColor;
-    const alpha = worldBackground.match(/rgba?\\(([^)]+)\\)/);
+    const alpha = worldBackground.match(/rgba?\(([^)]+)\)/);
     const components = alpha ? alpha[1].split(',').map(x => Number(x.trim())) : [];
     return { top: b.top, left: b.left, width: b.width, height: b.height, scrollY: window.scrollY,
       blur: blur.includes('blur('), worldAlpha: components.length === 4 ? components[3] : 1 };
