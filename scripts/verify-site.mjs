@@ -13,7 +13,15 @@ const browser = await chromium.launch(); let failed = 0; const say = (ok, m) => 
 const robots = readFileSync(join(ROOT, 'robots.txt'), 'utf8');
 const sitemap = readFileSync(join(ROOT, 'sitemap.xml'), 'utf8');
 say(/User-agent:\s*\*/i.test(robots) && /Allow:\s*\//i.test(robots) && robots.includes('https://www.jussco.company/sitemap.xml'), 'seo: robots allows crawl and declares canonical sitemap');
-say(['https://www.jussco.company/','https://www.jussco.company/services.html','https://www.jussco.company/work.html','https://www.jussco.company/creative-history.html','https://www.jussco.company/games/'].every((x) => sitemap.includes(`<loc>${x}</loc>`)), 'seo: sitemap lists canonical public pages');
+say(['https://www.jussco.company/','https://www.jussco.company/services','https://www.jussco.company/work','https://www.jussco.company/licensing','https://www.jussco.company/creative-history','https://www.jussco.company/games/'].every((x) => sitemap.includes(`<loc>${x}</loc>`)), 'seo: sitemap lists canonical public pages');
+const homepageHTML = readFileSync(join(ROOT, 'index.html'), 'utf8');
+say(homepageHTML.includes('aria-label="Public project directory"') && ['https://sekretbip.net/','https://foundercontrolroom.org/','https://jussbeautifulhair.com/','https://sync.jussco.company/','https://truthweaver.jussco.company/'].every(x => homepageHTML.includes('href="'+x+'"')), 'seo: public project directory is present in initial HTML');
+for (const [file, pathname] of [['services.html','services'],['work.html','work'],['licensing.html','licensing'],['creative-history.html','creative-history']]) {
+  const html = readFileSync(join(ROOT, file), 'utf8');
+  say(html.includes('rel="canonical" href="https://www.jussco.company/'+pathname+'"') && html.includes('property="og:url" content="https://www.jussco.company/'+pathname+'"'), 'seo: canonical and og agree: '+file);
+}
+say(readFileSync(join(ROOT, 'returns.html'), 'utf8').includes('name="robots" content="noindex,follow"') && !homepageHTML.includes('Returns policy (draft)'), 'seo: draft returns policy not indexed and footer corrected');
+say(robots.includes('ai-input=no') && robots.includes('ai-train=no') && robots.includes('User-agent: GPTBot'), 'seo: founder crawler and licensing rules unchanged');
 const expectedOS = ['Truth Weaver', 'Truth Compass', 'Exact Match Engine', 'Living Truth', 'Proof Core'];
 // Browser receipt: verify the actual HTML script attaches and emits fixed, non-personal fields.
 {
