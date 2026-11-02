@@ -10,7 +10,7 @@
     "datasetReuse": "commercial_license_required"
   },
   "licensing": {
-    "page": "https://www.jussco.company/licensing.html",
+    "page": "https://www.jussco.company/licensing",
     "manifest": "https://www.jussco.company/data/licensable-assets.json",
     "contact": "founder@jussco.company"
   },
