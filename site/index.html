@@ -127,7 +127,7 @@ h1,h2,h3{text-wrap:balance}
   linear-gradient(90deg,rgba(6,6,28,.97) 0%,rgba(6,6,28,.9) 30%,rgba(6,6,28,.45) 52%,rgba(6,6,28,0) 72%),
   linear-gradient(0deg,rgba(6,6,28,.85) 0%,rgba(6,6,28,0) 30%),
   linear-gradient(180deg,rgba(6,6,28,.5) 0%,rgba(6,6,28,0) 25%)}
-#stars{position:absolute;inset:0;z-index:-1;width:100%;height:100%;pointer-events:none}
+#stars{position:fixed;inset:0;z-index:0;width:100%;height:100%;pointer-events:none}
 .hero .in{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:32px;padding-block:clamp(56px,7vw,104px) clamp(48px,6vw,80px);min-height:min(760px,86vh);align-items:center}
 .eyebrow{color:var(--cream);opacity:.9;margin-bottom:18px}
 .h-brand{font-family:var(--f-display);font-weight:400;text-transform:uppercase;font-size:clamp(58px,8.2vw,128px);line-height:.9;white-space:nowrap;letter-spacing:.01em;background:linear-gradient(180deg,#FFFFFF 0%,#EDE4FF 45%,#B98CFF 78%,#7C5CFF 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 26px rgba(139,92,246,.55)) drop-shadow(0 4px 0 rgba(0,0,0,.35))}
@@ -319,6 +319,22 @@ h1,h2,h3{text-wrap:balance}
 .cols a:hover{color:#fff}
 .legal{margin-top:clamp(40px,6vw,64px);padding-top:18px;border-top:1px solid rgba(170,150,255,.16);display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;font-size:12px;color:var(--dim)}
 
+/* Fixed cosmic sky behind scrolling glass; no scroll-linked background transforms.
+   Keep the original typography, hero art, grid dimensions, and brand colors. */
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:
+  radial-gradient(ellipse at 75% 18%,rgba(65,75,165,.26),transparent 55%),
+  radial-gradient(ellipse at 16% 82%,rgba(116,57,175,.19),transparent 52%),
+  var(--void)}
+main{position:relative;z-index:1}
+.universe{background:radial-gradient(70% 50% at 100% 0%,rgba(61,107,255,.16),transparent 60%),radial-gradient(60% 50% at 0% 100%,rgba(184,107,255,.14),transparent 60%),rgba(6,6,28,.16)}
+.os-layer{background:radial-gradient(65% 70% at 100% 10%,rgba(59,227,255,.10),transparent 60%),radial-gradient(55% 65% at 0% 90%,rgba(184,107,255,.13),transparent 62%),rgba(7,7,32,.18)}
+.proof{background:linear-gradient(180deg,rgba(6,6,28,.22),rgba(8,8,43,.28) 50%,rgba(6,6,28,.22))}
+.why{background:radial-gradient(60% 60% at 15% 20%,rgba(245,193,75,.10),transparent 60%),radial-gradient(60% 60% at 90% 90%,rgba(139,92,246,.18),transparent 60%),rgba(6,6,28,.22)}
+.close::before{background:linear-gradient(180deg,rgba(6,6,28,.38),rgba(6,6,28,.6) 30%,rgba(6,6,28,.75))}
+.card,.os-card,.panel,.step,.drawer,.why-list li{backdrop-filter:blur(10px) saturate(1.12);-webkit-backdrop-filter:blur(10px) saturate(1.12)}
+.card{background:linear-gradient(180deg,rgba(24,20,70,.52),rgba(10,9,38,.70))}
+.os-card{background:linear-gradient(180deg,rgba(16,14,52,.60),rgba(7,7,28,.74))}
+
 /* ---- responsive ---- */
 @media (max-width:1100px){
   .sec-head{grid-template-columns:minmax(0,1fr)}
@@ -364,6 +380,7 @@ h1,h2,h3{text-wrap:balance}
 </style>
 </head>
 <body>
+<canvas id="stars" aria-hidden="true"></canvas>
 <header class="top wrap">
   <div class="in">
     <a class="brand" href="#top">Juss <b>&amp;</b> Co</a>
@@ -386,7 +403,6 @@ h1,h2,h3{text-wrap:balance}
 <!-- ================= HERO ================= -->
 <section class="hero wrap" aria-labelledby="h-hero">
   <div class="hero-bg" id="heroBg"><img src="assets/hero.jpg" alt="" fetchpriority="high" width="1160" height="586"></div>
-  <canvas id="stars" aria-hidden="true"></canvas>
   <div class="in">
     <div>
       <div class="eyebrow mono">A founder studio for a brighter tomorrow</div>
@@ -818,16 +834,21 @@ Promise.all([
   }
 
   /* ---------- parallax + stars ---------- */
-  var bg = document.getElementById("heroBg");
-  if(!reduce){ var tk=false; window.addEventListener("scroll", function(){ if(tk) return; tk=true; requestAnimationFrame(function(){ var y=Math.min(window.scrollY,800); bg.style.transform="translate3d(0,"+(y*.25)+"px,0)"; tk=false; }); },{passive:true}); }
   var cv=document.getElementById("stars"), ctx=cv.getContext&&cv.getContext("2d");
   if(ctx){
-    var stars=[],W=0,H=0,dpr=Math.min(window.devicePixelRatio||1,2),running=true;
-    function size(){ var r=cv.getBoundingClientRect(); W=r.width; H=r.height; cv.width=W*dpr; cv.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); stars=[]; var n=Math.round(W*H/11000); for(var i=0;i<n;i++) stars.push({x:Math.random()*W,y:Math.random()*H*.6,r:Math.random()*1.3+.2,p:Math.random()*6.28,s:.4+Math.random()*1.2,h:Math.random()<.25?"59,227,255":(Math.random()<.5?"200,180,255":"255,255,255")}); }
-    function draw(t){ ctx.clearRect(0,0,W,H); for(var i=0;i<stars.length;i++){ var s=stars[i], a=.3+.45*Math.sin(s.p+t*.001*s.s); ctx.fillStyle="rgba("+s.h+","+a.toFixed(3)+")"; ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,6.283); ctx.fill(); } }
+    var stars=[],W=0,H=0,dpr=Math.min(window.devicePixelRatio||1,2),running=!document.hidden;
+    function size(){ var r=cv.getBoundingClientRect(); W=r.width; H=r.height; cv.width=W*dpr; cv.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); stars=[]; var n=Math.round(W*H/11000); for(var i=0;i<n;i++) stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.3+.2,p:Math.random()*6.28,s:.4+Math.random()*1.2,glint:Math.random()<.16,h:Math.random()<.25?"59,227,255":(Math.random()<.5?"200,180,255":"255,255,255")}); }
+    function draw(t){ ctx.clearRect(0,0,W,H); for(var i=0;i<stars.length;i++){
+      var s=stars[i], a=.46+.38*Math.sin(s.p+t*.001*s.s);
+      ctx.fillStyle="rgba("+s.h+","+a.toFixed(3)+")";
+      ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,6.283); ctx.fill();
+      if(s.glint && a>.7){ var reach=3+s.r*2; ctx.strokeStyle="rgba("+s.h+","+((a-.7)*1.5).toFixed(3)+")";
+        ctx.lineWidth=.7; ctx.beginPath(); ctx.moveTo(s.x-reach,s.y); ctx.lineTo(s.x+reach,s.y);
+        ctx.moveTo(s.x,s.y-reach); ctx.lineTo(s.x,s.y+reach); ctx.stroke(); }
+    } }
     size(); draw(0);
     window.addEventListener("resize", function(){ size(); draw(performance.now()); });
-    if("IntersectionObserver" in window){ new IntersectionObserver(function(es){ running = es[0].isIntersecting; },{threshold:0}).observe(cv); }
+    document.addEventListener("visibilitychange",function(){ running=!document.hidden; if(running) draw(performance.now()); });
     if(!reduce){ (function loop(t){ if(running) draw(t); requestAnimationFrame(loop); })(0); }
   }
 
