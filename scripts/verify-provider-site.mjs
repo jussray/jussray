@@ -16,6 +16,7 @@ const HOSTS = ['jussco.company', 'www.jussco.company'];
 const REGISTRIES = ['worlds', 'systems', 'connectors'];
 const CANONICAL = 'https://www.jussco.company/';
 const COMPANY_QR_LABEL = 'Scan to explore';
+const HEALTH_PROBE_SCRIPT = `(async()=>{let code='network-error';try{const r=await fetch('/_telemetry/v1/health',{method:'POST',credentials:'omit',headers:{'Content-Type':'application/json'},body:JSON.stringify({probe:'health-v1'})});code=String(r.status)}catch{}document.documentElement.setAttribute('data-receiver-health',code)})();`;
 const ENTER_BIP = `setTimeout(() => { document.querySelector('[data-testid="web-welcome-enter"]')?.click(); }, 300);`;
 const OPEN_BIP_CARD = `(() => {let tries=0;const h=setInterval(() => {const card=Array.from(document.querySelectorAll('.card')).find(e => e.querySelector('h3')?.textContent?.trim() === "Se'kret Bip");if (card && card.querySelector('.go')) {card.querySelector('.go').click();clearInterval(h);}if (++tries > 30) clearInterval(h);},100);})();`;
 
@@ -87,6 +88,17 @@ export function verifyBipContent(html, stage) {
   } else {
     throw new Error('Unknown Se’kret Bip verification stage');
   }
+}
+
+export function verifyReceiverHealthHtml(content) {
+  if (typeof content !== 'string' || !/<html[\s>]/i.test(content)) {
+    throw new Error('Provider health proof did not return rendered HTML');
+  }
+  const found = content.match(/data-receiver-health=["']([^"']+)["']/);
+  if (!found || found[1] !== '204') {
+    throw new Error('Live first-party receiver health probe failed (expected HTTP 204 from schema readback)');
+  }
+  return true;
 }
 
 export function assertReleaseContext(env) {
@@ -167,6 +179,15 @@ export async function runProof({env=process.env, fetchImpl=fetch, root=ROOT}={})
       console.log(`VERIFIED ${host} ${viewport.width}px, company page and canonical scan link`);
     }
   }
+  // Read-only, no synthetic conversion: the receiver checks D1 table presence but never INSERTs.
+  const healthPage = await request('content', {
+    url: CANONICAL, actionTimeout:18_000,
+    addScriptTag:[{content:HEALTH_PROBE_SCRIPT}],
+    waitForSelector:{selector:'html[data-receiver-health]',timeout:15_000},
+  });
+  verifyReceiverHealthHtml(healthPage);
+  witness.pageProof.push({host:'www.jussco.company',firstPartyReceiverReadOnlyHealth:true,healthStatus:204});
+  console.log('VERIFIED first-party receiver D1 health: HTTP 204 (no conversion rows written)');
   // The independent Se'kret Bip runtime and age-assurance proof belongs to
   // Se'kret Bip's release gate. Do not couple parent-site attestations to
   // unrelated or unfinished product flows.
