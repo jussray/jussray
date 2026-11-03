@@ -23,3 +23,31 @@ test('dedicated provider proof remains fail-closed production authority', () => 
   assert.match(providerProof, /https:\/\/games\.jussco\.company\//);
   assert.match(providerProof, /Missing scoped Cloudflare Browser Rendering token or account ID/);
 });
+
+test('required site proof runs on every PR and keeps publication lock enabled', () => {
+  const pr = sourceWorkflow.slice(sourceWorkflow.indexOf('  pull_request:'), sourceWorkflow.indexOf('  workflow_dispatch:'));
+  assert.doesNotMatch(pr, /paths:/, 'A required status check must not be path-filtered');
+  assert.match(sourceWorkflow, /run: node scripts\/verify-approved-stories\.mjs/);
+  assert.match(sourceWorkflow, /name: Juss & Co Site Browser Proof/);
+});
+
+test('GitHub webhook receiver test runs in site-proof CI', () => {
+  assert.match(sourceWorkflow, /run: node --test tests\/jussco-github-webhook\.test\.mjs/);
+});
+
+test('webhook security tests run on every PR and on relevant main pushes', () => {
+  const push = sourceWorkflow.slice(sourceWorkflow.indexOf('  push:'), sourceWorkflow.indexOf('  pull_request:'));
+  const pr = sourceWorkflow.slice(sourceWorkflow.indexOf('  pull_request:'), sourceWorkflow.indexOf('  workflow_dispatch:'));
+  assert.match(push, /tests\/jussco-github-webhook\.test\.mjs/);
+  assert.doesNotMatch(pr, /paths:/);
+  assert.match(sourceWorkflow, /run: node --test tests\/jussco-github-webhook\.test\.mjs/);
+});
+
+test('trusted-checker bootstrap runs its unit tests on every PR', () => {
+  const push = sourceWorkflow.slice(sourceWorkflow.indexOf('  push:'),sourceWorkflow.indexOf('  pull_request:'));
+  const pr = sourceWorkflow.slice(sourceWorkflow.indexOf('  pull_request:'),sourceWorkflow.indexOf('  workflow_dispatch:'));
+  assert.match(push,/scripts\/verify-independent-review\.mjs/);
+  assert.match(push,/scripts\/verify-independent-review\.test\.mjs/);
+  assert.doesNotMatch(pr,/paths:/);
+  assert.match(sourceWorkflow,/node --test scripts\/verify-independent-review\.test\.mjs/);
+});
