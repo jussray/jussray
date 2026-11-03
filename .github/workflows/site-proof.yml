@@ -26,6 +26,8 @@ jobs:
         run: node --test scripts/agent-discovery.test.mjs
       - name: Licensing export is sanitized and rights are reserved
         run: node --test scripts/licensable-assets.test.mjs
+      - name: IndexNow key file is served and matches its filename
+        run: node --test scripts/indexnow-key.test.mjs
       - name: Verify worlds-patch executor truth gates
         run: python3 tools/worlds-patch-executor/test_worlds_patch.py
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
