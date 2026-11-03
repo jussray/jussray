@@ -32,7 +32,7 @@ Published = provider readback proves the observable artifact exists.
 
 ---
 
-## Public-safe content (always allowed)
+## Public-safe content candidates (NOT permission to publish)
 
 - What changed (behavior, not mechanism)
 - Problem solved (outcome, not implementation)
@@ -91,6 +91,8 @@ Sauce Guard review checklist before handing to Current You:
 ## FCR revalidation at execution time
 
 Before FCR executes the publish:
+
+- Require current, explicit founder approval bound to the exact content, channel, target audience, and action; a prior approval, public-safe classification or a model recommendation is never sufficient.
 
 - Re-verify that CURRENT claims are still CURRENT (reality may have shifted since draft)
 - Confirm the approved proposal is the exact one being executed (no silent edits)
