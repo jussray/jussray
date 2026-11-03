@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { gitBlobSha, extractScrapedRegistry, verifyWorldRegistry, verifySiteMarkdown, verifyDestinationMarkdown, verifyBipContent, assertSha, assertReleaseContext, runProof } from './verify-provider-site.mjs';
+import { gitBlobSha, extractScrapedRegistry, verifyWorldRegistry, verifySiteMarkdown, verifyDestinationMarkdown, verifyBipContent, assertSha, assertReleaseContext, verifyReceiverHealthHtml, runProof } from './verify-provider-site.mjs';
 
 const site = `---\ntitle: "Juss & Co"\n---\nTurn thoughts into living works.\n### Se'kret Bip\nOpening soon · no public link yet\nScan to explore www.jussco.company`;
 
@@ -65,4 +65,16 @@ test('production witness accepts main push and manual main dispatch only',()=>{
     ['refs/heads/feature','push'],['refs/heads/feature','workflow_dispatch'],
     ['refs/heads/main','pull_request'],['refs/heads/main','schedule']
   ]) assert.throws(()=>assertReleaseContext({GITHUB_REF:ref,GITHUB_EVENT_NAME:event}),/only after main push/);
+});
+
+test('provider health proof requires live HTML and actual 204 response', () => {
+  const valid = '<!doctype html><html lang="en" data-receiver-health="204"><body></body></html>';
+  assert.equal(verifyReceiverHealthHtml(valid), true);
+  for (const invalid of [
+    '<!doctype html><html data-receiver-health="503"></html>',
+    '<!doctype html><html data-receiver-health="400"></html>',
+    '<!doctype html><html data-receiver-health="network-error"></html>',
+    '<!doctype html><html></html>',
+    'HTTP 204 without HTML',
+  ]) assert.throws(() => verifyReceiverHealthHtml(invalid), /health probe|rendered HTML/);
 });

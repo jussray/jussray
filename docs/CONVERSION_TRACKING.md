@@ -22,10 +22,11 @@ Global Privacy Control (`navigator.globalPrivacyControl`) and Do Not Track are h
 ## Proof and release gates
 
 1. Run `node --test scripts/conversion-tracking.test.mjs` to verify event classification, strict props, GPC/DNT suppression, spoofed hostnames, and failure isolation.
-2. Run the existing Chromium site proof `node scripts/verify-site.mjs` on the candidate; the script now includes event instrumentation readback in Chromium.
-3. Observe exact PR head SHA and all required GitHub checks. Do not promote tests on a former commit to current proof.
-4. Cloudflare Zaraz was observed with `autoInjectScript: true`, but **zero configured destination tools** as of 2026-10-22. Do not call this production conversion reporting until a privacy-reviewed sink is configured, events are verified at the receiver, and the current deployed script responds HTTP 200 with JavaScript MIME.
-5. Merge, Cloudflare deployment, provider changes, and publishing are separate authority gates; this review candidate does not execute them. Rollback is removal of the one HTML script reference; the JS file and tests can then be removed in a follow-up.
+2. Run `node scripts/verify-site.mjs` for deterministic exact-source Chromium proof only. It must not call public production domains; hosted-CI Cloudflare challenges are not source regressions.
+3. Run `node scripts/verify-provider-site.mjs` only from the dedicated provider workflow on `main`, using scoped Cloudflare Browser Rendering credentials. That is the fail-closed production browser witness for `jussco.company`, `www.jussco.company`, and the Games hub.
+4. Observe exact PR head SHA and all required GitHub checks. Do not promote tests on a former commit to current proof.
+5. Cloudflare Zaraz was observed with `autoInjectScript: true`, but **zero configured destination tools** as of 2026-10-22. Do not call this production conversion reporting until a privacy-reviewed sink is configured, events are verified at the receiver, and the current deployed script responds HTTP 200 with JavaScript MIME.
+6. Merge, Cloudflare deployment, provider changes, and publishing are separate authority gates; this review candidate does not execute them. Rollback is removal of the one HTML script reference; the JS file and tests can then be removed in a follow-up.
 
 ## Later project-specific expansion
 
@@ -61,3 +62,14 @@ LIMIT 500;
 A frontend click is a *signal*, not a deduplicated human, qualified lead, WhatsApp message, or financial outcome. No private or user-level details should be added to these metrics. Spoofable client-originated activity is not trusted proof; protect against abuse and monitor anomalies before treating counts as reliable.
 
 **Release gates:** Exact-head CI (including receiver tests), fresh source/PR review, dedicated D1 creation and id binding, no-risk Worker script upload, route scope verification for `www.jussco.company/_telemetry/v1*`, separately authorized merge/site deployment, live endpoint negative tests, test fixture with count readback, and report aggregation. Do not present a source PR as collection actually running. Rolling back the route stops all collection while leaving the static site intact. The D1 records and schema are never deleted as an implied rollback.
+
+## Read-only receiver health diagnostic — October 22, 2026
+
+The follow-up source patch proposes a narrowly scoped `POST /_telemetry/v1/health` endpoint, served by the existing `www.jussco.company/_telemetry/v1*` Worker route. The endpoint requires the same canonical browser Origin and `Sec-Fetch-Site` restrictions as normal event traffic, an exact JSON body `{"probe":"health-v1"}`, and a bound D1 database.
+
+- Success: `204 No Content` only if a read-only column-select query succeeds, even when the table is empty; absent table or columns, missing binding, D1 errors: `503`. Malformed body: `400`. Wrong origin: `403`. No conversion row is created for any probe outcome.
+- The independent production witness uses Cloudflare Browser Rendering to invoke the health POST on the canonical live page, then requires an actual `204` DOM receipt. A string matching `204` in a test fixture or repository source does not prove that the deployed Worker works.
+- A passing health probe means **route + Worker + D1 schema are reachable**. It does **not** establish that a genuine visitor made a contact request, that the event insert path was exercised, or that GitHub-hosted browsers can pass Cloudflare protection.
+- Production rollout still requires review/merge, testing at exact HEAD, deploying **only** the separate conversion receiver Worker, provider browser readback, and operator configuration of GitHub Actions Browser Rendering credentials. Do not silently substitute an uncredentialed self-attestation for the independent provider proof.
+
+Do not write test events to `conversion_daily`. Existing GitHub Actions 403 and missing-token blockers remain **FAILED/BLOCKED** until separately resolved.
