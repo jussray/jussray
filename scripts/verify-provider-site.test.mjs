@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { gitBlobSha, extractScrapedRegistry, verifyWorldRegistry, verifySiteMarkdown, verifyDestinationMarkdown, verifyBipContent, assertSha, runProof, createQuickActionPacer, verifyLayoutHtml, verifyHtmlSourceMatch, cfRequest, assertFinalDestination, makePartialReadbackWitness } from './verify-provider-site.mjs';
 
 const bipLink = '[Visit Se\'kret Bip preview ↗](https://sekretbip.jussco.company/)';
@@ -135,4 +136,12 @@ test('successful public readback still cannot claim exact deployed-SHA verificat
   assert.deepEqual(receipt.registries,[]);
   assert.deepEqual(receipt.pageProof,[]);
   assert.throws(()=>makePartialReadbackWitness('short'),/40-character/);
+});
+
+
+test('provider Actions ID secret fallback does not weaken dedicated rendering token', () => {
+  const yaml = readFileSync(new URL('../.github/workflows/provider-site-proof.yml', import.meta.url), 'utf8');
+  assert.match(yaml, /CLOUDFLARE_ACCOUNT_ID: \$\{\{ vars\.CLOUDFLARE_ACCOUNT_ID \|\| secrets\.CLOUDFLARE_ACCOUNT_ID \}\}/);
+  assert.match(yaml, /CLOUDFLARE_BROWSER_RENDERING_TOKEN: \$\{\{ secrets\.CLOUDFLARE_BROWSER_RENDERING_TOKEN \}\}/);
+  assert.doesNotMatch(yaml, /CLOUDFLARE_BROWSER_RENDERING_TOKEN: \$\{\{ secrets\.CLOUDFLARE_API_TOKEN/);
 });
