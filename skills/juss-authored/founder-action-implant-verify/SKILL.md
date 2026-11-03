@@ -32,7 +32,7 @@ description: "Execute one bounded founder-directed action on any repo or system,
 - Pre-flight: repo, PR number/SHA, required checks
 - Merge: gh pr merge or GitHub API call
 - Verify: branch status, main head, base unchanged
-- Stop on: checks failing, merge conflict, permission denied
+- Stop on: missing current explicit founder merge authorization, unexpected head, failing or missing required checks, merge conflict, permission denied
 
 ### CI/Playwright verification lane
 - Pre-flight: test exists, can run locally or trigger
@@ -41,7 +41,7 @@ description: "Execute one bounded founder-directed action on any repo or system,
 - Stop on: test timeout, permission, network
 
 ### Provider change lane (deploy, config, DNS, etc.)
-- Pre-flight: access confirmed, target identified, change scope clear
+- Pre-flight: access confirmed, exact target and authoritative revision identified, current explicit authorization for deploy/config/DNS or other consequential change recorded
 - Execute: provider CLI or API call (vercel, cloudflare, gh, aws, etc.)
 - Verify: provider readback (live config, deployment status, resource state)
 - Stop on: auth error, invalid config, rate limit
@@ -75,7 +75,7 @@ RISK:
   
 ROLLBACK:
   [exact reversal command or steps]
-  git: git revert SHA / git reset --hard HEAD~1 / git push origin main
+  git: prefer a reviewed `git revert <applied-SHA>` on a new branch; never force-push/reset shared history as a routine rollback
   provider: [exact undo steps or previous config]
   
 NEXT GATE:
@@ -87,7 +87,7 @@ NEXT GATE:
 
 - **One action per invocation.** If multiple changes are needed, execute one, report, and wait for approval before the next.
 - **No speculation loops.** Verify the path exists before spending context on it. If the path is unknown or blocked, name it and stop.
-- **No full diffs.** Stat-only reporting (file names + line counts) unless diffs directly prove the claim.
+- **Preserve reviewability.** Use brief stat-only summaries by default, but include focused diffs whenever needed to prove the change or expose a security risk.
 - **Evidence only.** Report what you can prove. Mark unknown state clearly.
 - **Stop on unknown.** UNKNOWN status for a repo, branch, or provider state = BLOCKED. Do not guess.
 - **Zero token waste.** One pre-flight check, one execute, one verify. If the execute fails, diagnose once, then report the failure.
@@ -126,7 +126,7 @@ Report:
     mutations: sync behavior now idempotent (intended)
     
   ROLLBACK:
-    git reset --hard abc123 && git push origin main
+    create a new reviewed revert of def456; preserve protected-branch history
     
   NEXT GATE:
     merge / wait for manual review / investigate test red

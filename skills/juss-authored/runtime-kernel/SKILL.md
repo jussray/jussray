@@ -159,10 +159,10 @@ Must.
 Record each run as a JSON receipt and validate it:
 
 ```bash
-python scripts/check_receipt.py receipt.json
+python <installed-skill-path>/scripts/check_receipt.py receipt.json
 ```
 
-The checker enforces:
+The **structural checker** enforces the following *presence, consistency and declared-state constraints*. It does not verify that pointers resolve to genuine independent evidence, authenticate founders, or prove any external runtime result:
 - PROVEN and CANDIDATE 5W1H slots carry separate value + evidence.
 - forensic WHO attribution binds actor + identity evidence + action evidence; authority is recorded
   separately as AUTHORIZED / UNAUTHORIZED / UNKNOWN and must be AUTHORIZED for VERIFIED claims.
@@ -177,7 +177,7 @@ The checker enforces:
 - a value cannot be its own evidence (e.g., URL in WHERE.evidence is invalid; trace pointer is valid).
 - identity evidence cannot be reused to claim different actors performed different actions.
 
-Schema and examples live in `references/receipt-schema.md`.
+Schema and a local example live in `references/receipt-schema.md`. Exit 0 means **SCHEMA_OK**, not `VERIFIED` in the external sense. Production verification additionally requires independent runtime/provider evidence and permission-bound action receipts.
 
 ## Final states
 

@@ -58,7 +58,7 @@ No tools, APIs, or platform features are required. Where a step needs a browser,
 ## Commit and merge rule
 - Default outcome is a commit on a fix branch. Do not merge.
 - Commit only when: the diff is focused, checks are green, real-path evidence exists (Playwright trace or screenshot for UI), and a rollback path is written.
-- Merge only when Juss explicitly approves in this session, or a standing rule in the repo grants it.
+- Merge only with current explicit founder approval for the exact PR and head SHA, and only after all required checks pass. A standing rule alone is insufficient for authorization.
 - Never commit or merge over unrelated work.
 
 ## Budget
