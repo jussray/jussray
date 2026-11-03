@@ -8,7 +8,7 @@ My work sits where product judgment meets engineering: **human-centered products
 
 **Start here:** [Juss & Co](https://jussco.company) · [LinkedIn](https://www.linkedin.com/in/juss-rayy-13ba691a1) · [GitHub](https://github.com/jussray)
 
-**Review the work:** [Selected product case studies](PORTFOLIO_CASE_STUDIES.md) — brief → judgment → build → evidence → safe-share boundary.
+**Review the work:** [Selected product case studies](PORTFOLIO_CASE_STUDIES.md) · [AI evaluation evidence packet](AI_EVALUATION_PORTFOLIO_PACKET.md) — judgment → evidence → safe-share boundary.
 
 ## Selected public work
 
@@ -83,7 +83,7 @@ NEXT     → the next exact gate
 I take on **paid, focused engagements** where the outcome can be verified rather than hand-waved.
 
 **Current paid paths**
-- **[$300 Chief AI Founder Intelligence pilot](https://github.com/jussray/chief-ai-machine#founding-pilot--300)** — for the first 3 paying users; turn scattered prompts, decisions, workflows, and AI context into a portable company-intelligence system, including an inventory, workspace setup, reusable assets, portable export, and one follow-up review.
+- **[Chief AI Founder Intelligence](https://github.com/jussray/chief-ai-machine#founding-pilot--300)** — **$300 one time** today; approved lower-entry **$160/month** continuity pricing is pending verified Stripe recurring checkout, tax, and live-account activation.
 - **AI product repair + verification** — trace a real blocker across repo, CI, deployment, runtime, and browser behavior; make the smallest reversible fix; return proof and rollback.
 - **Founder operating-system setup** — structure approvals, evidence, release gates, and cross-tool execution using the patterns proven across Founder Control Room and the wider portfolio.
 

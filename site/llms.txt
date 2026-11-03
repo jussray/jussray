@@ -1,0 +1,26 @@
+# Juss & Co
+
+Canonical site: https://www.jussco.company/
+Licensing: https://www.jussco.company/licensing.html
+Licensable public-data manifest: https://www.jussco.company/data/licensable-assets.json
+Licensing contact: founder@jussco.company
+
+## Public-use policy
+
+Search indexing, linking, and short attributed reference excerpts are allowed.
+AI-model training, fine-tuning, bulk extraction, dataset reuse, generative AI ingestion, reproduction, and derivative or competing use require a separate written commercial license.
+
+Public visibility is not a license grant.
+
+## Safe public sources
+
+- https://www.jussco.company/
+- https://www.jussco.company/work.html
+- https://www.jussco.company/services.html
+- https://www.jussco.company/data/licensable-assets.json
+
+## Never part of the licensing export
+
+Private user or customer records; child, teen, guardian, family, or private-message data; authentication or payment records; credentials; private analytics; internal prompts; safety thresholds; internal receipts; and unreleased architecture.
+
+For the repository license and source-code restrictions, see https://github.com/jussray/jussray/blob/main/LICENSE
