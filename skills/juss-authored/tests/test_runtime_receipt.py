@@ -105,4 +105,34 @@ class RuntimeReceiptTests(unittest.TestCase):
         self.assertTrue(module().validate(data))
 
 
+    def test_verified_requires_explicit_runtime_policy_booleans(self):
+        for field in ('execution_occurred', 'governed_action', 'artifact_required'):
+            with self.subTest(field=field):
+                data = valid_receipt()
+                del data['runtime'][field]
+                self.assertTrue(module().validate(data), f'{field} omission must fail closed')
+
+    def test_verified_rejects_nonboolean_runtime_policy_fields(self):
+        for field in ('execution_occurred', 'governed_action', 'artifact_required'):
+            for value in (None, 'false', 1, [], {}):
+                with self.subTest(field=field, value=repr(value)):
+                    data = valid_receipt()
+                    data['runtime'][field] = value
+                    self.assertTrue(module().validate(data), f'{field} must be a JSON boolean')
+
+    def test_missing_execution_flag_cannot_bypass_executor_evidence(self):
+        data = valid_receipt()
+        del data['runtime']['execution_occurred']
+        del data['who']['executed']
+        self.assertTrue(module().validate(data))
+
+    def test_explicit_false_flags_are_valid_for_non_executed_nongoverned_observation(self):
+        data = valid_receipt()
+        data['runtime']['execution_occurred'] = False
+        data['runtime']['governed_action'] = False
+        data['runtime']['artifact_required'] = False
+        data['runtime'].pop('artifact', None)
+        data['who'].pop('executed')
+        self.assertEqual(module().validate(data), [])
+
 if __name__ == '__main__': unittest.main()

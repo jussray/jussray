@@ -81,6 +81,11 @@ def validate(record):
     if not isinstance(runtime, dict):
         runtime = {}
         issues.append('runtime must be an object for VERIFIED')
+    # A missing policy flag must not silently skip proof or approval gates.
+    # Require actual JSON booleans: 0, 1, strings, and null are not accepted.
+    for flag in ('execution_occurred', 'governed_action', 'artifact_required'):
+        if type(runtime.get(flag)) is not bool:
+            issues.append(f'runtime.{flag} must be an explicit boolean')
     if runtime.get('observed') is not True:
         issues.append('runtime.observed must be true')
     if not present(runtime.get('environment')):
