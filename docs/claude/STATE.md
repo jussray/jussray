@@ -1,3 +1,12 @@
+## 2026-11-04 — Project repos: paper/dry-run authority layers; no live money
+
+- REALITY: four project repos (SleepWealth-Agent, SolWealth-Meteora-, sideshift-Juss-bridge-, and an FCR feature branch) now carry authorization-evaluator code and their own `docs/claude/STATE.md`. Heads are recorded in those repos, not here. No live trading, signing, broadcast or payment path is enabled. VERIFIED by reading each repo's code and remote head.
+- FIX: dry-run AI seams, a two-model account-scope evaluator (customer-connected and pooled-managed), and an FCR governance profile update. All evaluators return `live_execution_authorized: false`.
+- PROOF: each repo's own test suite passed at its recorded head. Those numbers are in the repos' state files.
+- RISK: no receipt issuer exists yet, so no scope can reach eligibility in practice. Solana custody model and SideShift's money-flow role are undecided.
+- ROLLBACK: revert the project commits listed in each repo's state file.
+- NEXT GATE: founder decisions listed in each project's state file. No public status change: `site/data/worlds.json` is founder-declared and unchanged.
+
 ## 2026-10-20 — Juss Digital rename: standing founder rule + receipt
 - RULE (Juss, repeated): the former service name is retired everywhere; the brand is **Juss Digital**. Never reintroduce the former name in files, PR titles/bodies, or branch names — including in receipts like this one.
 - REALITY @ main 520a073: 0 occurrences of the former name in any tracked file (VERIFIED, case-insensitive `git grep` on `origin/main`). Rename landed via PR #5 (squash de4fa59); PR #4 and #5 titles/bodies rewritten to Juss Digital.
