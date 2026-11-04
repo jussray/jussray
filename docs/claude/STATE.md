@@ -1,3 +1,9 @@
+## 2026-11-04 — Standing rule: fix CI at the cause, never bypass
+
+- RULE (Juss, 2026-11-04): when CI fails, fix the cause. Never bypass, skip, weaken, relabel or disable a gate to make it pass. Classify each failing check from its job logs first, then make the narrowest correct change on the branch and re-run the exact head.
+- Any fix push moves the PR head. Proof from the old head does not carry over to the new one, and any merge approval must name the new head.
+- ROLLBACK: revert the commit that recorded this rule.
+
 ## 2026-11-04 — Project repos: paper/dry-run authority layers; no live money
 
 - REALITY: four project repos (SleepWealth-Agent, SolWealth-Meteora-, sideshift-Juss-bridge-, and an FCR feature branch) now carry authorization-evaluator code and their own `docs/claude/STATE.md`. Heads are recorded in those repos, not here. No live trading, signing, broadcast or payment path is enabled. VERIFIED by reading each repo's code and remote head.
