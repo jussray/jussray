@@ -25,3 +25,5 @@ jobs:
         run: python -m compileall -q skills/juss-authored/juss-os/scripts skills/juss-authored/runtime-kernel/scripts
       - name: Run receipt regression tests
         run: python -m unittest discover -s skills/juss-authored/tests -p 'test_*.py' -v
+      - name: Verify SHA-256 export file integrity and inventory
+        run: python skills/juss-authored/scripts/verify_inventory.py skills/juss-authored
