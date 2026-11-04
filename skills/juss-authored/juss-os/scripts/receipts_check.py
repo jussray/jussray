@@ -177,8 +177,11 @@ def check(rdir, head=None, eroot=None, now=None):
                     broken.append(f"{rid}: evidence invalid/unreadable: {e}")
 
         created = fields.get("CREATED-AT", "")
-        if not parse_time(created):
+        created_at = parse_time(created)
+        if not created_at:
             broken.append(f"{rid}: CREATED-AT must be timezone-aware ISO-8601")
+        elif isinstance(now, datetime) and now.tzinfo is not None and now.utcoffset() is not None and created_at > now:
+            broken.append(f"{rid}: CREATED-AT is in the future relative to the verification time")
         recheck = fields.get("RECHECK-BY", "").strip()
         if recheck:
             dt = parse_time(recheck)
@@ -189,12 +192,14 @@ def check(rdir, head=None, eroot=None, now=None):
 
     if tip and head and FULL_SHA.fullmatch(head):
         rec = receipts[tip][1].get("AUTHORITY-DIGEST", "")
-        match = SHA_IN_AUTHORITY.search(rec)
-        if not match:
+        matches = SHA_IN_AUTHORITY.findall(rec)
+        if not matches:
             broken.append(f"{tip}: AUTHORITY-DIGEST has no @<sha>")
-        elif len(match.group(1)) != len(head):
+        elif len(matches) != 1:
+            broken.append(f"{tip}: AUTHORITY-DIGEST must contain exactly one repository SHA reference")
+        elif len(matches[0]) != len(head):
             notes.append(f"{tip}: AUTHORITY-DIGEST uses abbreviated/nonmatching-width SHA; exact head unverified")
-        elif match.group(1).lower() != head.lower():
+        elif matches[0].lower() != head.lower():
             stale.append(f"{tip}: AUTHORITY-DIGEST does not match provided HEAD")
 
     chain = ["CHAIN: " + " -> ".join(order)] if order else []

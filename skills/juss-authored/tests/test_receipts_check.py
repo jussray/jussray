@@ -125,6 +125,29 @@ class ReceiptSafetyTests(unittest.TestCase):
             code, _, _ = checker.check(root, head=HEAD, eroot=root)
             self.assertEqual(code, 2, "duplicate authority keys must reject the receipt")
 
+    def test_future_dated_receipt_fails_closed(self):
+        with tempfile.TemporaryDirectory() as t:
+            root = pathlib.Path(t)
+            (root / "proof.txt").write_text("hello")
+            d = checker.digest(root, ["proof.txt"])
+            (root / "start.md").write_text(receipt(timestamp="2035-01-01T00:00:00Z", evid_digest=d))
+            code, _, _ = checker.check(root, head=HEAD, eroot=root, now=datetime(2026, 11, 4, tzinfo=timezone.utc))
+            self.assertEqual(code, 2)
+
+    def test_multiple_authority_shas_fail_closed(self):
+        with tempfile.TemporaryDirectory() as t:
+            root = pathlib.Path(t)
+            (root / "proof.txt").write_text("hello")
+            d = checker.digest(root, ["proof.txt"])
+            # A second authority value inside the same field cannot be ignored.
+            text = receipt(evid_digest=d).replace(
+                "AUTHORITY-DIGEST: jussray/example@" + HEAD,
+                "AUTHORITY-DIGEST: jussray/example@" + HEAD + " and other/repo@" + "b"*40,
+            )
+            (root / "start.md").write_text(text)
+            code, _, _ = checker.check(root, head=HEAD, eroot=root)
+            self.assertEqual(code, 2)
+
     def test_valid_chain_with_evidence_is_ok(self):
         with tempfile.TemporaryDirectory() as t:
             root = pathlib.Path(t)

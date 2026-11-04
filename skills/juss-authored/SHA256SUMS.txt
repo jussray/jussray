@@ -37,7 +37,7 @@ e501c2cd1ee23d06f333b664bb6d83c182fea39d0699cad2835f1c64b92b72f8  ./juss-os/refe
 75344b4152c04bb194772b1ef6f79ab26ff6fb8dfcb8027548b5247757428dcc  ./juss-os/references/runtime-first-class.md
 7ea607969a5dea1c2bf088e9d9dfe166bde0bf4bb5d1a2d80aec8f37e0fc9fb8  ./juss-os/scripts/confess.py
 a2ba358e6f37017ff605398c70c7073c50931a71971fe9a638c81884e27add47  ./juss-os/scripts/evidence_core.py
-4ad16bde6ac31b2f81eac73a0882e25405335f02298c0f9183a6381e63f9b547  ./juss-os/scripts/receipts_check.py
+75e4141f58c2e6b9628f8a5af814426e0c44b5b5989e470e021f5e0df9bfd805  ./juss-os/scripts/receipts_check.py
 b8aea158807cc99dd018828796558b80a22a60ad18b934b18a5f2739836db527  ./juss-os/scripts/test_evidence_ledger.py
 3a01323343f6b9606b10432c9d33297211e6f34c945c4a2f329773a6b7b542d5  ./juss-os/scripts/test_modes.py
 721823852acd163af844c8cfd07d0304cdbc5ec05be0ab0416259678396105d2  ./juss-os/scripts/truthmode.py
@@ -51,7 +51,7 @@ c21646d49aca6d8e24f578a2a09f98495ef17ab2e137bb4cd6113757a0150eb0  ./l99-v21-tran
 34cb519e24edb9667c69d135d90e31f1ed3a2b4570dce393c04a459e27aef7d4  ./sauce-guard/SKILL.md
 6817543f3201db7bf791df67c3e4324da0870988e85bbfb1fb871f67cf04d6f7  ./scripts/verify_inventory.py
 f33feb9902c7a4ae934f50d7eb70237cd149ff11ccc80d36e00d7cb02ae6dd82  ./tests/test_inventory.py
-e57cb2f9ee7fecd25fbe493e257dc52d01562908c1cdf347e41a6d6cbafb4956  ./tests/test_receipts_check.py
+a71b7a0994229ef397671ebaa387e66111b441ebed3e86d0e57ae91ccc203bf0  ./tests/test_receipts_check.py
 9affd3bd010687ca1f8fbe0b7d06bd0131d5388e4c238e62443a92926143a427  ./tests/test_runtime_receipt.py
 8aa35a9a5ba0d13c20946dd58f95b717252dd372ebb0d77ec8ec4182b976d0a8  ./truth-decay/SKILL.md
 30a7752fdf4f791af4dd4063300c52df72817404a73f3bd25899753d30535e70  ./truthmode/SKILL.md
