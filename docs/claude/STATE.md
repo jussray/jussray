@@ -1,3 +1,9 @@
+## 2026-11-04 — Standing rule: do not impede launches
+
+- RULE (Juss, 2026-11-04): never let agent work impede a Juss launch. Unrelated repository work, PRs and checks do not hold launch work. Blockers are reported at once with the exact one-line next action.
+- Safety gates still apply. This rule never removes merge, deploy, money, publication, credential or founder-approval gates. A gate that blocks a launch is reported as a blocker, and it is not bypassed.
+- ROLLBACK: revert the commit that recorded this rule.
+
 ## 2026-11-04 — Standing rule: fix CI at the cause, never bypass
 
 - RULE (Juss, 2026-11-04): when CI fails, fix the cause. Never bypass, skip, weaken, relabel or disable a gate to make it pass. Classify each failing check from its job logs first, then make the narrowest correct change on the branch and re-run the exact head.
