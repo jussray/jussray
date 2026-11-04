@@ -4,10 +4,10 @@ on:
     paths:
       - 'skills/juss-authored/**'
       - '.github/workflows/juss-authored-skills-conformance.yml'
+  # Required PR checks must run on every PR, not only on skill-file edits.
   pull_request:
-    paths:
-      - 'skills/juss-authored/**'
-      - '.github/workflows/juss-authored-skills-conformance.yml'
+    branches:
+      - main
   workflow_dispatch:
 permissions:
   contents: read
