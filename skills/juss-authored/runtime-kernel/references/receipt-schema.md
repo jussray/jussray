@@ -33,6 +33,7 @@
 - `state`: one of `VERIFIED`, `FAILED`, `UNKNOWN`, `RECONCILING`, `BLOCKED`.
 - 5W1H status: `PROVEN`, `CANDIDATE`, `UNKNOWN`; `PROVEN` or `CANDIDATE` requires value and separate evidence pointers. WHY PROVEN additionally requires `causal_evidence` pointers.
 - `must` may be empty, but it does **not** remove WHAT/WHERE/WHEN or runtime obligations.
+- For `VERIFIED`, explicitly declare `runtime.execution_occurred`, `runtime.governed_action`, and `runtime.artifact_required` as JSON booleans (`true` or `false`). Missing/null/string/number values fail closed; omitted flags cannot waive executor, approval, or artifact requirements.
 - `runtime.observation_evidence` is required for `VERIFIED`, and `artifact` when `artifact_required` is true. Declared pointers may be fabricated; a human or separate authorized verifier must inspect them.
 - If `execution_occurred` is true, `who.executed` and `who.verified` must name independent actors with distinct identity evidence. Auth status is checked structurally, **not** against provider grants.
 - For `governed_action: true`, include `approval` object with `action_hash`, `scope`, `issuer`, `receipt`. The validator checks presence only; execution must independently verify binding, current grant, expiry, and intended target.
