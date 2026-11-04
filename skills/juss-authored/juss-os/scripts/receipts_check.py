@@ -57,8 +57,11 @@ def parse(path):
         for line in f:
             line = line.strip().strip("`")
             m = FIELD.match(line)
-            if m and m.group(1) not in fields:
-                fields[m.group(1)] = m.group(2).strip()
+            if m:
+                key = m.group(1)
+                if key in fields:
+                    raise ValueError(f"duplicate receipt field {key}")
+                fields[key] = m.group(2).strip()
     return fields
 
 
@@ -96,10 +99,11 @@ def check(rdir, head=None, eroot=None, now=None):
             continue
         try:
             fields = parse(path)
-        except (OSError, UnicodeError) as e:
-            broken.append(f"{name}: receipt unreadable: {e}")
+        except (OSError, UnicodeError, ValueError) as e:
+            broken.append(f"{name}: receipt invalid/unreadable: {e}")
             continue
         if "RECEIPT-ID" not in fields:
+            broken.append(f"{name}: missing RECEIPT-ID")
             continue
         missing = [key for key in REQUIRED if not fields.get(key)]
         if missing:

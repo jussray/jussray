@@ -106,6 +106,25 @@ class ReceiptSafetyTests(unittest.TestCase):
             code, _, notes = checker.check(root, head=HEAD, eroot=root, now=datetime(2026,11,4,tzinfo=timezone.utc))
             self.assertEqual(code, 0, notes)
 
+    def test_idless_markdown_cannot_be_silently_ignored(self):
+        with tempfile.TemporaryDirectory() as t:
+            root = pathlib.Path(t)
+            (root / "proof.txt").write_text("hello")
+            d = checker.digest(root, ["proof.txt"])
+            (root / "start.md").write_text(receipt(evid_digest=d))
+            (root / "injected.md").write_text("CREATED-AT: 2026-11-03T12:00:00Z\nAUTHORITY-DIGEST: jussray/other@" + "b" * 40 + "\n")
+            code, _, _ = checker.check(root, head=HEAD, eroot=root)
+            self.assertEqual(code, 2, "every .md receipt candidate must be accounted for")
+
+    def test_duplicate_authority_digest_cannot_be_silently_ignored(self):
+        with tempfile.TemporaryDirectory() as t:
+            root = pathlib.Path(t)
+            (root / "proof.txt").write_text("hello")
+            d = checker.digest(root, ["proof.txt"])
+            (root / "start.md").write_text(receipt(evid_digest=d) + "AUTHORITY-DIGEST: jussray/other@" + "b" * 40 + "\n")
+            code, _, _ = checker.check(root, head=HEAD, eroot=root)
+            self.assertEqual(code, 2, "duplicate authority keys must reject the receipt")
+
     def test_valid_chain_with_evidence_is_ok(self):
         with tempfile.TemporaryDirectory() as t:
             root = pathlib.Path(t)
