@@ -2,7 +2,7 @@
   "contract": "juss/council-model-capability-profile@v1",
   "repository": "jussray/jussray",
   "defaultBranch": "main",
-  "preparedAgainstBaseSha": "49254b856193713783c46e1bc91f475c136880a7",
+  "preparedAgainstBaseSha": "93706bae8748868eefaa04364f855d13dcdd7229",
   "authorityHost": "jussray/founder-control-room",
   "providerExecutionHost": "jussray/founder-control-room",
   "projectRole": "jussco_public_front_door_and_games_hub",
@@ -32,6 +32,12 @@
       "model": "@cf/daily-co/phonellm-mini-alpha-2",
       "role": "voice_agent_fast_lane",
       "notes": "Voice/conversation specialist; only after local privacy/runtime gates.",
+      "status": "trial"
+    },
+    {
+      "model": "anthropic/claude",
+      "role": "repo_change_agent_and_copy_review",
+      "notes": "Claude Code bounded site/profile changes under CLAUDE.md gates and copy review; cannot change founder-declared worlds.json fields or claim unverified project status. Exact Claude model is chosen per invocation by the provider execution host; no version is pinned here.",
       "status": "trial"
     }
   ],

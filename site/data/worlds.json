@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-02T22:48:47Z",
+  "generatedAt": "2026-10-29T19:30:00Z",
   "source": "founder-declared portfolio worlds + builder/repository carriers; evidence fields remain FCR-owned",
   "worlds": [
     {
@@ -7,7 +7,6 @@
       "repo": "jussray/Sekret-Bip",
       "st": "soon",
       "label": "Opening soon",
-      "held": "Opening soon · no public link yet",
       "contact": {
         "site": "https://sekretbip.net",
         "github": "https://github.com/jussray/Sekret-Bip",
@@ -31,7 +30,11 @@
           "role": "demo/supporting source",
           "visibility": "public"
         }
-      ]
+      ],
+      "link": {
+        "text": "Visit Se’kret Bip",
+        "url": "https://sekretbip.net"
+      }
     },
     {
       "name": "Founder Control Room",
@@ -39,8 +42,8 @@
       "st": "building",
       "label": "Building",
       "link": {
-        "text": "Follow the build",
-        "url": "https://github.com/jussray/founder-control-room"
+        "text": "Visit Founder Control Room",
+        "url": "https://foundercontrolroom.org"
       },
       "contact": {
         "site": "https://foundercontrolroom.org",
@@ -164,7 +167,6 @@
       "repo": "jussray/sync-party-game",
       "st": "live",
       "label": "Live",
-      "held": "Live · link coming",
       "contact": {
         "github": "https://github.com/jussray/sync-party-game",
         "email": "support@jussco.company"
@@ -180,7 +182,11 @@
           "role": "canonical game source",
           "visibility": "public"
         }
-      ]
+      ],
+      "link": {
+        "text": "Play SYNC",
+        "url": "https://sync.jussco.company/"
+      }
     },
     {
       "name": "Bip Jr",

@@ -168,8 +168,8 @@
 ### AUTH Gate: 🔴 BLOCKED
 - Blocker 1: 23 remaining routes need Phase 3 remediation + tests
 - Blocker 2: Cross-tenant denial test suite required
-- Blocker 3: Stripe webhook verification missing
-- Blocker 4: CSP hardening missing
+- Blocker 3: Stripe webhook signature verification is implemented in code (StoryEngine `story-engine/lib/stripeWebhookSignature.js`, `story-engine/routes/revenue.js`: HMAC-SHA256, timing-safe compare, tolerance window, fail-closed without a secret). Live provider execution is not independently proven. Checked at StoryEngine `26b1c34`.
+- Blocker 4: CSP hardening incomplete (not missing). A Content-Security-Policy header is set (`story-engine/server.js:183`, `story-engine/lib/securityContext.js:183`), but the document `script-src` still allows `'unsafe-inline'` (`story-engine/server.js:66`). Checked at StoryEngine `26b1c34`.
 - Unblocks: DEPLOY gate, Cascading gates
 - Est. time to UNBLOCK: 3-4 hours (Phase 3 agents + manual security fixes)
 
