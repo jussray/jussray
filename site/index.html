@@ -114,8 +114,8 @@ h1,h2,h3{text-wrap:balance}
 .top .in{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:12px}
 .brand{font-family:var(--f-serif);font-weight:800;font-size:26px;text-decoration:none;color:var(--cream);letter-spacing:-.01em;white-space:nowrap}
 .brand b{color:var(--gold);font-weight:800}
-.navpill{display:flex;gap:4px;padding:5px;border-radius:999px;border:1px solid var(--line);background:rgba(12,10,44,.7)}
-.navpill a{font-size:14px;color:var(--muted);text-decoration:none;padding:10px 18px;border-radius:999px;min-height:40px;display:inline-flex;align-items:center;white-space:nowrap}
+.navpill{display:flex;flex:1 1 auto;min-width:0;max-width:100%;overflow-x:auto;gap:4px;padding:5px;border-radius:999px;border:1px solid var(--line);background:rgba(12,10,44,.7);scrollbar-width:thin}
+.navpill a{font-size:13px;color:var(--muted);text-decoration:none;padding:10px 9px;border-radius:999px;min-height:40px;display:inline-flex;align-items:center;white-space:nowrap}
 .navpill a:hover{color:#fff}
 .navpill a.on{color:#fff;background:rgba(124,58,237,.35);box-shadow:0 0 0 1px rgba(184,107,255,.7) inset,0 0 18px rgba(124,58,237,.6)}
 
@@ -361,6 +361,14 @@ h1,h2,h3{text-wrap:balance}
   .close-grid{grid-template-columns:minmax(0,1fr)}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+.live-site-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.live-site-card{display:flex;flex-direction:column;gap:12px;padding:24px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,rgba(36,26,86,.85),rgba(7,8,31,.92));min-width:0}
+.live-site-card h3{font-family:var(--f-serif);font-size:clamp(22px,2.4vw,30px);color:var(--cream);line-height:1.15}
+.live-site-card p{color:var(--muted);font-size:14px;flex:1}
+.live-site-card a{align-self:flex-start;display:inline-flex;align-items:center;min-height:44px;padding:10px 0;color:var(--gold-2);font-weight:700;text-underline-offset:5px}
+.live-site-card:focus-within{outline:2px solid var(--cyan);outline-offset:3px}
+@media(max-width:900px){.live-site-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.live-site-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -369,8 +377,10 @@ h1,h2,h3{text-wrap:balance}
     <a class="brand" href="#top">Juss <b>&amp;</b> Co</a>
     <nav class="navpill" aria-label="Primary">
       <a class="on" href="#top" data-nav="top">Home</a>
+      <a href="#live-sites">Live sites</a>
       <a href="#worlds" data-nav="worlds">Worlds</a>
       <a href="#systems" data-nav="systems">Systems</a>
+      <a href="portfolio.html">Portfolio</a>
       <a href="/work.html">Selected work</a>
       <a href="#proof" data-nav="proof">Proof</a>
       <a href="/services.html">Work with Juss</a>
@@ -411,6 +421,30 @@ h1,h2,h3{text-wrap:balance}
     <div class="hero-notes" aria-hidden="true">
       <p class="note hand a">ideas<br>products<br>people<br>brighter<br>tomorrows</p>
     </div>
+  </div>
+</section>
+
+<!-- Public destination directory: Cloudflare Worker domains and deployments observed 2026-11-05; HTTP/product journeys not yet verified. -->
+<section class="sec wrap" id="live-sites" aria-labelledby="live-sites-title" style="background:radial-gradient(ellipse at 50% 0%,rgba(139,92,246,.18),transparent 68%),var(--void);border-bottom:1px solid var(--line)">
+  <div class="in">
+    <div class="kicker mono">Open the Juss &amp; Co universe</div>
+    <h2 class="h2" id="live-sites-title">Explore <span class="gold">our sites.</span></h2>
+    <p class="sec-note" style="margin:18px 0 30px;max-width:75ch">Discover public destinations across the studio. These domains have Cloudflare deployment records; individual site availability and functionality may vary.</p>
+    <div class="live-site-grid">
+      <article class="live-site-card"><span class="mono" style="color:var(--gold)">Public domain configured</span><h3>Chief AI</h3><p>Standalone AI workspace</p><a href="https://chief.foundercontrolroom.org" target="_blank" rel="noopener noreferrer" aria-label="Visit Chief AI website">Visit website <span aria-hidden="true">↗</span></a></article>
+      <article class="live-site-card"><span class="mono" style="color:var(--gold)">Public domain configured</span><h3>SYNC Party</h3><p>Multiplayer party game</p><a href="https://sync.jussco.company/" target="_blank" rel="noopener noreferrer" aria-label="Visit SYNC Party website">Visit website <span aria-hidden="true">↗</span></a></article>
+      <article class="live-site-card"><span class="mono" style="color:var(--gold)">Public domain configured</span><h3>Truth Compass</h3><p>Claims and evidence</p><a href="https://compass.jussco.company/" target="_blank" rel="noopener noreferrer" aria-label="Visit Truth Compass website">Visit website <span aria-hidden="true">↗</span></a></article>
+      <article class="live-site-card"><span class="mono" style="color:var(--gold)">Public domain configured</span><h3>Exact Match Engine</h3><p>Evidence reconciliation</p><a href="https://exactmatch.jussco.company/" target="_blank" rel="noopener noreferrer" aria-label="Visit Exact Match Engine website">Visit website <span aria-hidden="true">↗</span></a></article>
+      <article class="live-site-card"><span class="mono" style="color:var(--gold)">Public domain configured</span><h3>Juss Beautiful Hair</h3><p>Hair and beauty storefront</p><a href="https://jussbeautifulhair.com/" target="_blank" rel="noopener noreferrer" aria-label="Visit Juss Beautiful Hair website">Visit website <span aria-hidden="true">↗</span></a></article>
+      <article class="live-site-card"><span class="mono" style="color:var(--gold)">Public domain configured</span><h3>Juss &amp; Co Games</h3><p>Games collection</p><a href="https://games.jussco.company/" target="_blank" rel="noopener noreferrer" aria-label="Visit Juss &amp; Co Games website">Visit website <span aria-hidden="true">↗</span></a></article>
+      <article class="live-site-card"><span class="mono" style="color:var(--gold)">Public domain configured</span><h3>JUSS Protect · One</h3><p>Digital protection experience</p><a href="https://protect.jussco.company/" target="_blank" rel="noopener noreferrer" aria-label="Visit JUSS Protect · One website">Visit website <span aria-hidden="true">↗</span></a></article>
+      <article class="live-site-card"><span class="mono" style="color:var(--gold)">Public domain configured</span><h3>JUSS Protect · Two</h3><p>Digital protection experience</p><a href="https://protect2.jussco.company/" target="_blank" rel="noopener noreferrer" aria-label="Visit JUSS Protect · Two website">Visit website <span aria-hidden="true">↗</span></a></article>
+      <article class="live-site-card"><span class="mono" style="color:var(--gold)">Public domain configured</span><h3>Make Video</h3><p>Video creation experience</p><a href="https://makevideo.jussco.company/" target="_blank" rel="noopener noreferrer" aria-label="Visit Make Video website">Visit website <span aria-hidden="true">↗</span></a></article>
+      <article class="live-site-card"><span class="mono" style="color:var(--gold)">Public domain configured</span><h3>Jungle Jinx</h3><p>Game experience</p><a href="https://junglejinx.jussco.company/" target="_blank" rel="noopener noreferrer" aria-label="Visit Jungle Jinx website">Visit website <span aria-hidden="true">↗</span></a></article>
+      <article class="live-site-card"><span class="mono" style="color:var(--gold)">Public domain configured</span><h3>Lumora</h3><p>Digital experience</p><a href="https://lumora.jussco.company/" target="_blank" rel="noopener noreferrer" aria-label="Visit Lumora website">Visit website <span aria-hidden="true">↗</span></a></article>
+    </div>
+    <p style="margin-top:24px;color:var(--muted);font-size:14px">More projects are in development.</p>
+    <a class="btn btn-gold-o" href="/portfolio.html" style="margin-top:16px;min-height:44px">See the complete portfolio <span aria-hidden="true">→</span></a>
   </div>
 </section>
 

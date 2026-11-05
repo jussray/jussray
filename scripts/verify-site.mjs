@@ -5,16 +5,97 @@ import { readFileSync, existsSync, mkdirSync } from 'node:fs';
 import { extname, join } from 'node:path';
 const ROOT = new URL('../site/', import.meta.url).pathname; const MIME = { '.html': 'text/html', '.jpg': 'image/jpeg', '.json': 'application/json', '.png': 'image/png', '.svg': 'image/svg+xml', '.js': 'text/javascript', '.txt': 'text/plain', '.xml': 'application/xml' };
 const WORLD_REGISTRY = JSON.parse(readFileSync(join(ROOT, 'data/worlds.json'), 'utf8')); const EXPECTED_WORLDS = WORLD_REGISTRY.worlds.map((w) => w.name); const IDEA_WORLDS = WORLD_REGISTRY.worlds.filter((w) => w.display?.group === 'Ideas & systems').map((w) => w.name);
+const portfolio = JSON.parse(readFileSync(join(ROOT, 'data/portfolio.json'), 'utf8'));
+const systems = JSON.parse(readFileSync(join(ROOT, 'data/systems.json'), 'utf8'));
+const worlds = WORLD_REGISTRY;
 const CONNECTOR_REGISTRY = JSON.parse(readFileSync(join(ROOT, 'data/connectors.json'), 'utf8')); const EXPECTED_CONNECTORS = CONNECTOR_REGISTRY.lanes.map((x) => x.name);
 const srv = createServer((q, r) => { let p = decodeURIComponent(q.url.split('?')[0]); if (p === '/') p = '/index.html'; const f = join(ROOT, p); if (!existsSync(f)) { r.writeHead(404); return r.end(); } r.writeHead(200, { 'content-type': MIME[extname(f)] || 'application/octet-stream' }); r.end(readFileSync(f)); });
 await new Promise((res) => srv.listen(0, '127.0.0.1', res)); const url = `http://127.0.0.1:${srv.address().port}/`;
 mkdirSync('proof/site', { recursive: true });
 const browser = await chromium.launch(); let failed = 0; const say = (ok, m) => { console.log(`${ok ? 'ok ' : 'FAIL'} ${m}`); if (!ok) failed++; };
+
+const projectSlugs = portfolio.projects.map((project) => project.slug);
+const featuredSlugs = portfolio.projects.filter((project) => project.featured).map((project) => project.slug).sort();
+const worldOverlays = portfolio.featuredWorldOverlays || [];
+const overlaySlugs = worldOverlays.map((overlay) => overlay.slug);
+const declaredFeatured = [...portfolio.featuredWorlds].sort();
+const projectBySlug = new Map(portfolio.projects.map((project) => [project.slug, project]));
+const overlayBySlug = new Map(worldOverlays.map((overlay) => [overlay.slug, overlay]));
+const worldSlugByName = new Map([
+  ["Se'kret Bip", 'sekret-bip'],
+  ['Founder Control Room', 'founder-control-room'],
+  ['Chief AI', 'chief-ai-machine'],
+  ['Juss Beautiful Hair', 'juss-beautiful-hair'],
+  ['StoryEngine', 'storyengine'],
+  ['Sync Party', 'sync-party'],
+  ['Bip Jr', 'bip-jr'],
+  ['PromptOS', 'promptos'],
+  ['SolContinuity', 'solcontinuity'],
+  ['Untold Stories', 'untold-stories'],
+  ['SWEATS', 'sweats'],
+  ['SleepWealth Agent', 'sleepwealth-agent'],
+  ['Think Tank', 'think-tank'],
+  ['Alexa Commerce Engine', 'alexa-commerce-engine'],
+  ['Ayure', 'ayure'],
+  ['Solwealth', 'solwealth'],
+]);
+const forbiddenProjectionTokens = ['jussray/jbh-private', 'jussray/exact-match-engine-', 'jussray/juss-protect-me', '6a9213ad92e06cfad8756b2b', '6a93e49bb1804a2648534bdf'];
+const projectionText = JSON.stringify(portfolio);
+const publicStandaloneSystems = systems.systems.filter((system) => system.public && system.kind === 'standalone_os').map((system) => system.name);
 const robots = readFileSync(join(ROOT, 'robots.txt'), 'utf8');
 const sitemap = readFileSync(join(ROOT, 'sitemap.xml'), 'utf8');
 say(/User-agent:\s*\*/i.test(robots) && /Allow:\s*\//i.test(robots) && robots.includes('https://www.jussco.company/sitemap.xml'), 'seo: robots allows crawl and declares canonical sitemap');
 say(['https://www.jussco.company/','https://www.jussco.company/services.html','https://www.jussco.company/work.html','https://www.jussco.company/creative-history.html','https://www.jussco.company/games/'].every((x) => sitemap.includes(`<loc>${x}</loc>`)), 'seo: sitemap lists canonical public pages');
 const expectedOS = ['Truth Weaver', 'Truth Compass', 'Exact Match Engine', 'Living Truth', 'Proof Core'];
+
+// Public site showcase: domain links are explicit destinations, never GitHub fallbacks.
+{
+  const home = readFileSync(join(ROOT, 'index.html'), 'utf8');
+  const required = [
+    'https://chief.foundercontrolroom.org',
+    'https://sync.jussco.company/',
+    'https://compass.jussco.company/',
+    'https://exactmatch.jussco.company/',
+    'https://jussbeautifulhair.com/',
+    'https://protect.jussco.company/',
+    'https://protect2.jussco.company/',
+    'https://makevideo.jussco.company/',
+    'https://junglejinx.jussco.company/',
+    'https://lumora.jussco.company/'
+  ];
+  say(home.includes('id="live-sites"') && home.indexOf('id="live-sites"') < home.indexOf('id="worlds"'), 'site showcase: public destinations appear before project worlds');
+  say(required.every((destination) => home.includes('href="' + destination + '"')), 'site showcase: ten external product destinations have direct links');
+  say((home.match(/class="live-site-card"/g) || []).length === 11, 'site showcase: eleven public destination cards');
+  say(home.includes('individual site availability and functionality may vary'), 'site showcase: deployment evidence is not mislabeled as runtime proof');
+}
+
+
+say(portfolio.schemaVersion === 1, 'portfolio: schema v1');
+say(portfolio.source?.mergeSha === 'b037ecce18863eb0be35098508b3b1fcf95c049d', 'portfolio: bound to merged FCR identity map');
+say(portfolio.source?.technicalInventory === 'site/data/systems.json', 'portfolio: technical independence reconciles through systems inventory');
+say(/non-authorizing/i.test(portfolio.authority || ''), 'portfolio: remains non-authorizing');
+say(portfolio.projects.length === 20, 'portfolio: 20 public-safe canonical project identities');
+say(new Set(projectSlugs).size === projectSlugs.length, 'portfolio: canonical slugs unique');
+say(JSON.stringify([...featuredSlugs, ...overlaySlugs].sort()) === JSON.stringify(declaredFeatured), 'portfolio: featured-world declaration matches canonical flags plus noncanonical overlays');
+say(worldOverlays.every((overlay) =>
+  overlay.canonicalIdentity === false &&
+  overlay.source === 'site/data/worlds.json' &&
+  !projectBySlug.has(overlay.slug) &&
+  worlds.worlds.some((world) => worldSlugByName.get(world.name) === overlay.slug &&
+    world.name === overlay.name && world.repo === overlay.repository && world.label === overlay.publicLabel)
+), 'portfolio: experimental world overlays preserve canonical company boundary and match world registry');
+say(portfolio.featuredWorlds.length === worlds.worlds.length, 'portfolio: featured count matches worlds.json');
+say(worlds.worlds.every((world) => {
+  const slug = worldSlugByName.get(world.name);
+  return slug && portfolio.featuredWorlds.includes(slug) &&
+    (projectBySlug.get(slug) || overlayBySlug.get(slug))?.publicLabel === world.label;
+}), 'portfolio: featured public labels agree with worlds.json');
+say(!projectBySlug.get('storyengine')?.link && !projectBySlug.get('sekret-bip')?.link, 'portfolio: unopened front doors have no public product links');
+say(forbiddenProjectionTokens.every((token) => !projectionText.includes(token)), 'portfolio: internal/private/legacy carriers stay out of public projection');
+say(expectedOS.every((name) => publicStandaloneSystems.includes(name)), 'systems: public standalone technical identities remain represented');
+say(projectBySlug.get('proof-core')?.technicalForm === 'standalone_os_prototype', 'portfolio: Proof Core stays a prototype rather than being promoted to a company');
+say(['truth-compass', 'truth-weaver', 'exact-match-engine'].every((slug) => projectBySlug.get(slug)?.technicalForm === 'standalone_os'), 'portfolio: standalone system form is preserved without changing commercial role');
+
 // Browser receipt: verify the actual HTML script attaches and emits fixed, non-personal fields.
 {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
@@ -129,10 +210,12 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   say((await page.evaluate(() => ![...document.querySelectorAll('.os-connectors span')].some((e) => e.dataset.state === 'connected'))), `${vp.n}: no connector claims connected without runtime proof`);
   say((await page.evaluate(() => [...document.querySelectorAll('.os-card')].every((c) => c.querySelector('.os-embed') && /already embedded in/i.test(c.querySelector('.os-embed').innerText)))), `${vp.n}: embedded relationships render without demoting identity`);
   say(!(await page.evaluate(() => document.getElementById('surfaceStrip').hidden)) && /Sync Playtest Signups/.test(await page.innerText('#surfaceStrip')) && /Sync Party/.test(await page.innerText('#surfaceStrip')), `${vp.n}: Sync supporting surface rolls up under Sync Party`);
-  say(!/ULTRATHINK/.test(await page.innerText('#systems')), `${vp.n}: internal ULTRATHINK carriers stay off public surface`);
+  say(!/ULTRATHINK/.test(await page.innerText('#systems')), `${vp.n}: internal ULTRATHINK carriers stay off public systems surface`);
+  say((await page.locator('a[href="portfolio.html"]').count()) === 1, `${vp.n}: complete portfolio is discoverable from primary nav`);
   say((await page.evaluate(() => [...document.images].filter((i) => i.complete && i.naturalWidth === 0).length)) === 0, `${vp.n}: no broken images`);
   say((await page.evaluate(() => [...document.querySelectorAll('a[href^="#"]')].map((a) => a.getAttribute('href')).filter((h) => h.length > 1 && !document.querySelector(h)).length)) === 0, `${vp.n}: no dead anchors`);
-  say((await page.evaluate(() => [...document.querySelectorAll('a,button')].filter((e) => { const b = e.getBoundingClientRect(); return b.width > 0 && b.height < 40; }).length)) === 0, `${vp.n}: tap targets >= 40px`);
+  const undersizedTargets = await page.evaluate(() => [...document.querySelectorAll('a,button')].filter((e) => { const b = e.getBoundingClientRect(); return b.width > 0 && b.height < 40; }).map((e) => ({ tag: e.tagName.toLowerCase(), className: String(e.className).slice(0, 100), text: (e.textContent || '').trim().slice(0, 48), height: Math.round(e.getBoundingClientRect().height * 10) / 10 })).slice(0, 16));
+  say(undersizedTargets.length === 0, `${vp.n}: tap targets >= 40px${undersizedTargets.length ? ' — ' + JSON.stringify(undersizedTargets) : ''}`);
   await page.click('.card:nth-child(4)'); await page.waitForTimeout(200);
   say((await page.innerText('#dName')) === 'Juss Beautiful Hair', `${vp.n}: drawer opens JBH`);
   say(/jussbeautifulhair\.com/.test((await page.getAttribute('#dCta a', 'href')) || ''), `${vp.n}: JBH link present`);
@@ -172,6 +255,32 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   await ctx.close();
 }
 
+for (const vp of [{ n: 'portfolio-desktop', w: 1440, h: 900 }, { n: 'portfolio-mobile', w: 390, h: 844, m: true }]) {
+  const ctx = await browser.newContext({ viewport: { width: vp.w, height: vp.h }, isMobile: !!vp.m, hasTouch: !!vp.m }); const page = await ctx.newPage();
+  const errors = []; page.on('pageerror', (e) => errors.push(String(e))); page.on('requestfailed', (r) => { if (!/fonts\.(googleapis|gstatic)\.com/.test(r.url())) errors.push(`${r.failure()?.errorText} ${r.url()}`); }); page.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) errors.push(m.text()); });
+  await page.goto(`${url}portfolio.html`, { waitUntil: 'load' });
+  await page.waitForFunction(() => document.querySelectorAll('#projects .project').length === 20);
+  say((await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)) === 0, `${vp.n}: no horizontal overflow`);
+  say((await page.locator('#projects .project').count()) === 20, `${vp.n}: renders all 20 public-safe identities`);
+  say((await page.locator('#worldOverlays .project[data-noncanonical="true"]').count()) === worldOverlays.length &&
+    (await page.locator('#worldOverlays h3').allTextContents()).every((name) => worldOverlays.some((overlay) => overlay.name === name)) &&
+    (await page.locator('#worldOverlays .state').allTextContents()).every((label) => worldOverlays.some((overlay) => overlay.publicLabel === label)),
+    `${vp.n}: homepage-only experimental world is visible without becoming a canonical project`);
+  const names = await page.locator('#projects .project h3').allTextContents();
+  say(['AYURE', 'Truth Weaver Counsel', 'Exact Match Engine', 'Living Truth', 'Proof Core'].every((name) => names.includes(name)), `${vp.n}: reconciled projects are present`);
+  say(((await page.textContent('#countLine')) || '').startsWith('20 of 20'), `${vp.n}: portfolio count is data-derived`);
+  const story = page.locator('#projects .project', { has: page.locator('h3', { hasText: 'StoryEngine' }) });
+  say((await story.locator('a.open').count()) === 0, `${vp.n}: StoryEngine has no invented front-door link`);
+  const sync = page.locator('#projects .project', { has: page.locator('h3', { hasText: 'SYNC Party' }) });
+  say((await sync.locator('.state').textContent()) === 'Live', `${vp.n}: Sync Party remains Live`);
+  await page.click('button[data-category="Founder software"]'); await page.waitForTimeout(100);
+  say((await page.locator('#worldOverlays .project').count()) === 0, `${vp.n}: experimental worlds stay separate from canonical project category filters`);
+  say((await page.locator('#projects .project').count()) === 10, `${vp.n}: category filter renders ten founder-software identities`);
+  say(((await page.textContent('#countLine')) || '').startsWith('10 of 20'), `${vp.n}: filtered count updates`);
+  say((await page.evaluate(() => [...document.querySelectorAll('a,button')].filter((e) => { const b = e.getBoundingClientRect(); return b.width > 0 && b.height < 40; }).length)) === 0, `${vp.n}: tap targets >= 40px`);
+  say(errors.length === 0, `${vp.n}: no console errors${errors.length ? ' — ' + errors.join(' | ') : ''}`);
+  await page.screenshot({ path: `proof/site/${vp.n}.png`, fullPage: true }); await ctx.close();
+}
 /* ---------- Games hub: code-level Playwright proof at exact source ---------- */
 for (const vp of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile', width: 390, height: 844 }]) {
   const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height } });
