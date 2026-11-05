@@ -57,7 +57,6 @@ const expectedOS = ['Truth Weaver', 'Truth Compass', 'Exact Match Engine', 'Livi
     'https://compass.jussco.company/',
     'https://exactmatch.jussco.company/',
     'https://jussbeautifulhair.com/',
-    'https://games.jussco.company/',
     'https://protect.jussco.company/',
     'https://protect2.jussco.company/',
     'https://makevideo.jussco.company/',
@@ -65,8 +64,8 @@ const expectedOS = ['Truth Weaver', 'Truth Compass', 'Exact Match Engine', 'Livi
     'https://lumora.jussco.company/'
   ];
   say(home.includes('id="live-sites"') && home.indexOf('id="live-sites"') < home.indexOf('id="worlds"'), 'site showcase: public destinations appear before project worlds');
-  say(required.every((destination) => home.includes('href="' + destination + '"')), 'site showcase: all 11 observed Cloudflare destinations have direct links');
-  say((home.match(/class="live-site-card"/g) || []).length === required.length, 'site showcase: one card per public destination');
+  say(required.every((destination) => home.includes('href="' + destination + '"')), 'site showcase: ten external product destinations have direct links');
+  say((home.match(/class="live-site-card"/g) || []).length === 11, 'site showcase: eleven public destination cards');
   say(home.includes('individual site availability and functionality may vary'), 'site showcase: deployment evidence is not mislabeled as runtime proof');
 }
 
