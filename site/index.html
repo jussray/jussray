@@ -114,8 +114,8 @@ h1,h2,h3{text-wrap:balance}
 .top .in{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:12px}
 .brand{font-family:var(--f-serif);font-weight:800;font-size:26px;text-decoration:none;color:var(--cream);letter-spacing:-.01em;white-space:nowrap}
 .brand b{color:var(--gold);font-weight:800}
-.navpill{display:flex;gap:4px;padding:5px;border-radius:999px;border:1px solid var(--line);background:rgba(12,10,44,.7)}
-.navpill a{font-size:14px;color:var(--muted);text-decoration:none;padding:10px 18px;border-radius:999px;min-height:40px;display:inline-flex;align-items:center;white-space:nowrap}
+.navpill{display:flex;flex:1 1 auto;min-width:0;max-width:100%;overflow-x:auto;gap:4px;padding:5px;border-radius:999px;border:1px solid var(--line);background:rgba(12,10,44,.7);scrollbar-width:thin}
+.navpill a{font-size:13px;color:var(--muted);text-decoration:none;padding:10px 9px;border-radius:999px;min-height:40px;display:inline-flex;align-items:center;white-space:nowrap}
 .navpill a:hover{color:#fff}
 .navpill a.on{color:#fff;background:rgba(124,58,237,.35);box-shadow:0 0 0 1px rgba(184,107,255,.7) inset,0 0 18px rgba(124,58,237,.6)}
 
@@ -365,7 +365,7 @@ h1,h2,h3{text-wrap:balance}
 .live-site-card{display:flex;flex-direction:column;gap:12px;padding:24px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,rgba(36,26,86,.85),rgba(7,8,31,.92));min-width:0}
 .live-site-card h3{font-family:var(--f-serif);font-size:clamp(22px,2.4vw,30px);color:var(--cream);line-height:1.15}
 .live-site-card p{color:var(--muted);font-size:14px;flex:1}
-.live-site-card a{align-self:flex-start;color:var(--gold-2);font-weight:700;text-underline-offset:5px}
+.live-site-card a{align-self:flex-start;display:inline-flex;align-items:center;min-height:44px;padding:10px 0;color:var(--gold-2);font-weight:700;text-underline-offset:5px}
 .live-site-card:focus-within{outline:2px solid var(--cyan);outline-offset:3px}
 @media(max-width:900px){.live-site-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.live-site-grid{grid-template-columns:1fr}}
