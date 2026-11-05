@@ -1,3 +1,9 @@
+## 2026-11-04 — Standing rule: never work around a blocker; implement the fix
+
+- RULE (Juss, 2026-11-04): when a blocker stands in the way of a project, do not route around it. Diagnose the cause, implement the needed fix in the project itself, and prove it. A workaround that leaves the blocker in place does not count as done.
+- Gates are not blockers to be bypassed. If a fix needs an authority I don't hold, I report the exact decision needed and stop there.
+- ROLLBACK: revert the commit that recorded this rule.
+
 ## 2026-11-04 — Standing rule: do not impede launches
 
 - RULE (Juss, 2026-11-04): never let agent work impede a Juss launch. Unrelated repository work, PRs and checks do not hold launch work. Blockers are reported at once with the exact one-line next action.
