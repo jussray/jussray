@@ -1,5 +1,5 @@
 /* Shared visual atmosphere; public visitors cannot choose a season. */
-const southernZones = /^(Australia\/(?!Darwin)|Pacific\/(Auckland|Chatham)|America\/(Argentina\/|Santiago|Montevideo)|Africa\/(Johannesburg|Maseru|Mbabane))/;
+const southernZones = /^(Australia\/(?!Darwin)|Pacific\/(Auckland|Chatham)|America\/(Argentina\/|Buenos_Aires|Santiago|Montevideo)|Africa\/(Johannesburg|Maseru|Mbabane))/;
 export function seasonFor(date = new Date(), zone = Intl.DateTimeFormat().resolvedOptions().timeZone || '') {
   const month = date.getMonth();
   let index = month === 11 || month < 2 ? 0 : month < 5 ? 1 : month < 8 ? 2 : 3;
