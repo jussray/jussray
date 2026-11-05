@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-01T21:40:00Z",
+  "generatedAt": "2026-10-02T19:20:00Z",
   "source": {
     "repository": "jussray/founder-control-room",
     "contract": "config/portfolio-identity-map.json",
@@ -15,7 +15,29 @@
     "chief-ai-machine",
     "juss-beautiful-hair",
     "storyengine",
-    "sync-party"
+    "sync-party",
+    "bip-jr",
+    "promptos",
+    "solcontinuity",
+    "untold-stories",
+    "sweats",
+    "sleepwealth-agent",
+    "think-tank",
+    "alexa-commerce-engine",
+    "ayure",
+    "solwealth"
+  ],
+  "featuredWorldOverlays": [
+    {
+      "slug": "solwealth",
+      "name": "Solwealth",
+      "publicLabel": "Building",
+      "role": "Independent learning-agent experiment",
+      "description": "A standalone experimental learning-agent world. It is visible on the homepage but is not promoted into the canonical 20-project identity map.",
+      "repository": "jussray/SolWealth-Meteora-",
+      "source": "site/data/worlds.json",
+      "canonicalIdentity": false
+    }
   ],
   "projects": [
     {
@@ -46,8 +68,8 @@
       "category": "Founder software",
       "role": "Supporting system",
       "portfolioStatus": "active",
-      "publicLabel": "Active system",
-      "featured": false,
+      "publicLabel": "Building",
+      "featured": true,
       "description": "Governed prompt, skill and founder-intent workflows with lineage and evidence.",
       "link": "https://github.com/jussray/promptos"
     },
@@ -116,8 +138,8 @@
       "category": "Founder software",
       "role": "Acquisition wedge",
       "portfolioStatus": "external",
-      "publicLabel": "Tracked project",
-      "featured": false,
+      "publicLabel": "Building",
+      "featured": true,
       "description": "Turns rough ideas into challenged, scored and portable idea records.",
       "link": "https://github.com/jussray/THINK-TANK"
     },
@@ -127,8 +149,8 @@
       "category": "Founder software",
       "role": "Continuity system",
       "portfolioStatus": "external",
-      "publicLabel": "Tracked system",
-      "featured": false,
+      "publicLabel": "Building",
+      "featured": true,
       "description": "Continuity, evidence history and resilience infrastructure.",
       "link": "https://github.com/jussray/solcontinuity"
     },
@@ -138,8 +160,8 @@
       "category": "Research",
       "role": "Research lane",
       "portfolioStatus": "external",
-      "publicLabel": "Research",
-      "featured": false,
+      "publicLabel": "Building",
+      "featured": true,
       "description": "A governed consequential-agent research lane used to test risk and control primitives.",
       "link": "https://github.com/jussray/SleepWealth-Agent"
     },
@@ -170,8 +192,8 @@
       "category": "Family product",
       "role": "Family module",
       "portfolioStatus": "continuity-only",
-      "publicLabel": "Family module",
-      "featured": false,
+      "publicLabel": "Private build",
+      "featured": true,
       "parent": "sekret-bip",
       "description": "A younger-family experience inside the Se’kret Bip world rather than a separate company."
     },
@@ -182,7 +204,7 @@
       "category": "Commerce",
       "role": "Core commerce business",
       "portfolioStatus": "active",
-      "publicLabel": "Live",
+      "publicLabel": "Store open · awaiting first order",
       "featured": true,
       "description": "A real hair-commerce brand with its own catalog, storefront, customer economics and fulfillment truth.",
       "link": "https://jussbeautifulhair.com"
@@ -193,8 +215,8 @@
       "category": "Commerce",
       "role": "Commerce brand",
       "portfolioStatus": "active",
-      "publicLabel": "Active project",
-      "featured": false,
+      "publicLabel": "Private build",
+      "featured": true,
       "description": "Story-led commerce with its own storefront identity and economics."
     },
     {
@@ -204,8 +226,8 @@
       "category": "Commerce",
       "role": "Commerce brand",
       "portfolioStatus": "external",
-      "publicLabel": "Prelaunch",
-      "featured": false,
+      "publicLabel": "Private build",
+      "featured": true,
       "description": "A soft-luxury athleisure brand whose catalog and fulfillment truth remain separate from its visual identity."
     },
     {
@@ -214,8 +236,8 @@
       "category": "Commerce",
       "role": "Supporting system",
       "portfolioStatus": "external",
-      "publicLabel": "Tracked system",
-      "featured": false,
+      "publicLabel": "Private build",
+      "featured": true,
       "description": "Commerce-agent infrastructure that supports portfolio commerce without becoming the brand itself."
     },
     {
@@ -234,8 +256,8 @@
       "category": "Networks",
       "role": "Emerging network product",
       "portfolioStatus": "continuity-only",
-      "publicLabel": "Emerging",
-      "featured": false,
+      "publicLabel": "Private build",
+      "featured": true,
       "description": "An intent-first property network connecting search, matching, evidence, people, services and outcome proof."
     }
   ],
