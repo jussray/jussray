@@ -30,6 +30,9 @@ Juss & Co's public runtime is served by Cloudflare Worker `jussray` from `site/`
 - Never delete or rewrite the existing profile, Juss Digital or picks source pages merely to make a runtime change easier.
 - Do not treat a stale deployment workflow, historical URL, build artifact, or repository file as proof of current runtime state. Re-observe the canonical Cloudflare domains.
 
+## Canonical glass-scroll presentation (founder decision 2026-11-05)
+The Juss & Co public experience uses a fixed midnight starfield with independently twinkling stars and translucent frosted-glass surfaces that scroll above it. Preserve the cinematic homepage/first welcome screen and clear readable content. Use `site/assets/glass-scroll.css` with `body.jc-glass-scroll`; never use `background-attachment: fixed` or make the effect depend on JS, tracking, cookies or fingerprinting. Respect reduced motion, keyboard navigation, contrast, iPhone Safari and the opacity fallback. See `docs/GLASS_SCROLL_CANON.md` and run `node --test scripts/glass-scroll-seo.test.mjs`. This is a canonical *design contract*, not evidence that every independent Juss & Co app or ChatGPT-hosted Sites instance has been updated.
+
 ## Presentation rule
 The homepage may feature a bounded set of high-signal worlds, but it must never imply that those featured worlds are the entire company. The complete public portfolio must remain discoverable from the public-safe projection while internal-only and unresolved carriers remain hidden.
 ## Founder /godmode routing contract
