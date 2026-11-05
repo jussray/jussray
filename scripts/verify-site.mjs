@@ -67,6 +67,7 @@ const expectedOS = ['Truth Weaver', 'Truth Compass', 'Exact Match Engine', 'Livi
   say(required.every((destination) => home.includes('href="' + destination + '"')), 'site showcase: ten external product destinations have direct links');
   say((home.match(/class="live-site-card"/g) || []).length === 11, 'site showcase: eleven public destination cards');
   say(home.includes('individual site availability and functionality may vary'), 'site showcase: deployment evidence is not mislabeled as runtime proof');
+  say(home.includes('id="products"') && home.includes('checkout readiness are verified') && (home.match(/class="jc-feature jc-feature--/g) || []).length === 3, 'product marketing: distinct public pathways without unverified purchase claims');
 }
 
 
@@ -192,13 +193,22 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   say((await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)) === 0, `${vp.n}: no horizontal overflow`);
   say(await page.evaluate(() => document.querySelector('.top .brand').getBoundingClientRect().height <= 44), `${vp.n}: header wordmark stays on one line`);
   say(await page.evaluate(() => document.querySelector('.top .btn').getBoundingClientRect().right <= window.innerWidth - 16), `${vp.n}: header CTA stays inside the side gutter`);
-  say(await page.locator('.jc-portal__core').isVisible() && (await page.locator('.hero .h-line').innerText()).includes('Built from real life.'), `${vp.n}: flagship sculpture and real-text headline render`);
+  say(await page.locator('.jc-scene__art').isVisible() && (await page.locator('.hero .h-line').innerText()).includes('Built from real life.'), `${vp.n}: cinematic living-world artwork and real-text headline render`);
+  say(await page.evaluate(() => new Promise((resolve) => {
+    const img = new Image(); img.onload = () => resolve(img.naturalWidth > 0);
+    img.onerror = () => resolve(false); img.src = '/assets/jussco-signature-world.jpg';
+  })), `${vp.n}: hero artwork asset resolves`);
+  say((await page.locator('#products .jc-feature').count()) === 3, `${vp.n}: three product pathways render`);
+  say((await page.locator('.jc-feature--shop a').getAttribute('href')) === 'https://jussbeautifulhair.com/' &&
+      (await page.locator('.jc-feature--play a').getAttribute('href')) === 'https://sync.jussco.company/' &&
+      (await page.locator('.jc-feature--coming a').getAttribute('href')) === '/portfolio.html',
+      `${vp.n}: shop, public experience, and coming-soon destinations remain distinct`);
   if (vp.n === 'mobile') say(await page.evaluate(() => {
-    const core = document.querySelector('.jc-portal__core')?.getBoundingClientRect();
+    const scene = document.querySelector('.jc-scene')?.getBoundingClientRect();
     const eyebrow = document.querySelector('.hero .eyebrow')?.getBoundingClientRect();
     const title = document.querySelector('.hero .h-brand')?.getBoundingClientRect();
-    return !!core && !!eyebrow && !!title && core.bottom + 12 <= eyebrow.top && title.left >= 12 && title.right <= window.innerWidth - 12;
-  }), 'mobile: sculpture clears headline and wordmark stays in viewport');
+    return !!scene && !!eyebrow && !!title && scene.bottom + 8 <= eyebrow.top && title.left >= 12 && title.right <= window.innerWidth - 12;
+  }), 'mobile: artwork clears headline and wordmark stays in viewport');
   say((await page.$$('.card')).length === EXPECTED_WORLDS.length, `${vp.n}: ${EXPECTED_WORLDS.length} portfolio worlds`);
   say((await page.locator('.os-card').count()) === 5, `${vp.n}: five public standalone OS builds`);
   say(JSON.stringify(await page.evaluate(() => [...document.querySelectorAll('.os-card h3')].map((e) => e.textContent))) === JSON.stringify(expectedOS), `${vp.n}: standalone OS identities preserved`);
