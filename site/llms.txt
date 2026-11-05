@@ -19,6 +19,18 @@ Public visibility is not a license grant.
 - https://www.jussco.company/services.html
 - https://www.jussco.company/data/licensable-assets.json
 
+## Work with Juss Rayy — public service facts
+
+Source: https://www.jussco.company/services.html
+
+Juss Rayy is the founder of Juss & Co and offers focused website, Shopify, software, automation and AI workflow audits, fixes and scoped builds.
+
+- Quick Audit: starting at $49. One bounded path, diagnosis and repair plan.
+- Fix Sprint: starting at $149. One agreed repair, narrow verification and evidence receipt.
+- Build Sprint: starting at $399. A bounded feature or workflow with relevant checks and a rollback path.
+
+These are starting prices, not a claim that online checkout is available. Service links initiate an email inquiry, not a completed payment. Actual scope is agreed before expansion; outcomes require real-path verification.
+
 ## Never part of the licensing export
 
 Private user or customer records; child, teen, guardian, family, or private-message data; authentication or payment records; credentials; private analytics; internal prompts; safety thresholds; internal receipts; and unreleased architecture.
