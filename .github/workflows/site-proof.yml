@@ -43,6 +43,10 @@ jobs:
         run: node -e "const d=JSON.parse(require('fs').readFileSync('site/data/connectors.json','utf8')); const ids=(d.lanes||[]).map(x=>x.id); const expected=['exa','notion','linear','slack']; const systems=d.systems||{}; const publicSystems=['Truth Weaver','Truth Compass','Exact Match Engine','Living Truth','Proof Core']; const bindings=Object.values(systems).flatMap(x=>x.bindings||[]); if(JSON.stringify(ids)!==JSON.stringify(expected)||!publicSystems.every(n=>Array.isArray(systems[n]?.bindings)&&systems[n].bindings.length===4)||bindings.some(x=>x.state==='connected')) process.exit(1); console.log('connector fabric registry valid; no unproven connected state')"
       - name: Verify canonical public URL
         run: node -e "const s=require('fs').readFileSync('site/index.html','utf8'); const good='<link rel=\\\"canonical\\\" href=\\\"https://www.jussco.company/\\\">'; const stale='https://jussray.github.io/jussray/'; if(!s.includes(good)||s.includes(stale)) process.exit(1); console.log('canonical Juss & Co URL valid')"
+      - name: Verify automatic seasonal calendar and living-world module syntax
+        run: |
+          node --test scripts/juss-atmosphere.test.mjs
+          node --check --input-type=module < site/assets/juss-living-world.js
       - name: Validate public outcome approval gate
         run: node scripts/verify-approved-stories.mjs
       - name: Test conversion tracking event and privacy contract
