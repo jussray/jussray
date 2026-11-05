@@ -369,6 +369,32 @@ h1,h2,h3{text-wrap:balance}
 .live-site-card:focus-within{outline:2px solid var(--cyan);outline-offset:3px}
 @media(max-width:900px){.live-site-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.live-site-grid{grid-template-columns:1fr}}
+/* Our Ecosystem carousel (mockup: glass band with world glyphs and prev/next). Items come only from
+   data/worlds.json and data/systems.json; unopened front doors render without a link. */
+.eco{position:relative;isolation:isolate;padding-block:clamp(40px,5vw,64px);border-bottom:1px solid var(--line);overflow:hidden}
+.eco::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 50% 0%,rgba(245,193,75,.16),transparent 60%),radial-gradient(ellipse at 50% 100%,rgba(184,107,255,.2),transparent 65%),var(--void)}
+.eco-band{position:relative;max-width:100%;border-radius:28px;padding:26px 16px 18px;border:1px solid rgba(245,193,75,.45);background:linear-gradient(180deg,rgba(20,17,63,.72),rgba(6,6,28,.92));box-shadow:inset 0 1px 0 rgba(255,217,138,.14),0 30px 90px rgba(245,193,75,.14)}
+.eco-title{display:flex;align-items:center;gap:16px;margin:0 0 18px}
+.eco-title::before,.eco-title::after{content:"";flex:1 1 auto;height:1px;background:linear-gradient(90deg,transparent,var(--gold-2))}
+.eco-title::after{background:linear-gradient(90deg,var(--gold-2),transparent)}
+.eco-title h2{margin:0;font-family:var(--f-serif);font-weight:400;font-size:clamp(26px,3.4vw,40px);color:var(--cream);white-space:nowrap}
+.eco-row{display:flex;align-items:center;gap:10px;min-width:0}
+.eco-nav{flex:0 0 44px;width:44px;height:44px;border-radius:999px;border:1px solid var(--line-hot);background:rgba(12,10,44,.7);color:var(--gold-2);font-size:24px;line-height:1;cursor:pointer}
+.eco-track{list-style:none;margin:0;padding:6px 4px 14px;flex:1 1 auto;min-width:0;display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.eco-track::-webkit-scrollbar{display:none}
+.eco-cell{flex:0 0 138px;display:flex;scroll-snap-align:start}
+.eco-item{flex:1 1 auto;display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px 10px 14px;min-height:196px;border-radius:20px;border:1px solid rgba(190,160,255,.35);background:linear-gradient(180deg,rgba(40,30,110,.75),rgba(10,9,38,.95));box-shadow:0 0 26px rgba(139,92,246,.22),inset 0 1px 0 rgba(255,255,255,.06);color:var(--text);text-align:center;text-decoration:none;transition:transform .3s var(--ease),border-color .3s,box-shadow .3s}
+a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-color:var(--gold-2);box-shadow:0 0 30px rgba(245,193,75,.35)}
+.eco-glyph{width:70px;height:70px;border-radius:20px;display:grid;place-items:center;font-family:var(--f-display);font-size:24px;color:#fff;background:radial-gradient(circle at 30% 25%,#FFD98A,#8B5CF6 45%,#14113F 88%);box-shadow:0 0 28px rgba(184,107,255,.55)}
+.eco-name{font-size:14px;font-weight:600;line-height:1.25;overflow-wrap:anywhere}
+.eco-status{margin-top:auto;font-size:12px;color:var(--muted);line-height:1.35}
+.eco-empty{margin:0;padding:24px;color:var(--muted);font-size:14px}
+.eco-links{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:22px}
+.eco-links a{min-height:44px;display:inline-flex;align-items:center;padding:0 18px;border-radius:999px;border:1px solid var(--line-hot);background:rgba(12,10,44,.55);color:var(--text);text-decoration:none;font-size:14px}
+.eco-links a:hover{border-color:var(--gold-2);color:#fff}
+.eco-nav:focus-visible,.eco-item:focus-visible,.eco-links a:focus-visible{outline:2px solid var(--gold-2);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){.eco-track{scroll-behavior:auto}.eco-item{transition:none}}
+@media (max-width:520px){.eco-band{padding-inline:12px}.eco-title::before,.eco-title::after{display:none}.eco-title{justify-content:center}}
 </style>
 </head>
 <body>
@@ -421,6 +447,27 @@ h1,h2,h3{text-wrap:balance}
     <div class="hero-notes" aria-hidden="true">
       <p class="note hand a">ideas<br>products<br>people<br>brighter<br>tomorrows</p>
     </div>
+  </div>
+</section>
+
+<!-- ================= OUR ECOSYSTEM (mockup carousel; items rendered from data/worlds.json + data/systems.json) ================= -->
+<section class="eco wrap" id="ecosystem" aria-labelledby="eco-title">
+  <div class="in">
+    <div class="eco-band">
+      <div class="eco-title"><h2 id="eco-title">Our Ecosystem</h2></div>
+      <div class="eco-row">
+        <button type="button" class="eco-nav" id="ecoPrev" aria-label="Scroll ecosystem back" aria-controls="ecoTrack">‹</button>
+        <ul class="eco-track" id="ecoTrack" aria-label="Juss &amp; Co ecosystem"><li class="eco-cell"><p class="eco-empty" role="status">Loading the ecosystem from the public project data…</p></li></ul>
+        <button type="button" class="eco-nav" id="ecoNext" aria-label="Scroll ecosystem forward" aria-controls="ecoTrack">›</button>
+      </div>
+    </div>
+    <nav class="eco-links" aria-label="Juss &amp; Co sections">
+      <a href="#worlds">Our Products</a>
+      <a href="/portfolio.html">Portfolio</a>
+      <a href="/services.html">Solutions</a>
+      <a href="/work.html">Our Work</a>
+      <a href="#contact">Contact</a>
+    </nav>
   </div>
 </section>
 
@@ -902,6 +949,42 @@ Promise.all([
     });
     empty.hidden=host.children.length>0;
   }).catch(function(){/* Keep the honest empty state when the feed is unavailable. */});
+})();
+</script>
+<script>
+/* Our Ecosystem: built with DOM APIs (no innerHTML), from the same registries the rest of the page reads.
+   A world links out only when worlds.json declares a link AND it is not an unopened front door (st "soon"). */
+(function(){
+  var track=document.getElementById('ecoTrack'); if(!track) return;
+  var prev=document.getElementById('ecoPrev'), next=document.getElementById('ecoNext');
+  function glyph(name){ return String(name).replace(/[^A-Za-z0-9 ]/g,' ').split(/\s+/).filter(Boolean).slice(0,2).map(function(p){return p.charAt(0).toUpperCase();}).join(''); }
+  function cell(name, status, href){
+    var li=document.createElement('li'); li.className='eco-cell';
+    var el=document.createElement(href?'a':'div'); el.className='eco-item';
+    if(href) el.href=href;
+    var g=document.createElement('span'); g.className='eco-glyph'; g.setAttribute('aria-hidden','true'); g.textContent=glyph(name);
+    var n=document.createElement('strong'); n.className='eco-name'; n.textContent=name;
+    var s=document.createElement('span'); s.className='eco-status'; s.textContent=status;
+    el.appendChild(g); el.appendChild(n); el.appendChild(s); li.appendChild(el);
+    return li;
+  }
+  function fetchJson(u){ return fetch(u,{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); }
+  Promise.all([fetchJson('data/worlds.json'), fetchJson('data/systems.json')]).then(function(res){
+    var frag=document.createDocumentFragment(), worlds=(res[0]&&res[0].worlds)||[], systems=(res[1]&&res[1].systems)||[];
+    worlds.forEach(function(w){
+      var open=!!(w.link&&w.link.url)&&w.st!=='soon';
+      frag.appendChild(cell(w.name, w.label||'Status pending', open?w.link.url:null));
+    });
+    systems.filter(function(s){return s.public&&s.publicUrl;}).forEach(function(s){
+      frag.appendChild(cell(s.name, s.label||s.status||'Published', s.publicUrl));
+    });
+    track.textContent='';
+    if(frag.childNodes.length) track.appendChild(frag);
+    else { var li=document.createElement('li'); li.className='eco-cell'; var p=document.createElement('p'); p.className='eco-empty'; p.setAttribute('role','status'); p.textContent='The ecosystem list is unavailable right now. See the full portfolio.'; li.appendChild(p); track.appendChild(li); }
+  });
+  function step(dir){ var c=track.querySelector('.eco-cell'); var w=c?c.getBoundingClientRect().width+14:152; track.scrollBy({left:dir*w*2,behavior:'smooth'}); }
+  if(prev) prev.addEventListener('click',function(){step(-1);});
+  if(next) next.addEventListener('click',function(){step(1);});
 })();
 </script>
 </body>
