@@ -2,7 +2,7 @@ name: Juss & Co site browser proof
 on:
   push:
     branches: [main]
-    paths: ['site/**', 'scripts/verify-independent-review.mjs', 'scripts/verify-independent-review.test.mjs', 'tests/jussco-github-webhook.test.mjs', 'scripts/verify-site.mjs', 'scripts/verify-approved-stories.mjs', 'scripts/licensable-assets.test.mjs', 'scripts/verify-licensing-page.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/conversion-receiver.test.mjs', 'scripts/conversion-client-first-party.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'scripts/site-proof-boundary.test.mjs', 'scripts/glass-scroll-seo.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', 'workers/**', 'wrangler.conversions.example.jsonc', '.github/workflows/site-proof.yml']
+    paths: ['site/**', 'scripts/verify-independent-review.mjs', 'scripts/verify-independent-review.test.mjs', 'tests/jussco-github-webhook.test.mjs', 'scripts/verify-site.mjs', 'scripts/verify-atmosphere.mjs', 'scripts/verify-approved-stories.mjs', 'scripts/licensable-assets.test.mjs', 'scripts/verify-licensing-page.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/conversion-receiver.test.mjs', 'scripts/conversion-client-first-party.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'scripts/site-proof-boundary.test.mjs', 'scripts/glass-scroll-seo.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', 'workers/**', 'wrangler.conversions.example.jsonc', '.github/workflows/site-proof.yml']
   pull_request:
   workflow_dispatch:
 permissions:
@@ -59,6 +59,8 @@ jobs:
         run: node --test scripts/glass-scroll-seo.test.mjs
       - name: Verify exact-source site and Games locally in Chromium
         run: node scripts/verify-site.mjs
+      - name: Verify adaptive seasonal glass atmosphere in Chromium
+        run: node scripts/verify-atmosphere.mjs
       - name: Verify licensing page on desktop and mobile in Chromium
         run: node scripts/verify-licensing-page.mjs
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
