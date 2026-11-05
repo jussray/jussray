@@ -2,7 +2,10 @@
 :root{--world-glass:rgba(11,10,38,.65);--world-outline:rgba(255,213,160,.55);--world-glow:#ffc77e}
 html{scroll-padding-top:100px}
 body{background:#09091d url('/assets/juss-living-world.svg') center top / cover fixed no-repeat}
-body[data-juss-season="spring"]{--world-glow:#ffb6dc}
+body[data-juss-season="spring"]{--world-glow:#ffb6dc;background-image:url('/assets/juss-living-world.svg')}
+body[data-juss-season="summer"]{background-image:url('/assets/juss-living-world-summer.svg')}
+body[data-juss-season="autumn"]{background-image:url('/assets/juss-living-world-autumn.svg')}
+body[data-juss-season="winter"]{background-image:url('/assets/juss-living-world-winter.svg')}
 body[data-juss-season="summer"]{--world-glow:#ffe49b}
 body[data-juss-season="autumn"]{--world-glow:#ffc77e}
 body[data-juss-season="winter"]{--world-glow:#b3ddff}
