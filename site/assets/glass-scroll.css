@@ -1,0 +1,98 @@
+/* Juss & Co Glass Scroll — canonical v1, 2026-11-05.
+   Fixed layers, scrolling glass, independent twinkles. No JS, tracking,
+   background-attachment:fixed, or required motion. */
+html{background:#06061c}
+body.jc-glass-scroll{
+  background:transparent!important;
+  position:relative;
+  isolation:isolate;
+  min-height:100vh;
+}
+body.jc-glass-scroll::before,
+body.jc-glass-scroll::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-1;
+  background-repeat:repeat;
+  will-change:opacity;
+}
+body.jc-glass-scroll::before{
+  background-color:#06061c;
+  background-image:
+    radial-gradient(ellipse at 18% 18%,rgba(112,69,213,.35),transparent 47%),
+    radial-gradient(ellipse at 86% 74%,rgba(23,104,168,.23),transparent 48%),
+    radial-gradient(circle at 7% 23%,rgba(252,246,221,.85) 0 1px,transparent 1.8px),
+    radial-gradient(circle at 48% 61%,rgba(190,172,255,.95) 0 1px,transparent 1.8px),
+    radial-gradient(circle at 77% 12%,rgba(158,224,255,.85) 0 1px,transparent 2px),
+    radial-gradient(circle at 92% 83%,rgba(250,220,165,.9) 0 1px,transparent 1.8px);
+  background-size:100% 100%,100% 100%,251px 213px,307px 281px,389px 263px,463px 337px;
+  animation:jc-glass-twinkle-a 8.7s ease-in-out -2.3s infinite alternate;
+}
+body.jc-glass-scroll::after{
+  background-image:
+    radial-gradient(circle at 12% 63%,rgba(255,252,242,.95) 0 1px,transparent 2px),
+    radial-gradient(circle at 64% 18%,rgba(161,212,255,.95) 0 1px,transparent 1.8px),
+    radial-gradient(circle at 91% 41%,rgba(247,204,255,.85) 0 1px,transparent 1.8px),
+    radial-gradient(circle at 35% 88%,rgba(249,224,165,.9) 0 1px,transparent 2px);
+  background-size:347px 279px,433px 367px,509px 313px,557px 421px;
+  animation:jc-glass-twinkle-b 5.9s ease-in-out -4.1s infinite alternate;
+}
+@keyframes jc-glass-twinkle-a{from{opacity:.66}to{opacity:1}}
+@keyframes jc-glass-twinkle-b{from{opacity:.20}to{opacity:.8}}
+/* Let the stationary sky remain visible beneath independent page layers. */
+body.jc-glass-scroll #live-sites{
+  background:linear-gradient(180deg,rgba(41,24,83,.24),rgba(6,6,28,.24))!important;
+}
+body.jc-glass-scroll .universe,
+body.jc-glass-scroll .method,
+body.jc-glass-scroll .proof:not(.card){
+  background-color:transparent;
+}
+/* The visual system is translucent, but text still has an opaque-enough
+   foreground panel for contrast independent of the star pattern. */
+body.jc-glass-scroll .live-site-card,
+body.jc-glass-scroll .card,
+body.jc-glass-scroll .promise,
+body.jc-glass-scroll .step,
+body.jc-glass-scroll .truth,
+body.jc-glass-scroll .value,
+body.jc-glass-scroll .cta,
+body.jc-glass-scroll .os-card{
+  background:linear-gradient(150deg,rgba(29,24,74,.78),rgba(8,9,33,.70));
+  border-color:rgba(196,179,255,.27);
+  -webkit-backdrop-filter:blur(15px) saturate(130%);
+  backdrop-filter:blur(15px) saturate(130%);
+}
+body.jc-glass-scroll .top{
+  -webkit-backdrop-filter:blur(20px);
+  backdrop-filter:blur(20px);
+}
+body.jc-glass-scroll .jc-glass-panel{
+  border:1px solid rgba(196,179,255,.27);
+  border-radius:20px;
+  background:linear-gradient(145deg,rgba(35,28,87,.72),rgba(8,9,33,.68));
+  -webkit-backdrop-filter:blur(15px) saturate(130%);
+  backdrop-filter:blur(15px) saturate(130%);
+}
+@media(prefers-reduced-motion:reduce){
+  body.jc-glass-scroll::before,body.jc-glass-scroll::after{animation:none;will-change:auto}
+}
+@media(max-width:600px){
+  body.jc-glass-scroll .live-site-card,
+  body.jc-glass-scroll .card,
+  body.jc-glass-scroll .promise,
+  body.jc-glass-scroll .step{ -webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px) }
+}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  body.jc-glass-scroll .live-site-card,
+  body.jc-glass-scroll .card,
+  body.jc-glass-scroll .promise,
+  body.jc-glass-scroll .step,
+  body.jc-glass-scroll .truth,
+  body.jc-glass-scroll .value,
+  body.jc-glass-scroll .cta,
+  body.jc-glass-scroll .os-card,
+  body.jc-glass-scroll .jc-glass-panel{background:rgba(15,12,48,.94)}
+}
