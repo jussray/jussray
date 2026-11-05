@@ -27,7 +27,8 @@ body::before{
              linear-gradient(180deg,#070719 0%,#0a0b28 45%,#050715 100%);
 }
 #stars{position:fixed!important;inset:0!important;z-index:1!important;width:100vw!important;height:100vh!important;height:100dvh!important;pointer-events:none!important;opacity:.82}
-body>.top,body>main,body>footer{position:relative;z-index:2}
+body>.top{position:sticky;z-index:60}
+body>main,body>footer{position:relative;z-index:2}
 main section{background-color:transparent!important}
 main .universe,main .proof,main .why{background-color:transparent!important}
 #live-sites{background-color:transparent!important}
