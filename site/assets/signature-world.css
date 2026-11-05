@@ -1,0 +1,7 @@
+/* The founder's supplied artwork is the opening composition. */
+.signature-world{position:relative;line-height:0;background:#120a1a}
+.signature-world__image{display:block;width:100%;height:auto}
+.signature-world__links a{position:absolute;display:block;color:transparent;overflow:hidden;text-decoration:none;border-radius:999px;outline-offset:2px}
+.signature-world__links a:focus-visible{outline:3px solid #fff4c1;background:rgba(255,211,112,.25);box-shadow:0 0 0 3px #2a1137}
+.sw-home{left:28.3%;top:2%;width:5.8%;height:5%}.sw-portfolio{left:34.8%;top:2%;width:6%;height:5%}.sw-products{left:42%;top:2%;width:6%;height:5%}.sw-solutions{left:49.5%;top:2%;width:6%;height:5%}.sw-work{left:57%;top:2%;width:6%;height:5%}.sw-about{left:64.5%;top:2%;width:4.5%;height:5%}.sw-founder{left:69.5%;top:2%;width:5%;height:5%}.sw-contact{left:76%;top:2%;width:5%;height:5%}.sw-explore{left:35.8%;top:41.4%;width:14.8%;height:5.7%}.sw-our-products{left:51.7%;top:41.4%;width:12.5%;height:5.7%}
+@media(max-width:700px){.signature-world__links{display:flex;gap:.5rem;overflow-x:auto;line-height:1.2;padding:.8rem;background:#160e20}.signature-world__links a{position:static;flex:0 0 auto;display:inline-flex;min-height:44px;align-items:center;padding:.55rem .9rem;color:#fff4d9;border:1px solid #d4a956;background:#2b1b2c;font:600 14px system-ui,sans-serif}.signature-world__links a:focus-visible{outline-offset:-3px}}
