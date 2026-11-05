@@ -1,6 +1,6 @@
 /* Juss & Co Glass Scroll — canonical v1, 2026-11-05.
    Fixed layers, scrolling glass, independent twinkles. No JS, tracking,
-   background-attachment:fixed, or required motion. */
+   scroll-bound backgrounds, or required motion. */
 html{background:#06061c}
 body.jc-glass-scroll{
   background:transparent!important;
