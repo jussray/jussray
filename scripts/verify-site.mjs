@@ -174,8 +174,21 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   const schemaTypes = (schema['@graph'] || []).map((x) => x['@type']);
   say(['Person','Organization','WebSite'].every((x) => schemaTypes.includes(x)), `${vp.n}: Person Organization WebSite structured data`);
   say(/Juss Rayy/.test(await page.locator('.founder-line').innerText()) && /Full-Stack AI Systems Builder/.test(await page.locator('.founder-line').innerText()), `${vp.n}: visible founder identity`);
-  say((await page.locator('a[href="/services.html"]').count()) >= 3, `${vp.n}: Work with Juss path linked from homepage`);
+  say((await page.locator('a[href="/services.html"]').count()) >= 2, `${vp.n}: Solutions remains discoverable without Work with Juss CTA`);
   say((await page.locator('a[href="/work.html"]').count()) >= 2, `${vp.n}: Selected Work path linked from homepage`);
+  await page.waitForFunction(() => document.querySelectorAll('#worldProductTrack .world-card').length === 9);
+  say((await page.locator('#worldProductTrack .world-card').count()) === 9,
+    `${vp.n}: nine canonical public ecosystem project cards`);
+  say((await page.locator('a').filter({ hasText: 'Work with Juss' }).count()) === 0,
+    `${vp.n}: retired Work with Juss CTA is not exposed`);
+  say((await page.locator('#worldSoundToggle').getAttribute('aria-pressed')) === 'false' &&
+    (await page.locator('#worldSoundVolume').isDisabled()),
+    `${vp.n}: nature audio is disabled until user opts in`);
+  say(['winter', 'spring', 'summer', 'autumn'].includes(
+    await page.evaluate(() => document.body.dataset.jussSeason)),
+    `${vp.n}: automatic calendar atmosphere activated`);
+  say((await page.locator('[data-visitor-theme-switch]').count()) === 0,
+    `${vp.n}: visitors have no seasonal override`);
   const companyEmail=await page.locator('#mail').textContent();
   say(companyEmail==='founder@jussco.company' && (await page.locator('#mail').getAttribute('href'))==='mailto:'+companyEmail, `${vp.n}: company email text and mailto match business address`);
   const directory=page.locator('#projectContactDirectory');
