@@ -167,6 +167,10 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   await page.goto(url, { waitUntil: 'load' }); await page.waitForFunction(() => document.querySelectorAll('.os-card').length === 5); await page.waitForTimeout(300);
   say((await page.locator('link[rel="canonical"]').count()) === 1 && (await page.locator('link[rel="canonical"]').getAttribute('href')) === 'https://www.jussco.company/', `${vp.n}: exactly one preferred www canonical tag`);
   say((await page.title()) === 'Juss & Co | Juss Rayy, Product & AI Systems Builder', `${vp.n}: search title binds Juss & Co to Juss Rayy`);
+  say(await page.evaluate(() => document.body.classList.contains('jc-glass-scroll') &&
+    getComputedStyle(document.body, '::before').position === 'fixed' &&
+    getComputedStyle(document.body, '::after').position === 'fixed'),
+    `${vp.n}: starfield is fixed independently of page content`);
   say((await page.locator('meta[name="description"]').getAttribute('content'))?.includes("Juss Rayy's founder studio"), `${vp.n}: meta description names founder and studio`);
   say((await page.locator('meta[property="og:url"]').getAttribute('content')) === 'https://www.jussco.company/' && (await page.locator('meta[property="og:image"]').getAttribute('content')) === 'https://www.jussco.company/assets/hero.jpg', `${vp.n}: absolute canonical social metadata`);
   say((await page.locator('meta[name="twitter:card"]').getAttribute('content')) === 'summary_large_image', `${vp.n}: twitter card metadata`);
@@ -239,8 +243,12 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   servicePage.on('requestfailed', (r) => { if (!/fonts\.(googleapis|gstatic)\.com/.test(r.url())) serviceErrors.push(`${r.failure()?.errorText} ${r.url()}`); });
   servicePage.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) serviceErrors.push(m.text()); });
   await servicePage.goto(`${url}services.html`, { waitUntil: 'load' });
-  say((await servicePage.title()) === 'Work with Juss | Product & AI Systems Builder', `${vp.n}: services search title`);
+  say((await servicePage.title()) === 'Work with Juss Rayy | Websites, Shopify & AI Systems', `${vp.n}: services search title`);
   say((await servicePage.locator('link[rel="canonical"]').getAttribute('href')) === 'https://www.jussco.company/services.html', `${vp.n}: services canonical URL`);
+  say(await servicePage.evaluate(() => document.body.classList.contains('jc-glass-scroll') &&
+    getComputedStyle(document.body, '::before').position === 'fixed' &&
+    getComputedStyle(document.body, '::after').position === 'fixed'), `${vp.n}: services glass sky remains fixed`);
+  say((await servicePage.locator('#questions article').count()) === 4, `${vp.n}: four visible answers for AI/search retrieval`);
   const serviceText = await servicePage.locator('body').innerText();
   say(/Work with Juss Rayy/i.test(serviceText) && !/Sajay|Juss Digital/i.test(serviceText), `${vp.n}: current Juss identity only`);
   say(['$49','$149','$399'].every((x) => serviceText.includes(x)), `${vp.n}: three fixed-price service offers`);
