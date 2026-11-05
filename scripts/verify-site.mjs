@@ -171,6 +171,22 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
     getComputedStyle(document.body, '::before').position === 'fixed' &&
     getComputedStyle(document.body, '::after').position === 'fixed'),
     `${vp.n}: starfield is fixed independently of page content`);
+  // Simulate actual foreground movement without moving the fixed sky.
+  const glassMoves = await page.evaluate(() => {
+    const heading = document.getElementById('worlds');
+    if (!heading) return false;
+    const before = heading.getBoundingClientRect().top;
+    const previous = window.scrollY;
+    document.documentElement.style.scrollBehavior = 'auto';
+    window.scrollTo({ top: 240, behavior: 'instant' });
+    const after = heading.getBoundingClientRect().top;
+    window.scrollTo({ top: previous, behavior: 'instant' });
+    document.documentElement.style.removeProperty('scroll-behavior');
+    return before - after >= 120 &&
+      getComputedStyle(document.body, '::before').position === 'fixed';
+  });
+  say(glassMoves, `${vp.n}: page content moves while starfield stays fixed`);
+
   say((await page.locator('meta[name="description"]').getAttribute('content'))?.includes("Juss Rayy's founder studio"), `${vp.n}: meta description names founder and studio`);
   say((await page.locator('meta[property="og:url"]').getAttribute('content')) === 'https://www.jussco.company/' && (await page.locator('meta[property="og:image"]').getAttribute('content')) === 'https://www.jussco.company/assets/hero.jpg', `${vp.n}: absolute canonical social metadata`);
   say((await page.locator('meta[name="twitter:card"]').getAttribute('content')) === 'summary_large_image', `${vp.n}: twitter card metadata`);
