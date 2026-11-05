@@ -1,5 +1,12 @@
 name: Juss & Co provider public readback (partial)
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - 'scripts/verify-provider-site.mjs'
+      - 'scripts/verify-provider-site.test.mjs'
+      - '.github/workflows/provider-site-proof.yml'
   pull_request:
     paths:
       - scripts/verify-provider-site.mjs
@@ -33,6 +40,15 @@ jobs:
           exit 1
       - name: Witness public readback (partial; not release verification)
         if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' }}
+      # Main push and explicit main dispatch may attest to the public
+      # deployment. Pull request jobs test source guards, not production.
+      - name: Reject production jobs outside main
+        if: ${{ github.event_name != 'pull_request' && github.ref != 'refs/heads/main' }}
+        run: |
+          echo "::error::Production proof requires workflow_dispatch on main; refusing non-main dispatch."
+          exit 1
+      - name: Verify public production via Cloudflare Browser Rendering
+        if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID || secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_BROWSER_RENDERING_TOKEN: ${{ secrets.CLOUDFLARE_BROWSER_RENDERING_TOKEN }}
@@ -40,6 +56,8 @@ jobs:
         run: node scripts/verify-provider-site.mjs
       - name: Upload partial readback receipt (not deployment attestation)
         if: ${{ always() && github.event_name == 'workflow_dispatch' }}
+      - name: Upload immutable per-commit production receipt
+        if: ${{ always() && github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: partial-provider-readback-${{ github.sha }}

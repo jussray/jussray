@@ -1,0 +1,66 @@
+{
+  "contract": "juss/council-model-capability-profile@v1",
+  "repository": "jussray/jussray",
+  "defaultBranch": "main",
+  "preparedAgainstBaseSha": "93706bae8748868eefaa04364f855d13dcdd7229",
+  "authorityHost": "jussray/founder-control-room",
+  "providerExecutionHost": "jussray/founder-control-room",
+  "projectRole": "jussco_public_front_door_and_games_hub",
+  "activation": "trial_profile_only",
+  "runtimeActivation": false,
+  "restrictedContextAllowed": false,
+  "lanes": [
+    {
+      "model": "@cf/deepseek-ai/deepseek-v4.1-flash-1017",
+      "role": "reasoning_and_adversarial_challenge",
+      "notes": "Bounded reasoning/challenge; provider response is evidence input only.",
+      "status": "trial"
+    },
+    {
+      "model": "@cf/cloudflare/clairic",
+      "role": "structured_estimation_and_forecast",
+      "notes": "Typed extraction/estimate/forecast with confidence; never truth by itself.",
+      "status": "trial"
+    },
+    {
+      "model": "@cf/cloudflare/clef-omni",
+      "role": "multimodal_evidence_adjudication",
+      "notes": "Typed multimodal decisions/probabilities; never self-authorizing.",
+      "status": "trial"
+    },
+    {
+      "model": "@cf/daily-co/phonellm-mini-alpha-2",
+      "role": "voice_agent_fast_lane",
+      "notes": "Voice/conversation specialist; only after local privacy/runtime gates.",
+      "status": "trial"
+    },
+    {
+      "model": "anthropic/claude",
+      "role": "repo_change_agent_and_copy_review",
+      "notes": "Claude Code bounded site/profile changes under CLAUDE.md gates and copy review; cannot change founder-declared worlds.json fields or claim unverified project status. Exact Claude model is chosen per invocation by the provider execution host; no version is pinned here.",
+      "status": "trial"
+    }
+  ],
+  "authority": {
+    "selectionAuthority": false,
+    "executionAuthority": false,
+    "mergeAuthority": false,
+    "deployAuthority": false,
+    "publishAuthority": false,
+    "spendAuthority": false,
+    "providerMutationAuthority": false
+  },
+  "promotionGate": [
+    "fresh task-specific local receipts",
+    "provider evidence for the exact invocation",
+    "project-local focused tests",
+    "runtime proof for live claims",
+    "Playwright proof for user-facing flows"
+  ],
+  "projectGuards": [
+    "front-door routing must preserve destination project authority",
+    "model summaries cannot claim unverified portfolio status",
+    "voice lane cannot bypass project-local gates"
+  ],
+  "rollback": "Remove this profile and any consumer mapping that references it; no secret or deployment state is stored here."
+}

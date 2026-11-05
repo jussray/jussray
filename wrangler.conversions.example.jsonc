@@ -1,0 +1,12 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "jussco-conversion-receiver",
+  "main": "workers/conversion-receiver.mjs",
+  "compatibility_date": "2026-10-22",
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "jussco-conversion-aggregates",
+    "database_id": "REPLACE_WITH_NEW_DEDICATED_D1_DATABASE_ID"
+  }],
+  "routes": [{ "pattern": "www.jussco.company/_telemetry/v1*", "zone_name": "jussco.company" }]
+}

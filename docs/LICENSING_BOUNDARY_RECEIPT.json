@@ -1,0 +1,124 @@
+{
+  "schema": "jussco/licensing-boundary-receipt@v1",
+  "recordedAt": "2026-10-30",
+  "repository": "jussray/jussray",
+  "branch": "feat/licensable-assets-boundary-20261030",
+  "baseMainSha": "1ad6dd0b842e1052a532b59844f8fa7752ed70a1",
+  "candidateSourceHead": "540d452c471badbdf661b7a46b0576842104161b",
+  "fingerprint": "sha256:db9104d08e12a8b66f7243bce80ba81ab9e709578d57787d37b0b0a7e5b3ce99",
+  "continuityCookie": "jussco-licensing-boundary:db9104d08e12a8b66f7243bc",
+  "supersedesFingerprint": "sha256:d43c3b687ce2a93703384e3328710800d1261f198a4036c5fd48af9afddc530c",
+  "coveredSourceRule": "The fingerprint covers the candidate source head and non-receipt source files listed below. The receipt commit itself is not part of the covered source set, so recording this receipt does not invalidate the covered source fingerprint.",
+  "authorityNotice": "Fingerprint and continuity cookie preserve evidence continuity only. They do not grant merge, deploy, publication, payment, data-access, provider, or mutation authority.",
+  "truth": {
+    "sourceReadback": "VERIFIED",
+    "deterministicBoundaryChecks": "VERIFIED",
+    "playwrightSourceAndRequiredGate": "VERIFIED",
+    "playwrightExecution": "VERIFIED",
+    "providerCI": "NOT_RUN",
+    "cloudflarePayPerCrawl": "NOT_ENABLED",
+    "deployment": "NOT_AUTHORIZED",
+    "productionRuntime": "PRE_CANDIDATE_DEPLOYMENT_VERIFIED"
+  },
+  "providerReality": {
+    "cloudflareWorker": "jussray",
+    "latestObservedProductionDeploymentCreatedOn": "2026-10-29T19:50:35.683107Z",
+    "latestObservedProductionVersion": "c4506e8d-7fc4-4ebb-85a6-d385a2a2853e",
+    "conclusion": "The observed production deployment predates this licensing candidate. No claim is made that the candidate is deployed."
+  },
+  "diffAudit": {
+    "sourceBranchAheadOfBaseByCommits": 16,
+    "sourceBranchBehindBaseByCommits": 0,
+    "unexpectedChangedFiles": [],
+    "intendedChangedFiles": [
+      ".github/workflows/site-proof.yml",
+      "scripts/licensable-assets.test.mjs",
+      "scripts/verify-licensing-page.mjs",
+      "site/.well-known/api-catalog",
+      "site/_headers",
+      "site/crawlers.json",
+      "site/data/licensable-assets.json",
+      "site/index.html",
+      "site/licensing.html",
+      "site/llms.txt",
+      "site/robots.txt",
+      "site/sitemap.xml"
+    ]
+  },
+  "checks": {
+    "passed": "all required site-proof steps",
+    "failed": 0,
+    "summary": [
+      "Wrangler runtime-truth guard passed",
+      "Agent discovery guard passed",
+      "Licensing data-quality/privacy gate passed 5/5",
+      "Worlds patch executor passed 5/5",
+      "Wrangler deploy target and custom-domain validation passed",
+      "World, standalone-OS, connector-fabric, canonical-URL, and public-outcome validation passed",
+      "Conversion tracking passed 4/4",
+      "Aggregation/privacy tests passed 9/9",
+      "Source/provider responsibility boundary passed 2/2",
+      "Exact-source JussCo browser proof passed on desktop, tablet, and mobile",
+      "Games hub browser proof passed on desktop and mobile",
+      "Work page browser proof passed on desktop and mobile",
+      "Licensing browser proof passed on desktop and mobile"
+    ]
+  },
+  "sourceFiles": {
+    "site/data/licensable-assets.json": {
+      "gitBlobSha": "1db4bd6a102db784783fbd58cddd63c7b991325a"
+    },
+    "site/robots.txt": {
+      "gitBlobSha": "e4a5a23fa1f4833a4b0154158d40a0d98d684ec3"
+    },
+    "site/_headers": {
+      "gitBlobSha": "cc3ca991e4730ff220429532065695606ca66e68"
+    },
+    "site/llms.txt": {
+      "gitBlobSha": "f04531e920ca07f7d7f17adc68c77948c44f5b35"
+    },
+    "site/crawlers.json": {
+      "gitBlobSha": "36c5d060e142c1391e247029cc69a8db6ef77d0f"
+    },
+    "site/.well-known/api-catalog": {
+      "gitBlobSha": "2c66f5ed9425753be3583931b289a08fe68251ef"
+    },
+    "site/licensing.html": {
+      "gitBlobSha": "8fe79ce73ab671cf8d268a441c466aaee37ac971"
+    },
+    "site/sitemap.xml": {
+      "gitBlobSha": "608a7aa6cc25ee21bc9908d7fcd670be2d82a591"
+    },
+    "site/index.html": {
+      "gitBlobSha": "c633ebcb4b9e6662529381698ecd0689db871015"
+    },
+    "scripts/licensable-assets.test.mjs": {
+      "gitBlobSha": "3207ae6d1894ed3f18087054df54a5ff9b8c4422"
+    },
+    "scripts/verify-licensing-page.mjs": {
+      "gitBlobSha": "814f181d792bf0938d1fddcda69ea6974520e022"
+    },
+    ".github/workflows/site-proof.yml": {
+      "gitBlobSha": "9beac69874d843293278ac366c96334cc7c151b4"
+    }
+  },
+  "rollback": "Because the implementation is isolated and unmerged, delete the feature branch to discard it. If later merged, revert this bounded licensing change set.",
+  "nextGate": "Founder merge decision only. If merged, deploy through the existing JussCo path, then independently re-observe the live runtime before enabling any provider monetization adapter.",
+  "executionProof": {
+    "environment": "isolated connected cloud terminal",
+    "testedHead": "540d452c471badbdf661b7a46b0576842104161b",
+    "node": "v24.22.1",
+    "playwright": "1.61.1",
+    "chromium": "installed via Playwright",
+    "result": "ALL_SITE_PROOF_STEPS_PASSED",
+    "licensingDataGate": "5/5 passed",
+    "licensingBrowserProof": "desktop + mobile passed",
+    "existingSiteBrowserProof": "desktop + tablet + mobile passed",
+    "gamesHubBrowserProof": "desktop + mobile passed",
+    "workPageBrowserProof": "desktop + mobile passed",
+    "notes": [
+      "Two false-positive assertions in the new licensing guard were narrowed to the exported dataset/records before the final green run.",
+      "No production deployment, merge, payment activation, or provider administration was performed."
+    ]
+  }
+}

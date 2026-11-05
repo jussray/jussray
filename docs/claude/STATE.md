@@ -1,4 +1,70 @@
+## 2026-10-20 — Juss Digital rename: standing founder rule + receipt
+- RULE (Juss, repeated): the former service name is retired everywhere; the brand is **Juss Digital**. Never reintroduce the former name in files, PR titles/bodies, or branch names — including in receipts like this one.
+- REALITY @ main 520a073: 0 occurrences of the former name in any tracked file (VERIFIED, case-insensitive `git grep` on `origin/main`). Rename landed via PR #5 (squash de4fa59); PR #4 and #5 titles/bodies rewritten to Juss Digital.
+- Other branches: only `feat/juss-services-live` contains it, in 3 negative CI guards that fail if the former name returns. Keep them; they enforce the rule.
+- OPEN (founder action): one remote branch still carries the former name — the `fix/<former-name>-digital-money-page` branch. Its tip 6f1f826 is identical to `fix/juss-digital-money-page`, so deleting it loses nothing. Agent deletion was blocked by the session safety classifier; Juss deletes it in GitHub → Branches.
+- NOT CHANGED (by design): 4 historical commit messages contain the former name; rewriting main history would need a force-push. Left as history.
+- Make onboarding (same session): BLOCKED. Make connector not connected at claude.ai/customize/connectors; `mcp.make.com` denied by the cloud environment network policy; make-skills plugin not installed. First scenario proposed: Juss Digital inquiry webhook → Sheet/Notion log → Gmail auto-reply → Slack ping, built inactive and tested before activation.
+- ROLLBACK: revert this entry's commit.
+
+## 2026-10-18 — Revert of unreviewed Worker runtime (fix/revert-unreviewed-worker-runtime-20261018)
+- REALITY: main 4a64e3c carried a Worker script (`wrangler.jsonc` `main: src/index.ts`, KV + analytics bindings) from direct-to-main commits 062e5e5, 631b375, 5f9cdf3, f9b30c6 with no PR and no exact-head CI. Loop observed the live Worker `jussray` not redeployed since 2026-10-15 (Cloudflare metadata, not re-verified here).
+- FIX: reverted 631b375, 5f9cdf3, f9b30c6; `wrangler.jsonc` restored to 92952c4 baseline; `src/index.ts` removed; `site/.well-known/security.txt` (062e5e5) kept; drift guard `scripts/wrangler-runtime-truth.test.mjs` wired into `site-proof.yml`.
+- SUPERSEDES the "Phase 2" HSTS and CSP entries below: HSTS and CSP are NOT on main after this change. Their COMPLETE marks describe reverted code and are HISTORICAL. Commits 34aa117 and 608796e are not in main's bounded history (depth 15); not verified beyond that.
+- `worlds.json` founder-declared change c0f6a71 (email to support@jussco.company) is NOT touched by this fix; held for Juss's ruling.
+- PROOF: guard 5/5 green on fixed tree; against defective 4a64e3c config 3 of 5 red (tests 1, 2, 5); tests 3-4 pass there by design (assets and routes unchanged by the defect).
+- RISK: security headers removed from runtime path; they return only through a reviewed PR (assets binding + CSP nonces). Guard is drift-only, not a full validator.
+- ROLLBACK: revert this change commit; defective commits stay in history.
+- GATE SCOPE (Juss ruling a, 2026-10-18): the CI-only production fetch of games.jussco.company in `scripts/verify-site.mjs` now runs on push events only, not pull_request, matching the live-domain steps. Local source/Games checks still run on every PR. The red gate on PR head 68c8221 (same gate red on main push runs 4a64e3c, ea7baef, efe19ea) is attributed to the production fetch: inferred, since the GitHub log was unavailable; reproduced locally with CI=true.
+- NEXT GATE: exact-head CI on the new head (draft PR); merge and redeploy held for Juss.
+
+## 2026-10-09 — JussCo outcome showcase branch receipt
+- Branch: `feature/approved-outcome-showcase`; production `main` intentionally unchanged.
+- Scope: `site/index.html` parent-company showcase; empty `site/data/approved-stories.json`; `scripts/verify-site.mjs` browser regressions; `scripts/verify-approved-stories.mjs` public-feed validation; `.github/workflows/site-proof.yml` validation step; README and CLAUDE contract updates.
+- Brand: existing midnight/violet/cyan/gold styling retained; no project registry or hero replacement.
+- Evidence: GitHub commits accepted; exact-head CI/Playwright not yet confirmed; no deployment, merge, or real stories published.
+- Risk: approval flags are declarative, not independently authenticated consent; revocation and removal are not yet implemented. Public JSON must not contain private data.
+- Next gate: open PR for branch-triggered site proof, review exact-head checks/screenshots, then design trusted approval/revocation ingestion before any real-person story publication. HOLD merge and deploy until gates are met.
+
+---
+
 # Claude session state — public portfolio
+
+## 2026-10-18 — Phase 2: Security & Email Strategy Complete
+
+**SUBTASK 1: security.txt (RFC 9116)** ✅ COMPLETE
+- File created: site/.well-known/security.txt
+- Content: Contact, Expires, Preferred-Languages per RFC 9116
+- Worker handler: Serves with text/plain MIME type + cache headers
+- Commit: 34aa117
+
+**SUBTASK 2: HSTS Header** ✅ COMPLETE
+- Header: Strict-Transport-Security: max-age=3600; includeSubdomains; preload
+- Implementation: src/index.ts Worker handler
+- Timeout: 1 hour (3600s) for rollback safety
+- Escalation: Set to 31536000 (1 year) after cert renewal test
+- Applies to: All responses including security.txt
+- Commit: 34aa117 (combined with Subtask 1)
+
+**SUBTASK 3: Email Strategy** ✅ COMPLETE (Pending email config gate)
+- Updated worlds.json: 9 public/live worlds now use support@jussco.company
+- Private worlds: Unchanged (keep hello@)
+- Company contact: Unchanged (hello@ for founder direct access)
+- Affected worlds: Founder Control Room, Chief AI, JBH, Sync Party, PromptOS, SolContinuity, SleepWealth Agent, Solwealth, Think Tank
+- Commit: 608796e
+
+**BLOCKER:** Cloudflare Email Routing configuration required
+- Action: Create support@jussco.company alias routing to hello@jussbeautifulhair.com
+- Gate: Founder decision (Juss)
+- Status: Pending
+
+**VERIFICATION REQUIRED:**
+- [ ] GET /.well-known/security.txt → 200 + text/plain
+- [ ] GET / → Strict-Transport-Security header present
+- [ ] Playwright test: HSTS header validation
+- [ ] Email alias configured (post-config)
+
+---
 
 ## 2026-10-11 — Release-readiness consolidation: 4 gates identified, 23 blockers mapped
 
@@ -317,3 +383,22 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
 - Founder working rules recorded in `CLAUDE.md` (this branch).
 - ultrathink-devil: not a new skill (≈70% duplicates ULTRATHINK- `reasoning-stack` Redteam/Lindy twins + juss-os law 1). Unique parts (consequence classes, planes, adaptive budget, ≤3 options) are being made executable in the private product repo. Pasted source was truncated after "Can a mode or untrusted" — remainder UNKNOWN.
 - Drift to resolve (founder decision): two juss-os versions exist — installed skill (79-line kernel, v3-DRAFT) vs `ULTRATHINK-` repo (110-line kernel). Neither recorded as FOUNDER ACCEPT.
+
+### Agent-readiness scan (2026-10-24) — branch `claude/new-session-qkil62`
+- Scanner items audited: only Link headers, API catalog (jussco) and MCP server card (Chief, real `/mcp` ProofMode) are truthful. OAuth/PRM, auth.md, A2A card, skills index, Web Bot Auth, WebMCP, DNS-AID rejected: nothing real behind them.
+- jussray `d74f8a5`: `scripts/verify-site.mjs` was a SyntaxError on main `374bc0d` (merge leftover) — Playwright site proof could not run. Fixed. Remaining pre-existing FAIL: "mobile: hero eyebrow sits below the art band" (147/148 ok), not addressed.
+- jussray `ec07255`: `/.well-known/api-catalog` + homepage Link headers + `scripts/agent-discovery.test.mjs` in site-proof CI. Proven under local wrangler dev only; live domain unreachable from session (proxy 403).
+- chief-ai-machine `5a36de2`: details in that repo's own history.
+- No PRs opened, nothing merged/deployed.
+
+### Claude runtime + lane (2026-10-26) — branch `chore/claude-runtime-20261026`
+- Founder rule recorded: every app is standalone; never change one app for another.
+- jussray: `CLAUDE.md` gains "Runtime for Claude" (carrier, exact CI test set, browser proof, workflows); `.control-room/model-capabilities.v1.json` gains a trial `anthropic/claude` lane (no authority, no pinned version).
+- Pre-existing gap, not fixed: `scripts/evidence-sync-proof.test.mjs` imports `vitest`, cannot run under `node --test`, and is in no workflow.
+- Matching Claude docs and lanes were added in each other repo's own branch; their state lives in those repos. Nothing merged or deployed.
+
+### Platform rule (2026-10-26, corrected 2026-10-27)
+- Juss: FCR is the source platform; apps are pulled from its skills and systems. Some are FCR-branded, some are both standalone and FCR extensions. Standalone apps need their own real domain and brand on `*.jussco.company`.
+- Superseded: the earlier "FCR hosts serve FCR code only" reading and attaching truthcompass/truthweaver.foundercontrolroom.org to founder-control-room Pages (wrong).
+- 2026-10-27: both FCR-branded URLs dropped per Juss: DNS CNAMEs deleted in the FCR zone and both hostnames removed from founder-control-room Pages. Readback: 0 `truth*` records, 0 `truth*` redirect rules in the FCR zone.
+- Open: compass.jussco.company is still a 302 to fcr-truth-compass.lovable.app. Real domain needs Juss to add it in Lovable (yields the `_lovable` TXT). truthweaver.jussco.company is already a real Lovable domain (A 185.158.133.1 DNS-only).
