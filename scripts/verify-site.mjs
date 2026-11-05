@@ -186,6 +186,13 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
       getComputedStyle(document.body, '::before').position === 'fixed';
   });
   say(glassMoves, `${vp.n}: page content moves while starfield stays fixed`);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  say(await page.evaluate(() =>
+    getComputedStyle(document.body, '::before').animationName === 'none' &&
+    getComputedStyle(document.body, '::after').animationName === 'none'),
+    `${vp.n}: glass twinkles stop when reduced motion is preferred`);
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+
 
   say((await page.locator('meta[name="description"]').getAttribute('content'))?.includes("Juss Rayy's founder studio"), `${vp.n}: meta description names founder and studio`);
   say((await page.locator('meta[property="og:url"]').getAttribute('content')) === 'https://www.jussco.company/' && (await page.locator('meta[property="og:image"]').getAttribute('content')) === 'https://www.jussco.company/assets/hero.jpg', `${vp.n}: absolute canonical social metadata`);
