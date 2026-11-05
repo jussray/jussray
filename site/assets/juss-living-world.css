@@ -1,0 +1,76 @@
+/* Juss & Co Living World — phase one. Canonical public product and proof flows remain below. */
+:root{--world-glass:rgba(11,10,38,.65);--world-outline:rgba(255,213,160,.55);--world-glow:#ffc77e}
+html{scroll-padding-top:100px}
+body{background:#09091d url('/assets/juss-living-world.svg') center top / cover fixed no-repeat}
+body[data-juss-season="spring"]{--world-glow:#ffb6dc}
+body[data-juss-season="summer"]{--world-glow:#ffe49b}
+body[data-juss-season="autumn"]{--world-glow:#ffc77e}
+body[data-juss-season="winter"]{--world-glow:#b3ddff}
+body[data-juss-holiday="halloween"]{--world-glow:#ffa34f}
+body[data-juss-holiday="winter-lights"]{--world-glow:#fff2ba}
+body[data-juss-holiday="new-year"]{--world-glow:#e5bbff}
+.top{margin:0;padding-top:5px;background:linear-gradient(180deg,rgba(6,6,28,.76),rgba(6,6,28,.38));border-bottom:1px solid rgba(255,219,164,.28)}
+.top .in{max-width:1560px}
+.top .brand{color:#fff3d9;text-shadow:0 0 24px rgba(255,199,126,.4)}
+.top .navpill{background:rgba(15,14,43,.65);border-color:rgba(255,206,155,.46);backdrop-filter:blur(24px);scrollbar-width:none;justify-content:center}
+.top .navpill a{color:#f5effb}
+.top .navpill a.on{background:linear-gradient(100deg,#ffe6bf,#d6826d);color:#1b1020;box-shadow:0 0 24px rgba(255,179,107,.58)}
+.hero{background:transparent;box-shadow:none;border-bottom:0;min-height:850px;padding-bottom:42px}
+.hero::before{inset:0;z-index:-1;background:linear-gradient(180deg,rgba(12,9,34,.22) 0%,rgba(10,8,33,.34) 40%,rgba(6,5,23,.52) 78%,rgba(6,5,23,.34) 100%)}
+.hero-bg,.hero-notes,.hero .pillars,.hero .founder-line{display:none}
+.hero .in{display:block;min-height:0;max-width:1120px;padding-block:clamp(75px,9vh,145px) 0;text-align:center}
+.hero .eyebrow{font-family:var(--f-serif);font-size:clamp(14px,1.7vw,24px);letter-spacing:.33em;color:#f9e3af;text-shadow:0 2px 14px #1a0c32}
+.hero .h-brand{font-family:var(--f-serif);font-weight:700;text-transform:none;white-space:normal;font-size:clamp(40px,5.3vw,82px);letter-spacing:-.032em;line-height:1.07;color:#fff9eb;background:none;-webkit-text-fill-color:#fff9eb;filter:none;text-shadow:0 2px 25px rgba(8,4,33,.9),0 0 40px rgba(254,218,170,.42);max-width:940px;margin:auto}
+.hero .h-line{font:500 clamp(11px,1.3vw,16px)/1.5 var(--f-body);text-transform:uppercase;letter-spacing:.18em;color:#e8e3ff;text-shadow:0 2px 12px #0b0829;margin:15px auto 0;max-width:900px}
+.hero .lede{margin:14px auto 0;font:500 clamp(13px,1.4vw,17px)/1.6 var(--f-body);max-width:790px;color:#fff3dc;text-shadow:0 2px 12px #0b0829}
+.hero .cta-row{justify-content:center;margin:24px auto 0}
+.hero .cta-row .btn{border-radius:999px;min-width:168px;box-shadow:0 0 28px rgba(10,7,31,.65);backdrop-filter:blur(14px)}
+.hero .cta-row .btn-gold{background:linear-gradient(110deg,#fff0ce,#ffc97e);border-color:#fff5d8;color:#201126}
+.hero .cta-row .btn-ghost{border:1px solid rgba(240,218,255,.7);background:rgba(16,15,43,.66);color:#fff}
+.world-ecosystem{max-width:1330px;margin:clamp(80px,13vh,180px) auto 0;padding:16px clamp(13px,3vw,32px) 21px;border-radius:34px;background:linear-gradient(115deg,rgba(23,16,59,.75),rgba(22,9,51,.55));border:1px solid rgba(255,205,144,.77);box-shadow:0 0 0 1px rgba(255,210,146,.18) inset,0 18px 70px rgba(11,3,37,.58),0 0 34px rgba(226,117,255,.18);backdrop-filter:blur(24px)}
+.world-ecosystem h2{font:700 clamp(24px,3vw,43px)/1.1 var(--f-serif);color:#fff4dc;text-align:center;margin:0 0 15px;text-shadow:0 0 18px rgba(255,191,122,.5)}
+.world-ecosystem small{display:block;color:#e9dbfa;font:600 10px/1.5 var(--f-mono);letter-spacing:.11em;text-transform:uppercase;margin-top:5px;text-align:center}
+.world-carousel{display:flex;align-items:center;gap:10px}
+.world-scroll{min-width:0;display:flex;gap:10px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:#a56ada transparent;flex:1;padding:6px 2px 13px}
+.world-card{position:relative;scroll-snap-align:start;flex:0 0 clamp(108px,10.6vw,142px);min-height:160px;border:1px solid rgba(255,211,174,.63);border-radius:16px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:8px;padding:16px 9px;text-decoration:none;text-align:center;color:#fff;background:radial-gradient(circle at 50% 25%,color-mix(in srgb,var(--world-card) 38%,transparent),transparent 65%),linear-gradient(160deg,rgba(35,21,78,.84),rgba(11,8,37,.9));box-shadow:0 0 18px color-mix(in srgb,var(--world-card) 25%,transparent),inset 0 0 14px rgba(218,148,255,.13);transition:transform .22s,border-color .22s,box-shadow .22s}
+.world-card:hover,.world-card:focus-visible{transform:translateY(-4px);border-color:#fff4d1;box-shadow:0 0 24px color-mix(in srgb,var(--world-card) 60%,transparent)}
+.world-card-icon{font:700 clamp(22px,2.7vw,34px)/1 var(--f-serif);height:48px;width:56px;display:grid;place-items:center;color:var(--world-card);text-shadow:0 0 14px var(--world-card)}
+.world-card-title{font:700 12px/1.23 var(--f-body);min-height:30px;display:grid;place-items:center}
+.world-card-status{font:600 9px/1.2 var(--f-mono);color:#f5d8bb;text-transform:uppercase;letter-spacing:.03em}
+.world-arrow{flex:0 0 40px;height:44px;border:1px solid rgba(255,219,181,.62);border-radius:50%;background:rgba(16,9,43,.78);color:#fff;font-size:25px;cursor:pointer;display:grid;place-items:center}
+.world-arrow:hover{box-shadow:0 0 18px var(--world-glow)}
+.world-audio{position:fixed;left:clamp(12px,3vw,32px);bottom:clamp(14px,3vh,28px);z-index:75;max-width:220px;display:grid;gap:8px;padding:12px 14px;border:1px solid rgba(254,214,169,.55);border-radius:17px;color:#fff;background:rgba(15,13,38,.78);backdrop-filter:blur(22px);box-shadow:0 8px 28px rgba(5,4,21,.35);font:500 12px/1.4 var(--f-body)}
+.world-audio button{min-height:44px;display:flex;align-items:center;gap:9px;text-align:left;justify-content:space-between;border:0;background:transparent;color:#fff;cursor:pointer;font:600 12px var(--f-body)}
+.world-audio button::after{content:"◯";font-size:22px;color:#f1d4ff}
+.world-audio button[aria-pressed="true"]::after{content:"●";color:#c6a6ff}
+.world-audio label{display:flex;align-items:center;gap:9px;font-size:11px}
+.world-audio input{width:110px;accent-color:#c89cff;cursor:pointer}
+.world-audio input:disabled{opacity:.45;cursor:not-allowed}
+.world-atmosphere{position:absolute;top:90px;right:clamp(16px,3vw,60px);z-index:4;max-width:170px;padding:13px 19px;text-align:center;background:rgba(13,12,43,.6);border:1px solid rgba(255,220,179,.45);border-radius:20px;backdrop-filter:blur(18px);color:#fff}
+.world-atmosphere b{display:block;text-transform:capitalize;font:700 19px/1.25 var(--f-serif);color:var(--world-glow)}
+.world-atmosphere small{font:500 10px/1.6 var(--f-body)}
+body[data-juss-season="winter"] .hero{filter:saturate(.8)}
+body[data-juss-season="autumn"] .hero{filter:saturate(1.07)}
+body[data-juss-season="summer"] .hero{filter:brightness(1.05)}
+body[data-juss-holiday="winter-lights"] .world-ecosystem{box-shadow:0 0 35px rgba(255,248,196,.4)}
+/* Preserve a single scenery through homepage sections, without obscuring text. */
+.sec,.universe,.os-layer,.proof,.why,.close{background:linear-gradient(180deg,rgba(7,6,28,.88),rgba(7,6,28,.95))!important}
+@media(max-width:900px){.hero .in{padding-top:95px}.world-atmosphere{position:static;margin:10px auto}.world-ecosystem{margin-top:75px}.top .navpill{justify-content:flex-start}}
+@media(max-width:640px){
+ body{background-attachment:scroll;background-size:auto 100vh;background-position:50% 0}
+ .top .in{gap:8px}.top .brand{font-size:23px}
+ .top .navpill{display:flex;flex-wrap:nowrap;order:3;padding:4px;overflow-x:auto;width:100%}
+ .top .navpill a{min-height:40px;padding:8px 11px}
+ .hero{min-height:0;padding-bottom:56px}
+ .hero .in{padding-top:52px;padding-inline:3px}
+ .hero .h-brand{font-size:clamp(37px,9vw,60px)}
+ .hero .h-line{font-size:11px}
+ .hero .cta-row .btn{flex:1 1 42%;min-width:0;padding-inline:12px}
+ .world-ecosystem{margin-top:80px;padding:15px 10px 18px;border-radius:22px}
+ .world-card{flex-basis:116px}
+ .world-arrow{flex-basis:32px;height:38px}
+ .world-audio{left:12px;bottom:12px;padding:6px 10px;max-width:172px}
+ .world-audio label{display:none}
+ .world-audio button{font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){.world-card{transition:none}.world-card:hover{transform:none}body{background-attachment:scroll}}
