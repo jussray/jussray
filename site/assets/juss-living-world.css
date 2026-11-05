@@ -77,4 +77,5 @@ body[data-juss-holiday="winter-lights"] .world-ecosystem{box-shadow:0 0 35px rgb
  .world-audio label{display:none}
  .world-audio button{font-size:11px}
 }
-@media(prefers-reduced-motion:reduce){.world-card{transition:none}.world-card:hover{transform:none}body{background-attachment:scroll}}
+@view-transition{navigation:auto}
+@media(prefers-reduced-motion:reduce){.world-card{transition:none}.world-card:hover{transform:none}body{background-attachment:scroll}@view-transition{navigation:none}}
