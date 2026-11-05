@@ -111,3 +111,8 @@ body { background:#09070e; color:#f7f2ed; }
 @media(max-width:900px) { .jc-scene { max-width:620px; min-height:380px; margin:0 auto 8px; } .jc-feature-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .jc-showcase__heading { align-items:start; flex-direction:column; } }
 @media(max-width:600px) { .hero-notes.jc-scene { max-width:100%; min-height:330px; margin:0 auto 18px; } .jc-scene__art { background-size:auto 187%; background-position:74% 94%; } .jc-scene__caption { bottom:16px; right:18px; font-size:9px; } .jc-feature-grid { grid-template-columns:1fr; } .jc-feature__visual { aspect-ratio:322 / 145; } .jc-feature__content { padding:20px; } .jc-showcase__heading { margin-bottom:22px; } }
 @media(prefers-reduced-motion:reduce) { .jc-feature,.jc-feature__visual img,.jc-scene__art { transition:none; } .jc-feature:hover,.jc-feature:hover img,.jc-scene:hover .jc-scene__art { transform:none; } }
+
+/* Maintain comfortably sized keyboard and touch targets across breakpoints. */
+a.brand { display:inline-flex; align-items:center; min-height:44px; }
+.top .btn-gold { min-height:44px!important; }
+.cta-row .btn:nth-child(n+3) { min-height:44px; }
