@@ -48,6 +48,29 @@ say(/User-agent:\s*\*/i.test(robots) && /Allow:\s*\//i.test(robots) && robots.in
 say(['https://www.jussco.company/','https://www.jussco.company/services.html','https://www.jussco.company/work.html','https://www.jussco.company/creative-history.html','https://www.jussco.company/games/'].every((x) => sitemap.includes(`<loc>${x}</loc>`)), 'seo: sitemap lists canonical public pages');
 const expectedOS = ['Truth Weaver', 'Truth Compass', 'Exact Match Engine', 'Living Truth', 'Proof Core'];
 
+// Public site showcase: domain links are explicit destinations, never GitHub fallbacks.
+{
+  const home = readFileSync(join(ROOT, 'index.html'), 'utf8');
+  const required = [
+    'https://chief.foundercontrolroom.org',
+    'https://sync.jussco.company/',
+    'https://compass.jussco.company/',
+    'https://exactmatch.jussco.company/',
+    'https://jussbeautifulhair.com/',
+    'https://games.jussco.company/',
+    'https://protect.jussco.company/',
+    'https://protect2.jussco.company/',
+    'https://makevideo.jussco.company/',
+    'https://junglejinx.jussco.company/',
+    'https://lumora.jussco.company/'
+  ];
+  say(home.includes('id="live-sites"') && home.indexOf('id="live-sites"') < home.indexOf('id="worlds"'), 'site showcase: public destinations appear before project worlds');
+  say(required.every((destination) => home.includes('href="' + destination + '"')), 'site showcase: all 11 observed Cloudflare destinations have direct links');
+  say((home.match(/class="live-site-card"/g) || []).length === required.length, 'site showcase: one card per public destination');
+  say(home.includes('individual site availability and functionality may vary'), 'site showcase: deployment evidence is not mislabeled as runtime proof');
+}
+
+
 say(portfolio.schemaVersion === 1, 'portfolio: schema v1');
 say(portfolio.source?.mergeSha === 'b037ecce18863eb0be35098508b3b1fcf95c049d', 'portfolio: bound to merged FCR identity map');
 say(portfolio.source?.technicalInventory === 'site/data/systems.json', 'portfolio: technical independence reconciles through systems inventory');
