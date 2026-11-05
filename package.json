@@ -1,0 +1,10 @@
+{
+  "name": "jussco-site-preview",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "build": "node --check scripts/railway-preview-server.mjs",
+    "start": "node scripts/railway-preview-server.mjs"
+  },
+  "engines": { "node": ">=20" }
+}
