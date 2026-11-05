@@ -390,3 +390,15 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
 - jussray `ec07255`: `/.well-known/api-catalog` + homepage Link headers + `scripts/agent-discovery.test.mjs` in site-proof CI. Proven under local wrangler dev only; live domain unreachable from session (proxy 403).
 - chief-ai-machine `5a36de2`: details in that repo's own history.
 - No PRs opened, nothing merged/deployed.
+
+### Claude runtime + lane (2026-10-26) — branch `chore/claude-runtime-20261026`
+- Founder rule recorded: every app is standalone; never change one app for another.
+- jussray: `CLAUDE.md` gains "Runtime for Claude" (carrier, exact CI test set, browser proof, workflows); `.control-room/model-capabilities.v1.json` gains a trial `anthropic/claude` lane (no authority, no pinned version).
+- Pre-existing gap, not fixed: `scripts/evidence-sync-proof.test.mjs` imports `vitest`, cannot run under `node --test`, and is in no workflow.
+- Matching Claude docs and lanes were added in each other repo's own branch; their state lives in those repos. Nothing merged or deployed.
+
+### Platform rule (2026-10-26, corrected 2026-10-27)
+- Juss: FCR is the source platform; apps are pulled from its skills and systems. Some are FCR-branded, some are both standalone and FCR extensions. Standalone apps need their own real domain and brand on `*.jussco.company`.
+- Superseded: the earlier "FCR hosts serve FCR code only" reading and attaching truthcompass/truthweaver.foundercontrolroom.org to founder-control-room Pages (wrong).
+- 2026-10-27: both FCR-branded URLs dropped per Juss: DNS CNAMEs deleted in the FCR zone and both hostnames removed from founder-control-room Pages. Readback: 0 `truth*` records, 0 `truth*` redirect rules in the FCR zone.
+- Open: compass.jussco.company is still a 302 to fcr-truth-compass.lovable.app. Real domain needs Juss to add it in Lovable (yields the `_lovable` TXT). truthweaver.jussco.company is already a real Lovable domain (A 185.158.133.1 DNS-only).
