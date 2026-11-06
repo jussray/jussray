@@ -2,7 +2,7 @@ name: Juss & Co site browser proof
 on:
   push:
     branches: [main]
-    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/verify-approved-stories.mjs', 'scripts/licensable-assets.test.mjs', 'scripts/verify-licensing-page.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/conversion-receiver.test.mjs', 'scripts/conversion-client-first-party.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'scripts/site-proof-boundary.test.mjs', 'scripts/public-resources.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', 'workers/**', 'wrangler.conversions.example.jsonc', '.github/workflows/site-proof.yml', 'scripts/verify-independent-review.mjs', 'scripts/verify-independent-review.test.mjs', 'tests/jussco-github-webhook.test.mjs']
+    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/verify-approved-stories.mjs', 'scripts/licensable-assets.test.mjs', 'scripts/verify-licensing-page.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/conversion-receiver.test.mjs', 'scripts/conversion-client-first-party.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'scripts/site-proof-boundary.test.mjs', 'scripts/public-resources.test.mjs', 'scripts/verify-independent-review.mjs', 'scripts/verify-independent-review.test.mjs', 'tests/jussco-github-webhook.test.mjs', 'tests/atmosphere.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', 'workers/**', 'wrangler.conversions.example.jsonc', '.github/workflows/site-proof.yml']
   pull_request:
   workflow_dispatch:
 permissions:
@@ -53,6 +53,8 @@ jobs:
         run: node --test tests/jussco-github-webhook.test.mjs
       - name: Test systematic review decision and native ruleset contract (read-only)
         run: node --test scripts/verify-independent-review.test.mjs
+      - name: Test automatic seasonal atmosphere
+        run: node --test tests/atmosphere.test.mjs
       - name: Verify source/provider proof responsibility boundary
         run: node --test scripts/site-proof-boundary.test.mjs
       - name: Validate company resource links, public PDFs and status honesty

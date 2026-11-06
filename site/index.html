@@ -469,6 +469,9 @@ a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-colo
 .hero-bg,.hero-notes,#stars{display:none!important}
 .hero{background:var(--void)}
 </style>
+<link rel="stylesheet" href="/assets/signature-world.css">
+<link rel="stylesheet" href="/assets/atmosphere.css"><script type="module" src="/assets/atmosphere.mjs"></script>
+<link rel="stylesheet" href="/assets/flagship.css">
 </head>
 <body>
 <header class="top wrap">
@@ -521,11 +524,11 @@ a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-colo
 
 <!-- ================= HERO ================= -->
 <section class="hero wrap" aria-labelledby="h-hero">
-  <div class="hero-bg" id="heroBg"><img src="assets/hero.jpg" alt="" fetchpriority="high" width="1160" height="586"></div>
+  <div class="hero-bg" id="heroBg"><img src="assets/hero.jpg" alt="" loading="lazy" width="1160" height="586"></div>
   <canvas id="stars" aria-hidden="true"></canvas>
   <div class="in">
     <div>
-      <div class="eyebrow mono">A founder studio for a brighter tomorrow</div>
+      <div class="eyebrow mono">INDEPENDENT CREATIVE &amp; TECHNOLOGY COMPANY</div>
       <h1 class="h-brand" id="h-hero">Juss &amp; Co</h1>
       <p class="h-line">Turn thoughts into <span class="script">living works.</span></p>
       <p class="hero-tagline">Creative Technology for a More Beautiful Life</p>
@@ -534,8 +537,8 @@ a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-colo
       <p class="lede">We build products, systems, stories and proof that help more people live, create, and belong. From idea to impact, we make thoughts real.</p>
       <p class="founder-line">Founded by <strong>Juss Rayy</strong> · Product &amp; Full-Stack AI Systems Builder.</p>
       <div class="cta-row">
-        <a class="btn btn-gold" href="/services.html">Work with Juss <span aria-hidden="true">→</span></a>
-        <a class="btn btn-violet" href="/work.html">See selected work <span aria-hidden="true">→</span></a>
+        <a class="btn btn-violet" href="#products">Explore our products <span aria-hidden="true">→</span></a>
+        <a class="btn btn-ghost" href="/work.html">Explore our work <span aria-hidden="true">→</span></a>
         <a class="btn btn-ghost" href="#worlds">Explore the worlds <span aria-hidden="true">→</span></a>
         <a class="btn btn-ghost" href="https://games.jussco.company/">🎮 Visit Juss &amp; Co. Games <span aria-hidden="true">↗</span></a>
         <a class="btn btn-ghost" href="#proof"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>See proof</a>
@@ -547,8 +550,53 @@ a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-colo
         <li class="pillar"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10 15 15 0 0 1-4-10 15 15 0 0 1 4-10z"/></svg><div><b>Proof</b><span>compounds impact</span></div></li>
       </ul>
     </div>
-    <div class="hero-notes" aria-hidden="true">
-      <p class="note hand a">ideas<br>products<br>people<br>brighter<br>tomorrows</p>
+    <div class="hero-notes jc-scene" aria-hidden="true">
+      <div class="jc-scene__art"></div><div class="jc-scene__light"></div>
+      <span class="jc-scene__caption">One company.<br>Many living worlds.</span>
+    </div>
+  </div>
+</section>
+
+<!-- Public-facing product pathways. The links are real destinations, not claims of checkout or runtime verification. -->
+<section class="sec wrap jc-showcase" id="products" aria-labelledby="jc-products-title">
+  <div class="in">
+    <div class="kicker mono">DISCOVER THE JUSS &amp; CO UNIVERSE</div>
+    <div class="jc-showcase__heading">
+      <h2 class="h2" id="jc-products-title">Made to <span class="gold">experience.</span></h2>
+      <p>Some worlds are ready to explore now. Others are still being built. Find the right place to begin, with each brand standing in its own light.</p>
+    </div>
+    <div class="jc-feature-grid">
+      <article class="jc-feature jc-feature--shop">
+        <div class="jc-feature__visual"><img src="/assets/w-jbh.jpg" alt="Juss Beautiful Hair brand artwork" loading="lazy" width="322" height="132"></div>
+        <div class="jc-feature__content">
+          <span class="jc-feature__label">BEAUTY &amp; COMMERCE · STOREFRONT</span>
+          <h3>Juss Beautiful Hair</h3>
+          <p>Discover the independent beauty brand and explore its storefront.</p>
+          <a href="https://jussbeautifulhair.com/" target="_blank" rel="noopener noreferrer" aria-label="Visit Juss Beautiful Hair storefront">Explore the store <span aria-hidden="true">↗</span></a>
+        </div>
+      </article>
+      <article class="jc-feature jc-feature--play">
+        <div class="jc-feature__visual"><img src="/assets/w-sync.jpg" alt="Friends enjoying a lively multiplayer experience" loading="lazy" width="322" height="132"></div>
+        <div class="jc-feature__content">
+          <span class="jc-feature__label">GAMES &amp; EXPERIENCES · PUBLIC DESTINATION</span>
+          <h3>SYNC Party</h3>
+          <p>Explore the social party-game world built around playing together.</p>
+          <a href="https://sync.jussco.company/" target="_blank" rel="noopener noreferrer" aria-label="Visit SYNC Party experience">Explore SYNC <span aria-hidden="true">↗</span></a>
+        </div>
+      </article>
+      <article class="jc-feature jc-feature--coming">
+        <div class="jc-feature__visual"><img src="/assets/w-bip.jpg" alt="Se’kret Bip character with a playful cloud companion" loading="lazy" width="322" height="132"></div>
+        <div class="jc-feature__content">
+          <span class="jc-feature__label">FAMILY &amp; CONNECTION · OPENING SOON</span>
+          <h3>Se’kret Bip</h3>
+          <p>Meet the world being designed for authentic expression and connection.</p>
+          <a href="/portfolio.html" aria-label="Learn about Se’kret Bip in the Juss and Co portfolio">Meet the world <span aria-hidden="true">→</span></a>
+        </div>
+      </article>
+    </div>
+    <div class="jc-showcase__foot">
+      <p>Product availability and checkout readiness are verified on each destination, not assumed from its listing here.</p>
+      <a href="#live-sites">Discover all public destinations <span aria-hidden="true">↓</span></a>
     </div>
   </div>
 </section>
