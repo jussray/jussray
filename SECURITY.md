@@ -2,7 +2,7 @@
 
 ## Report a vulnerability privately
 
-Email **founder@jussco.company** with a subject beginning `[Security][Juss & Co.]`. Include the affected URL or repository, observed behavior, possible impact, and minimal safe reproduction steps. Do not post exploitable details in public GitHub issues.
+Email **security@jussco.company** with a subject beginning `[Security][Juss & Co.]`. Include the affected URL or repository, observed behavior, possible impact, and minimal safe reproduction steps. Do not post exploitable details in public GitHub issues.
 
 Do not send passwords, access tokens, private keys, children's personal information, customer records, or other sensitive data as proof. Redact examples and coordinate privately before sharing any further evidence.
 

@@ -1,16 +1,12 @@
 {
-  "generatedAt": "2026-10-02T22:48:47Z",
+  "generatedAt": "2026-10-29T19:30:00Z",
   "source": "founder-declared portfolio worlds + builder/repository carriers; evidence fields remain FCR-owned",
   "worlds": [
     {
       "name": "Se'kret Bip",
       "repo": "jussray/Sekret-Bip",
-      "st": "progress",
-      "label": "Public preview",
-      "link": {
-        "text": "Visit Se'kret Bip preview",
-        "url": "https://sekretbip.jussco.company/"
-      },
+      "st": "soon",
+      "label": "Opening soon",
       "contact": {
         "site": "https://sekretbip.net",
         "github": "https://github.com/jussray/Sekret-Bip",
@@ -34,7 +30,11 @@
           "role": "demo/supporting source",
           "visibility": "public"
         }
-      ]
+      ],
+      "link": {
+        "text": "Visit Se’kret Bip",
+        "url": "https://sekretbip.net"
+      }
     },
     {
       "name": "Founder Control Room",
@@ -42,14 +42,15 @@
       "st": "building",
       "label": "Building",
       "link": {
-        "text": "Explore FCR site (sign-in pending)",
-        "url": "https://foundercontrolroom.org/"
+        "text": "Visit Founder Control Room",
+        "url": "https://foundercontrolroom.org"
       },
       "contact": {
         "site": "https://foundercontrolroom.org",
         "github": "https://github.com/jussray/founder-control-room",
-        "email": "founder@jussco.company",
-        "linkedin": "https://www.linkedin.com/in/juss-rayy-13ba691a1"
+        "email": "support@foundercontrolroom.org",
+        "linkedin": "https://www.linkedin.com/in/juss-rayy-13ba691a1",
+        "founder": "founder@foundercontrolroom.org"
       },
       "evidence": {},
       "display": {
@@ -75,7 +76,7 @@
       },
       "contact": {
         "github": "https://github.com/jussray/chief-ai-machine",
-        "email": "founder@jussco.company"
+        "email": "support@jussco.company"
       },
       "evidence": {},
       "display": {
@@ -93,8 +94,8 @@
     {
       "name": "Juss Beautiful Hair",
       "repo": "jussray/jussbeautifulhair-site",
-      "st": "live",
-      "label": "Live",
+      "st": "progress",
+      "label": "Store open · awaiting first order",
       "link": {
         "text": "Shop the store",
         "url": "https://jussbeautifulhair.com"
@@ -102,8 +103,10 @@
       "contact": {
         "site": "https://jussbeautifulhair.com",
         "email": "hello@jussbeautifulhair.com",
+        "wholesale": "wholesale@jussbeautifulhair.com",
         "instagram": "[JBH INSTAGRAM URL]",
-        "facebook": "[JBH FACEBOOK PAGE URL]"
+        "facebook": "[JBH FACEBOOK PAGE URL]",
+        "hello": "hello@jussbeautifulhair.com"
       },
       "evidence": {},
       "display": {
@@ -126,7 +129,7 @@
           "platform": "github",
           "ref": "jussray/jbh-private",
           "role": "additional carrier",
-          "visibility": "private"
+          "visibility": "public"
         },
         {
           "platform": "github",
@@ -145,8 +148,9 @@
       "held": "Coming soon · no public link yet",
       "contact": {
         "github": "https://github.com/jussray/StoryEngine",
-        "email": "founder@jussco.company"
+        "email": "support@jussco.company"
       },
+      "legacyRoutingNote": "Earlier shared contact candidate: support@jussco.company; not verified for delivery.",
       "evidence": {},
       "display": {
         "group": "Stories & play"
@@ -165,14 +169,11 @@
       "repo": "jussray/sync-party-game",
       "st": "live",
       "label": "Live",
-      "link": {
-        "text": "Play SYNC Party",
-        "url": "https://sync.jussco.company"
-      },
       "contact": {
         "github": "https://github.com/jussray/sync-party-game",
-        "email": "founder@jussco.company"
+        "email": "support@jussco.company"
       },
+      "legacyRoutingNote": "Earlier shared contact candidate: support@jussco.company; not verified for delivery.",
       "evidence": {},
       "display": {
         "group": "Stories & play"
@@ -184,7 +185,11 @@
           "role": "canonical game source",
           "visibility": "public"
         }
-      ]
+      ],
+      "link": {
+        "text": "Play SYNC",
+        "url": "https://sync.jussco.company/"
+      }
     },
     {
       "name": "Bip Jr",
@@ -193,7 +198,7 @@
       "label": "Private build",
       "held": "Private build · tracked internally",
       "contact": {
-        "email": "founder@jussco.company"
+        "email": "support@sekretbip.net"
       },
       "evidence": {},
       "carriers": [
@@ -239,12 +244,12 @@
       "st": "building",
       "label": "Building",
       "link": {
-        "text": "View public overview",
-        "url": "https://foundercontrolroom.org/#promptos"
+        "text": "Follow the build",
+        "url": "https://github.com/jussray/promptos"
       },
       "contact": {
         "github": "https://github.com/jussray/promptos",
-        "email": "founder@jussco.company"
+        "email": "support@jussco.company"
       },
       "evidence": {},
       "carriers": [
@@ -252,7 +257,7 @@
           "platform": "github",
           "ref": "jussray/promptos",
           "role": "canonical source",
-          "visibility": "private"
+          "visibility": "public"
         }
       ],
       "display": {
@@ -295,7 +300,7 @@
       },
       "contact": {
         "github": "https://github.com/jussray/solcontinuity",
-        "email": "founder@jussco.company"
+        "email": "support@jussco.company"
       },
       "evidence": {},
       "carriers": [
@@ -342,7 +347,7 @@
       "label": "Private build",
       "held": "Private storefront build · tracked internally",
       "contact": {
-        "email": "founder@jussco.company"
+        "email": "support@jussco.company"
       },
       "evidence": {},
       "carriers": [
@@ -389,7 +394,7 @@
       "label": "Private build",
       "held": "Private brand build · tracked internally",
       "contact": {
-        "email": "founder@jussco.company"
+        "email": "support@jussco.company"
       },
       "evidence": {},
       "carriers": [
@@ -440,7 +445,7 @@
       },
       "contact": {
         "github": "https://github.com/jussray/SleepWealth-Agent",
-        "email": "founder@jussco.company"
+        "email": "support@jussco.company"
       },
       "evidence": {},
       "carriers": [
@@ -491,7 +496,7 @@
       },
       "contact": {
         "github": "https://github.com/jussray/SolWealth-Meteora-",
-        "email": "founder@jussco.company"
+        "email": "support@jussco.company"
       },
       "evidence": {},
       "carriers": [
@@ -542,7 +547,7 @@
       },
       "contact": {
         "github": "https://github.com/jussray/THINK-TANK",
-        "email": "founder@jussco.company"
+        "email": "support@jussco.company"
       },
       "evidence": {},
       "carriers": [
@@ -589,7 +594,7 @@
       "label": "Private build",
       "held": "Private commerce build · tracked internally",
       "contact": {
-        "email": "founder@jussco.company"
+        "email": "support@jussco.company"
       },
       "evidence": {},
       "carriers": [
@@ -634,12 +639,9 @@
       "repo": "jussray/Ayure-",
       "st": "building",
       "label": "Private build",
-      "link": {
-        "text": "Explore AYURE public preview",
-        "url": "https://ayure.us/"
-      },
+      "held": "Private product build · tracked internally",
       "contact": {
-        "email": "founder@jussco.company"
+        "email": "support@jussco.company"
       },
       "evidence": {},
       "carriers": [
@@ -678,74 +680,19 @@
           ]
         ]
       }
-    },
-    {
-      "name": "MakeVideo",
-      "repo": "jussray/make-video-",
-      "st": "live",
-      "label": "Live studio",
-      "link": {
-        "text": "Create a video",
-        "url": "https://makevideo.jussco.company/"
-      },
-      "contact": {
-        "github": "https://github.com/jussray/make-video-",
-        "email": "founder@jussco.company"
-      },
-      "evidence": {},
-      "carriers": [
-        {
-          "platform": "github",
-          "ref": "jussray/make-video-",
-          "role": "canonical MakeVideo source",
-          "visibility": "public"
-        }
-      ],
-      "display": {
-        "group": "Stories & play",
-        "accent": "#9E72ED",
-        "img": "assets/w-story.jpg",
-        "alt": "Creative storytelling studio artwork",
-        "desc": "A browser-based Juss & Co. studio for storyboards, photo-motion shots, soundtracks and exported videos.",
-        "tags": [
-          "Video",
-          "Creative studio",
-          "Local-first"
-        ],
-        "tag": "Make the storyboard move.",
-        "blurb": "Arrange shots, add your own images and soundtrack, and export a playable animatic from your browser. AI rendering and automatic publication are not enabled.",
-        "facts": [
-          [
-            "Public studio",
-            "https://makevideo.jussco.company/"
-          ],
-          [
-            "Verified",
-            "Cloudflare hosted studio with browser export and Playwright checks"
-          ],
-          [
-            "Storage",
-            "Projects remain in this browser; exported files are user controlled"
-          ],
-          [
-            "Boundary",
-            "StoryEngine GPU rendering and publication remain separate"
-          ]
-        ]
-      }
     }
   ],
   "company": {
     "name": "Juss & Co",
     "founder": "Juss",
-    "site": "https://jussco.company",
+    "site": "https://www.jussco.company",
     "github": "https://github.com/jussray",
     "email": "founder@jussco.company",
     "linkedin": "https://www.linkedin.com/in/juss-rayy-13ba691a1",
     "facebook": "https://www.facebook.com/share/1cH3mxVRpi/?mibextid=wwXIfr",
     "youtube": "[YOUTUBE URL]",
     "support": "https://buymeacoffee.com/jussrayy",
-    "contact_source": "founder emails published by the live sites: jussbeautifulhair.com pages (Shipping/Privacy/Returns) and the Se'kret Bip app; hello@jussbeautifulhair.com is the legal contact in the FCR, Bip and StoryEngine repos"
+    "contact_source": "Cloudflare Email Routing rules checked for jussco.company, jussbeautifulhair.com, foundercontrolroom.org and sekretbip.net. Other portfolio projects use the shared Juss & Co support route. Configured mail routing is not proof of successful delivery or outbound sending."
   },
   "quotes": [
     {

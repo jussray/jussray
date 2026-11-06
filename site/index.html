@@ -3,15 +3,56 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="Juss & Co is a founder studio. Products, systems, stories and proof that help more people live, create and belong.">
-<meta property="og:title" content="Juss & Co — Turn thoughts into living works.">
-<meta property="og:description" content="A founder studio for a brighter tomorrow. Connected worlds, one proof protocol.">
-<meta property="og:image" content="assets/hero.jpg">
+<meta name="description" content="Juss & Co is Juss Rayy's founder studio building human-centered products, AI systems, commerce, creator tools and verifiable digital products.">
+<meta name="robots" content="index,follow">
+<meta property="og:title" content="Juss & Co | Juss Rayy, Product & AI Systems Builder">
+<meta property="og:description" content="Juss Rayy's founder studio for human-centered products, AI systems, commerce, creator tools and proof-backed digital work.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.jussco.company/">
+<meta property="og:image" content="https://www.jussco.company/assets/hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Juss & Co | Juss Rayy, Product & AI Systems Builder">
+<meta name="twitter:description" content="Human-centered products, AI systems, commerce, creator tools and proof-backed digital work.">
+<meta name="twitter:image" content="https://www.jussco.company/assets/hero.jpg">
 <meta name="theme-color" content="#06061C">
-<link rel="canonical" href="https://jussco.company/">
+<link rel="canonical" href="https://www.jussco.company/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2306061C'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='%23F5C14B' font-family='Georgia'%3E%26%3C/text%3E%3C/svg%3E">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}</style>
-<title>Juss &amp; Co — Turn thoughts into living works.</title>
+<title>Juss &amp; Co | Juss Rayy, Product &amp; AI Systems Builder</title>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://www.jussco.company/#juss-rayy",
+      "name": "Juss Rayy",
+      "url": "https://www.jussco.company/",
+      "jobTitle": "Founder, Product & Full-Stack AI Systems Builder",
+      "sameAs": [
+        "https://github.com/jussray",
+        "https://www.linkedin.com/in/juss-rayy-13ba691a1"
+      ],
+      "worksFor": { "@id": "https://www.jussco.company/#organization" }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://www.jussco.company/#organization",
+      "name": "Juss & Co",
+      "url": "https://www.jussco.company/",
+      "founder": { "@id": "https://www.jussco.company/#juss-rayy" }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.jussco.company/#website",
+      "url": "https://www.jussco.company/",
+      "name": "Juss & Co",
+      "publisher": { "@id": "https://www.jussco.company/#organization" }
+    }
+  ]
+}
+</script>
+<script src="/assets/conversion-tracking.js" defer></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Playfair+Display:wght@700;800&family=Kaushan+Script&family=Caveat:wght@700&family=Sora:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
@@ -71,10 +112,10 @@ h1,h2,h3{text-wrap:balance}
 /* ---- top bar ---- */
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:60;background:linear-gradient(180deg,rgba(6,6,28,.95),rgba(6,6,28,.7));backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(170,150,255,.12)}
 .top .in{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:12px}
-.brand{font-family:var(--f-serif);font-weight:800;font-size:26px;text-decoration:none;color:var(--cream);letter-spacing:-.01em}
+.brand{font-family:var(--f-serif);font-weight:800;font-size:26px;text-decoration:none;color:var(--cream);letter-spacing:-.01em;white-space:nowrap}
 .brand b{color:var(--gold);font-weight:800}
-.navpill{display:flex;gap:4px;padding:5px;border-radius:999px;border:1px solid var(--line);background:rgba(12,10,44,.7)}
-.navpill a{font-size:14px;color:var(--muted);text-decoration:none;padding:10px 18px;border-radius:999px;min-height:40px;display:inline-flex;align-items:center}
+.navpill{display:flex;flex:1 1 auto;min-width:0;max-width:100%;overflow-x:auto;gap:4px;padding:5px;border-radius:999px;border:1px solid var(--line);background:rgba(12,10,44,.7);scrollbar-width:thin}
+.navpill a{font-size:13px;color:var(--muted);text-decoration:none;padding:10px 9px;border-radius:999px;min-height:40px;display:inline-flex;align-items:center;white-space:nowrap}
 .navpill a:hover{color:#fff}
 .navpill a.on{color:#fff;background:rgba(124,58,237,.35);box-shadow:0 0 0 1px rgba(184,107,255,.7) inset,0 0 18px rgba(124,58,237,.6)}
 
@@ -93,6 +134,7 @@ h1,h2,h3{text-wrap:balance}
 .h-line{margin-top:10px;font-family:var(--f-display);font-weight:400;text-transform:uppercase;font-size:clamp(28px,3.6vw,56px);line-height:1;color:#fff;letter-spacing:.01em;text-shadow:0 0 18px rgba(255,255,255,.25)}
 .h-line .script{font-family:var(--f-script);text-transform:none;letter-spacing:0;color:var(--gold);font-size:1.12em;text-shadow:0 0 22px rgba(245,193,75,.55);padding-left:.12em}
 .lede{margin-top:22px;max-width:52ch;font-size:clamp(16px,1.3vw,19px);color:#E4DFFB;line-height:1.55}
+.founder-line{margin-top:14px;color:var(--gold-2);font-size:14px;letter-spacing:.01em}.founder-line strong{color:var(--cream)}
 .cta-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:28px}
 .pillars{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:38px;max-width:640px}
 .pillar{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:center}
@@ -186,7 +228,7 @@ h1,h2,h3{text-wrap:balance}
 .os-meta span,.os-embed span{font-family:var(--f-mono);font-size:9px;letter-spacing:.09em;text-transform:uppercase;padding:6px 8px;border-radius:999px;border:1px solid rgba(170,150,255,.2);color:var(--muted);background:rgba(255,255,255,.02)}
 .os-embed{display:flex;gap:7px;flex-wrap:wrap;padding-top:11px;border-top:1px solid rgba(170,150,255,.13)}
 .os-embed b{width:100%;font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-2);font-weight:700}
-.os-link{align-self:flex-start;color:var(--cyan);font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center;min-height:44px;padding:8px 2px}
+.os-link{align-self:flex-start;min-height:40px;display:inline-flex;align-items:center;color:var(--cyan);font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;padding:8px 2px}
 .surface-strip{margin-top:18px;border:1px dashed rgba(184,107,255,.35);border-radius:14px;padding:14px 16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;color:var(--muted);font-size:13px}
 .surface-strip b{color:#fff}.os-foot{margin-top:14px;color:var(--dim)}
 @media(max-width:900px){.os-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -258,6 +300,13 @@ h1,h2,h3{text-wrap:balance}
 .addr{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 10px 10px 16px;border-radius:12px;border:1px solid var(--line-hot);background:rgba(6,6,28,.7)}
 .addr a{display:inline-flex;align-items:center;min-height:44px;font-family:var(--f-mono);font-size:13px;overflow-wrap:anywhere;min-width:0;color:var(--gold)}
 .copy{min-height:44px;padding:10px 14px;border-radius:10px;border:1px solid var(--line-hot);background:rgba(124,58,237,.25);color:#fff;font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;cursor:pointer}
+.project-contact-directory{border:1px solid var(--line);border-radius:12px;background:rgba(6,6,28,.7);padding:0 14px}
+.project-contact-directory summary{display:flex;align-items:center;min-height:44px;font-family:var(--f-mono);font-size:11px;letter-spacing:.04em;color:var(--cream);cursor:pointer}
+.project-contact-directory ul{list-style:none;margin:4px 0 12px;padding:0;max-height:280px;overflow:auto;display:grid;gap:8px}
+.project-contact-directory li{display:grid;gap:2px;padding:8px 0;border-top:1px solid var(--line);font-size:12px;min-width:0}
+.project-contact-directory strong{font-weight:600;color:var(--text)}
+.project-contact-directory a{color:var(--cyan);overflow-wrap:anywhere;min-height:44px;display:inline-flex;align-items:center}
+.project-contact-directory small{color:var(--muted);font-size:10px}
 .sig{display:grid;gap:14px;justify-items:start}
 .sig .brand{font-size:34px}
 .sig .tag{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
@@ -287,11 +336,14 @@ h1,h2,h3{text-wrap:balance}
   .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .drawer{grid-template-columns:minmax(0,1fr)}
   .pillars{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .top .in{flex-wrap:wrap;row-gap:10px}
+  .navpill{order:3;flex:0 0 100%;max-width:100%;overflow-x:auto;justify-content:flex-start;scrollbar-width:thin}
 }
+@media (max-width:760px){.navpill a{padding-inline:11px}}
 @media (max-width:640px){
   .navpill{display:none}
-  .hero .in{padding-top:290px;min-height:0}
-  .hero-bg{inset:0 0 auto 0;height:330px}
+  .hero .in{padding-top:calc(330px + 22px);min-height:0}
+  .hero-bg{inset:0 0 auto 0;height:330px;transform:none!important} /* stacked layout: parallax would slide the art over the copy */
   .hero-bg img{object-position:72% 40%}
   .hero::before{background:linear-gradient(180deg,rgba(6,6,28,.25) 0%,rgba(6,6,28,.2) 35%,rgba(6,6,28,.92) 62%,var(--void) 100%)}
   .h-brand{font-size:clamp(44px,13.5vw,72px)}
@@ -309,6 +361,56 @@ h1,h2,h3{text-wrap:balance}
   .close-grid{grid-template-columns:minmax(0,1fr)}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+.live-site-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.live-site-card{display:flex;flex-direction:column;gap:12px;padding:24px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,rgba(36,26,86,.85),rgba(7,8,31,.92));min-width:0}
+.live-site-card h3{font-family:var(--f-serif);font-size:clamp(22px,2.4vw,30px);color:var(--cream);line-height:1.15}
+.live-site-card p{color:var(--muted);font-size:14px;flex:1}
+.live-site-card a{align-self:flex-start;display:inline-flex;align-items:center;min-height:44px;padding:10px 0;color:var(--gold-2);font-weight:700;text-underline-offset:5px}
+.live-site-card:focus-within{outline:2px solid var(--cyan);outline-offset:3px}
+@media(max-width:900px){.live-site-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.live-site-grid{grid-template-columns:1fr}}
+/* Our Ecosystem carousel (mockup: glass band with world glyphs and prev/next). Items come only from
+   data/worlds.json and data/systems.json; unopened front doors render without a link. */
+.eco{position:relative;isolation:isolate;padding-block:clamp(40px,5vw,64px);border-bottom:1px solid var(--line);overflow:hidden}
+.eco::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(6,6,28,.25),rgba(6,6,28,.72)),url(assets/home-scene.webp) center/cover no-repeat,var(--void)}
+.eco-band{position:relative;max-width:100%;border-radius:28px;padding:26px 16px 18px;border:1px solid rgba(245,193,75,.45);background:linear-gradient(180deg,rgba(20,17,63,.72),rgba(6,6,28,.92));box-shadow:inset 0 1px 0 rgba(255,217,138,.14),0 30px 90px rgba(245,193,75,.14)}
+.eco-title{display:flex;align-items:center;gap:16px;margin:0 0 18px}
+.eco-title::before,.eco-title::after{content:"";flex:1 1 auto;height:1px;background:linear-gradient(90deg,transparent,var(--gold-2))}
+.eco-title::after{background:linear-gradient(90deg,var(--gold-2),transparent)}
+.eco-title h2{margin:0;font-family:var(--f-serif);font-weight:400;font-size:clamp(26px,3.4vw,40px);color:var(--cream);white-space:nowrap}
+.eco-row{display:flex;align-items:center;gap:10px;min-width:0}
+.eco-nav{flex:0 0 44px;width:44px;height:44px;border-radius:999px;border:1px solid var(--line-hot);background:rgba(12,10,44,.7);color:var(--gold-2);font-size:24px;line-height:1;cursor:pointer}
+.eco-track{list-style:none;margin:0;padding:6px 4px 14px;flex:1 1 auto;min-width:0;display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.eco-track::-webkit-scrollbar{display:none}
+.eco-cell{flex:0 0 138px;display:flex;scroll-snap-align:start}
+.eco-item{flex:1 1 auto;display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px 10px 14px;min-height:196px;border-radius:20px;border:1px solid rgba(190,160,255,.35);background:linear-gradient(180deg,rgba(40,30,110,.75),rgba(10,9,38,.95));box-shadow:0 0 26px rgba(139,92,246,.22),inset 0 1px 0 rgba(255,255,255,.06);color:var(--text);text-align:center;text-decoration:none;transition:transform .3s var(--ease),border-color .3s,box-shadow .3s}
+a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-color:var(--gold-2);box-shadow:0 0 30px rgba(245,193,75,.35)}
+.eco-glyph{width:70px;height:70px;border-radius:20px;display:grid;place-items:center;font-family:var(--f-display);font-size:24px;color:#fff;background:radial-gradient(circle at 30% 25%,#FFD98A,#8B5CF6 45%,#14113F 88%);box-shadow:0 0 28px rgba(184,107,255,.55)}
+.eco-name{font-size:14px;font-weight:600;line-height:1.25;overflow-wrap:anywhere}
+.eco-status{margin-top:auto;font-size:12px;color:var(--muted);line-height:1.35}
+.eco-empty{margin:0;padding:24px;color:var(--muted);font-size:14px}
+.eco-links{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:22px}
+.eco-links a{min-height:44px;display:inline-flex;align-items:center;padding:0 18px;border-radius:999px;border:1px solid var(--line-hot);background:rgba(12,10,44,.55);color:var(--text);text-decoration:none;font-size:14px}
+.eco-links a:hover{border-color:var(--gold-2);color:#fff}
+.eco-nav:focus-visible,.eco-item:focus-visible,.eco-links a:focus-visible{outline:2px solid var(--gold-2);outline-offset:3px}
+.eco-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:22px;min-width:0}
+.eco-band{min-width:0}
+.eco-panel{border-radius:24px;border:1px solid var(--line-hot);background:linear-gradient(180deg,rgba(20,17,63,.85),rgba(8,8,32,.95));padding:22px 18px;min-width:0;align-self:start}
+.eco-panel h3{margin:0 0 12px;font-family:var(--f-serif);font-weight:400;font-size:22px;color:var(--cream)}
+.eco-panel ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.eco-panel a{display:flex;flex-direction:column;gap:2px;min-height:44px;padding:12px 14px;border-radius:14px;border:1px solid transparent;color:var(--text);text-decoration:none}
+.eco-panel a:hover,.eco-panel a:focus-visible{border-color:var(--gold-2);background:rgba(245,193,75,.06)}
+.eco-panel b{font-weight:600;font-size:15px}
+.eco-panel span{font-size:13px;color:var(--muted)}
+.eco-panel a:focus-visible{outline:2px solid var(--gold-2);outline-offset:2px}
+.hero-tagline{font-family:var(--f-serif);font-size:clamp(26px,3vw,40px);line-height:1.15;color:var(--cream);margin:14px 0 8px}
+.hero-caps{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+.hero-verbs{font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-2);margin:0 0 18px}
+@media (min-width:1100px){.eco-grid{grid-template-columns:minmax(0,1fr) 300px;align-items:start}}
+@media (prefers-reduced-motion:reduce){.eco-track{scroll-behavior:auto}.eco-item{transition:none}}
+@media (max-width:520px){.eco-band{padding-inline:12px}.eco-title::before,.eco-title::after{display:none}.eco-title{justify-content:center}}
+.hero-bg,.hero-notes,#stars{display:none!important}
+.hero{background:var(--void)}
 </style>
 </head>
 <body>
@@ -317,18 +419,48 @@ h1,h2,h3{text-wrap:balance}
     <a class="brand" href="#top">Juss <b>&amp;</b> Co</a>
     <nav class="navpill" aria-label="Primary">
       <a class="on" href="#top" data-nav="top">Home</a>
+      <a href="#live-sites">Live sites</a>
       <a href="#worlds" data-nav="worlds">Worlds</a>
       <a href="#systems" data-nav="systems">Systems</a>
+      <a href="portfolio.html">Portfolio</a>
+      <a href="/work.html">Selected work</a>
       <a href="#proof" data-nav="proof">Proof</a>
+      <a href="/services.html">Work with Juss</a>
       <a href="/creative-history.html">Creative history</a>
       <a href="#why" data-nav="why">The why</a>
       <a href="#contact" data-nav="contact">Contact</a>
     </nav>
-    <a class="btn btn-gold" href="#contact" style="min-height:44px;padding:10px 20px;font-size:14px">Contact <span aria-hidden="true">→</span></a>
+    <a class="btn btn-gold" href="/services.html" style="min-height:44px;padding:10px 20px;font-size:14px">Work with Juss <span aria-hidden="true">→</span></a>
   </div>
 </header>
 
 <main id="top">
+<!-- ================= OUR ECOSYSTEM (mockup carousel; items rendered from data/worlds.json + data/systems.json) ================= -->
+<section class="eco wrap" id="ecosystem" aria-labelledby="eco-title">
+  <div class="in">
+    <div class="eco-grid">
+    <div class="eco-band">
+      <div class="eco-title"><h2 id="eco-title">Our Ecosystem</h2></div>
+      <div class="eco-row">
+        <button type="button" class="eco-nav" id="ecoPrev" aria-label="Scroll ecosystem back" aria-controls="ecoTrack">‹</button>
+        <ul class="eco-track" id="ecoTrack" aria-label="Juss &amp; Co ecosystem"><li class="eco-cell"><p class="eco-empty" role="status">Loading the ecosystem from the public project data…</p></li></ul>
+        <button type="button" class="eco-nav" id="ecoNext" aria-label="Scroll ecosystem forward" aria-controls="ecoTrack">›</button>
+      </div>
+    </div>
+    <aside class="eco-panel" aria-labelledby="eco-panel-title">
+      <h3 id="eco-panel-title">The Juss &amp; Co Ecosystem</h3>
+      <ul>
+        <li><a href="#worlds"><b>Our Products</b><span>Flagship solutions, real impact.</span></a></li>
+        <li><a href="/portfolio.html"><b>Portfolio</b><span>See what we've built.</span></a></li>
+        <li><a href="/services.html"><b>Solutions</b><span>Custom for your goals.</span></a></li>
+        <li><a href="/work.html"><b>Our Work</b><span>Results, case studies, and proof.</span></a></li>
+        <li><a href="#contact"><b>Contact</b><span>Let's create together.</span></a></li>
+      </ul>
+    </aside>
+    </div>
+  </div>
+</section>
+
 <!-- ================= HERO ================= -->
 <section class="hero wrap" aria-labelledby="h-hero">
   <div class="hero-bg" id="heroBg"><img src="assets/hero.jpg" alt="" fetchpriority="high" width="1160" height="586"></div>
@@ -338,9 +470,15 @@ h1,h2,h3{text-wrap:balance}
       <div class="eyebrow mono">A founder studio for a brighter tomorrow</div>
       <h1 class="h-brand" id="h-hero">Juss &amp; Co</h1>
       <p class="h-line">Turn thoughts into <span class="script">living works.</span></p>
+      <p class="hero-tagline">Creative Technology for a More Beautiful Life</p>
+      <p class="hero-caps mono">AI-powered product creation, systems, brands, and experiences</p>
+      <p class="hero-verbs mono">Create · Build · Launch · Grow · Protect</p>
       <p class="lede">We build products, systems, stories and proof that help more people live, create, and belong. From idea to impact, we make thoughts real.</p>
+      <p class="founder-line">Founded by <strong>Juss Rayy</strong> · Product &amp; Full-Stack AI Systems Builder.</p>
       <div class="cta-row">
-        <a class="btn btn-violet" href="#worlds">Explore the worlds <span aria-hidden="true">→</span></a>
+        <a class="btn btn-gold" href="/services.html">Work with Juss <span aria-hidden="true">→</span></a>
+        <a class="btn btn-violet" href="/work.html">See selected work <span aria-hidden="true">→</span></a>
+        <a class="btn btn-ghost" href="#worlds">Explore the worlds <span aria-hidden="true">→</span></a>
         <a class="btn btn-ghost" href="https://games.jussco.company/">🎮 Visit Juss &amp; Co. Games <span aria-hidden="true">↗</span></a>
         <a class="btn btn-ghost" href="#proof"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>See proof</a>
       </div>
@@ -357,6 +495,30 @@ h1,h2,h3{text-wrap:balance}
   </div>
 </section>
 
+<!-- Public destination directory: Cloudflare Worker domains and deployments observed 2026-11-05; HTTP/product journeys not yet verified. -->
+<section class="sec wrap" id="live-sites" aria-labelledby="live-sites-title" style="background:radial-gradient(ellipse at 50% 0%,rgba(139,92,246,.18),transparent 68%),var(--void);border-bottom:1px solid var(--line)">
+  <div class="in">
+    <div class="kicker mono">Open the Juss &amp; Co universe</div>
+    <h2 class="h2" id="live-sites-title">Explore <span class="gold">our sites.</span></h2>
+    <p class="sec-note" style="margin:18px 0 30px;max-width:75ch">Discover public destinations across the studio. These domains have Cloudflare deployment records; individual site availability and functionality may vary.</p>
+    <div class="live-site-grid">
+      <article class="live-site-card"><span class="mono" style="color:var(--gold)">Public domain configured</span><h3>Chief AI</h3><p>Standalone AI workspace</p><a href="https://chief.foundercontrolroom.org" target="_blank" rel="noopener noreferrer" aria-label="Visit Chief AI website">Visit website <span aria-hidden="true">↗</span></a></article>
+      <article class="live-site-card"><span class="mono" style="color:var(--gold)">Public domain configured</span><h3>SYNC Party</h3><p>Multiplayer party game</p><a href="https://sync.jussco.company/" target="_blank" rel="noopener noreferrer" aria-label="Visit SYNC Party website">Visit website <span aria-hidden="true">↗</span></a></article>
+      <article class="live-site-card"><span class="mono" style="color:var(--gold)">Public domain configured</span><h3>Truth Compass</h3><p>Claims and evidence</p><a href="https://compass.jussco.company/" target="_blank" rel="noopener noreferrer" aria-label="Visit Truth Compass website">Visit website <span aria-hidden="true">↗</span></a></article>
+      <article class="live-site-card"><span class="mono" style="color:var(--gold)">Public domain configured</span><h3>Exact Match Engine</h3><p>Evidence reconciliation</p><a href="https://exactmatch.jussco.company/" target="_blank" rel="noopener noreferrer" aria-label="Visit Exact Match Engine website">Visit website <span aria-hidden="true">↗</span></a></article>
+      <article class="live-site-card"><span class="mono" style="color:var(--gold)">Public domain configured</span><h3>Juss Beautiful Hair</h3><p>Hair and beauty storefront</p><a href="https://jussbeautifulhair.com/" target="_blank" rel="noopener noreferrer" aria-label="Visit Juss Beautiful Hair website">Visit website <span aria-hidden="true">↗</span></a></article>
+      <article class="live-site-card"><span class="mono" style="color:var(--gold)">Public domain configured</span><h3>Juss &amp; Co Games</h3><p>Games collection</p><a href="https://games.jussco.company/" target="_blank" rel="noopener noreferrer" aria-label="Visit Juss &amp; Co Games website">Visit website <span aria-hidden="true">↗</span></a></article>
+      <article class="live-site-card"><span class="mono" style="color:var(--gold)">Public domain configured</span><h3>JUSS Protect · One</h3><p>Digital protection experience</p><a href="https://protect.jussco.company/" target="_blank" rel="noopener noreferrer" aria-label="Visit JUSS Protect · One website">Visit website <span aria-hidden="true">↗</span></a></article>
+      <article class="live-site-card"><span class="mono" style="color:var(--gold)">Public domain configured</span><h3>JUSS Protect · Two</h3><p>Digital protection experience</p><a href="https://protect2.jussco.company/" target="_blank" rel="noopener noreferrer" aria-label="Visit JUSS Protect · Two website">Visit website <span aria-hidden="true">↗</span></a></article>
+      <article class="live-site-card"><span class="mono" style="color:var(--gold)">Public domain configured</span><h3>Make Video</h3><p>Video creation experience</p><a href="https://makevideo.jussco.company/" target="_blank" rel="noopener noreferrer" aria-label="Visit Make Video website">Visit website <span aria-hidden="true">↗</span></a></article>
+      <article class="live-site-card"><span class="mono" style="color:var(--gold)">Public domain configured</span><h3>Jungle Jinx</h3><p>Game experience</p><a href="https://junglejinx.jussco.company/" target="_blank" rel="noopener noreferrer" aria-label="Visit Jungle Jinx website">Visit website <span aria-hidden="true">↗</span></a></article>
+      <article class="live-site-card"><span class="mono" style="color:var(--gold)">Public domain configured</span><h3>Lumora</h3><p>Digital experience</p><a href="https://lumora.jussco.company/" target="_blank" rel="noopener noreferrer" aria-label="Visit Lumora website">Visit website <span aria-hidden="true">↗</span></a></article>
+    </div>
+    <p style="margin-top:24px;color:var(--muted);font-size:14px">More projects are in development.</p>
+    <a class="btn btn-gold-o" href="/portfolio.html" style="margin-top:16px;min-height:44px">See the complete portfolio <span aria-hidden="true">→</span></a>
+  </div>
+</section>
+
 <!-- ================= WORLDS ================= -->
 <section class="sec universe wrap" id="worlds" aria-labelledby="h-worlds">
   <div class="in">
@@ -365,7 +527,7 @@ h1,h2,h3{text-wrap:balance}
         <div class="kicker mono">The Juss &amp; Co universe</div>
         <h2 class="h2" id="h-worlds"><span class="ln">Different worlds.</span><span class="ln gold">A brighter tomorrow.</span></h2>
       </div>
-      <p class="sec-note"><strong style="color:var(--cream)">Six worlds. One shared belief.</strong> Each project is a living work, a world with its own purpose, people and possibilities. Grouped by what it is for: people &amp; belonging, ideas &amp; systems, stories &amp; play. <span id="liveStamp">Status is shown as it is on 30 Sep 2026.</span></p>
+      <p class="sec-note"><strong style="color:var(--cream)" id="worldSummaryCount">Portfolio worlds. One shared belief.</strong> Each project is a living work, a world with its own purpose, people and possibilities. Grouped by what it is for: people &amp; belonging, ideas &amp; systems, stories &amp; play. <span id="liveStamp">Status is shown as it is on 30 Sep 2026.</span></p>
       <a class="btn btn-gold-o" href="https://github.com/jussray">All builds on GitHub <span aria-hidden="true">↗</span></a>
     </div>
     <div class="filters" id="filters" role="group" aria-label="Filter worlds">
@@ -383,7 +545,7 @@ h1,h2,h3{text-wrap:balance}
         <p class="tag" id="dTag"></p>
         <p class="blurb" id="dBlurb"></p>
         <div class="cta" id="dCta"></div>
-        <div class="contacts" id="dContacts" hidden><div class="facts-h"><span>Founder contact</span></div><ul class="clist" id="dContactList"></ul></div>
+        <div class="contacts" id="dContacts" hidden><div class="facts-h"><span>Project contact</span></div><ul class="clist" id="dContactList"></ul></div>
       </div>
       <div>
         <div class="facts-h"><span>What is true today</span><span id="dIdx"></span></div>
@@ -490,8 +652,15 @@ h1,h2,h3{text-wrap:balance}
       </div>
       <div class="contact-col">
         <div class="addr"><a id="mail" href="mailto:founder@jussco.company">founder@jussco.company</a><button class="copy" type="button" id="copyBtn" aria-label="Copy Juss &amp; Co. founder email">Copy email</button></div>
-        <a class="btn btn-gold" href="https://github.com/jussray">Follow the builds <span aria-hidden="true">↗</span></a>
+        <details class="project-contact-directory" id="projectContactDirectory" hidden><summary>Find a project’s contact email</summary><ul id="projectContactList"></ul></details>
+        <a class="btn btn-gold" href="/services.html">Work with Juss <span aria-hidden="true">→</span></a>
+        <a class="btn btn-ghost" href="/licensing.html">Data &amp; AI licensing</a>
+        <a class="btn btn-ghost" href="https://github.com/jussray">Follow the builds <span aria-hidden="true">↗</span></a>
         <a class="btn btn-ghost" href="#worlds">Explore all worlds</a>
+        <a href="https://www.jussco.company/" class="company-qr" aria-label="Visit Juss and Co on the web, or scan the QR code" style="display:flex;align-items:center;gap:16px;max-width:350px;min-height:160px;padding:12px;margin-top:16px;text-decoration:none;background:rgba(9,6,35,.72);border:1px solid rgba(178,141,255,.5);border-radius:18px">
+          <img src="assets/qr/jussco-company.svg" alt="QR code for www.jussco.company" width="132" height="132" loading="lazy" decoding="async" style="width:132px;height:132px;flex:none;border-radius:8px;background:#fff">
+          <span style="display:grid;gap:5px;min-width:0"><strong style="font-size:16px;line-height:1.3;color:#F8F4FF">Scan to explore</strong><small style="font-size:12px;overflow-wrap:anywhere;color:#C4BEEC">www.jussco.company</small><small style="font-size:11px;line-height:1.4;color:#B9AADD">Open on your phone</small></span>
+        </a>
       </div>
       <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:start">
         <div class="sig">
@@ -506,7 +675,7 @@ h1,h2,h3{text-wrap:balance}
         </nav>
       </div>
     </div>
-    <div class="legal"><span>© 2026 Juss &amp; Co. Turn thoughts into living works.</span><span class="mono" style="letter-spacing:.14em">Proof before promises</span></div>
+    <div class="legal"><span>© 2026 Juss &amp; Co. Turn thoughts into living works.</span><a href="returns.html" style="color:inherit;display:inline-flex;align-items:center;min-height:44px">Returns policy (draft)</a><span class="mono" style="letter-spacing:.14em">Proof before promises</span></div>
   </div>
 </section>
 </main>
@@ -536,11 +705,11 @@ h1,h2,h3{text-wrap:balance}
      tag:"Intent → bounded execution → evidence.", blurb:"The intelligence partner that starts with one question: what are you trying to move forward?",
      facts:[["Runtime","Deployed on Cloudflare Workers"],["Merged #142","MCP identity surface and credential membrane"],["Role","Defines intent; Control Room governs the doing"]],
      link:["Follow the build","https://github.com/jussray/chief-ai-machine"]},
-    {name:"Juss Beautiful Hair", group:"People & belonging", st:"live", label:"Live", w:"#FF4FB8", img:"assets/w-jbh.jpg",
+    {name:"Juss Beautiful Hair", group:"People & belonging", st:"progress", label:"Store open · awaiting first order", w:"#FF4FB8", img:"assets/w-jbh.jpg",
      alt:"A woman with long curly hair in warm light, hand at her cheek, confident and relaxed",
      desc:"Premium hair for real people. Confidence, culture and care.", tags:["Beauty","Commerce","Community"],
      tag:"Beauty commerce, built to convert.", blurb:"Curated human hair bundles, closures and frontals, shipped to your door.",
-     facts:[["Live","jussbeautifulhair.com"],["Claims audited","Unproven hair claims removed (#115, 29 Sep)"],["Checkout","Exact-head checkout gate passed in a real browser"]],
+     facts:[["Store","jussbeautifulhair.com"],["Claims audited","Unproven hair claims removed (#115, 29 Sep)"],["Checkout","Exact-head checkout gate passed in a real browser"]],
      link:["Shop the store","https://jussbeautifulhair.com"]},
     {name:"StoryEngine", group:"Stories & play", st:"building", label:"Building", w:"#F5C14B", img:"assets/w-story.jpg",
      alt:"Silhouette of a filmmaker behind a camera rig against a violet sunset city",
@@ -568,12 +737,30 @@ h1,h2,h3{text-wrap:balance}
   }
   WORLDS.forEach(function(w,i){renderWorldCard(w,i);});
   var LIVE = {};
+  function validContactEmail(v){return typeof v==="string" && /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(v);}
+  function renderProjectContactDirectory(worlds){
+    var box=document.getElementById("projectContactDirectory"), ul=document.getElementById("projectContactList");
+    if(!box||!ul)return;
+    ul.replaceChildren();
+    (worlds||[]).forEach(function(w){
+      var c=w.contact||{}, email=c.email||c.support;
+      if(!validContactEmail(email))return;
+      var li=document.createElement("li"), label=document.createElement("strong"), a=document.createElement("a");
+      label.textContent=w.name; a.href="mailto:"+email; a.textContent=email;
+      li.appendChild(label);li.appendChild(a);
+      if(email==="support@jussco.company"){
+        var shared=document.createElement("small");shared.textContent="Shared Juss & Co support";li.appendChild(shared);
+      }
+      ul.appendChild(li);
+    });
+    box.hidden=ul.children.length===0;
+  }
   function worldFromRegistry(L){var p=L.display||{};return{name:L.name,group:p.group||"Ideas & systems",st:L.st||"building",label:L.label||"Building",w:p.accent||"#8B5CF6",img:p.img||"assets/w-fcr.jpg",alt:p.alt||"",desc:p.desc||"",tags:Array.isArray(p.tags)?p.tags:[],tag:p.tag||"",blurb:p.blurb||p.desc||"",facts:Array.isArray(p.facts)?p.facts:[],held:L.held||"Tracked · no public link yet",link:(L.link&&L.link.url)?[L.link.text||"Open",L.link.url]:null};}
   fetch("data/worlds.json",{cache:"no-store"}).then(function(r){return r.ok?r.json():null;}).then(function(d){
     if(!d||!d.worlds)return;
     d.worlds.forEach(function(L){LIVE[L.name]=L;var idx=WORLDS.findIndex(function(w){return w.name===L.name;});if(idx<0&&L.display){var added=worldFromRegistry(L);WORLDS.push(added);idx=WORLDS.length-1;renderWorldCard(added,idx);}if(idx<0)return;var w=WORLDS[idx];if(L.st&&L.label){w.st=L.st;w.label=L.label;var b=cards[idx].querySelector(".badge");b.className="badge s-"+L.st;b.textContent=L.label;}if(L.link&&L.link.url){w.link=[L.link.text||"Open",L.link.url];w.held=null;}else if(L.held){w.held=L.held;w.link=null;}});
-    var n=document.querySelector('#filters .chip[data-group=""] .n');if(n)n.textContent=String(WORLDS.length).padStart(2,"0");
-    if(d.company&&d.company.email)document.getElementById("mail").textContent=d.company.email;if(d.quotes&&d.quotes.length)setQuotes(d.quotes);var stamp=document.getElementById("liveStamp");if(stamp&&d.generatedAt)stamp.textContent="Status synced "+new Date(d.generatedAt).toUTCString().replace(/:\d\d GMT$/," UTC");if(current>=0){var k=current;current=-1;open(k);}
+    var n=document.querySelector('#filters .chip[data-group=""] .n');if(n)n.textContent=String(WORLDS.length).padStart(2,"0");var worldSummary=document.getElementById("worldSummaryCount");if(worldSummary)worldSummary.textContent=String(WORLDS.length)+" worlds. One shared belief.";
+    if(d.company&&validContactEmail(d.company.email)){var companyMail=document.getElementById("mail");companyMail.textContent=d.company.email;companyMail.href="mailto:"+d.company.email;}renderProjectContactDirectory(d.worlds);if(d.quotes&&d.quotes.length)setQuotes(d.quotes);var stamp=document.getElementById("liveStamp");if(stamp&&d.generatedAt)stamp.textContent="Status synced "+new Date(d.generatedAt).toUTCString().replace(/:\d\d GMT$/," UTC");if(current>=0){var k=current;current=-1;open(k);}
   }).catch(function(){});
 
 /* ---------- standalone OS registry ---------- */
@@ -645,6 +832,7 @@ Promise.all([
     keys.forEach(function(k){ var li=document.createElement("li"), b=document.createElement("b"); b.textContent=k; li.appendChild(b);
       var v=String(c[k]||""); if(!v || v[0]==="["){ var s=document.createElement("span"); s.className="pend"; s.textContent=(v||"pending").replace(/^\[|\]$/g,"")+" · pending"; li.appendChild(s); }
       else if(/^https?:/.test(v)){ var a=document.createElement("a"); a.href=v; a.textContent=v.replace(/^https?:\/\//,""); li.appendChild(a); }
+      else if(validContactEmail(v)){ var mail=document.createElement("a");mail.href="mailto:"+v;mail.textContent=v;li.appendChild(mail); }
       else { var t=document.createElement("span"); t.textContent=v; t.style.userSelect="all"; li.appendChild(t); }
       ul.appendChild(li); });
     box.hidden=false;
@@ -785,6 +973,42 @@ Promise.all([
     });
     empty.hidden=host.children.length>0;
   }).catch(function(){/* Keep the honest empty state when the feed is unavailable. */});
+})();
+</script>
+<script>
+/* Our Ecosystem: built with DOM APIs (no innerHTML), from the same registries the rest of the page reads.
+   A world links out only when worlds.json declares a link AND it is not an unopened front door (st "soon"). */
+(function(){
+  var track=document.getElementById('ecoTrack'); if(!track) return;
+  var prev=document.getElementById('ecoPrev'), next=document.getElementById('ecoNext');
+  function glyph(name){ return String(name).replace(/[^A-Za-z0-9 ]/g,' ').split(/\s+/).filter(Boolean).slice(0,2).map(function(p){return p.charAt(0).toUpperCase();}).join(''); }
+  function cell(name, status, href){
+    var li=document.createElement('li'); li.className='eco-cell';
+    var el=document.createElement(href?'a':'div'); el.className='eco-item';
+    if(href) el.href=href;
+    var g=document.createElement('span'); g.className='eco-glyph'; g.setAttribute('aria-hidden','true'); g.textContent=glyph(name);
+    var n=document.createElement('strong'); n.className='eco-name'; n.textContent=name;
+    var s=document.createElement('span'); s.className='eco-status'; s.textContent=status;
+    el.appendChild(g); el.appendChild(n); el.appendChild(s); li.appendChild(el);
+    return li;
+  }
+  function fetchJson(u){ return fetch(u,{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); }
+  Promise.all([fetchJson('data/worlds.json'), fetchJson('data/systems.json')]).then(function(res){
+    var frag=document.createDocumentFragment(), worlds=(res[0]&&res[0].worlds)||[], systems=(res[1]&&res[1].systems)||[];
+    worlds.forEach(function(w){
+      var open=!!(w.link&&w.link.url)&&w.st!=='soon';
+      frag.appendChild(cell(w.name, w.label||'Status pending', open?w.link.url:null));
+    });
+    systems.filter(function(s){return s.public&&s.publicUrl;}).forEach(function(s){
+      frag.appendChild(cell(s.name, s.label||s.status||'Published', s.publicUrl));
+    });
+    track.textContent='';
+    if(frag.childNodes.length) track.appendChild(frag);
+    else { var li=document.createElement('li'); li.className='eco-cell'; var p=document.createElement('p'); p.className='eco-empty'; p.setAttribute('role','status'); p.textContent='The ecosystem list is unavailable right now. See the full portfolio.'; li.appendChild(p); track.appendChild(li); }
+  });
+  function step(dir){ var c=track.querySelector('.eco-cell'); var w=c?c.getBoundingClientRect().width+14:152; track.scrollBy({left:dir*w*2,behavior:'smooth'}); }
+  if(prev) prev.addEventListener('click',function(){step(-1);});
+  if(next) next.addEventListener('click',function(){step(1);});
 })();
 </script>
 </body>
