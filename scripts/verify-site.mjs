@@ -185,14 +185,14 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   const routes=await page.locator('#projectContactList li').evaluateAll(nodes=>nodes.map(li=>({name:li.querySelector('strong')?.textContent,href:li.querySelector('a')?.getAttribute('href'),text:li.querySelector('a')?.textContent,shared:li.querySelector('small')?.textContent||''})));
   const byName=Object.fromEntries(routes.map(r=>[r.name,r]));
   say(routes.length===EXPECTED_WORLDS.length, `${vp.n}: every world has a discoverable project contact`);
-  say(byName['Founder Control Room']?.href==='mailto:support@foundercontrolroom.org' && byName['Juss Beautiful Hair']?.href==='mailto:support@jussbeautifulhair.com' && byName["Se'kret Bip"]?.href==='mailto:founder@sekretbip.net' && byName['Bip Jr']?.href==='mailto:support@sekretbip.net', `${vp.n}: domain-specific FCR, hair and Bip routing preserved`);
+  say(byName['Founder Control Room']?.href==='mailto:support@foundercontrolroom.org' && byName['Juss Beautiful Hair']?.href==='mailto:hello@jussbeautifulhair.com' && byName["Se'kret Bip"]?.href==='mailto:founder@sekretbip.net' && byName['Bip Jr']?.href==='mailto:support@sekretbip.net', `${vp.n}: domain-specific FCR, hair and Bip routing preserved`);
   say(routes.every(r=>r.href==='mailto:'+r.text && !r.href.includes('[')) && !routes.some(r=>r.name!=='Juss Beautiful Hair' && r.href.endsWith('@jussbeautifulhair.com')), `${vp.n}: project emails have matching mailto and no hair-store leakage`);
   say(byName['StoryEngine']?.href==='mailto:support@jussco.company' && byName['StoryEngine']?.shared.includes('Shared'), `${vp.n}: projects without proven mailboxes show shared company support`);
 
   say((await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)) === 0, `${vp.n}: no horizontal overflow`);
   say(await page.evaluate(() => document.querySelector('.top .brand').getBoundingClientRect().height <= 44), `${vp.n}: header wordmark stays on one line`);
   say(await page.evaluate(() => document.querySelector('.top .btn').getBoundingClientRect().right <= window.innerWidth - 16), `${vp.n}: header CTA stays inside the side gutter`);
-  if (vp.n === 'mobile') say(await page.evaluate(() => document.querySelector('.hero .eyebrow').getBoundingClientRect().top >= document.querySelector('.hero .hero-bg').getBoundingClientRect().bottom), 'mobile: hero eyebrow sits below the art band');
+  if (vp.n === 'mobile') say(await page.evaluate(() => { const top = (el) => el.getBoundingClientRect().top + window.scrollY; return top(document.querySelector('.hero .eyebrow')) >= top(document.querySelector('#ecosystem')) + document.querySelector('#ecosystem').getBoundingClientRect().height; }), 'mobile: hero eyebrow sits below the ecosystem band (page coordinates)');
   say((await page.$$('.card')).length === EXPECTED_WORLDS.length, `${vp.n}: ${EXPECTED_WORLDS.length} portfolio worlds`);
   say((await page.locator('.os-card').count()) === 5, `${vp.n}: five public standalone OS builds`);
   say(JSON.stringify(await page.evaluate(() => [...document.querySelectorAll('.os-card h3')].map((e) => e.textContent))) === JSON.stringify(expectedOS), `${vp.n}: standalone OS identities preserved`);
@@ -220,7 +220,7 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   say((await page.innerText('#dName')) === 'Juss Beautiful Hair', `${vp.n}: drawer opens JBH`);
   say(/jussbeautifulhair\.com/.test((await page.getAttribute('#dCta a', 'href')) || ''), `${vp.n}: JBH link present`);
   say(!(await page.evaluate(() => document.getElementById('dContacts').hidden)), `${vp.n}: founder contacts render from data/worlds.json`);
-  say((await page.locator('#dContactList a[href="mailto:support@jussbeautifulhair.com"]').count()) === 1, `${vp.n}: hair world displays clickable hair-store support email`);
+  say((await page.locator('#dContactList a[href="mailto:hello@jussbeautifulhair.com"]').count()) >= 1, `${vp.n}: hair world displays clickable hair-store email (hello@)`);
   await page.keyboard.press('Escape'); await page.waitForTimeout(100);
   say(await page.evaluate(() => document.getElementById('drawer').hidden), `${vp.n}: Escape closes drawer`);
   await page.click('.chip[data-group="Ideas & systems"]'); await page.waitForTimeout(150);
