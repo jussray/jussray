@@ -1,5 +1,7 @@
+import { installDayNight } from './juss-day-night.mjs';
 import { initNatureAudio } from './juss-nature-audio.mjs';
 import { atmosphereAt } from './juss-season.mjs';
+installDayNight();
 (() => {
   const carousel = document.getElementById('worldProductTrack');
   if (!carousel) return;
