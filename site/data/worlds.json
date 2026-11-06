@@ -102,7 +102,8 @@
       },
       "contact": {
         "site": "https://jussbeautifulhair.com",
-        "email": "support@jussbeautifulhair.com",
+        "email": "hello@jussbeautifulhair.com",
+        "wholesale": "wholesale@jussbeautifulhair.com",
         "instagram": "[JBH INSTAGRAM URL]",
         "facebook": "[JBH FACEBOOK PAGE URL]",
         "hello": "hello@jussbeautifulhair.com"
@@ -149,6 +150,7 @@
         "github": "https://github.com/jussray/StoryEngine",
         "email": "support@jussco.company"
       },
+      "legacyRoutingNote": "Earlier shared contact candidate: support@jussco.company; not verified for delivery.",
       "evidence": {},
       "display": {
         "group": "Stories & play"
@@ -171,6 +173,7 @@
         "github": "https://github.com/jussray/sync-party-game",
         "email": "support@jussco.company"
       },
+      "legacyRoutingNote": "Earlier shared contact candidate: support@jussco.company; not verified for delivery.",
       "evidence": {},
       "display": {
         "group": "Stories & play"

@@ -3,7 +3,7 @@ import { chromium } from 'playwright';
 import { createServer } from 'node:http';
 import { readFileSync, existsSync, mkdirSync } from 'node:fs';
 import { extname, join } from 'node:path';
-const ROOT = new URL('../site/', import.meta.url).pathname; const MIME = { '.html': 'text/html', '.jpg': 'image/jpeg', '.json': 'application/json', '.png': 'image/png', '.svg': 'image/svg+xml', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.txt': 'text/plain', '.xml': 'application/xml' };
+const ROOT = new URL('../site/', import.meta.url).pathname; const MIME = { '.html': 'text/html', '.jpg': 'image/jpeg', '.json': 'application/json', '.png': 'image/png', '.svg': 'image/svg+xml', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.txt': 'text/plain', '.xml': 'application/xml', '.pdf': 'application/pdf' };
 const WORLD_REGISTRY = JSON.parse(readFileSync(join(ROOT, 'data/worlds.json'), 'utf8')); const EXPECTED_WORLDS = WORLD_REGISTRY.worlds.map((w) => w.name); const IDEA_WORLDS = WORLD_REGISTRY.worlds.filter((w) => w.display?.group === 'Ideas & systems').map((w) => w.name);
 const portfolio = JSON.parse(readFileSync(join(ROOT, 'data/portfolio.json'), 'utf8'));
 const systems = JSON.parse(readFileSync(join(ROOT, 'data/systems.json'), 'utf8'));
@@ -121,6 +121,21 @@ say(['truth-compass', 'truth-weaver', 'exact-match-engine'].every((slug) => proj
   say(errors.length === 0, 'conversion browser: tracking causes no page errors');
   await ctx.close();
 }
+// RFC 9116: verify the real static disclosure path in Chromium, not only file existence.
+{
+  const page = await browser.newPage();
+  const response = await page.goto(new URL('.well-known/security.txt', url).href, { waitUntil: 'domcontentloaded' });
+  const body = response ? await response.text() : '';
+  const mime = response?.headers()['content-type'] || '';
+  say(response?.status() === 200, 'security.txt: HTTP 200');
+  say(mime.toLowerCase().startsWith('text/plain'), 'security.txt: text/plain response');
+  say(/^Contact: mailto:security@jussco\.company$/m.test(body), 'security.txt: founder-approved reporting contact (mailto:security@jussco.company)');
+  const expiration = body.match(/^Expires: ([^\r\n]+)$/m);
+  say(Boolean(expiration && Date.parse(expiration[1]) > Date.now()), 'security.txt: future expiration');
+  say((body.match(/^Canonical: https:\/\/(www\.)?jussco\.company\/\.well-known\/security\.txt$/gm) || []).length === 2, 'security.txt: canonical apex + www');
+  await page.close();
+}
+
 for (const mode of ['abort', 'malformed']) {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } }); const page = await ctx.newPage();
   // Deterministic first-party receiver fixture: PR checks must not call production.
@@ -177,6 +192,26 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   say(/Juss Rayy/.test(await page.locator('.founder-line').innerText()) && /Full-Stack AI Systems Builder/.test(await page.locator('.founder-line').innerText()), `${vp.n}: visible founder identity`);
   say((await page.locator('a[href="/services.html"]').count()) >= 3, `${vp.n}: Work with Juss path linked from homepage`);
   say((await page.locator('a[href="/work.html"]').count()) >= 2, `${vp.n}: Selected Work path linked from homepage`);
+  const portfolioDownload = page.locator('#portfolioDownload');
+  say(await portfolioDownload.count() === 1, `${vp.n}: The Why has exactly one portfolio download button`);
+  say(await portfolioDownload.getAttribute('href') === 'https://github.com/jussray/jussray/raw/refs/heads/main/AI_EVALUATION_PORTFOLIO_PACKET.md' &&
+    await portfolioDownload.getAttribute('target') === '_blank' &&
+    (await portfolioDownload.getAttribute('rel'))?.split(/\s+/).includes('noopener') &&
+    (await portfolioDownload.getAttribute('rel'))?.split(/\s+/).includes('noreferrer'),
+    `${vp.n}: portfolio packet link opens in a safe new tab`);
+  say((await portfolioDownload.innerText()).includes('Download my portfolio packet') && await portfolioDownload.isVisible(),
+    `${vp.n}: portfolio download button is visible and accurately labeled`);
+  const resources=page.locator('#resources');
+  say(await resources.count() === 1 && await resources.isVisible(), `${vp.n}: public resources visible`);
+  for (const name of ['juss-co-company-overview.pdf','juss-co-selected-work-evidence.pdf']) {
+    const link=resources.locator('a[href="/downloads/'+name+'"]');
+    say(await link.count() === 1 && await link.getAttribute('target') === '_blank' &&
+      (await link.getAttribute('rel'))?.includes('noopener') && (await link.getAttribute('rel'))?.includes('noreferrer'),
+      `${vp.n}: ${name} safe new-tab link`);
+    const pdf=await page.request.get(url+'downloads/'+name);
+    say(pdf.status() === 200 && (await pdf.body()).subarray(0,8).toString() === '%PDF-1.4',
+      `${vp.n}: ${name} actual PDF`);
+  }
   const companyEmail=await page.locator('#mail').textContent();
   say(companyEmail==='founder@jussco.company' && (await page.locator('#mail').getAttribute('href'))==='mailto:'+companyEmail, `${vp.n}: company email text and mailto match business address`);
   const directory=page.locator('#projectContactDirectory');
@@ -186,13 +221,14 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   const routes=await page.locator('#projectContactList li').evaluateAll(nodes=>nodes.map(li=>({name:li.querySelector('strong')?.textContent,href:li.querySelector('a')?.getAttribute('href'),text:li.querySelector('a')?.textContent,shared:li.querySelector('small')?.textContent||''})));
   const byName=Object.fromEntries(routes.map(r=>[r.name,r]));
   say(routes.length===EXPECTED_WORLDS.length, `${vp.n}: every world has a discoverable project contact`);
-  say(byName['Founder Control Room']?.href==='mailto:support@foundercontrolroom.org' && byName['Juss Beautiful Hair']?.href==='mailto:support@jussbeautifulhair.com' && byName["Se'kret Bip"]?.href==='mailto:founder@sekretbip.net' && byName['Bip Jr']?.href==='mailto:support@sekretbip.net', `${vp.n}: domain-specific FCR, hair and Bip routing preserved`);
+  say(byName['Founder Control Room']?.href==='mailto:support@foundercontrolroom.org' && byName['Juss Beautiful Hair']?.href==='mailto:hello@jussbeautifulhair.com' && byName["Se'kret Bip"]?.href==='mailto:founder@sekretbip.net' && byName['Bip Jr']?.href==='mailto:support@sekretbip.net', `${vp.n}: domain-specific FCR, hair and Bip routing preserved`);
   say(routes.every(r=>r.href==='mailto:'+r.text && !r.href.includes('[')) && !routes.some(r=>r.name!=='Juss Beautiful Hair' && r.href.endsWith('@jussbeautifulhair.com')), `${vp.n}: project emails have matching mailto and no hair-store leakage`);
   say(byName['StoryEngine']?.href==='mailto:support@jussco.company' && byName['StoryEngine']?.shared.includes('Shared'), `${vp.n}: projects without proven mailboxes show shared company support`);
 
   say((await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)) === 0, `${vp.n}: no horizontal overflow`);
   say(await page.evaluate(() => document.querySelector('.top .brand').getBoundingClientRect().height <= 44), `${vp.n}: header wordmark stays on one line`);
   say(await page.evaluate(() => document.querySelector('.top .btn').getBoundingClientRect().right <= window.innerWidth - 16), `${vp.n}: header CTA stays inside the side gutter`);
+<<<<<<< HEAD
   say(await page.locator('.jc-scene__art').isVisible() && (await page.locator('.hero .h-line').innerText()).includes('Built from real life.'), `${vp.n}: cinematic living-world artwork and real-text headline render`);
   say(await page.evaluate(() => new Promise((resolve) => {
     const img = new Image(); img.onload = () => resolve(img.naturalWidth > 0);
@@ -209,6 +245,9 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
     const title = document.querySelector('.hero .h-brand')?.getBoundingClientRect();
     return !!scene && !!eyebrow && !!title && scene.bottom + 8 <= eyebrow.top && title.left >= 12 && title.right <= window.innerWidth - 12;
   }), 'mobile: artwork clears headline and wordmark stays in viewport');
+=======
+  if (vp.n === 'mobile') say(await page.evaluate(() => { const top = (el) => el.getBoundingClientRect().top + window.scrollY; return top(document.querySelector('.hero .eyebrow')) >= top(document.querySelector('#ecosystem')) + document.querySelector('#ecosystem').getBoundingClientRect().height; }), 'mobile: hero eyebrow sits below the ecosystem band (page coordinates)');
+>>>>>>> main
   say((await page.$$('.card')).length === EXPECTED_WORLDS.length, `${vp.n}: ${EXPECTED_WORLDS.length} portfolio worlds`);
   say((await page.locator('.os-card').count()) === 5, `${vp.n}: five public standalone OS builds`);
   say(JSON.stringify(await page.evaluate(() => [...document.querySelectorAll('.os-card h3')].map((e) => e.textContent))) === JSON.stringify(expectedOS), `${vp.n}: standalone OS identities preserved`);
@@ -236,7 +275,7 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   say((await page.innerText('#dName')) === 'Juss Beautiful Hair', `${vp.n}: drawer opens JBH`);
   say(/jussbeautifulhair\.com/.test((await page.getAttribute('#dCta a', 'href')) || ''), `${vp.n}: JBH link present`);
   say(!(await page.evaluate(() => document.getElementById('dContacts').hidden)), `${vp.n}: founder contacts render from data/worlds.json`);
-  say((await page.locator('#dContactList a[href="mailto:support@jussbeautifulhair.com"]').count()) === 1, `${vp.n}: hair world displays clickable hair-store support email`);
+  say((await page.locator('#dContactList a[href="mailto:hello@jussbeautifulhair.com"]').count()) >= 1, `${vp.n}: hair world displays clickable hair-store email (hello@)`);
   await page.keyboard.press('Escape'); await page.waitForTimeout(100);
   say(await page.evaluate(() => document.getElementById('drawer').hidden), `${vp.n}: Escape closes drawer`);
   await page.click('.chip[data-group="Ideas & systems"]'); await page.waitForTimeout(150);
@@ -319,6 +358,24 @@ for (const vp of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile
   await ctx.close();
 }
 
+
+/* ---------- Builds for others: honest status, no unconsented client names ---------- */
+for (const vp of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile', width: 390, height: 844 }]) {
+  const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height } });
+  const page = await ctx.newPage();
+  await page.route('**/_telemetry/v1', (route) => route.fulfill({ status: 204, body: '' }));
+  const errors = [];
+  page.on('pageerror', e => errors.push(String(e)));
+  const response = await page.goto(url + 'builds.html', { waitUntil: 'load' });
+  say(response?.status() === 200, `builds: ${vp.name} responds 200`);
+  const pills = await page.locator('article.build .pill').allTextContents();
+  say(pills.length === 2 && pills.includes('Built · not on a domain yet') && pills.includes('Building · not launched'), `builds: ${vp.name} two builds with honest status`);
+  say(!/Pappa|Razzy|Bleeding/i.test(await page.locator('body').innerText()), `builds: ${vp.name} no unconsented client names`);
+  say((await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)) <= 0, `builds: ${vp.name} no horizontal overflow`);
+  say(errors.length === 0, `builds: ${vp.name} no JS errors`);
+  await page.screenshot({ path: `proof/site/builds-${vp.name}.png`, fullPage: true });
+  await ctx.close();
+}
 
 for (const vp of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile', width: 390, height: 844 }]) {
   const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height }, isMobile: vp.name === 'mobile', hasTouch: vp.name === 'mobile' });
