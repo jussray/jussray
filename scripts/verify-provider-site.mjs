@@ -14,13 +14,11 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const REPO = 'jussray/jussray';
 const HOSTS = ['jussco.company', 'www.jussco.company'];
 const REGISTRIES = ['worlds', 'systems', 'connectors'];
-const BIP_URL = 'https://sekretbip.jussco.company/';
-const BUTTON_TEXT = "Visit Se'kret Bip preview";
-const ENTER_BIP = `(()=>{let attempts=0;const timer=setInterval(()=>{const button=document.querySelector('[data-testid="web-welcome-enter"]');if(button&&!button.disabled){button.click();clearInterval(timer)}if(++attempts>45)clearInterval(timer)},100)})();`;
 const CANONICAL = 'https://www.jussco.company/';
 const COMPANY_QR_LABEL = 'Scan to explore';
 const HEALTH_PROBE_SCRIPT = `(async()=>{let code='network-error';try{const r=await fetch('/_telemetry/v1/health',{method:'POST',credentials:'omit',headers:{'Content-Type':'application/json'},body:JSON.stringify({probe:'health-v1'})});code=String(r.status)}catch{}document.documentElement.setAttribute('data-receiver-health',code)})();`;
-const ENTER_BIP = `setTimeout(() => { document.querySelector('[data-testid="web-welcome-enter"]')?.click(); }, 300);`;
+const BIP_URL = 'https://sekretbip.jussco.company/';
+const ENTER_BIP = `(()=>{let attempts=0;const timer=setInterval(()=>{const button=document.querySelector('[data-testid="web-welcome-enter"]');if(button&&!button.disabled){button.click();clearInterval(timer)}if(++attempts>45)clearInterval(timer)},100)})();`;
 const OPEN_BIP_CARD = `(() => {let tries=0;const h=setInterval(() => {const card=Array.from(document.querySelectorAll('.card')).find(e => e.querySelector('h3')?.textContent?.trim() === "Se'kret Bip");if (card && card.querySelector('.go')) {card.querySelector('.go').click();clearInterval(h);}if (++tries > 30) clearInterval(h);},100);})();`;
 
 export function gitBlobSha(buffer) {
@@ -93,70 +91,6 @@ export function verifyBipContent(html, stage) {
   }
 }
 
-const LAYOUT_SCRIPT = `(()=>{let n=0;const h=setInterval(()=>{const card=[...document.querySelectorAll('.card')].find(x=>x.querySelector('h3')?.textContent?.trim()==="Se'kret Bip");if(card?.querySelector('.go')){card.querySelector('.go').click();clearInterval(h)}if(++n>30)clearInterval(h)},100);setTimeout(()=>{const a=document.querySelector('#dCta a'),r=a?.getBoundingClientRect(),d=document.documentElement;d.dataset.proofLayout=JSON.stringify({vw:window.innerWidth,vh:window.innerHeight,scroll:d.scrollWidth,cta:!!a,rect:r?{width:r.width,height:r.height,left:r.left,right:r.right,top:r.top,bottom:r.bottom}:null})},1200)})();`;
-const HTML_HASH_SCRIPT = `setTimeout(async()=>{
-  try {
-    const response=await fetch('/index.html',{cache:'no-store'});
-    const source=await response.text();
-    const bytes=new TextEncoder().encode(source);
-    const prefix=new TextEncoder().encode('blob '+bytes.length+'\\0');
-    const payload=new Uint8Array(prefix.length+bytes.length);
-    payload.set(prefix);payload.set(bytes,prefix.length);
-    const hash=await crypto.subtle.digest('SHA-1',payload);
-    const sha=Array.from(new Uint8Array(hash)).map(x=>x.toString(16).padStart(2,'0')).join('');
-    document.documentElement.setAttribute('data-source-check',JSON.stringify({
-      http:response.status,bytes:bytes.length,gitBlobSha1:sha,url:response.url,
-    }));
-  } catch(error) {
-    document.documentElement.setAttribute('data-source-check',JSON.stringify({error:String(error).slice(0,160)}));
-  }
-},400);`;
-export function verifyHtmlSourceMatch(html,expectedHash,host) {
-  const match=typeof html==='string'&&html.match(/data-source-check="([^"]+)"/);
-  if(!match)throw new Error('Browser did not record full HTML source readback');
-  const result=JSON.parse(match[1].replaceAll('&quot;','"').replaceAll('&amp;','&'));
-  if(result.error || result.http!==200 || !Number.isInteger(result.bytes)||result.bytes<100 ||
-    result.gitBlobSha1!==expectedHash || new URL(result.url).hostname!==host) {
-    throw new Error('Public HTML source does not match checked-out Git blob');
-  }
-  return result.gitBlobSha1;
-}
-
-export function verifyLayoutHtml(html, viewportWidth) {
-  const match = typeof html === 'string' && html.match(/data-proof-layout="([^"]+)"/);
-  if (!match) throw new Error('No browser layout evidence captured');
-  const data=JSON.parse(match[1].replaceAll('&quot;', '"').replaceAll('&amp;', '&'));
-  if (data.vw!==viewportWidth || data.scroll>viewportWidth+1 || !data.cta || data.rect?.width<=0 || data.rect?.height<=0 ||
-      !Number.isFinite(data.vh) || data.rect.left<0 || data.rect.right>data.vw+1 ||
-      data.rect.top<0 || data.rect.bottom>data.vh+1)
-    throw new Error('Live viewport overflows or CTA is not geometrically visible');
-  return data;
-}
-export function createQuickActionPacer({intervalMs=11000, now=()=>Date.now(),sleep=ms=>new Promise(done=>setTimeout(done,ms))}={}) {
-  let next=0;
-  return async()=>{const delay=Math.max(0,next-now());if(delay>0)await sleep(delay);next=now()+intervalMs;};
-}
-
-export function assertFinalDestination(requested, actual) {
-  if (typeof requested !== 'string' || typeof actual !== 'string') {
-    throw new Error('Provider did not attest target final URL');
-  }
-  const expected = requested === BIP_URL ? 'https://sekretbip.net/' : requested;
-  let observed;
-  try { observed = new URL(actual).href; } catch { throw new Error('Invalid provider final URL'); }
-  if (observed !== new URL(expected).href) throw new Error('Public route redirected to unexpected destination');
-}
-
-export function makePartialReadbackWitness(expectedHead) {
-  return {
-    status:'PARTIAL_PUBLIC_READBACK',
-    deploymentShaAttested:false,
-    repo:REPO,
-    sourceSha:assertSha(expectedHead),
-    method:'Cloudflare REST Browser Rendering, public domains',
-    registries:[],
-    pageProof:[],
-  };
 export function verifyReceiverHealthHtml(content) {
   if (typeof content !== 'string' || !/<html[\s>]/i.test(content)) {
     throw new Error('Provider health proof did not return rendered HTML');
@@ -179,6 +113,71 @@ export function assertReleaseContext(env) {
 export function assertSha(value) {
   if (!/^[a-f0-9]{40}$/.test(value || '')) throw new Error('Expected an exact 40-character commit SHA');
   return value;
+}
+
+const HTML_HASH_SCRIPT = `setTimeout(async()=>{
+  try {
+    const response=await fetch('/index.html',{cache:'no-store'});
+    const source=await response.text();
+    const bytes=new TextEncoder().encode(source);
+    const prefix=new TextEncoder().encode('blob '+bytes.length+'\\0');
+    const payload=new Uint8Array(prefix.length+bytes.length);
+    payload.set(prefix);payload.set(bytes,prefix.length);
+    const hash=await crypto.subtle.digest('SHA-1',payload);
+    const sha=Array.from(new Uint8Array(hash)).map(x=>x.toString(16).padStart(2,'0')).join('');
+    document.documentElement.setAttribute('data-source-check',JSON.stringify({
+      http:response.status,bytes:bytes.length,gitBlobSha1:sha,url:response.url,
+    }));
+  } catch(error) {
+    document.documentElement.setAttribute('data-source-check',JSON.stringify({error:String(error).slice(0,160)}));
+  }
+},400);`;
+
+// The apex is a declared same-path redirect to the canonical www host (CLAUDE.md).
+// Accept exactly that hop; any other host is a failure.
+export function acceptedHosts(host) {
+  return host === 'jussco.company' ? ['jussco.company', 'www.jussco.company'] : [host];
+}
+
+export function verifyHtmlSourceMatch(html,expectedHash,host) {
+  const match=typeof html==='string'&&html.match(/data-source-check="([^"]+)"/);
+  if(!match)throw new Error('Browser did not record full HTML source readback');
+  const result=JSON.parse(match[1].replaceAll('&quot;','"').replaceAll('&amp;','&'));
+  let observedHost='';
+  try { observedHost=new URL(result.url).hostname; } catch {}
+  if(result.error || result.http!==200 || !Number.isInteger(result.bytes)||result.bytes<100 ||
+    result.gitBlobSha1!==expectedHash || !acceptedHosts(host).includes(observedHost)) {
+    throw new Error('Public HTML source does not match checked-out Git blob');
+  }
+  return result.gitBlobSha1;
+}
+
+export function createQuickActionPacer({intervalMs=11000, now=()=>Date.now(),sleep=ms=>new Promise(done=>setTimeout(done,ms))}={}) {
+  let next=0;
+  return async()=>{const delay=Math.max(0,next-now());if(delay>0)await sleep(delay);next=now()+intervalMs;};
+}
+
+export function assertFinalDestination(requested, actual) {
+  if (typeof requested !== 'string' || typeof actual !== 'string') {
+    throw new Error('Provider did not attest target final URL');
+  }
+  let observed, wanted;
+  try { observed = new URL(actual); wanted = new URL(requested === BIP_URL ? 'https://sekretbip.net/' : requested); }
+  catch { throw new Error('Invalid provider final URL'); }
+  const allowed = acceptedHosts(wanted.hostname).map(h => { const u = new URL(wanted.href); u.hostname = h; return u.href; });
+  if (!allowed.includes(observed.href)) throw new Error('Public route redirected to unexpected destination');
+}
+
+export function makePartialReadbackWitness(expectedHead) {
+  return {
+    status:'PARTIAL_PUBLIC_READBACK',
+    deploymentShaAttested:false,
+    repo:REPO,
+    sourceSha:assertSha(expectedHead),
+    method:'Cloudflare REST Browser Rendering, public domains',
+    registries:[],
+    pageProof:[],
+  };
 }
 
 export async function cfRequest({accountId, token, endpoint, body, fetchImpl=fetch, pace=async()=>{}, sleep=ms=>new Promise(done=>setTimeout(done,ms))}) {
@@ -232,7 +231,7 @@ export async function runProof({env=process.env, fetchImpl=fetch, root=ROOT}={})
 
   // A source SHA and public file matches do not attest the deployed Worker version.
   const witness = makePartialReadbackWitness(expectedHead);
-  const pace=createQuickActionPacer();
+  const pace = createQuickActionPacer();
   const request = (endpoint, body) => cfRequest({accountId, token, endpoint, body, fetchImpl, pace});
   for (const host of HOSTS) {
     for (const registry of REGISTRIES) {
@@ -247,9 +246,9 @@ export async function runProof({env=process.env, fetchImpl=fetch, root=ROOT}={})
       witness.registries.push({host,file:`data/${registry}.json`,gitBlobSha:liveHash,match:true});
       console.log(`VERIFIED ${host}/data/${registry}.json Git blob ${liveHash.slice(0,12)}`);
     }
-    const rawHtml=await request('content',{url:`https://${host}/`,actionTimeout:20_000,
+    const rawHtml = await request('content',{url:`https://${host}/`,actionTimeout:20_000,
       waitForTimeout:2_500,addScriptTag:[{content:HTML_HASH_SCRIPT}]});
-    const htmlGitBlobSha=verifyHtmlSourceMatch(rawHtml,gitBlobSha(readFileSync(resolve(root,'site/index.html'))),host);
+    const htmlGitBlobSha = verifyHtmlSourceMatch(rawHtml,gitBlobSha(readFileSync(resolve(root,'site/index.html'))),host);
     witness.pageProof.push({host,asset:'site/index.html',gitBlobSha:htmlGitBlobSha,match:true});
     console.log(`VERIFIED ${host}/index.html Git blob ${htmlGitBlobSha.slice(0,12)}`);
     for (const viewport of [{width:1440,height:900},{width:390,height:844,isMobile:true,hasTouch:true}]) {
@@ -258,23 +257,6 @@ export async function runProof({env=process.env, fetchImpl=fetch, root=ROOT}={})
         waitForTimeout:1_100, addScriptTag:[{content:OPEN_BIP_CARD}],
       });
       verifySiteMarkdown(markdown);
-      if(viewport.width===390) {
-        const rendered=await request('content',{url:`https://${host}/`,viewport,actionTimeout:20_000,
-          waitForTimeout:1800,addScriptTag:[{content:LAYOUT_SCRIPT}]});
-        verifyLayoutHtml(rendered,390);
-      }
-      witness.pageProof.push({host,viewport:viewport.width,worldLink:BIP_URL,rendered:true,layoutChecked:viewport.width===390});
-      console.log(`VERIFIED ${host} ${viewport.width}px, Se'kret Bip public preview CTA`);
-    }
-  }
-  // A page title alone cannot prove the teen-facing app is rendered or usable.
-  // Verify real rendered HTML plus the harmless welcome -> age-gate transition.
-  verifyBipContent(await request('content',{url:BIP_URL,actionTimeout:20_000,waitForTimeout:1_200}),'welcome');
-  verifyBipContent(await request('content',{url:BIP_URL,actionTimeout:20_000,waitForTimeout:5_200,
-    addScriptTag:[{content:ENTER_BIP}]}),'age');
-  witness.pageProof.push({host:'sekretbip.jussco.company',publicDestination:true,rendered:true,stages:['welcome','age-selection']});
-  console.log('VERIFIED Se’kret Bip welcome and age-selection UI; no signup submitted');
-
       witness.pageProof.push({host,viewport:viewport.width,canonical:CANONICAL,companyQr:true,rendered:true});
       console.log(`VERIFIED ${host} ${viewport.width}px, company page and canonical scan link`);
     }

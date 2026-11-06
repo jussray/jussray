@@ -31,17 +31,8 @@ jobs:
           node-version: '24'
       - name: Test independent provider proof guards (offline)
         run: node --test scripts/verify-provider-site.test.mjs
-      # Main-only dispatch validates public readback, NOT full release or deployed-SHA attestation.
-      # PR jobs test only source guards.
-      - name: Reject production dispatch outside main
-        if: ${{ github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/main' }}
-        run: |
-          echo "::error::Production proof requires workflow_dispatch on main; refusing non-main dispatch."
-          exit 1
-      - name: Witness public readback (partial; not release verification)
-        if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' }}
-      # Main push and explicit main dispatch may attest to the public
-      # deployment. Pull request jobs test source guards, not production.
+      # Main push and explicit main dispatch validate public readback, NOT full
+      # release or deployed-SHA attestation. Pull request jobs test source guards only.
       - name: Reject production jobs outside main
         if: ${{ github.event_name != 'pull_request' && github.ref != 'refs/heads/main' }}
         run: |
@@ -55,8 +46,6 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: node scripts/verify-provider-site.mjs
       - name: Upload partial readback receipt (not deployment attestation)
-        if: ${{ always() && github.event_name == 'workflow_dispatch' }}
-      - name: Upload immutable per-commit production receipt
         if: ${{ always() && github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:

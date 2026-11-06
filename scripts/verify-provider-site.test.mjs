@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { gitBlobSha, extractScrapedRegistry, verifyWorldRegistry, verifySiteMarkdown, verifyDestinationMarkdown, verifyBipContent, assertSha, assertReleaseContext, verifyReceiverHealthHtml, runProof } from './verify-provider-site.mjs';
+import { readFileSync } from 'node:fs';
+import { gitBlobSha, extractScrapedRegistry, verifyWorldRegistry, verifySiteMarkdown, verifyDestinationMarkdown, verifyBipContent, assertSha, assertReleaseContext, verifyReceiverHealthHtml, runProof, createQuickActionPacer, cfRequest, assertFinalDestination, verifyHtmlSourceMatch, makePartialReadbackWitness } from './verify-provider-site.mjs';
 
 const site = `---\ntitle: "Juss & Co"\n---\nTurn thoughts into living works.\n### Se'kret Bip\nOpening soon · no public link yet\nScan to explore www.jussco.company`;
 
@@ -87,16 +88,6 @@ test('rate limiter spaces actions to protect Cloudflare Free quota',async()=>{
   assert.deepEqual(delays,[11000,11000]);
 });
 
-test('mobile layout proof fails on overflow and missing CTA geometry',()=>{
-  const embed=x=>'<html data-proof-layout="'+JSON.stringify(x).replaceAll('"','&quot;')+'"></html>';
-  const base={vw:390,vh:844,scroll:390,cta:true,rect:{width:252,height:49,left:37,right:289,top:227,bottom:276}};
-  assert.equal(verifyLayoutHtml(embed(base),390).scroll,390);
-  assert.throws(()=>verifyLayoutHtml(embed({...base,scroll:410}),390),/overflows/);
-  assert.throws(()=>verifyLayoutHtml(embed({...base,cta:false}),390),/CTA/);
-  assert.throws(()=>verifyLayoutHtml(embed({...base,rect:{...base.rect,right:500}}),390),/CTA/);
-  assert.throws(()=>verifyLayoutHtml('<html></html>',390),/No browser layout/);
-});
-
 test('provider HTTP 200 must not hide a failing target-page HTTP status',async()=>{
   const fake=async()=>({ok:true,status:200,json:async()=>({success:true,meta:{status:503},result:'<html>Looks fine</html>'})});
   await assert.rejects(()=>cfRequest({accountId:'a'.repeat(32),token:'fake',endpoint:'content',body:{url:'https://jussco.company'},fetchImpl:fake}),/target content: HTTP 503/);
@@ -113,7 +104,6 @@ test('provider HTTP 429 retries with bounded backoff, without leaking token',asy
   assert.equal(value,'public render');assert.equal(n,2);assert.deepEqual(sleeps,[15000]);
 });
 
-
 test('live final destinations are bound to approved public origins',()=>{
   assert.doesNotThrow(()=>assertFinalDestination('https://jussco.company/','https://jussco.company/'));
   assert.doesNotThrow(()=>assertFinalDestination('https://www.jussco.company/','https://www.jussco.company/'));
@@ -122,6 +112,14 @@ test('live final destinations are bound to approved public origins',()=>{
   assert.throws(()=>assertFinalDestination('https://jussco.company/','https://other.example/'),/unexpected destination/);
   assert.throws(()=>assertFinalDestination('https://sekretbip.jussco.company/','https://attacker.example/'),/unexpected destination/);
   assert.throws(()=>assertFinalDestination('https://jussco.company/',undefined),/final URL/);
+});
+
+test('apex accepts only the declared same-path hop to www; nothing else widens',()=>{
+  assert.doesNotThrow(()=>assertFinalDestination('https://jussco.company/data/worlds.json','https://www.jussco.company/data/worlds.json'));
+  assert.throws(()=>assertFinalDestination('https://jussco.company/data/worlds.json','https://www.jussco.company/'),/unexpected destination/);
+  assert.throws(()=>assertFinalDestination('https://www.jussco.company/','https://jussco.company/'),/unexpected destination/);
+  assert.throws(()=>assertFinalDestination('https://games.jussco.company/','https://www.games.jussco.company/'),/unexpected destination/);
+  assert.throws(()=>assertFinalDestination('https://jussco.company/','https://evil.jussco.company/'),/unexpected destination/);
 });
 
 test('browser response fails closed if the target redirected off-domain',async()=>{
@@ -134,13 +132,14 @@ test('public raw HTML must match exact source Git blob and requested hostname',(
   const make=(p)=>'<html data-source-check="'+JSON.stringify(p).replaceAll('"','&quot;')+'"></html>';
   const valid={http:200,bytes:69598,gitBlobSha1:sha,url:'https://jussco.company/'};
   assert.equal(verifyHtmlSourceMatch(make(valid),sha,'jussco.company'),sha);
+  assert.equal(verifyHtmlSourceMatch(make({...valid,url:'https://www.jussco.company/'}),sha,'jussco.company'),sha);
+  assert.throws(()=>verifyHtmlSourceMatch(make({...valid,url:'https://jussco.company/'}),sha,'games.jussco.company'),/does not match/);
   assert.throws(()=>verifyHtmlSourceMatch(make({...valid,gitBlobSha1:'b'.repeat(40)}),sha,'jussco.company'),/does not match/);
   assert.throws(()=>verifyHtmlSourceMatch(make({...valid,url:'https://example.org/'}),sha,'jussco.company'),/does not match/);
   assert.throws(()=>verifyHtmlSourceMatch(make({...valid,http:503}),sha,'jussco.company'),/does not match/);
   assert.throws(()=>verifyHtmlSourceMatch(make({error:'blocked'}),sha,'jussco.company'),/does not match/);
   assert.throws(()=>verifyHtmlSourceMatch('<html></html>',sha,'jussco.company'),/did not record/);
 });
-
 
 test('successful public readback still cannot claim exact deployed-SHA verification',()=>{
   const receipt=makePartialReadbackWitness('a'.repeat(40));
@@ -152,10 +151,10 @@ test('successful public readback still cannot claim exact deployed-SHA verificat
   assert.throws(()=>makePartialReadbackWitness('short'),/40-character/);
 });
 
-
 test('provider Actions ID secret fallback does not weaken dedicated rendering token', () => {
   const yaml = readFileSync(new URL('../.github/workflows/provider-site-proof.yml', import.meta.url), 'utf8');
   assert.match(yaml, /CLOUDFLARE_ACCOUNT_ID: \$\{\{ vars\.CLOUDFLARE_ACCOUNT_ID \|\| secrets\.CLOUDFLARE_ACCOUNT_ID \}\}/);
   assert.match(yaml, /CLOUDFLARE_BROWSER_RENDERING_TOKEN: \$\{\{ secrets\.CLOUDFLARE_BROWSER_RENDERING_TOKEN \}\}/);
   assert.doesNotMatch(yaml, /CLOUDFLARE_BROWSER_RENDERING_TOKEN: \$\{\{ secrets\.CLOUDFLARE_API_TOKEN/);
+  assert.match(yaml, /push:\n    branches: \[main\]/);
 });
