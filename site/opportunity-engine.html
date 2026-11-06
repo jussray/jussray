@@ -53,6 +53,12 @@ small.note{display:block;text-align:center;color:#ead1d8;margin:14px auto;max-wi
 @media(max-width:930px){header{grid-template-columns:1fr auto}nav{grid-column:1/-1;grid-row:2;overflow-x:auto;justify-content:flex-start}main{padding-top:20px}.cards,.research-results{grid-template-columns:1fr}.prompt{grid-template-columns:1fr}.generate{justify-self:start}}
 @media(max-width:600px){h1{font-size:41px}.heading p{letter-spacing:.08em}header{padding:12px}.selector{justify-content:flex-start}.core{min-height:92px}.core .orb{width:72px;height:72px}.prompt{padding:14px}.mine{font-size:12px}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important}}
+html[data-season="winter"] .world:before{filter:saturate(.93) brightness(.96) hue-rotate(7deg)}
+html[data-season="spring"] .world:before{filter:saturate(1.18)}
+html[data-season="summer"] .world:before{filter:saturate(1.2) brightness(1.04)}
+html[data-season="autumn"] .world:before{filter:saturate(1.06) sepia(.1)}
+.world-atmosphere{position:fixed;inset:0;z-index:10;pointer-events:none;opacity:.64}
+@media(prefers-reduced-motion:reduce){.world-atmosphere{display:none}}
 </style></head><body><div class="world">
 <header>
 <a class="brand" href="/"><span>♛</span>Juss &amp; Co</a>
@@ -148,4 +154,6 @@ function exportBrief(){
 $('#generate').addEventListener('click',render);$('#sources').addEventListener('click',refresh);$('#export').addEventListener('click',exportBrief);
 render();
 })();
-</script></body></html>
+</script>
+<script type="module" src="/assets/atmosphere.mjs"></script>
+</body></html>
