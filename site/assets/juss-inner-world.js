@@ -1,5 +1,7 @@
+import { installDayNight } from './juss-day-night.mjs';
 import { atmosphereAt } from './juss-season.mjs';
 import { initNatureAudio } from './juss-nature-audio.mjs';
+installDayNight();
 (() => {
   let timezone = 'UTC';
   try { timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'; } catch {}
