@@ -1,3 +1,30 @@
+## 2026-11-04 — Standing rule: never work around a blocker; implement the fix
+
+- RULE (Juss, 2026-11-04): when a blocker stands in the way of a project, do not route around it. Diagnose the cause, implement the needed fix in the project itself, and prove it. A workaround that leaves the blocker in place does not count as done.
+- Gates are not blockers to be bypassed. If a fix needs an authority I don't hold, I report the exact decision needed and stop there.
+- ROLLBACK: revert the commit that recorded this rule.
+
+## 2026-11-04 — Standing rule: do not impede launches
+
+- RULE (Juss, 2026-11-04): never let agent work impede a Juss launch. Unrelated repository work, PRs and checks do not hold launch work. Blockers are reported at once with the exact one-line next action.
+- Safety gates still apply. This rule never removes merge, deploy, money, publication, credential or founder-approval gates. A gate that blocks a launch is reported as a blocker, and it is not bypassed.
+- ROLLBACK: revert the commit that recorded this rule.
+
+## 2026-11-04 — Standing rule: fix CI at the cause, never bypass
+
+- RULE (Juss, 2026-11-04): when CI fails, fix the cause. Never bypass, skip, weaken, relabel or disable a gate to make it pass. Classify each failing check from its job logs first, then make the narrowest correct change on the branch and re-run the exact head.
+- Any fix push moves the PR head. Proof from the old head does not carry over to the new one, and any merge approval must name the new head.
+- ROLLBACK: revert the commit that recorded this rule.
+
+## 2026-11-04 — Project repos: paper/dry-run authority layers; no live money
+
+- REALITY: four project repos (SleepWealth-Agent, SolWealth-Meteora-, sideshift-Juss-bridge-, and an FCR feature branch) now carry authorization-evaluator code and their own `docs/claude/STATE.md`. Heads are recorded in those repos, not here. No live trading, signing, broadcast or payment path is enabled. VERIFIED by reading each repo's code and remote head.
+- FIX: dry-run AI seams, a two-model account-scope evaluator (customer-connected and pooled-managed), and an FCR governance profile update. All evaluators return `live_execution_authorized: false`.
+- PROOF: each repo's own test suite passed at its recorded head. Those numbers are in the repos' state files.
+- RISK: no receipt issuer exists yet, so no scope can reach eligibility in practice. Solana custody model and SideShift's money-flow role are undecided.
+- ROLLBACK: revert the project commits listed in each repo's state file.
+- NEXT GATE: founder decisions listed in each project's state file. No public status change: `site/data/worlds.json` is founder-declared and unchanged.
+
 ## 2026-10-20 — Juss Digital rename: standing founder rule + receipt
 - RULE (Juss, repeated): the former service name is retired everywhere; the brand is **Juss Digital**. Never reintroduce the former name in files, PR titles/bodies, or branch names — including in receipts like this one.
 - REALITY @ main 520a073: 0 occurrences of the former name in any tracked file (VERIFIED, case-insensitive `git grep` on `origin/main`). Rename landed via PR #5 (squash de4fa59); PR #4 and #5 titles/bodies rewritten to Juss Digital.

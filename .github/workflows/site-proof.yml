@@ -2,9 +2,8 @@ name: Juss & Co site browser proof
 on:
   push:
     branches: [main]
-    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/verify-approved-stories.mjs', 'scripts/licensable-assets.test.mjs', 'scripts/verify-licensing-page.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/conversion-receiver.test.mjs', 'scripts/conversion-client-first-party.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'scripts/site-proof-boundary.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', 'workers/**', 'wrangler.conversions.example.jsonc', '.github/workflows/site-proof.yml']
+    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/verify-approved-stories.mjs', 'scripts/licensable-assets.test.mjs', 'scripts/verify-licensing-page.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/conversion-receiver.test.mjs', 'scripts/conversion-client-first-party.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'scripts/site-proof-boundary.test.mjs', 'scripts/public-resources.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', 'workers/**', 'wrangler.conversions.example.jsonc', '.github/workflows/site-proof.yml', 'scripts/verify-independent-review.mjs', 'scripts/verify-independent-review.test.mjs', 'tests/jussco-github-webhook.test.mjs']
   pull_request:
-    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/licensable-assets.test.mjs', 'scripts/verify-licensing-page.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/conversion-receiver.test.mjs', 'scripts/conversion-client-first-party.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'scripts/site-proof-boundary.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', 'workers/**', 'wrangler.conversions.example.jsonc', '.github/workflows/site-proof.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -14,6 +13,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   verify:
+    name: Juss & Co Site Browser Proof
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -49,8 +49,14 @@ jobs:
         run: node --test scripts/conversion-tracking.test.mjs
       - name: Test first-party aggregation, abuse limits and privacy
         run: node --test scripts/conversion-receiver.test.mjs scripts/conversion-client-first-party.test.mjs
+      - name: Test GitHub webhook receiver (HMAC, request bounds, safe acknowledgements)
+        run: node --test tests/jussco-github-webhook.test.mjs
+      - name: Test systematic review decision and native ruleset contract (read-only)
+        run: node --test scripts/verify-independent-review.test.mjs
       - name: Verify source/provider proof responsibility boundary
         run: node --test scripts/site-proof-boundary.test.mjs
+      - name: Validate company resource links, public PDFs and status honesty
+        run: node --test scripts/public-resources.test.mjs
       - name: Verify exact-source site and Games locally in Chromium
         run: node scripts/verify-site.mjs
       - name: Verify licensing page on desktop and mobile in Chromium
