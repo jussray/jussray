@@ -120,6 +120,21 @@ say(['truth-compass', 'truth-weaver', 'exact-match-engine'].every((slug) => proj
   say(errors.length === 0, 'conversion browser: tracking causes no page errors');
   await ctx.close();
 }
+// RFC 9116: verify the real static disclosure path in Chromium, not only file existence.
+{
+  const page = await browser.newPage();
+  const response = await page.goto(new URL('.well-known/security.txt', url).href, { waitUntil: 'domcontentloaded' });
+  const body = response ? await response.text() : '';
+  const mime = response?.headers()['content-type'] || '';
+  say(response?.status() === 200, 'security.txt: HTTP 200');
+  say(mime.toLowerCase().startsWith('text/plain'), 'security.txt: text/plain response');
+  say(/^Contact: mailto:security@jussco\.company$/m.test(body), 'security.txt: founder-approved reporting contact (mailto:security@jussco.company)');
+  const expiration = body.match(/^Expires: ([^\r\n]+)$/m);
+  say(Boolean(expiration && Date.parse(expiration[1]) > Date.now()), 'security.txt: future expiration');
+  say((body.match(/^Canonical: https:\/\/(www\.)?jussco\.company\/\.well-known\/security\.txt$/gm) || []).length === 2, 'security.txt: canonical apex + www');
+  await page.close();
+}
+
 for (const mode of ['abort', 'malformed']) {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } }); const page = await ctx.newPage();
   // Deterministic first-party receiver fixture: PR checks must not call production.
