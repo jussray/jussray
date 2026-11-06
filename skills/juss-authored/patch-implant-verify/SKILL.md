@@ -16,12 +16,12 @@ description: "Token-efficient patch application + verification using runtime-ker
 git am < patch-file
 # or: git format-patch BASE..HEAD → git am
 ```
-If conflict: resolve narrowly, commit as-is, note conflict in RISK.
+If conflict: **stop without committing**. Record the rejected hunks and require an explicit, reviewable resolution; run the focused tests again before any commit. Do not silently carry a partially applied patch.
 
 ## Verify (2 steps, narrowest path)
 1. **CI proof only**: Does the target repo CI pass for this exact commit?
    - If yes → PROOF exists
-   - If no → FAILED, investigate one line in CI logs only
+   - If no → FAILED; inspect the full failing step and dependent logs needed to establish cause. Never treat a red required check as merge-ready.
 2. **Runtime proof only if load-bearing** (UI/API change, credential, deploy)
    - Playwright: one test covering the changed path
    - If green → VERIFIED
@@ -36,7 +36,7 @@ If conflict: resolve narrowly, commit as-is, note conflict in RISK.
 ## Blockers (name them, stop)
 - Repo auth gate → "BLOCKED: repo unreachable"
 - Patch not found → "UNKNOWN: patch source"
-- CI red (non-load-bearing) → "CANDIDATE: CI red, proceed with caution"
+- CI red (any required check) → "BLOCKED for merge: required CI red"; keep changes local or in an unmerged review branch
 - Playwright red (load-bearing) → "FAILED: real-path proof missing"
 
 ## Next gate
@@ -46,7 +46,7 @@ One founder decision: merge/revert/investigate/wait.
 
 **Token discipline:**
 - No speculation loops (verify once per decision, stop on unknown)
-- No full diffs (stat only)
+- Include the smallest necessary diff when it proves a fix or reveals unsafe changes
 - No retry without reason
 - CI/Playwright only; skip if not load-bearing
 - Report findings, don't interpret

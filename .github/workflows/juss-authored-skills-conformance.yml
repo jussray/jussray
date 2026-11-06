@@ -1,0 +1,29 @@
+name: Juss-authored skills conformance
+on:
+  push:
+    paths:
+      - 'skills/juss-authored/**'
+      - '.github/workflows/juss-authored-skills-conformance.yml'
+  # Required PR checks must run on every PR, not only on skill-file edits.
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  receipts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile receipt validators
+        run: python -m compileall -q skills/juss-authored/juss-os/scripts skills/juss-authored/runtime-kernel/scripts
+      - name: Run receipt regression tests
+        run: python -m unittest discover -s skills/juss-authored/tests -p 'test_*.py' -v
+      - name: Verify SHA-256 export file integrity and inventory
+        run: python skills/juss-authored/scripts/verify_inventory.py skills/juss-authored

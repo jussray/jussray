@@ -17,7 +17,8 @@ const REGISTRIES = ['worlds', 'systems', 'connectors'];
 const CANONICAL = 'https://www.jussco.company/';
 const COMPANY_QR_LABEL = 'Scan to explore';
 const HEALTH_PROBE_SCRIPT = `(async()=>{let code='network-error';try{const r=await fetch('/_telemetry/v1/health',{method:'POST',credentials:'omit',headers:{'Content-Type':'application/json'},body:JSON.stringify({probe:'health-v1'})});code=String(r.status)}catch{}document.documentElement.setAttribute('data-receiver-health',code)})();`;
-const ENTER_BIP = `setTimeout(() => { document.querySelector('[data-testid="web-welcome-enter"]')?.click(); }, 300);`;
+const BIP_URL = 'https://sekretbip.jussco.company/';
+const ENTER_BIP = `(()=>{let attempts=0;const timer=setInterval(()=>{const button=document.querySelector('[data-testid="web-welcome-enter"]');if(button&&!button.disabled){button.click();clearInterval(timer)}if(++attempts>45)clearInterval(timer)},100)})();`;
 const OPEN_BIP_CARD = `(() => {let tries=0;const h=setInterval(() => {const card=Array.from(document.querySelectorAll('.card')).find(e => e.querySelector('h3')?.textContent?.trim() === "Se'kret Bip");if (card && card.querySelector('.go')) {card.querySelector('.go').click();clearInterval(h);}if (++tries > 30) clearInterval(h);},100);})();`;
 
 export function gitBlobSha(buffer) {
@@ -37,12 +38,10 @@ export function extractScrapedRegistry(data) {
 export function verifyWorldRegistry(raw) {
   const parsed = JSON.parse(raw);
   const bip = parsed.worlds?.find(x => x.name === "Se'kret Bip");
-  // A public informational front door is not an attested member launch.
   if (!bip || bip.st !== 'soon' || bip.label !== 'Opening soon' ||
-      bip.contact?.site !== 'https://sekretbip.net' ||
-      bip.link?.url !== 'https://sekretbip.net' ||
-      bip.held !== undefined) {
-    throw new Error("Se'kret Bip must stay upcoming with its verified public front door, not a live signup claim");
+      bip.held !== 'Opening soon · no public link yet' ||
+      bip.contact?.site !== 'https://sekretbip.net' || bip.link?.url) {
+    throw new Error('Se\'kret Bip must remain a clearly gated upcoming product');
   }
 }
 
@@ -50,9 +49,8 @@ export function verifySiteMarkdown(content) {
   if (typeof content !== 'string' || !content.includes('Turn thoughts into living works.') || !content.includes("### Se'kret Bip")) {
     throw new Error('Rendered Juss & Co. site markers missing');
   }
-  const bipSection = content.split("### Se'kret Bip")[1]?.split(/\n#{2,3} /)[0] ?? '';
-  if (!bipSection.includes('Opening soon') || /Public signup live|Member app live|Sign up now/i.test(bipSection)) {
-    throw new Error("Se'kret Bip must remain upcoming; an informational public link does not prove member launch");
+  if (!content.includes('Opening soon · no public link yet')) {
+    throw new Error('Se\'kret Bip must not claim a public live preview');
   }
   if (!content.includes(COMPANY_QR_LABEL) || !content.includes('www.jussco.company')) {
     throw new Error('Canonical company QR destination missing from live homepage');
@@ -117,24 +115,98 @@ export function assertSha(value) {
   return value;
 }
 
-async function cfRequest({accountId, token, endpoint, body, fetchImpl=fetch}) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 45_000);
+const HTML_HASH_SCRIPT = `setTimeout(async()=>{
   try {
-    const response = await fetchImpl(`https://api.cloudflare.com/client/v4/accounts/${accountId}/browser-rendering/${endpoint}?cacheTTL=0`, {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-      signal: controller.signal,
-    });
-    // Never echo request headers, Cloudflare API response bodies, or token text.
-    if (!response.ok) throw new Error(`Browser Rendering ${endpoint}: HTTP ${response.status}`);
-    const payload = await response.json();
-    if (payload?.success !== true) throw new Error(`Browser Rendering ${endpoint}: provider returned unsuccessful result`);
-    return payload.result;
-  } finally {
-    clearTimeout(timer);
+    const response=await fetch('/index.html',{cache:'no-store'});
+    const source=await response.text();
+    const bytes=new TextEncoder().encode(source);
+    const prefix=new TextEncoder().encode('blob '+bytes.length+'\\0');
+    const payload=new Uint8Array(prefix.length+bytes.length);
+    payload.set(prefix);payload.set(bytes,prefix.length);
+    const hash=await crypto.subtle.digest('SHA-1',payload);
+    const sha=Array.from(new Uint8Array(hash)).map(x=>x.toString(16).padStart(2,'0')).join('');
+    document.documentElement.setAttribute('data-source-check',JSON.stringify({
+      http:response.status,bytes:bytes.length,gitBlobSha1:sha,url:response.url,
+    }));
+  } catch(error) {
+    document.documentElement.setAttribute('data-source-check',JSON.stringify({error:String(error).slice(0,160)}));
   }
+},400);`;
+
+// The apex is a declared same-path redirect to the canonical www host (CLAUDE.md).
+// Accept exactly that hop; any other host is a failure.
+export function acceptedHosts(host) {
+  return host === 'jussco.company' ? ['jussco.company', 'www.jussco.company'] : [host];
+}
+
+export function verifyHtmlSourceMatch(html,expectedHash,host) {
+  const match=typeof html==='string'&&html.match(/data-source-check="([^"]+)"/);
+  if(!match)throw new Error('Browser did not record full HTML source readback');
+  const result=JSON.parse(match[1].replaceAll('&quot;','"').replaceAll('&amp;','&'));
+  let observedHost='';
+  try { observedHost=new URL(result.url).hostname; } catch {}
+  if(result.error || result.http!==200 || !Number.isInteger(result.bytes)||result.bytes<100 ||
+    result.gitBlobSha1!==expectedHash || !acceptedHosts(host).includes(observedHost)) {
+    throw new Error('Public HTML source does not match checked-out Git blob');
+  }
+  return result.gitBlobSha1;
+}
+
+export function createQuickActionPacer({intervalMs=11000, now=()=>Date.now(),sleep=ms=>new Promise(done=>setTimeout(done,ms))}={}) {
+  let next=0;
+  return async()=>{const delay=Math.max(0,next-now());if(delay>0)await sleep(delay);next=now()+intervalMs;};
+}
+
+export function assertFinalDestination(requested, actual) {
+  if (typeof requested !== 'string' || typeof actual !== 'string') {
+    throw new Error('Provider did not attest target final URL');
+  }
+  let observed, wanted;
+  try { observed = new URL(actual); wanted = new URL(requested === BIP_URL ? 'https://sekretbip.net/' : requested); }
+  catch { throw new Error('Invalid provider final URL'); }
+  const allowed = acceptedHosts(wanted.hostname).map(h => { const u = new URL(wanted.href); u.hostname = h; return u.href; });
+  if (!allowed.includes(observed.href)) throw new Error('Public route redirected to unexpected destination');
+}
+
+export function makePartialReadbackWitness(expectedHead) {
+  return {
+    status:'PARTIAL_PUBLIC_READBACK',
+    deploymentShaAttested:false,
+    repo:REPO,
+    sourceSha:assertSha(expectedHead),
+    method:'Cloudflare REST Browser Rendering, public domains',
+    registries:[],
+    pageProof:[],
+  };
+}
+
+export async function cfRequest({accountId, token, endpoint, body, fetchImpl=fetch, pace=async()=>{}, sleep=ms=>new Promise(done=>setTimeout(done,ms))}) {
+  for (let attempt=1; attempt<=3; attempt++) {
+    await pace();
+    const controller=new AbortController();
+    const timer=setTimeout(()=>controller.abort(),45_000);
+    try {
+      const response=await fetchImpl(`https://api.cloudflare.com/client/v4/accounts/${accountId}/browser-rendering/${endpoint}?cacheTTL=0`,{
+        method:'POST',
+        headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},
+        body:JSON.stringify(body),signal:controller.signal,
+      });
+      if(response.status===429 && attempt<3) {
+        const retry=Number(response.headers?.get?.('retry-after'));
+        await sleep(Number.isFinite(retry)&&retry>0?Math.min(60_000,Math.max(11_000,retry*1000)):11_000);
+        continue;
+      }
+      // Never echo request headers, cookies, response bodies, or token text.
+      if(!response.ok)throw new Error(`Browser Rendering ${endpoint}: HTTP ${response.status}`);
+      const payload=await response.json();
+      if(payload?.success!==true)throw new Error(`Browser Rendering ${endpoint}: provider unsuccessful`);
+      // API HTTP 200 is not proof the TARGET page returned HTTP 200.
+      if(payload.meta?.status!==200)throw new Error(`Public target ${endpoint}: HTTP ${payload.meta?.status??'unknown'}`);
+      assertFinalDestination(body.url,payload.meta?.finalUrl);
+      return payload.result;
+    } finally {clearTimeout(timer);}
+  }
+  throw new Error('Provider Quick Action retries exhausted');
 }
 
 async function fetchHead(token, fetchImpl=fetch) {
@@ -143,20 +215,6 @@ async function fetchHead(token, fetchImpl=fetch) {
   });
   if (!response.ok) throw new Error(`GitHub main ref lookup failed: HTTP ${response.status}`);
   return assertSha((await response.json()).object?.sha);
-}
-
-// Matching published JSON with source proves public readback, not the Cloudflare
-// Worker deployment's provenance or the entire site's behavior.
-export function createProviderWitness(sourceSha) {
-  return {
-    status:'PARTIAL_PUBLIC_READBACK',
-    deploymentShaAttested:false,
-    repo:REPO,
-    sha:assertSha(sourceSha),
-    method:'Cloudflare REST Browser Rendering, public domains',
-    registries:[],
-    pageProof:[]
-  };
 }
 
 export async function runProof({env=process.env, fetchImpl=fetch, root=ROOT}={}) {
@@ -171,8 +229,10 @@ export async function runProof({env=process.env, fetchImpl=fetch, root=ROOT}={})
   if (checkoutHead !== expectedHead) throw new Error('Git checkout SHA differs from GitHub Actions exact head');
   if (await fetchHead(env.GITHUB_TOKEN, fetchImpl) !== expectedHead) throw new Error('main moved before proof; evidence is stale');
 
-  const witness = createProviderWitness(expectedHead);
-  const request = (endpoint, body) => cfRequest({accountId, token, endpoint, body, fetchImpl});
+  // A source SHA and public file matches do not attest the deployed Worker version.
+  const witness = makePartialReadbackWitness(expectedHead);
+  const pace = createQuickActionPacer();
+  const request = (endpoint, body) => cfRequest({accountId, token, endpoint, body, fetchImpl, pace});
   for (const host of HOSTS) {
     for (const registry of REGISTRIES) {
       const source = readFileSync(resolve(root,`site/data/${registry}.json`));
@@ -186,6 +246,11 @@ export async function runProof({env=process.env, fetchImpl=fetch, root=ROOT}={})
       witness.registries.push({host,file:`data/${registry}.json`,gitBlobSha:liveHash,match:true});
       console.log(`VERIFIED ${host}/data/${registry}.json Git blob ${liveHash.slice(0,12)}`);
     }
+    const rawHtml = await request('content',{url:`https://${host}/`,actionTimeout:20_000,
+      waitForTimeout:2_500,addScriptTag:[{content:HTML_HASH_SCRIPT}]});
+    const htmlGitBlobSha = verifyHtmlSourceMatch(rawHtml,gitBlobSha(readFileSync(resolve(root,'site/index.html'))),host);
+    witness.pageProof.push({host,asset:'site/index.html',gitBlobSha:htmlGitBlobSha,match:true});
+    console.log(`VERIFIED ${host}/index.html Git blob ${htmlGitBlobSha.slice(0,12)}`);
     for (const viewport of [{width:1440,height:900},{width:390,height:844,isMobile:true,hasTouch:true}]) {
       const markdown = await request('markdown', {
         url:`https://${host}/`, viewport, actionTimeout:18_000,
@@ -222,7 +287,7 @@ export async function runProof({env=process.env, fetchImpl=fetch, root=ROOT}={})
   mkdirSync(folder,{recursive:true});
   const path = resolve(folder,`provider-${expectedHead}.json`);
   writeFileSync(path,JSON.stringify(witness,null,2)+'\n');
-  console.log(`MATCHED public provider-side readback to checkout at ${expectedHead.slice(0,12)}; ${witness.registries.length} registry hashes + ${witness.pageProof.length} page checks`);
+  console.log(`PUBLIC READBACK MATCHED at source ${expectedHead.slice(0,12)}; deployed SHA UNATTESTED; ${witness.registries.length} registry hashes + ${witness.pageProof.length} page checks`);
   return witness;
 }
 

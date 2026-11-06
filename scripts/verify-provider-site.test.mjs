@@ -1,8 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { gitBlobSha, extractScrapedRegistry, verifyWorldRegistry, verifySiteMarkdown, verifyDestinationMarkdown, verifyBipContent, assertSha, assertReleaseContext, verifyReceiverHealthHtml, createProviderWitness, runProof } from './verify-provider-site.mjs';
+import { readFileSync } from 'node:fs';
+import { gitBlobSha, extractScrapedRegistry, verifyWorldRegistry, verifySiteMarkdown, verifyDestinationMarkdown, verifyBipContent, assertSha, assertReleaseContext, verifyReceiverHealthHtml, runProof, createQuickActionPacer, cfRequest, assertFinalDestination, verifyHtmlSourceMatch, makePartialReadbackWitness } from './verify-provider-site.mjs';
 
-const site = `---\ntitle: "Juss & Co"\n---\nTurn thoughts into living works.\n### Se'kret Bip\nOpening soon\n[Visit Se’kret Bip ↗](https://sekretbip.net)\nScan to explore www.jussco.company`;
+const site = `---\ntitle: "Juss & Co"\n---\nTurn thoughts into living works.\n### Se'kret Bip\nOpening soon · no public link yet\nScan to explore www.jussco.company`;
 
 test('Git blob hash matches known Git SHA-1 format', () => {
   assert.equal(gitBlobSha(Buffer.from('hello\n')), 'ce013625030ba8dba906f756967f9e9ca394464a');
@@ -15,34 +16,18 @@ test('registry scraper requires a full unique pre element', () => {
   assert.throws(()=>extractScrapedRegistry([{selector:'pre',results:[{text:'abc'},{text:'def'}]}]), /exactly one/);
 });
 
-test('world registry distinguishes public front door from a released member app', () => {
-  const base={worlds:[{name:"Se'kret Bip",st:'soon',label:'Opening soon',contact:{site:'https://sekretbip.net'},link:{text:'Visit Se’kret Bip',url:'https://sekretbip.net'}}]};
+test('world registry preserves standalone Bip and preview truth', () => {
+  const base={worlds:[{name:"Se'kret Bip",st:'soon',label:'Opening soon',held:'Opening soon · no public link yet',contact:{site:'https://sekretbip.net'}}]};
   assert.doesNotThrow(()=>verifyWorldRegistry(JSON.stringify(base)));
-  base.worlds[0].link.url='https://invalid.example';
-  assert.throws(()=>verifyWorldRegistry(JSON.stringify(base)), /upcoming with its verified public front door/);
-  base.worlds[0].link.url='https://sekretbip.net';
-  base.worlds[0].st='live';
-  assert.throws(()=>verifyWorldRegistry(JSON.stringify(base)), /upcoming with its verified public front door/);
-  base.worlds[0].st='soon';
-  base.worlds[0].held='Opening soon · no public link yet';
-  assert.throws(()=>verifyWorldRegistry(JSON.stringify(base)), /upcoming with its verified public front door/);
+  base.worlds[0].label='Live signup';
+  assert.throws(()=>verifyWorldRegistry(JSON.stringify(base)), /gated upcoming product/);
 });
 
 test('public company QR and honest upcoming project state must appear in browser markdown', () => {
   assert.doesNotThrow(()=>verifySiteMarkdown(site));
   assert.throws(()=>verifySiteMarkdown(site.replace('Scan to explore','')),/QR destination/);
-  assert.throws(()=>verifySiteMarkdown(site.replace('Opening soon','Public signup live')),/must remain upcoming/);
+  assert.throws(()=>verifySiteMarkdown(site.replace('Opening soon · no public link yet','Public signup live')),/must not claim/);
   assert.throws(()=>verifySiteMarkdown('Just a moment... '+site),/Cloudflare challenge/);
-});
-
-test('public provider receipt does not falsely attest to a deployment SHA', () => {
-  const sha='a'.repeat(40);
-  const receipt=createProviderWitness(sha);
-  assert.equal(receipt.sha,sha);
-  assert.equal(receipt.status,'PARTIAL_PUBLIC_READBACK');
-  assert.equal(receipt.deploymentShaAttested,false);
-  assert.deepEqual(receipt.registries,[]);
-  assert.throws(()=>createProviderWitness('abc'),/40-character/);
 });
 
 test('standalone destinations reject challenge and unrelated pages',()=>{
@@ -93,4 +78,83 @@ test('provider health proof requires live HTML and actual 204 response', () => {
     '<!doctype html><html></html>',
     'HTTP 204 without HTML',
   ]) assert.throws(() => verifyReceiverHealthHtml(invalid), /health probe|rendered HTML/);
+});
+
+
+test('rate limiter spaces actions to protect Cloudflare Free quota',async()=>{
+  let clock=100;const delays=[];
+  const pace=createQuickActionPacer({intervalMs:11000,now:()=>clock,sleep:async ms=>{delays.push(ms);clock+=ms}});
+  await pace();await pace();await pace();
+  assert.deepEqual(delays,[11000,11000]);
+});
+
+test('provider HTTP 200 must not hide a failing target-page HTTP status',async()=>{
+  const fake=async()=>({ok:true,status:200,json:async()=>({success:true,meta:{status:503},result:'<html>Looks fine</html>'})});
+  await assert.rejects(()=>cfRequest({accountId:'a'.repeat(32),token:'fake',endpoint:'content',body:{url:'https://jussco.company'},fetchImpl:fake}),/target content: HTTP 503/);
+});
+
+test('provider HTTP 429 retries with bounded backoff, without leaking token',async()=>{
+  let n=0;const sleeps=[];
+  const fake=async()=>{
+    n++;
+    if(n===1)return {ok:false,status:429,headers:{get:()=> '15'}};
+    return {ok:true,status:200,json:async()=>({success:true,meta:{status:200,finalUrl:'https://jussco.company'},result:'public render'})};
+  };
+  const value=await cfRequest({accountId:'b'.repeat(32),token:'fake',endpoint:'markdown',body:{url:'https://jussco.company'},fetchImpl:fake,sleep:async ms=>sleeps.push(ms)});
+  assert.equal(value,'public render');assert.equal(n,2);assert.deepEqual(sleeps,[15000]);
+});
+
+test('live final destinations are bound to approved public origins',()=>{
+  assert.doesNotThrow(()=>assertFinalDestination('https://jussco.company/','https://jussco.company/'));
+  assert.doesNotThrow(()=>assertFinalDestination('https://www.jussco.company/','https://www.jussco.company/'));
+  assert.doesNotThrow(()=>assertFinalDestination('https://games.jussco.company/','https://games.jussco.company/'));
+  assert.doesNotThrow(()=>assertFinalDestination('https://sekretbip.jussco.company/','https://sekretbip.net/'));
+  assert.throws(()=>assertFinalDestination('https://jussco.company/','https://other.example/'),/unexpected destination/);
+  assert.throws(()=>assertFinalDestination('https://sekretbip.jussco.company/','https://attacker.example/'),/unexpected destination/);
+  assert.throws(()=>assertFinalDestination('https://jussco.company/',undefined),/final URL/);
+});
+
+test('apex accepts only the declared same-path hop to www; nothing else widens',()=>{
+  assert.doesNotThrow(()=>assertFinalDestination('https://jussco.company/data/worlds.json','https://www.jussco.company/data/worlds.json'));
+  assert.throws(()=>assertFinalDestination('https://jussco.company/data/worlds.json','https://www.jussco.company/'),/unexpected destination/);
+  assert.throws(()=>assertFinalDestination('https://www.jussco.company/','https://jussco.company/'),/unexpected destination/);
+  assert.throws(()=>assertFinalDestination('https://games.jussco.company/','https://www.games.jussco.company/'),/unexpected destination/);
+  assert.throws(()=>assertFinalDestination('https://jussco.company/','https://evil.jussco.company/'),/unexpected destination/);
+});
+
+test('browser response fails closed if the target redirected off-domain',async()=>{
+  const fake=async()=>({ok:true,status:200,json:async()=>({success:true,meta:{status:200,finalUrl:'https://elsewhere.example/'},result:'valid-looking content'})});
+  await assert.rejects(()=>cfRequest({accountId:'a'.repeat(32),token:'fake',endpoint:'content',body:{url:'https://jussco.company/'},fetchImpl:fake}),/unexpected destination/);
+});
+
+test('public raw HTML must match exact source Git blob and requested hostname',()=>{
+  const sha='a'.repeat(40);
+  const make=(p)=>'<html data-source-check="'+JSON.stringify(p).replaceAll('"','&quot;')+'"></html>';
+  const valid={http:200,bytes:69598,gitBlobSha1:sha,url:'https://jussco.company/'};
+  assert.equal(verifyHtmlSourceMatch(make(valid),sha,'jussco.company'),sha);
+  assert.equal(verifyHtmlSourceMatch(make({...valid,url:'https://www.jussco.company/'}),sha,'jussco.company'),sha);
+  assert.throws(()=>verifyHtmlSourceMatch(make({...valid,url:'https://jussco.company/'}),sha,'games.jussco.company'),/does not match/);
+  assert.throws(()=>verifyHtmlSourceMatch(make({...valid,gitBlobSha1:'b'.repeat(40)}),sha,'jussco.company'),/does not match/);
+  assert.throws(()=>verifyHtmlSourceMatch(make({...valid,url:'https://example.org/'}),sha,'jussco.company'),/does not match/);
+  assert.throws(()=>verifyHtmlSourceMatch(make({...valid,http:503}),sha,'jussco.company'),/does not match/);
+  assert.throws(()=>verifyHtmlSourceMatch(make({error:'blocked'}),sha,'jussco.company'),/does not match/);
+  assert.throws(()=>verifyHtmlSourceMatch('<html></html>',sha,'jussco.company'),/did not record/);
+});
+
+test('successful public readback still cannot claim exact deployed-SHA verification',()=>{
+  const receipt=makePartialReadbackWitness('a'.repeat(40));
+  assert.equal(receipt.status,'PARTIAL_PUBLIC_READBACK');
+  assert.equal(receipt.deploymentShaAttested,false);
+  assert.equal(receipt.sourceSha,'a'.repeat(40));
+  assert.deepEqual(receipt.registries,[]);
+  assert.deepEqual(receipt.pageProof,[]);
+  assert.throws(()=>makePartialReadbackWitness('short'),/40-character/);
+});
+
+test('provider Actions ID secret fallback does not weaken dedicated rendering token', () => {
+  const yaml = readFileSync(new URL('../.github/workflows/provider-site-proof.yml', import.meta.url), 'utf8');
+  assert.match(yaml, /CLOUDFLARE_ACCOUNT_ID: \$\{\{ vars\.CLOUDFLARE_ACCOUNT_ID \|\| secrets\.CLOUDFLARE_ACCOUNT_ID \}\}/);
+  assert.match(yaml, /CLOUDFLARE_BROWSER_RENDERING_TOKEN: \$\{\{ secrets\.CLOUDFLARE_BROWSER_RENDERING_TOKEN \}\}/);
+  assert.doesNotMatch(yaml, /CLOUDFLARE_BROWSER_RENDERING_TOKEN: \$\{\{ secrets\.CLOUDFLARE_API_TOKEN/);
+  assert.match(yaml, /push:\n    branches: \[main\]/);
 });
