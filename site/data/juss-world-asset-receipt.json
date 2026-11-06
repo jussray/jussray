@@ -1,0 +1,45 @@
+{
+  "schema": "jussco/living-world-asset-receipt@v1",
+  "status": "display_derivatives_prepared_locally_not_yet_committed_to_github",
+  "authority": "Juss & Co founder-approved day/dusk/night scenic compositions",
+  "publicAccess": "public web display only when shipped; originals excluded from site/",
+  "policy": {
+    "noPublicThemeOverrides": true,
+    "sourceOriginalsPrivate": true,
+    "noBrowserFingerprinting": true,
+    "noGuaranteeOfCopyPrevention": true,
+    "defaultAudioOff": true
+  },
+  "assets": [
+    {
+      "phase": "day",
+      "path": "/assets/scenes/juss-world-day-5ea951ad.webp",
+      "pixelSize": [
+        1536,
+        864
+      ],
+      "sourceSha256": "5ea951ad41c201e45d7303b66275063e65b4a181da4f2cf3dffb9c9875b83813",
+      "derivativeSha256": "eaf3b7277e5898c7c92e5c458086e6cd2a108fcca36bb7beeb9224453befd6f9"
+    },
+    {
+      "phase": "dusk",
+      "path": "/assets/scenes/juss-world-dusk-a3df3f32.webp",
+      "pixelSize": [
+        1672,
+        941
+      ],
+      "sourceSha256": "a3df3f3225888323b5090fb18d2660768c9a6b661431a9016a00d8840f7084d4",
+      "derivativeSha256": "60e21ad5f0107da51c2f1722ad4ca0cfb550bb2e06145cb00075261a701038df"
+    },
+    {
+      "phase": "night",
+      "path": "/assets/scenes/juss-world-night-1b88cfea.webp",
+      "pixelSize": [
+        1536,
+        864
+      ],
+      "sourceSha256": "1b88cfea894d374d8c9a88da3ea9367821b5ce1f792393a78b18189801f2a7c0",
+      "derivativeSha256": "9af9beddeef64a414e207a7f9eb0a481f62c04bfac4a4b6461af9d57e2c1c2df"
+    }
+  ]
+}
