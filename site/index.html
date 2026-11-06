@@ -372,7 +372,7 @@ h1,h2,h3{text-wrap:balance}
 /* Our Ecosystem carousel (mockup: glass band with world glyphs and prev/next). Items come only from
    data/worlds.json and data/systems.json; unopened front doors render without a link. */
 .eco{position:relative;isolation:isolate;padding-block:clamp(40px,5vw,64px);border-bottom:1px solid var(--line);overflow:hidden}
-.eco::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 50% 0%,rgba(245,193,75,.16),transparent 60%),radial-gradient(ellipse at 50% 100%,rgba(184,107,255,.2),transparent 65%),var(--void)}
+.eco::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(6,6,28,.25),rgba(6,6,28,.72)),url(assets/home-scene.webp) center/cover no-repeat,var(--void)}
 .eco-band{position:relative;max-width:100%;border-radius:28px;padding:26px 16px 18px;border:1px solid rgba(245,193,75,.45);background:linear-gradient(180deg,rgba(20,17,63,.72),rgba(6,6,28,.92));box-shadow:inset 0 1px 0 rgba(255,217,138,.14),0 30px 90px rgba(245,193,75,.14)}
 .eco-title{display:flex;align-items:center;gap:16px;margin:0 0 18px}
 .eco-title::before,.eco-title::after{content:"";flex:1 1 auto;height:1px;background:linear-gradient(90deg,transparent,var(--gold-2))}
