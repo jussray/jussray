@@ -13,3 +13,24 @@ body main article,body main .card{backdrop-filter:blur(12px)}
 .world-audio input{width:96px;accent-color:#b995ff}
 @media(max-width:640px){body{background-attachment:scroll!important;background-size:auto 100vh!important}.world-audio{left:10px;bottom:10px;padding:5px 9px}.world-audio label{display:none}}
 @media(prefers-reduced-motion:reduce){@view-transition{navigation:none}body{background-attachment:scroll!important}}
+
+
+/* Founder-approved photographic world variants: source originals are held privately.
+   Public derivations use content-addressed names. Missing derivative? SVG remains visible. */
+:root {
+  --juss-scene-url:url('/assets/scenes/juss-world-day-5ea951ad.webp');
+  --juss-scene-fallback:url('/assets/juss-living-world.svg');
+}
+html[data-juss-phase="dusk"]{--juss-scene-url:url('/assets/scenes/juss-world-dusk-a3df3f32.webp')}
+html[data-juss-phase="night"]{--juss-scene-url:url('/assets/scenes/juss-world-night-1b88cfea.webp')}
+body[data-juss-season="summer"]{--juss-scene-fallback:url('/assets/juss-living-world-summer.svg')}
+body[data-juss-season="autumn"]{--juss-scene-fallback:url('/assets/juss-living-world-autumn.svg')}
+body[data-juss-season="winter"]{--juss-scene-fallback:url('/assets/juss-living-world-winter.svg')}
+
+html[data-juss-phase] body {
+  background-image:linear-gradient(180deg,rgba(7,6,27,.60),rgba(7,6,27,.82)),var(--juss-scene-url),var(--juss-scene-fallback)!important;
+  background-size:cover,cover,cover!important;
+  background-position:center top,center center,center center!important;
+  background-repeat:no-repeat!important;
+}
+@media(max-width:640px){html[data-juss-phase] body{background-attachment:scroll!important;background-size:auto 100vh!important}}
