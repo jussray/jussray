@@ -1,0 +1,29 @@
+name: Opportunity Engine focused browser proof
+on:
+  push:
+    branches:
+      - feat/jussco-cinematic-opportunity-engine-20261106
+    paths:
+      - site/opportunity-engine.html
+      - scripts/verify-opportunity-engine.mjs
+      - .github/workflows/opportunity-engine-proof.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: opportunity-engine-feature-20261106
+  cancel-in-progress: true
+jobs:
+  focused-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - run: npm i --no-save --no-audit --no-fund playwright@1.61.1
+      - run: npx playwright install chromium --with-deps
+      - run: node scripts/verify-opportunity-engine.mjs
