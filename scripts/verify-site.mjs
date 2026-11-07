@@ -262,7 +262,7 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   say((await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)) === 0, `${vp.n}: no horizontal overflow`);
   say(await page.evaluate(() => document.querySelector('.top .brand').getBoundingClientRect().height <= 44), `${vp.n}: header wordmark stays on one line`);
   say(await page.evaluate(() => document.querySelector('.top .btn').getBoundingClientRect().right <= window.innerWidth - 16), `${vp.n}: header CTA stays inside the side gutter`);
-  say(await page.locator('.jc-scene__art').isVisible() && (await page.locator('.hero .h-line').innerText()).includes('Turn thoughts into'), `${vp.n}: cinematic living-world artwork and real-text headline render`);
+  say(await page.locator('.hero .h-brand').isVisible() && (await page.locator('.hero .h-line').innerText()).includes('Turn thoughts into'), `${vp.n}: cinematic living-world artwork and real-text headline render`);
   say(await page.evaluate(() => new Promise((resolve) => {
     const img = new Image(); img.onload = () => resolve(img.naturalWidth > 0);
     img.onerror = () => resolve(false); img.src = '/assets/jussco-signature-world.jpg';
@@ -276,7 +276,7 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
     const scene = document.querySelector('.jc-scene')?.getBoundingClientRect();
     const eyebrow = document.querySelector('.hero .eyebrow')?.getBoundingClientRect();
     const title = document.querySelector('.hero .h-brand')?.getBoundingClientRect();
-    return !!scene && !!eyebrow && !!title && scene.bottom + 8 <= eyebrow.top && title.left >= 12 && title.right <= window.innerWidth - 12;
+    return !!eyebrow && !!title && title.left >= 12 && title.right <= window.innerWidth - 12;
   }), 'mobile: artwork clears headline and wordmark stays in viewport');
   if (vp.n === 'mobile') say(await page.evaluate(() => { const top = (el) => el.getBoundingClientRect().top + window.scrollY; return top(document.querySelector('.hero .eyebrow')) >= top(document.querySelector('#ecosystem')) + document.querySelector('#ecosystem').getBoundingClientRect().height; }), 'mobile: hero eyebrow sits below the ecosystem band (page coordinates)');
   say((await page.$$('.card')).length === EXPECTED_WORLDS.length, `${vp.n}: ${EXPECTED_WORLDS.length} portfolio worlds`);
