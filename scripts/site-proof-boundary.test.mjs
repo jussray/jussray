@@ -11,7 +11,10 @@ test('generic site proof stays deterministic and exact-source only', () => {
   assert.doesNotMatch(sourceWorkflow, /Verify public custom domains in Chromium/);
   assert.doesNotMatch(sourceWorkflow, /Verify deployed portfolio in real browsers/);
   assert.doesNotMatch(sourceWorkflow, /Enforce all browser proof outcomes/);
-  assert.doesNotMatch(sourceProof, /https:\/\/games\.jussco\.company\//);
+  // Source proof may inspect an external destination URL as inert link text,
+  // but must never navigate/fetch that production origin during local checks.
+  assert.match(sourceProof, /page\.goto\(url \+ 'games\/index\.html'/);
+  assert.doesNotMatch(sourceProof, /(?:\.goto|\.get|\.post|fetch)\(\s*['`"]https:\/\/games\.jussco\.company\//);
   assert.doesNotMatch(sourceProof, /games production:/i);
 });
 
