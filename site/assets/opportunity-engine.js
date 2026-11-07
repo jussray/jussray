@@ -36,6 +36,17 @@
       tags:['Commerce','Discovery','Growth'],
       icon:'<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M6 11h7l8 32h30l7-25H16"/><path d="M24 28h28M29 20v23M42 20v23"/><circle cx="27" cy="52" r="4"/><circle cx="47" cy="52" r="4"/></svg>'
     }
+    ,{
+      id:'sync-group-play',title:'SYNC Group Play Experiences',
+      products:['Juss & Co Games / SYNC'],
+      desc:'Explore group-play experiences, event formats and community partnerships around the existing SYNC game.',
+      buyer:'Community organizers and small groups seeking social-play experiences',
+      offer:'Pilot a facilitated, accessible group-play session while keeping SYNC gameplay and room authority in its own product.',
+      test:'Validate one public game-play scenario and check whether an organizer expresses willingness to pay.',
+      keywords:'games gaming play group party trivia friend social event sync together think alike',
+      tags:['Games','Community','Experiences'],
+      icon:'<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="7" y="17" width="50" height="31" rx="15"/><path d="M20 27v12M14 33h12M42 30h10M46 26v8"/><path d="M14 18c3-4 9-6 18-6s15 2 18 6"/></svg>'
+    }
   ];
   let latestSignals = [];
   let audioContext;
@@ -66,7 +77,7 @@
     const area = $('#cards');
     area.replaceChildren();
     const selected = chosen();
-    for (const item of ranked()) {
+    for (const item of ranked().slice(0,3)) {
       const article = el('article',undefined,'card');
       article.dataset.opportunityId=item.id;
       const icon = el('div',undefined,'op-icon');
@@ -156,7 +167,7 @@
       'Selected systems: '+(chosen().join(', ')||'none'),
       '',
     ];
-    for(const [index,item] of ranked().entries()) {
+    for(const [index,item] of ranked().slice(0,3).entries()) {
       lines.push('## '+(index+1)+'. '+item.title,'',
         item.desc,'Potential buyer: '+item.buyer,'Offer: '+item.offer,
         'First validation: '+item.test,'Verified demand: UNKNOWN','Market score: WITHHELD','');
