@@ -1,0 +1,39 @@
+name: Juss & Co Game Hub cinematic proof
+on:
+  push:
+    branches:
+      - feat/jussco-cinematic-game-hub-20261107
+    paths:
+      - site/games/**
+      - scripts/verify-games-hub-cinematic.mjs
+      - .github/workflows/game-hub-cinematic-proof.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: game-hub-proof-feature-20261107
+  cancel-in-progress: true
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - name: Install browser test runtime
+        run: |
+          npm install --no-save --no-audit --no-fund playwright
+          npx playwright install chromium --with-deps
+      - name: Prove visuals, controls, mobile layout and original game destinations
+        run: node scripts/verify-games-hub-cinematic.mjs
+      - name: Retain visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: game-hub-browser-proof
+          path: proof/game-hub/
+          if-no-files-found: ignore
