@@ -1,3 +1,10 @@
+## 2026-11-07 — Games hub joins the living world
+
+- FIX: `site/games/index.html` now uses the same founder day/night scene, glass panels, gold edges and Playfair headings as `/ideas.html`. The games Worker serves only `site/games/`, so the scene art is copied into `site/games/assets/`. The scene follows local time: day 06:00–18:00, night otherwise. Game names, links, statuses and safety copy are unchanged.
+- FIX: the phone overflow (392 vs 390px) came from the hero glow at `right:-20px`; it is now `right:0`.
+- PROOF (local): verify-site exit 0 with no FAIL lines. Two new games checks pass: the art loads from the games Worker's own folder, and the atmosphere is set. Screenshots reviewed: desktop day, desktop cards at night, phone at night.
+- ROLLBACK: revert this commit.
+
 ## 2026-11-07 — Rejected artwork retired (Juss: "Not this one")
 
 - RULE (Juss, 2026-11-07): the autumn living-room "Creative Technology for a More Beautiful Life" artwork (`jussco-signature-world.jpg`) is rejected. Do not use it again.
