@@ -5,6 +5,9 @@ on:
       - feat/jussco-cinematic-opportunity-engine-20261106
     paths:
       - site/opportunity-engine.html
+      - site/assets/opportunity-engine.css
+      - site/assets/opportunity-engine.js
+      - site/assets/home-scene.webp
       - scripts/verify-opportunity-engine.mjs
       - .github/workflows/opportunity-engine-proof.yml
   workflow_dispatch:
