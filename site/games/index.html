@@ -152,6 +152,28 @@ header .inner{width:min(1380px,calc(100% - 36px))}
   .gstage-hero{grid-area:hero}.stage-quote{grid-area:quote;align-self:center}.hub-panel{grid-area:panel}.fx{grid-area:fx;align-self:end}.stage-ctrl{grid-area:ctrl;align-self:end}
   header .inner{flex-wrap:nowrap}
 }
+
+/* Mockup proportions (Juss, 2026-11-07): compact side cards, band at the bottom, scene visible in between. */
+@media(min-width:1100px){
+  .gstage{width:min(1500px,calc(100% - 48px));grid-template-columns:200px minmax(0,1fr) 232px;grid-template-rows:auto 1fr auto;grid-template-areas:"quote hero panel" "quote gap panel" "ctrl fx panel";column-gap:clamp(24px,4vw,64px);row-gap:12px}
+  .gstage-hero h1{font-size:clamp(52px,5.4vw,84px)}
+  .stage-kicker{font-size:18px}.stage-verbs{font-size:13px}.stage-sub{font-size:14px}.stage-sign{font-size:30px;margin:0 0 4px}
+  .sbtn{min-height:42px;padding:0 20px;font-size:15px}
+  .stage-quote{padding:14px 14px 10px;border-radius:18px;background:rgba(28,18,66,.32)}
+  .stage-quote p{font-size:16px;line-height:1.4}.stage-quote p::before{font-size:30px}.stage-quote figcaption{font-size:22px;margin-top:6px}
+  .hub-panel{align-self:start;padding:14px 10px;border-radius:18px}
+  .hub-panel h2{font-size:19px;margin:0 0 6px}
+  .hub-panel a{padding:7px 10px;border-radius:10px}.hub-panel b{font-size:13px}.hub-panel span{font-size:11px}
+  .fx{padding:14px 12px 10px;border-radius:22px}
+  .fx-title{margin:0 0 10px}.fx-title h2{font-size:26px}
+  .fx-track{gap:10px;padding:4px 2px 8px}
+  .fx-track li{flex:0 0 108px}.fx-track li:first-child{margin-left:auto}.fx-track li:last-child{margin-right:auto}
+  .fx-tile{min-height:138px;padding:10px 6px 8px;gap:6px;border-radius:14px}
+  .fx-glyph{width:58px;height:58px;border-radius:14px;font-size:20px}
+  .fx-tile strong{font-size:13px}.fx-tile small{font-size:10px}
+  .stage-ctrl{padding:10px;gap:4px;font-size:12px;border-radius:16px}
+  .ctrl-atmo{min-height:44px;font-size:12px}.ctrl-atmo small{font-size:10px}
+}
 @media(max-width:1099px){.gstage-hero{order:1}.fx{order:2}.stage-quote{order:3;max-width:560px;margin-inline:auto}.hub-panel{order:4}.stage-ctrl{order:5;max-width:420px;width:100%;margin-inline:auto}}
 @media(max-width:700px){.gnav{width:100%;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none}.gnav a{padding:0 10px;font-size:13px;white-space:nowrap}}
 @media(prefers-reduced-motion:reduce){.fx-tile{transition:none}.fx-tile:hover{transform:none}}

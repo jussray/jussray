@@ -527,6 +527,33 @@ a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-colo
   .stage .eco-panel ul{gap:2px}.stage .eco-panel a{padding:9px 12px}.stage .eco-panel h3{font-size:20px}
   .stage .eco-item{min-height:176px}
 }
+
+/* Mockup proportions (Juss, 2026-11-07: "match the images"): compact side cards, band at the bottom, scene visible in between. */
+@media (min-width:1100px){
+  .top{background:linear-gradient(180deg,rgba(14,8,40,.6),rgba(14,8,40,.18));border-bottom-color:transparent}
+  .stage{min-height:100vh;display:flex;margin-top:-82px;padding-top:calc(82px + clamp(10px,1.6vw,24px))}
+  .stage-in{flex:1;grid-template-columns:200px minmax(0,1fr) 232px;grid-template-rows:auto 1fr auto;grid-template-areas:"quote hero panel" "quote gap panel" "ctrl eco panel";column-gap:clamp(24px,4vw,64px);row-gap:12px;max-width:1500px}
+  .stage-hero h1{font-size:clamp(34px,3.4vw,54px)}
+  .stage-kicker{font-size:18px}.stage-caps{font-size:11px}.stage-verbs{font-size:11px}.stage-sign{font-size:30px;margin:0 0 4px}
+  .sbtn{min-height:42px;padding:0 20px;font-size:15px}
+  .stage-quote{align-self:center;padding:14px 14px 10px;border-radius:18px;background:rgba(28,18,66,.32)}
+  .stage-quote p{font-size:16px;line-height:1.4}.stage-quote p::before{font-size:30px}.stage-quote figcaption{font-size:22px;margin-top:6px}
+  .stage .eco-panel{align-self:start;padding:14px 10px;border-radius:18px}
+  .stage .eco-panel h3{font-size:17px;margin:0 0 6px;padding:0 6px}
+  .stage .eco-panel a{padding:7px 8px;min-height:44px;border-radius:10px}
+  .stage .eco-panel b{font-size:13px}.stage .eco-panel span{font-size:11px}
+  .stage .eco{align-self:end}
+  .stage .eco-band{padding:14px 12px 10px;border-radius:22px}
+  .stage .eco-title{margin:0 0 10px}.stage .eco-title h2{font-size:26px}
+  .stage .eco-cell{flex:0 0 104px}
+  .stage .eco-track{gap:10px;padding:4px 2px 8px}
+  .stage .eco-item{min-height:138px;padding:10px 6px 8px;gap:6px;border-radius:14px}
+  .stage .eco-glyph{width:58px;height:58px;border-radius:14px;font-size:19px}
+  .stage .eco-name{font-size:12px}.stage .eco-status{font-size:10px}
+  .stage .eco-nav{flex-basis:44px}
+  .stage-ctrl{align-self:end;padding:10px;gap:4px;font-size:12px;border-radius:16px}
+  .stage-ctrl .ctrl-atmo{min-height:44px;font-size:12px}.stage-ctrl .ctrl-atmo small{font-size:10px}
+}
 @media (prefers-reduced-motion:reduce){.stage-scene .art{transition:none}}
 </style>
 <link rel="stylesheet" href="/assets/signature-world.css">

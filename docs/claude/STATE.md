@@ -1,3 +1,15 @@
+## 2026-11-07 — Mockup proportions (Juss: "you're making the cards too big, match the images")
+
+- RULES recorded in CLAUDE.md: use all `skills/juss-authored` skills; match mockup proportions, not just parts.
+- FIX (≥1100px, homepage and Game Hub):
+  - Side cards shrink to the mockup's widths: quote 200px, panel 232px, controls 200px.
+  - Tiles go from 138×196 to 104–108×138; panel rows and type are tighter.
+  - The headline is smaller, and the band sits at the bottom, so the lotus and orb show between the headline and the band.
+  - The homepage header is translucent glass with the scene behind it (`flagship.css` `.top`).
+  - The Game Hub tiles are centred.
+- PROOF (local): verify-site exit 0, 389 ok. Screenshots reviewed at 1672×941 (the mockup's size) and 1440.
+- ROLLBACK: revert this commit.
+
 ## 2026-11-07 — Game Hub world stage (founder mockup)
 
 - FIX: `site/games/index.html` now opens on a Game Hub stage:
