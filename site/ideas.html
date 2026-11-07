@@ -32,12 +32,13 @@ a{color:inherit}
 .scene .art{position:absolute;inset:0;background-size:cover;background-position:50% 60%;transition:opacity 1.2s ease}
 .scene .day{background-image:url('/assets/ideas-day.webp')}
 .scene .night{background-image:url('/assets/ideas-night.webp');opacity:0}
-@media (max-width:700px){.scene .day{background-image:url('/assets/ideas-day-sm.webp')}.scene .night{background-image:url('/assets/ideas-night-sm.webp')}.scene .art{background-position:50% 55%}}
-[data-atmo="night"] .scene .night,[data-atmo="sunset"] .scene .night{opacity:1}
+.scene .sunset{background-image:url('/assets/ideas-sunset.webp');opacity:0}
+@media (max-width:700px){.scene .day{background-image:url('/assets/ideas-day-sm.webp')}.scene .night{background-image:url('/assets/ideas-night-sm.webp')}.scene .sunset{background-image:url('/assets/ideas-sunset-sm.webp')}.scene .art{background-position:50% 55%}}
+[data-atmo="night"] .scene .night,[data-atmo="sunset"] .scene .sunset,[data-atmo="dawn"] .scene .sunset{opacity:1}
 .scene .tint{position:absolute;inset:0;transition:background 1.2s}
 [data-atmo="day"] .scene .tint{background:linear-gradient(180deg,rgba(18,10,51,.45),rgba(18,10,51,.15) 40%,rgba(18,10,51,.5))}
-[data-atmo="dawn"] .scene .tint{background:linear-gradient(180deg,rgba(120,60,140,.5),rgba(255,160,170,.18) 45%,rgba(30,16,70,.55))}
-[data-atmo="sunset"] .scene .tint{background:linear-gradient(180deg,rgba(90,30,120,.35),rgba(255,140,90,.32) 42%,rgba(40,14,70,.55))}
+[data-atmo="dawn"] .scene .tint{background:linear-gradient(180deg,rgba(150,120,200,.4),rgba(255,200,220,.14) 45%,rgba(30,16,70,.55))}
+[data-atmo="sunset"] .scene .tint{background:linear-gradient(180deg,rgba(40,14,70,.35),rgba(40,14,70,.1) 42%,rgba(20,8,50,.6))}
 [data-atmo="night"] .scene .tint{background:linear-gradient(180deg,rgba(6,4,24,.25),transparent 45%,rgba(6,4,24,.5))}
 .petal{position:absolute;top:-20px;width:12px;height:9px;border-radius:12px 1px 12px 1px;background:#ffb6d9;opacity:.85;animation:fall linear infinite}
 @keyframes fall{to{transform:translate3d(-12vw,110vh,0) rotate(540deg)}}
@@ -138,7 +139,7 @@ footer a{display:inline-flex;align-items:center;min-height:44px;padding:0 10px}
 <body data-atmo="sunset">
 <a class="skip" href="#controls">Skip to controls</a>
 <div class="scene" aria-hidden="true">
-  <div class="art day"></div><div class="art night"></div><div class="tint"></div>
+  <div class="art day"></div><div class="art night"></div><div class="art sunset"></div><div class="tint"></div>
   <div id="petals"></div>
 </div>
 

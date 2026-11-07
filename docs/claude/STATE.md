@@ -1,3 +1,9 @@
+## 2026-11-07 — Sunset scene added
+
+- FIX: Juss's sunset scene (`ideas-sunset[-sm].webp`, 108–348 KB) is now the Sunset and Dawn art on `/ideas.html`. On the Games hub it shows 05:00–08:00 and 17:00–20:00; Daylight shows 08:00–17:00 and night otherwise. Both sites carry their own copy of the image.
+- PROOF (local): verify-site exit 0. The image checks now cover all three scenes. Screenshots reviewed: Sunset on the idea generator (desktop) and on the Games hub (phone).
+- ROLLBACK: revert this commit.
+
 ## 2026-11-07 — Games hub joins the living world
 
 - FIX: `site/games/index.html` now uses the same founder day/night scene, glass panels, gold edges and Playfair headings as `/ideas.html`. The games Worker serves only `site/games/`, so the scene art is copied into `site/games/assets/`. The scene follows local time: day 06:00–18:00, night otherwise. Game names, links, statuses and safety copy are unchanged.
