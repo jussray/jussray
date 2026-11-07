@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<script>document.documentElement.classList.add("views");</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="description" content="Juss & Co is Juss Rayy's founder studio building human-centered products, AI systems, commerce, creator tools and verifiable digital products.">
 <meta name="robots" content="index,follow">
@@ -554,6 +555,16 @@ a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-colo
   .stage-ctrl{align-self:end;padding:10px;gap:4px;font-size:12px;border-radius:16px}
   .stage-ctrl .ctrl-atmo{min-height:44px;font-size:12px}.stage-ctrl .ctrl-atmo small{font-size:10px}
 }
+
+/* Page views (Juss, 2026-11-07: no never-ending scroll): each nav button opens only its own content. Without JS, everything shows. */
+.views [data-view]:not(.view-on){display:none!important}
+@media (max-width:640px){
+  .top .in{flex-wrap:wrap;row-gap:6px}
+  .top .navpill{display:flex!important;order:3;flex:0 0 100%;max-width:100%;flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;scrollbar-width:none;padding:0}
+  .top .navpill::-webkit-scrollbar{display:none}
+  .top .navpill a{min-height:44px;font-size:13px;padding:0 12px;flex:0 0 auto}
+  .top .navpill a.on{background:linear-gradient(180deg,#ffe3a8,#f3b25a);color:#2a1640;border-radius:999px}
+}
 @media (prefers-reduced-motion:reduce){.stage-scene .art{transition:none}}
 </style>
 <link rel="stylesheet" href="/assets/signature-world.css">
@@ -565,14 +576,15 @@ a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-colo
   <div class="in">
     <a class="brand" href="#top">Juss <b>&amp;</b> Co</a>
     <nav class="navpill" aria-label="Primary">
-      <a class="on" href="#top" data-nav="top">Home</a>
+      <a class="on" href="#top" data-view-link="home">Home</a>
       <a href="portfolio.html">Portfolio</a>
-      <a href="#products">Products</a>
+      <a href="#products" data-view-link="products">Products</a>
+      <a href="#worlds" data-view-link="worlds">Worlds</a>
       <a href="/services.html">Solutions</a>
       <a href="/work.html">Our Work</a>
-      <a href="/ideas.html">Ideas</a>
-      <a href="#why" data-nav="why">Founder</a>
-      <a href="#contact" data-nav="contact">Contact</a>
+      <a href="#proof" data-view-link="proof">Proof</a>
+      <a href="#why" data-view-link="founder">Founder</a>
+      <a href="#contact" data-view-link="contact">Contact</a>
     </nav>
     <a class="btn btn-gold" href="/services.html" style="min-height:44px;padding:10px 20px;font-size:14px">Work with Juss <span aria-hidden="true">→</span></a>
   </div>
@@ -580,7 +592,7 @@ a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-colo
 
 <main id="top">
 <!-- ================= WORLD STAGE (founder mockup 2026-11-07; ecosystem items rendered from data/worlds.json + data/systems.json) ================= -->
-<section class="stage" id="world" aria-labelledby="stage-title">
+<section class="stage" id="world" data-view="home" aria-labelledby="stage-title">
   <div class="stage-scene" aria-hidden="true"><div class="art day"></div><div class="art sunset"></div><div class="art night"></div><div class="tint"></div></div>
   <div class="stage-in wrap">
     <div class="stage-hero">
@@ -629,7 +641,7 @@ a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-colo
 </section>
 
 <!-- ================= HERO ================= -->
-<section class="hero wrap" aria-labelledby="h-hero">
+<section class="hero wrap" data-view="home" aria-labelledby="h-hero">
   <div class="hero-bg" id="heroBg"><img src="assets/hero.jpg" alt="" loading="lazy" width="1160" height="586"></div>
   <canvas id="stars" aria-hidden="true"></canvas>
   <div class="in">
@@ -661,7 +673,7 @@ a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-colo
 </section>
 
 <!-- Public-facing product pathways. The links are real destinations, not claims of checkout or runtime verification. -->
-<section class="sec wrap jc-showcase" id="products" aria-labelledby="jc-products-title">
+<section class="sec wrap jc-showcase" id="products" data-view="products" aria-labelledby="jc-products-title">
   <div class="in">
     <div class="kicker mono">DISCOVER THE JUSS &amp; CO UNIVERSE</div>
     <div class="jc-showcase__heading">
@@ -705,7 +717,7 @@ a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-colo
 </section>
 
 <!-- Public destination directory: Cloudflare Worker domains and deployments observed 2026-11-05; HTTP/product journeys not yet verified. -->
-<section class="sec wrap" id="live-sites" aria-labelledby="live-sites-title" style="background:radial-gradient(ellipse at 50% 0%,rgba(139,92,246,.18),transparent 68%),var(--void);border-bottom:1px solid var(--line)">
+<section class="sec wrap" id="live-sites" data-view="products" aria-labelledby="live-sites-title" style="background:radial-gradient(ellipse at 50% 0%,rgba(139,92,246,.18),transparent 68%),var(--void);border-bottom:1px solid var(--line)">
   <div class="in">
     <div class="kicker mono">Open the Juss &amp; Co universe</div>
     <h2 class="h2" id="live-sites-title">Explore <span class="gold">our sites.</span></h2>
@@ -729,7 +741,7 @@ a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-colo
 </section>
 
 <!-- ================= WORLDS ================= -->
-<section class="sec universe wrap" id="worlds" aria-labelledby="h-worlds">
+<section class="sec universe wrap" id="worlds" data-view="worlds" aria-labelledby="h-worlds">
   <div class="in">
     <div class="sec-head">
       <div>
@@ -765,7 +777,7 @@ a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-colo
 </section>
 
 <!-- ================= STANDALONE OS ================= -->
-<section class="sec os-layer wrap" id="systems" aria-labelledby="h-systems">
+<section class="sec os-layer wrap" id="systems" data-view="worlds" aria-labelledby="h-systems">
   <div class="in">
     <div class="sec-head">
       <div>
@@ -781,7 +793,7 @@ a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-colo
 </section>
 
 <!-- ================= PROOF ================= -->
-<section class="sec proof wrap" id="proof" aria-labelledby="h-proof">
+<section class="sec proof wrap" id="proof" data-view="proof" aria-labelledby="h-proof">
   <div class="in">
     <div class="proof-top">
       <div>
@@ -831,7 +843,7 @@ a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-colo
 </section>
 
 <!-- ================= THE WHY ================= -->
-<section class="sec why wrap" id="why" aria-labelledby="h-why">
+<section class="sec why wrap" id="why" data-view="founder" aria-labelledby="h-why">
   <div class="in why-grid">
     <div>
       <div class="kicker mono">The why</div>
@@ -853,7 +865,7 @@ a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-colo
 
 
 <!-- ================= PUBLIC RESOURCES ================= -->
-<section class="sec resources wrap" id="resources" aria-labelledby="h-resources">
+<section class="sec resources wrap" id="resources" data-view="proof" aria-labelledby="h-resources">
   <div class="in">
     <div class="kicker mono">Company resources</div>
     <h2 class="h2" id="h-resources"><span class="ln">Explore the work.</span><span class="ln gold">Keep the receipts.</span></h2>
@@ -881,7 +893,7 @@ a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-colo
 </section>
 
 <!-- ================= CLOSE ================= -->
-<section class="close wrap" id="contact" aria-labelledby="h-close">
+<section class="close wrap" id="contact" data-view="home contact" aria-labelledby="h-close">
   <div class="close-bg"><img src="assets/footer-sky.jpg" alt="" loading="lazy" width="1440" height="982"></div>
   <div class="in">
     <div class="close-grid">
@@ -1152,15 +1164,6 @@ Promise.all([
     }); },{threshold:.4}).observe(stepsEl);
   }
 
-  /* ---------- nav highlight ---------- */
-  var navLinks = Array.prototype.slice.call(document.querySelectorAll(".navpill a"));
-  if("IntersectionObserver" in window){
-    var secs = ["top","worlds","systems","proof","why","contact"].map(function(id){ return document.getElementById(id); });
-    new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ navLinks.forEach(function(a){ a.classList.toggle("on", a.dataset.nav===e.target.id); }); } }); },{rootMargin:"-40% 0px -50% 0px"}).observe;
-    var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ navLinks.forEach(function(a){ a.classList.toggle("on", a.dataset.nav===e.target.id); }); } }); },{rootMargin:"-40% 0px -50% 0px"});
-    secs.forEach(function(s){ if(s) io.observe(s); });
-  }
-
   /* ---------- parallax + stars ---------- */
   var bg = document.getElementById("heroBg");
   if(!reduce){ var tk=false; window.addEventListener("scroll", function(){ if(tk) return; tk=true; requestAnimationFrame(function(){ var y=Math.min(window.scrollY,800); bg.style.transform="translate3d(0,"+(y*.25)+"px,0)"; tk=false; }); },{passive:true}); }
@@ -1187,7 +1190,7 @@ Promise.all([
 </script>
 
 <!-- Approved outcomes: separate from operational world evidence; empty by default. -->
-<section class="sec wrap" id="outcomes" aria-labelledby="outcomes-title" style="border-top:1px solid var(--line)">
+<section class="sec wrap" id="outcomes" data-view="proof" aria-labelledby="outcomes-title" style="border-top:1px solid var(--line)">
   <div class="in">
     <div class="kicker mono">THE OUTCOME EDIT</div>
     <h2 class="h2" id="outcomes-title">Work worth <span class="gold">celebrating.</span></h2>
@@ -1266,6 +1269,30 @@ Promise.all([
     [196,246.94,293.66,392].forEach(function(fr,i){ var o=ctx.createOscillator(); o.type=i%2?'sine':'triangle'; o.frequency.value=fr; o.detune.value=(i-1.5)*4; var g=ctx.createGain(); g.gain.value=.06; o.connect(g); g.connect(f); o.start(); }); return true; }
   if(sw) sw.addEventListener('click',function(){ var on=sw.getAttribute('aria-checked')!=='true'; if(on&&!ctx&&!start()) return; if(ctx){ ctx.resume(); gain.gain.setTargetAtTime(on?level():0,ctx.currentTime,.4); } sw.setAttribute('aria-checked',String(on)); });
   if(vol) vol.addEventListener('input',function(){ if(ctx&&sw.getAttribute('aria-checked')==='true') gain.gain.setTargetAtTime(level(),ctx.currentTime,.2); });
+})();
+</script>
+<script>
+/* Page views: the hash picks the view; section anchors open the view that holds them. */
+(function(){
+  var root=document.documentElement; if(!root.classList.contains('views')) return;
+  var secs=[].slice.call(document.querySelectorAll('[data-view]')), links=[].slice.call(document.querySelectorAll('[data-view-link]'));
+  var aliases={top:'home',home:'home',founder:'founder'};
+  function viewFor(id){ if(!id) return {view:'home'}; if(aliases[id]) return {view:aliases[id]};
+    var el=document.getElementById(id); if(!el) return {view:'home'};
+    var holder=el.closest('[data-view]'); if(!holder) return {view:'home'};
+    var vs=holder.getAttribute('data-view').split(' '); var v=vs[vs.length-1];
+    return {view:v, target:el}; }
+  function show(initial){
+    var id=decodeURIComponent(location.hash.slice(1)), r=viewFor(id);
+    secs.forEach(function(s){ s.classList.toggle('view-on', s.getAttribute('data-view').split(' ').indexOf(r.view)>=0); });
+    links.forEach(function(a){ var on=a.getAttribute('data-view-link')===r.view; a.classList.toggle('on',on); if(on) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
+    root.setAttribute('data-current-view', r.view);
+    var first=secs.filter(function(s){return s.classList.contains('view-on');})[0];
+    if(r.target && first && r.target!==first && !first.contains(r.target)) r.target.scrollIntoView({block:'start'});
+    else if(!initial || r.view!=='home') window.scrollTo(0,0);
+  }
+  window.addEventListener('hashchange',function(){ show(false); });
+  show(true);
 })();
 </script>
 </body>

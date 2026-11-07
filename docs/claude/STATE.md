@@ -1,3 +1,20 @@
+## 2026-11-07 — Homepage split into page views (Juss: phone was "a never ending scroll")
+
+- RULE (Juss, 2026-11-07): content belongs behind its own page button. The landing page stays short, and each page scrolls only as far as its own content.
+- FIX: page views inside `site/index.html`, chosen by the URL hash, so the back button and shared links work:
+  - Home: world stage, intro, contact.
+  - Products (`#products`): pathways and live sites.
+  - Worlds (`#worlds`): world cards and systems.
+  - Proof (`#proof`): proof, quotes, outcomes, resources.
+  - Founder (`#why`).
+  - Contact (`#contact`).
+  - Old section anchors open the view that holds them. Without JS, every section shows. The nav gained Worlds and Proof (Ideas moved to the footer) and now shows on phones as a sideways-scrolling row; it was hidden below 640px before. The old scroll-spy highlight was removed because the views now own it.
+- NUMBERS (390px phone): landing 22,990px down to 4,269px. Products 4,330, Worlds 9,668, Proof 3,928, Founder 1,069, Contact 1,541.
+- TESTS: homepage checks now open the view that holds their content first, as a visitor would; no check was removed. New checks: each view shows only its own content and marks its nav button, the back button works, and the phone landing page is under 7,000px.
+- PROOF (local): verify-site exit 0, 408 ok. Phone screenshots reviewed: landing, and Worlds opened from the nav.
+- UNKNOWN: what Juss saw on the live site. It isn't from this branch; PR #68 is not merged or deployed, and the proxy blocks production from here.
+- ROLLBACK: revert this commit.
+
 ## 2026-11-07 — Mockup proportions (Juss: "you're making the cards too big, match the images")
 
 - RULES recorded in CLAUDE.md: use all `skills/juss-authored` skills; match mockup proportions, not just parts.
