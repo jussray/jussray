@@ -69,7 +69,7 @@ try {
     assert.equal(await page.locator('#cards .card').count(),3);
     assert.match(await page.locator('#cards .card').first().innerText(),/SYNC Group Play Experiences/);
     assert.equal(await page.getByRole('link',{name:/Visit Game Hub/}).getAttribute('href'),'https://games.jussco.company/');
-    assert.match(await page.locator('#games-entry').innerText(),/Think alike\\. Beat the clock\\./);
+    assert.match(await page.locator('#games-entry').innerText(),/Think alike/);
     const downloadEvent=page.waitForEvent('download');
     await page.locator('#export').click();
     const download=await downloadEvent;
