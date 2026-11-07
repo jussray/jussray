@@ -59,3 +59,16 @@ test('browser proof source parses and contains no unresolved merge markers', () 
   const syntax = spawnSync(process.execPath, ['--check', 'scripts/verify-site.mjs'], { encoding: 'utf8' });
   assert.equal(syntax.status, 0, syntax.stderr || syntax.stdout);
 });
+
+test('flagship hero remains visible and mobile games decoration does not extend beyond viewport', () => {
+  const homepage = readFileSync('site/index.html', 'utf8');
+  const games = readFileSync('site/games/index.html', 'utf8');
+  assert.doesNotMatch(homepage, /\.hero-bg,\.hero-notes,#stars\{display:none!important\}/,
+    'legacy forced hide must not disable cinematic artwork');
+  assert.match(homepage, /\.hero-bg,#stars\{display:none!important\}/,
+    'obsolete background layers remain disabled without hiding the new artwork');
+  assert.doesNotMatch(games, /right:-20px;top:6%;opacity:\.20/,
+    'mobile decorative element must not extend past viewport');
+  assert.match(games, /right:0;top:6%;opacity:\.20/,
+    'mobile decorative element stays within the screen');
+});
