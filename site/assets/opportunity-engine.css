@@ -159,6 +159,9 @@ h1{font-size:clamp(39px,4.2vw,64px);line-height:1.08;letter-spacing:-.015em;marg
  .scene-clearing{height:clamp(145px,36vw,245px)}
  .world-stage{background-size:auto 100svh;background-position:50% 50%}
  .opportunity-deck{border-radius:30px;padding:15px 10px 18px}
+ .opportunity-deck::after{left:1%;right:1%;bottom:-7px}
+ .card-copy{min-width:0;overflow-wrap:anywhere}
+ .opportunity-deck{overflow-wrap:anywhere}
  .opportunity-deck h2{font-size:clamp(25px,6vw,32px);margin:4px 0 13px}
  .opportunity-deck h2::before,.opportunity-deck h2::after{width:13px;margin:0 7px}
  .cards{grid-template-columns:1fr;gap:10px}
