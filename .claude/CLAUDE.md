@@ -1,11 +1,11 @@
-# Codex Runtime Configuration — Juss & Co
+# Claude Code Runtime Configuration — Juss & Co
 
 Founder-studio configuration for Claude Code. Sets operating stack, skill discovery, and authority routing.
 
 ## Runtime Identity
 
 **Project**: jussray/jussray — Juss & Co public profile and founder studio runtime
-**Skills Path**: `skills/juss-authored/` (16 core skills + FCR collection)
+**Curated source skills**: `skills/juss-authored/` (repo-authored export); Codex repository discovery uses `.agents/skills/`.
 **Authority**: Founder-gated (/godmode routing per CLAUDE.md at root)
 
 ## Operating Stack
@@ -19,7 +19,7 @@ When working in this project, **load and apply**:
 
 ## Skill Discovery
 
-Codex discovers skills from `skills/juss-authored/*/SKILL.md`. Each skill declares:
+Claude Code uses its configured Claude skills and project instructions. Codex discovers repository skills from `.agents/skills/*/SKILL.md`, not from the curated export directory alone. Each skill declares:
 - `trigger`: slash commands (e.g., `/goalfix`, `/confess`)
 - `description`: one-line capability statement
 - `requirements`: prerequisites (e.g., repo scope, founder approval)
