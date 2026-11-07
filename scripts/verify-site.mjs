@@ -378,7 +378,12 @@ for (const vp of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile
   say((await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)) <= 0, `games hub: ${vp.name} no horizontal overflow`);
   say(await page.locator('.card:has(h3:text("LUMORA")) a').count() === 0 && await page.locator('.card:has(h3:text("ChatQuest")) a').count() === 0, `games hub: ${vp.name} unreleased child games have no entry links`);
   say(await page.evaluate(() => Promise.all(['assets/ideas-day.webp','assets/ideas-night.webp','assets/ideas-sunset.webp','assets/ideas-day-sm.webp','assets/ideas-night-sm.webp','assets/ideas-sunset-sm.webp'].map((src) => new Promise((ok) => { const i = new Image(); i.onload = () => ok(i.naturalWidth > 0); i.onerror = () => ok(false); i.src = src; }))).then((r) => r.every(Boolean))), `games hub: ${vp.name} living-world scene art resolves from the games worker's own assets`);
-  say(['day', 'sunset', 'night'].includes(await page.evaluate(() => document.body.dataset.atmo)), `games hub: ${vp.name} atmosphere follows local time`);
+  say(['dawn', 'day', 'sunset', 'night'].includes(await page.evaluate(() => document.body.dataset.atmo)), `games hub: ${vp.name} atmosphere follows local time`);
+  say((await page.locator('h1').count()) === 1 && (await page.locator('h1').innerText()).trim() === 'Game Hub', `games hub: ${vp.name} Game Hub stage headline`);
+  const stageText = await page.locator('.gstage').innerText();
+  say(!/tournament|rewards|achievement|my library|creator zone|\bearn\b/i.test(stageText), `games hub: ${vp.name} stage shows no unbuilt features`);
+  const fx = await page.locator('#fxTrack a').evaluateAll((as) => as.map((a) => a.getAttribute('href')));
+  say(fx.length === 6 && fx.filter((h) => /^https?:/.test(h)).join() === 'https://sync.jussco.company/', `games hub: ${vp.name} only live SYNC leaves the page from featured experiences`);
   say(errors.length === 0, `games hub: ${vp.name} no JS errors`);
   await page.screenshot({ path: `proof/site/games-${vp.name}.png`, fullPage: true });
   await ctx.close();

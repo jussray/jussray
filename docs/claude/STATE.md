@@ -1,3 +1,15 @@
+## 2026-11-07 — Game Hub world stage (founder mockup)
+
+- FIX: `site/games/index.html` now opens on a Game Hub stage:
+  - Crown, "Game Hub" (the single h1), PLAY · CONNECT · CREATE · COMPETE, a subline and the script sign.
+  - Explore Games (links to #games) and Play SYNC (links to sync.jussco.company).
+  - Founder quote, "Game Hub Center" panel, "Featured Experiences" band, and ambient sound and atmosphere controls.
+  - The nav mirrors the company nav, with "Games" marked as the current page.
+  - Featured tiles are the six real games. Only live SYNC leaves the page; the others jump to their own card.
+- NOT BUILT: the mockup's Tournaments, Events & Challenges, Creator Zone, Rewards & Achievements and My Library, plus "EARN" in the tagline. None of these exist, and "earn" would imply money or rewards. Play SYNC replaces My Library. Each one needs a real feature, and Juss's word, first.
+- PROOF (local): verify-site exit 0, 389 ok. Four new games checks pass: single headline, no unbuilt features shown, only SYNC links off the page from the featured tiles, and the dawn atmosphere. Screenshots reviewed at 1440 and 390.
+- ROLLBACK: revert this commit.
+
 ## 2026-11-07 — Homepage world stage (Juss: "the main page should view like this")
 
 - TARGET: Juss's homepage mockup (crown, centred "Creative Technology for a More Beautiful Life", founder quote, ecosystem side panel, "Our Ecosystem" band, ambient sound and atmosphere controls, all over the lake scene).
