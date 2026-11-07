@@ -58,6 +58,18 @@ try {
     await page.locator('#sources').click();
     await page.getByRole('link',{name:'Sample public article lead'}).waitFor();
     assert.match(await page.locator('#status').innerText(),/NOT verified demand/i);
+    // Games integration must be discoverable without mixing with SYNC's room authority.
+    const gameHubSelection=page.locator('#products input[value="Juss & Co Games / SYNC"]');
+    assert.equal(await gameHubSelection.count(),1,'Game Hub is an available product');
+    await page.locator('#products input').evaluateAll(inputs => {
+      for(const input of inputs) input.checked=false;
+    });
+    await gameHubSelection.check();
+    await page.locator('#generate').click();
+    assert.equal(await page.locator('#cards .card').count(),3);
+    assert.match(await page.locator('#cards .card').first().innerText(),/SYNC Group Play Experiences/);
+    assert.equal(await page.getByRole('link',{name:/Visit Game Hub/}).getAttribute('href'),'https://games.jussco.company/');
+    assert.match(await page.locator('#games-entry').innerText(),/Think alike\\. Beat the clock\\./);
     const downloadEvent=page.waitForEvent('download');
     await page.locator('#export').click();
     const download=await downloadEvent;
