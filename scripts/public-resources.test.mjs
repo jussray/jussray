@@ -2,7 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 const read=(p)=>readFileSync(new URL('../'+p,import.meta.url));
-const html=read('site/index.html').toString('utf8');
+const html=read('site/universe.html').toString('utf8');
+const landing=read('site/index.html').toString('utf8');
 const sitemap=read('site/sitemap.xml').toString('utf8');
 const llms=read('site/llms.txt').toString('utf8');
 test('public PDF links open safely in new tabs and ship real PDF bytes',()=>{
@@ -50,4 +51,15 @@ test('structured public answers match visible FAQ and avoid unverified availabil
     assert.ok(html.includes('<summary>'+escaped+'</summary>'));
   }
   assert.ok(JSON.stringify(questions).includes('public repository does not by itself verify'));
+});
+
+test('new homepage routes content to dedicated pages without discarding source documentation',()=>{
+  for(const route of ['/products.html','/portfolio.html','/sites.html','/founder.html','/contact.html']){
+    assert.ok(landing.includes('href="'+route+'"'),'homepage missing '+route);
+    assert.ok(sitemap.includes('https://www.jussco.company'+route),'sitemap missing '+route);
+  }
+  assert.doesNotMatch(landing,/id="live-sites"|id="worlds"|id="systems"|id="proof"/);
+  assert.match(html,/id="live-sites"/);
+  assert.match(html,/id="worlds"/);
+  assert.match(landing,/Scan to explore/);
 });
