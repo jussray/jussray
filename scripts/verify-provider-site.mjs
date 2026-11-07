@@ -46,11 +46,9 @@ export function verifyWorldRegistry(raw) {
 }
 
 export function verifySiteMarkdown(content) {
-  if (typeof content !== 'string' || !content.includes('Turn thoughts into living works.') || !content.includes("### Se'kret Bip")) {
-    throw new Error('Rendered Juss & Co. site markers missing');
-  }
-  if (!content.includes('Opening soon · no public link yet')) {
-    throw new Error('Se\'kret Bip must not claim a public live preview');
+  if (typeof content !== 'string' || !content.includes('Turn thoughts into living works.') ||
+      !content.includes('Explore our products') || !content.includes('Enter the portfolio')) {
+    throw new Error('Rendered Juss & Co. landing navigation missing');
   }
   if (!content.includes(COMPANY_QR_LABEL) || !content.includes('www.jussco.company')) {
     throw new Error('Canonical company QR destination missing from live homepage');
@@ -254,7 +252,7 @@ export async function runProof({env=process.env, fetchImpl=fetch, root=ROOT}={})
     for (const viewport of [{width:1440,height:900},{width:390,height:844,isMobile:true,hasTouch:true}]) {
       const markdown = await request('markdown', {
         url:`https://${host}/`, viewport, actionTimeout:18_000,
-        waitForTimeout:1_100, addScriptTag:[{content:OPEN_BIP_CARD}],
+        waitForTimeout:1_100,
       });
       verifySiteMarkdown(markdown);
       witness.pageProof.push({host,viewport:viewport.width,canonical:CANONICAL,companyQr:true,rendered:true});
