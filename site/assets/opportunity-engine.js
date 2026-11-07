@@ -59,7 +59,7 @@
       portfolioMatches:item.products.filter(product => selected.includes(product)).length,
       promptMatches:[...tokens].filter(word => (item.title+' '+item.buyer+' '+item.keywords).toLowerCase().includes(word)).length,
     })).sort((a,b) =>
-      (b.portfolioMatches*5+b.promptMatches)-(a.portfolioMatches*5+a.promptMatches) || a.index-b.index);
+      (b.portfolioMatches*3+b.promptMatches*3)-(a.portfolioMatches*3+a.promptMatches*3) || a.index-b.index);
   }
 
   function render() {
