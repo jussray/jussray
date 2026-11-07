@@ -1,3 +1,9 @@
+## 2026-11-07 — Creation Core: founder scene art
+
+- FIX: Juss's two text-free scenes (day and night) are now the background of `/ideas.html`, as `site/assets/ideas-{day,night}[-sm].webp` at 130–430 KB. Dawn and Daylight use the day art; Sunset and Night use the night art; each has its own tint, and switching crossfades. The CSS gradient stays as a fallback. The third image, the homepage mockup, was used as a reference only. Its ecosystem layout already shipped in #64, and the homepage is unchanged.
+- PROOF (local): 39/39 `ideas-*` checks pass, including the new check that the scene art loads. Day and night screenshots were reviewed at 1440, and Sunset at 390. The only failure is the pre-existing games-hub overflow.
+- ROLLBACK: revert this commit.
+
 ## 2026-11-07 — Creation Core idea generator (`site/ideas.html`)
 
 - REALITY: new public page `/ideas.html`, built from Juss's mockups. It is client-side only: no backend, no LLM call, and no data leaves the browser. Product chips come from `site/data/portfolio.json`. Candidates are ranked by keyword and category fit, and every one is labelled "Research candidate · unverified". The page never shows demand numbers. The mockup's "+182% YoY" style signals were invented, so the signals panel shows an honest empty state instead. The search, bell and "My Juss" icons were dropped because they had no working function behind them.
