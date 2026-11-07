@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
 
 const sourceWorkflow = readFileSync('.github/workflows/site-proof.yml', 'utf8');
 const providerWorkflow = readFileSync('.github/workflows/provider-site-proof.yml', 'utf8');
@@ -50,4 +51,11 @@ test('trusted-checker bootstrap runs its unit tests on every PR', () => {
   assert.match(push,/scripts\/verify-independent-review\.test\.mjs/);
   assert.doesNotMatch(pr,/paths:/);
   assert.match(sourceWorkflow,/node --test scripts\/verify-independent-review\.test\.mjs/);
+});
+
+test('browser proof source parses and contains no unresolved merge markers', () => {
+  assert.doesNotMatch(sourceProof, /^(?:<{7}(?: .*)?|={7}|>{7}(?: .*)?)$/m,
+    'site browser verification must not contain unresolved merge conflict delimiters');
+  const syntax = spawnSync(process.execPath, ['--check', 'scripts/verify-site.mjs'], { encoding: 'utf8' });
+  assert.equal(syntax.status, 0, syntax.stderr || syntax.stdout);
 });
