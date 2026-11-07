@@ -1,3 +1,10 @@
+## 2026-11-07 — Rejected artwork retired (Juss: "Not this one")
+
+- RULE (Juss, 2026-11-07): the autumn living-room "Creative Technology for a More Beautiful Life" artwork (`jussco-signature-world.jpg`) is rejected. Do not use it again.
+- FIX: removed the asset. The homepage `.jc-scene__art` now uses the approved night scene (`ideas-night[-sm].webp`); that element stays hidden by #64. A new check in `verify-site.mjs` fails if the old file or any reference to it returns.
+- UNKNOWN: whether production still serves it. The cloud proxy blocks www.jussco.company, so re-check after deploy.
+- ROLLBACK: revert this commit; git history restores the file.
+
 ## 2026-11-07 — Creation Core: founder scene art
 
 - FIX: Juss's two text-free scenes (day and night) are now the background of `/ideas.html`, as `site/assets/ideas-{day,night}[-sm].webp` at 130–430 KB. Dawn and Daylight use the day art; Sunset and Night use the night art; each has its own tint, and switching crossfades. The CSS gradient stays as a fallback. The third image, the homepage mockup, was used as a reference only. Its ecosystem layout already shipped in #64, and the homepage is unchanged.

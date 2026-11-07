@@ -230,8 +230,9 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   say(await page.evaluate(() => document.querySelector('.top .btn').getBoundingClientRect().right <= window.innerWidth - 16), `${vp.n}: header CTA stays inside the side gutter`);
   say(await page.evaluate(() => new Promise((resolve) => {
     const img = new Image(); img.onload = () => resolve(img.naturalWidth > 0);
-    img.onerror = () => resolve(false); img.src = '/assets/jussco-signature-world.jpg';
+    img.onerror = () => resolve(false); img.src = '/assets/ideas-night.webp';
   })), `${vp.n}: hero artwork asset resolves`);
+  say(!/jussco-signature-world/.test(readFileSync(join(ROOT, 'assets/flagship.css'), 'utf8') + readFileSync(join(ROOT, 'index.html'), 'utf8')) && !existsSync(join(ROOT, 'assets/jussco-signature-world.jpg')), `${vp.n}: founder-rejected living-room artwork stays retired`);
   say((await page.locator('#products .jc-feature').count()) === 3, `${vp.n}: three product pathways render`);
   say((await page.locator('.jc-feature--shop a').getAttribute('href')) === 'https://jussbeautifulhair.com/' &&
       (await page.locator('.jc-feature--play a').getAttribute('href')) === 'https://sync.jussco.company/' &&
