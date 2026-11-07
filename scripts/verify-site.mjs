@@ -262,7 +262,7 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   say((await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)) === 0, `${vp.n}: no horizontal overflow`);
   say(await page.evaluate(() => document.querySelector('.top .brand').getBoundingClientRect().height <= 44), `${vp.n}: header wordmark stays on one line`);
   say(await page.evaluate(() => document.querySelector('.top .btn').getBoundingClientRect().right <= window.innerWidth - 16), `${vp.n}: header CTA stays inside the side gutter`);
-  say(await page.locator('.jc-scene__art').isVisible() && (await page.locator('.hero .h-line').innerText()).includes('Built from real life.'), `${vp.n}: cinematic living-world artwork and real-text headline render`);
+  say(await page.locator('.jc-scene__art').isVisible() && (await page.locator('.hero .h-line').innerText()).includes('Turn thoughts into'), `${vp.n}: cinematic living-world artwork and real-text headline render`);
   say(await page.evaluate(() => new Promise((resolve) => {
     const img = new Image(); img.onload = () => resolve(img.naturalWidth > 0);
     img.onerror = () => resolve(false); img.src = '/assets/jussco-signature-world.jpg';
