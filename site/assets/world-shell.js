@@ -26,8 +26,9 @@
       var t = document.createElement('div'); t.className = 'tint'; scene.appendChild(t);
       document.body.insertBefore(scene, document.body.firstChild);
     }
-    var header = document.querySelector('header.top');
-    if (!header) return;
+    // Upgrade the page's own header (header.top, else its first page-level header); create one if the page has none.
+    var header = document.querySelector('header.top') || document.querySelector('body > header, body > .wrap > header, body > div > header');
+    if (!header) { header = document.createElement('header'); var scn = document.querySelector('.ws-scene'); document.body.insertBefore(header, scn ? scn.nextSibling : document.body.firstChild); }
     header.className = 'top ws-top';
     header.textContent = '';
     var brand = document.createElement('a');

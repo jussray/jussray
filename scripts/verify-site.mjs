@@ -361,7 +361,7 @@ for (const vp of [{ n: 'portfolio-desktop', w: 1440, h: 900 }, { n: 'portfolio-m
 for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'mobile', w: 390, h: 844, m: true }]) {
   const ctx = await browser.newContext({ viewport: { width: vp.w, height: vp.h }, isMobile: !!vp.m, hasTouch: !!vp.m }); const page = await ctx.newPage();
   const errors = []; page.on('pageerror', (e) => errors.push(String(e)));
-  for (const [file, current] of [['portfolio.html', 'Portfolio'], ['services.html', 'Solutions'], ['work.html', 'Our Work'], ['ideas.html', null]]) {
+  for (const [file, current] of [['portfolio.html', 'Portfolio'], ['services.html', 'Solutions'], ['work.html', 'Our Work'], ['ideas.html', null], ['builds.html', null], ['creative-history.html', null], ['licensing.html', null], ['returns.html', null]]) {
     await page.goto(url + file, { waitUntil: 'load' }); await page.waitForTimeout(150);
     const st = await page.evaluate(() => ({
       links: [...document.querySelectorAll('header.top.ws-top .ws-nav a')].map((a) => [a.textContent, a.getAttribute('href')]),

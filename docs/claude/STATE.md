@@ -1,3 +1,11 @@
+## 2026-11-07 — Old pages join the world; founder approval recorded
+
+- APPROVAL (Juss, 2026-11-07): "approved" for PR #68. Merge only on an exact head where every required check is green. The independent-review gate is not mine to satisfy or bypass.
+- FIX: the world shell now also covers builds, creative-history, licensing and returns. The shell upgrades `header.top`, falls back to the page's first header, or creates one (licensing had none). All shell pages get Playfair headlines matching the stage, and the brand is no longer uppercased by page CSS.
+- CI note: the .gitignore-only head cc8330d did not trigger Site Browser Proof, which the review gate requires. This push touches `site/` so the full set runs. No further pushes until the gate evaluates, because the gate goes stale when the head moves.
+- PROOF (local): verify-site exit 0, 463 ok (shell checks on 8 pages × 2 widths). `node --test` 80/81 (known vitest gap). approved-stories passed.
+- ROLLBACK: revert this commit.
+
 ## 2026-11-07 — Devil pass (/godmode /devil ULTRATHINK, no new target)
 
 - CONFESS: I pushed 9 commits without reading PR #68 CI. Head 3213b53 was red on 3 checks. I also skipped `node --test` after the page-views commit.
