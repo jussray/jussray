@@ -10,12 +10,12 @@ Founder-studio configuration for Claude Code. Sets operating stack, skill discov
 
 ## Operating Stack
 
-When working in this project, **load and apply**:
+When working in this project, **coordinate through founder**:
 
-1. **/godmode-devil-ultrathink** — Founder OS (redteam + OODA + L99)
-2. **/goalfix** (for jussray-owned repos) — smallest reversible fix, verify on exact head
-3. **/truthmode** + **/confess** — exact-head proof gates, no unverified claims
-4. **/juss-command-codex** — Codex-specific commands and shortcuts
+1. **/godmode-devil-ultrathink** — Founder OS (redteam + OODA + L99) — founder-gated, Claude Code observes
+2. **/goalfix** (for jussray-owned repos) — smallest reversible fix, verify on exact head — founder approves before merge
+3. **/truthmode** + **/confess** — exact-head proof gates, no unverified claims — Claude Code reports, founder decides
+4. **/juss-command-codex** — Codex-specific commands and shortcuts — requires founder invocation
 
 ## Skill Discovery
 
