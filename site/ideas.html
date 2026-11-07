@@ -30,10 +30,10 @@ a{color:inherit}
 /* ---------- scene ---------- */
 .scene{position:fixed;inset:0;z-index:-1;overflow:hidden;background:linear-gradient(180deg,var(--sky1) 0%,var(--sky2) 38%,var(--sky3) 56%,var(--water1) 57%,var(--water2) 100%);transition:background 1.2s}
 .scene .art{position:absolute;inset:0;background-size:cover;background-position:50% 60%;transition:opacity 1.2s ease}
-.scene .day{background-image:url('/assets/ideas-day.webp')}
-.scene .night{background-image:url('/assets/ideas-night.webp');opacity:0}
-.scene .sunset{background-image:url('/assets/ideas-sunset.webp');opacity:0}
-@media (max-width:700px){.scene .day{background-image:url('/assets/ideas-day-sm.webp')}.scene .night{background-image:url('/assets/ideas-night-sm.webp')}.scene .sunset{background-image:url('/assets/ideas-sunset-sm.webp')}.scene .art{background-position:50% 55%}}
+
+.scene .night{opacity:0}
+.scene .sunset{opacity:0}
+@media (max-width:700px){.scene .art{background-position:50% 55%}}
 [data-atmo="night"] .scene .night,[data-atmo="sunset"] .scene .sunset,[data-atmo="dawn"] .scene .sunset{opacity:1}
 .scene .tint{position:absolute;inset:0;transition:background 1.2s}
 [data-atmo="day"] .scene .tint{background:linear-gradient(180deg,rgba(18,10,51,.45),rgba(18,10,51,.15) 40%,rgba(18,10,51,.5))}
@@ -134,7 +134,15 @@ input[type=range]{width:100%;min-height:44px;accent-color:var(--gold)}
 footer{padding:30px 0 40px;text-align:center;color:var(--muted);font-size:13px}
 footer a{display:inline-flex;align-items:center;min-height:44px;padding:0 10px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* Load only the active scene (devil pass 2026-11-07: three downloads to show one). */
+[data-atmo="day"] .scene .day{background-image:url(/assets/ideas-day.webp)}
+[data-atmo="sunset"] .scene .sunset,[data-atmo="dawn"] .scene .sunset{background-image:url(/assets/ideas-sunset.webp)}
+[data-atmo="night"] .scene .night{background-image:url(/assets/ideas-night.webp)}
+@media (max-width:700px){[data-atmo="day"] .scene .day{background-image:url(/assets/ideas-day-sm.webp)}[data-atmo="sunset"] .scene .sunset,[data-atmo="dawn"] .scene .sunset{background-image:url(/assets/ideas-sunset-sm.webp)}[data-atmo="night"] .scene .night{background-image:url(/assets/ideas-night-sm.webp)}}
 </style>
+<link rel="stylesheet" href="/assets/world-shell.css">
+<script src="/assets/world-shell.js" defer></script>
 </head>
 <body data-atmo="sunset">
 <a class="skip" href="#controls">Skip to controls</a>

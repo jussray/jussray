@@ -357,6 +357,26 @@ for (const vp of [{ n: 'portfolio-desktop', w: 1440, h: 900 }, { n: 'portfolio-m
   say(errors.length === 0, `${vp.n}: no console errors${errors.length ? ' — ' + errors.join(' | ') : ''}`);
   await page.screenshot({ path: `proof/site/${vp.n}.png`, fullPage: true }); await ctx.close();
 }
+/* ---------- World shell: one header and one lake world on every page (Juss: "one site, not two") ---------- */
+for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'mobile', w: 390, h: 844, m: true }]) {
+  const ctx = await browser.newContext({ viewport: { width: vp.w, height: vp.h }, isMobile: !!vp.m, hasTouch: !!vp.m }); const page = await ctx.newPage();
+  const errors = []; page.on('pageerror', (e) => errors.push(String(e)));
+  for (const [file, current] of [['portfolio.html', 'Portfolio'], ['services.html', 'Solutions'], ['work.html', 'Our Work'], ['ideas.html', null]]) {
+    await page.goto(url + file, { waitUntil: 'load' }); await page.waitForTimeout(150);
+    const st = await page.evaluate(() => ({
+      links: [...document.querySelectorAll('header.top.ws-top .ws-nav a')].map((a) => [a.textContent, a.getAttribute('href')]),
+      current: document.querySelector('.ws-nav a[aria-current="page"]')?.textContent || null,
+      scene: !!document.querySelector('.ws-scene, .scene, .page-scene'),
+      overflow: document.documentElement.scrollWidth - innerWidth,
+      small: [...document.querySelectorAll('header.top a')].filter((a) => { const b = a.getBoundingClientRect(); return b.width > 0 && b.height < 40; }).length
+    }));
+    say(JSON.stringify(st.links.map((l) => l[0])) === JSON.stringify(['Home','Portfolio','Products','Worlds','Solutions','Our Work','Proof','Founder','Contact']) && st.links.every((l) => /^\/(#[a-z]+|[a-z]+\.html)?$/.test(l[1])), `shell ${vp.n}: ${file} carries the shared nine-button nav`);
+    say(st.current === current, `shell ${vp.n}: ${file} marks its own nav button`);
+    say(st.scene && st.overflow === 0 && st.small === 0, `shell ${vp.n}: ${file} has the lake world, no overflow, 40px+ header targets`);
+  }
+  say(errors.length === 0, `shell ${vp.n}: no page errors${errors.length ? ' — ' + errors.join(' | ') : ''}`);
+  await ctx.close();
+}
 /* ---------- Creation Core idea generator ---------- */
 for (const vp of [{ n: 'ideas-desktop', w: 1440, h: 900 }, { n: 'ideas-tablet', w: 834, h: 1112, m: true }, { n: 'ideas-mobile', w: 390, h: 844, m: true }]) {
   const ctx = await browser.newContext({ viewport: { width: vp.w, height: vp.h }, isMobile: !!vp.m, hasTouch: !!vp.m }); const page = await ctx.newPage();

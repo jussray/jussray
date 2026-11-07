@@ -1,3 +1,16 @@
+## 2026-11-07 — Devil pass (/godmode /devil ULTRATHINK, no new target)
+
+- CONFESS: I pushed 9 commits without reading PR #68 CI. Head 3213b53 was red on 3 checks. I also skipped `node --test` after the page-views commit.
+- FOUND AND FIXED:
+  1. `public-resources.test.mjs` failed (CI Site Browser Proof): `data-view` was inserted between `id` and `aria-labelledby`. The attribute now sits at the end of every section tag.
+  2. "Two sites" one tap deeper: Portfolio, Solutions and Our Work each had their own header, nav and look. New `site/assets/world-shell.{css,js}`, linked from portfolio, services, work and ideas, gives every page the same glass header, the same nine-button nav (current page marked) and the same lake world. With no JS, each page keeps its own header.
+  3. The homepage, Ideas and the Game Hub downloaded all three scenes (about 1.1MB on desktop) to show one. Background images are now scoped to the active atmosphere, so each page loads one scene, plus another only on a tap. The Game Hub no longer starts as "day" before its script runs.
+  4. Repo Reality failed: the PR body lacked the five evidence sections. The body was rewritten.
+- NOT MINE TO FIX: Independent Review Evidence needs an independent reviewer on the exact head. Its log said "head changed during evaluation; evidence is stale".
+- CLEARED: only the router writes the URL hash, so there is no hash collision.
+- PROOF (local): verify-site exit 0, 439 ok (26 new shell checks). `node --test` 80/81; the one failure is the known vitest-only `evidence-sync-proof`. approved-stories gate passed; worlds-patch passed. Network trace: one scene per page on load.
+- ROLLBACK: revert this commit.
+
 ## 2026-11-07 — One site, not two (Juss: "like two different sites", ULTRATHINK)
 
 - CAUSE: only the home stage had the lake world. Every other section painted its own near-black background, and Home still stacked the old dark hero and contact under the stage, so phones showed two visual languages.

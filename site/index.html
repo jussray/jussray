@@ -18,7 +18,13 @@
 <meta name="theme-color" content="#06061C">
 <link rel="canonical" href="https://www.jussco.company/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2306061C'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='%23F5C14B' font-family='Georgia'%3E%26%3C/text%3E%3C/svg%3E">
-<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}</style>
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}
+/* Load only the active scene (devil pass 2026-11-07: three downloads to show one). */
+[data-atmo="day"] .stage-scene .day{background-image:url(assets/ideas-day.webp)}
+[data-atmo="sunset"] .stage-scene .sunset,[data-atmo="dawn"] .stage-scene .sunset{background-image:url(assets/ideas-sunset.webp)}
+[data-atmo="night"] .stage-scene .night{background-image:url(assets/ideas-night.webp)}
+@media (max-width:700px){[data-atmo="day"] .stage-scene .day{background-image:url(assets/ideas-day-sm.webp)}[data-atmo="sunset"] .stage-scene .sunset,[data-atmo="dawn"] .stage-scene .sunset{background-image:url(assets/ideas-sunset-sm.webp)}[data-atmo="night"] .stage-scene .night{background-image:url(assets/ideas-night-sm.webp)}}
+</style>
 <title>Juss &amp; Co | Juss Rayy, Product &amp; AI Systems Builder</title>
 <script type="application/ld+json">
 {
@@ -474,8 +480,8 @@ a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-colo
 .stage{position:relative;isolation:isolate;overflow:hidden;min-height:calc(100vh - 72px);padding:clamp(18px,2.4vw,34px) 0 clamp(28px,3vw,44px);border-bottom:1px solid rgba(255,214,138,.25)}
 .stage-scene{position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,#2a1a6e,#7b3fa8 45%,#0f0b2e)}
 .stage-scene .art{position:absolute;inset:0;background-size:cover;background-position:50% 55%;opacity:0;transition:opacity 1.2s ease}
-.stage-scene .day{background-image:url(assets/ideas-day.webp)}.stage-scene .sunset{background-image:url(assets/ideas-sunset.webp)}.stage-scene .night{background-image:url(assets/ideas-night.webp)}
-@media (max-width:700px){.stage-scene .day{background-image:url(assets/ideas-day-sm.webp)}.stage-scene .sunset{background-image:url(assets/ideas-sunset-sm.webp)}.stage-scene .night{background-image:url(assets/ideas-night-sm.webp)}}
+
+@media (max-width:700px){}
 [data-atmo="day"] .stage-scene .day,[data-atmo="sunset"] .stage-scene .sunset,[data-atmo="dawn"] .stage-scene .sunset,[data-atmo="night"] .stage-scene .night{opacity:1}
 .stage-scene .tint{position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,8,40,.55),rgba(14,8,40,.12) 34%,rgba(14,8,40,.18) 60%,rgba(8,5,26,.7))}
 [data-atmo="day"] .stage-scene .tint{background:linear-gradient(180deg,rgba(14,8,40,.6),rgba(14,8,40,.25) 40%,rgba(8,5,26,.72))}
@@ -615,7 +621,7 @@ html[data-current-view]:not([data-current-view="home"]) .page-scene .tint{backgr
 
 <main id="top">
 <!-- ================= WORLD STAGE (founder mockup 2026-11-07; ecosystem items rendered from data/worlds.json + data/systems.json) ================= -->
-<section class="stage" id="world" data-view="home" aria-labelledby="stage-title">
+<section class="stage" id="world" aria-labelledby="stage-title" data-view="home">
   <div class="stage-in wrap">
     <div class="stage-hero">
       <svg class="stage-crown" viewBox="0 0 30 22" aria-hidden="true"><path d="M2 20h26l2-14-8 6-7-10-7 10-8-6z"/></svg>
@@ -663,7 +669,7 @@ html[data-current-view]:not([data-current-view="home"]) .page-scene .tint{backgr
 </section>
 
 <!-- ================= HERO ================= -->
-<section class="hero wrap" data-view="founder" aria-labelledby="h-hero">
+<section class="hero wrap" aria-labelledby="h-hero" data-view="founder">
   <div class="hero-bg" id="heroBg"><img src="assets/hero.jpg" alt="" loading="lazy" width="1160" height="586"></div>
   <canvas id="stars" aria-hidden="true"></canvas>
   <div class="in">
@@ -695,7 +701,7 @@ html[data-current-view]:not([data-current-view="home"]) .page-scene .tint{backgr
 </section>
 
 <!-- Public-facing product pathways. The links are real destinations, not claims of checkout or runtime verification. -->
-<section class="sec wrap jc-showcase" id="products" data-view="products" aria-labelledby="jc-products-title">
+<section class="sec wrap jc-showcase" id="products" aria-labelledby="jc-products-title" data-view="products">
   <div class="in">
     <div class="kicker mono">DISCOVER THE JUSS &amp; CO UNIVERSE</div>
     <div class="jc-showcase__heading">
@@ -739,7 +745,7 @@ html[data-current-view]:not([data-current-view="home"]) .page-scene .tint{backgr
 </section>
 
 <!-- Public destination directory: Cloudflare Worker domains and deployments observed 2026-11-05; HTTP/product journeys not yet verified. -->
-<section class="sec wrap" id="live-sites" data-view="products" aria-labelledby="live-sites-title" style="background:radial-gradient(ellipse at 50% 0%,rgba(139,92,246,.18),transparent 68%),var(--void);border-bottom:1px solid var(--line)">
+<section class="sec wrap" id="live-sites" aria-labelledby="live-sites-title" style="background:radial-gradient(ellipse at 50% 0%,rgba(139,92,246,.18),transparent 68%),var(--void);border-bottom:1px solid var(--line)" data-view="products">
   <div class="in">
     <div class="kicker mono">Open the Juss &amp; Co universe</div>
     <h2 class="h2" id="live-sites-title">Explore <span class="gold">our sites.</span></h2>
@@ -763,7 +769,7 @@ html[data-current-view]:not([data-current-view="home"]) .page-scene .tint{backgr
 </section>
 
 <!-- ================= WORLDS ================= -->
-<section class="sec universe wrap" id="worlds" data-view="worlds" aria-labelledby="h-worlds">
+<section class="sec universe wrap" id="worlds" aria-labelledby="h-worlds" data-view="worlds">
   <div class="in">
     <div class="sec-head">
       <div>
@@ -799,7 +805,7 @@ html[data-current-view]:not([data-current-view="home"]) .page-scene .tint{backgr
 </section>
 
 <!-- ================= STANDALONE OS ================= -->
-<section class="sec os-layer wrap" id="systems" data-view="worlds" aria-labelledby="h-systems">
+<section class="sec os-layer wrap" id="systems" aria-labelledby="h-systems" data-view="worlds">
   <div class="in">
     <div class="sec-head">
       <div>
@@ -815,7 +821,7 @@ html[data-current-view]:not([data-current-view="home"]) .page-scene .tint{backgr
 </section>
 
 <!-- ================= PROOF ================= -->
-<section class="sec proof wrap" id="proof" data-view="proof" aria-labelledby="h-proof">
+<section class="sec proof wrap" id="proof" aria-labelledby="h-proof" data-view="proof">
   <div class="in">
     <div class="proof-top">
       <div>
@@ -865,7 +871,7 @@ html[data-current-view]:not([data-current-view="home"]) .page-scene .tint{backgr
 </section>
 
 <!-- ================= THE WHY ================= -->
-<section class="sec why wrap" id="why" data-view="founder" aria-labelledby="h-why">
+<section class="sec why wrap" id="why" aria-labelledby="h-why" data-view="founder">
   <div class="in why-grid">
     <div>
       <div class="kicker mono">The why</div>
@@ -887,7 +893,7 @@ html[data-current-view]:not([data-current-view="home"]) .page-scene .tint{backgr
 
 
 <!-- ================= PUBLIC RESOURCES ================= -->
-<section class="sec resources wrap" id="resources" data-view="proof" aria-labelledby="h-resources">
+<section class="sec resources wrap" id="resources" aria-labelledby="h-resources" data-view="proof">
   <div class="in">
     <div class="kicker mono">Company resources</div>
     <h2 class="h2" id="h-resources"><span class="ln">Explore the work.</span><span class="ln gold">Keep the receipts.</span></h2>
@@ -915,7 +921,7 @@ html[data-current-view]:not([data-current-view="home"]) .page-scene .tint{backgr
 </section>
 
 <!-- ================= CLOSE ================= -->
-<section class="close wrap" id="contact" data-view="contact" aria-labelledby="h-close">
+<section class="close wrap" id="contact" aria-labelledby="h-close" data-view="contact">
   <div class="close-bg"><img src="assets/footer-sky.jpg" alt="" loading="lazy" width="1440" height="982"></div>
   <div class="in">
     <div class="close-grid">
@@ -1216,7 +1222,7 @@ Promise.all([
 </script>
 
 <!-- Approved outcomes: separate from operational world evidence; empty by default. -->
-<section class="sec wrap" id="outcomes" data-view="proof" aria-labelledby="outcomes-title" style="border-top:1px solid var(--line)">
+<section class="sec wrap" id="outcomes" aria-labelledby="outcomes-title" style="border-top:1px solid var(--line)" data-view="proof">
   <div class="in">
     <div class="kicker mono">THE OUTCOME EDIT</div>
     <h2 class="h2" id="outcomes-title">Work worth <span class="gold">celebrating.</span></h2>
