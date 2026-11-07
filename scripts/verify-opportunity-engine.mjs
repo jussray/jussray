@@ -64,6 +64,7 @@ try {
     await page.locator('#products input').evaluateAll(inputs => {
       for(const input of inputs) input.checked=false;
     });
+    await page.locator('#products summary').click();
     await gameHubSelection.check();
     await page.locator('#generate').click();
     assert.equal(await page.locator('#cards .card').count(),3);
