@@ -593,6 +593,26 @@ html[data-current-view]:not([data-current-view="home"]) .page-scene .tint{backgr
   .site-foot .cols a{min-height:44px}
   .site-foot [style*="grid-template-columns:minmax(0,1fr) auto"]{grid-template-columns:1fr!important}
 }
+.menu-btn,.tabbar{display:none}
+@media (max-width:640px){
+  .menu-btn{display:inline-grid;place-content:center;gap:5px;width:44px;height:44px;border-radius:14px;border:1px solid rgba(255,214,138,.4);background:rgba(10,6,34,.5);cursor:pointer;flex:0 0 auto}
+  .menu-btn span{display:block;width:20px;height:2px;border-radius:2px;background:#f8ecd0}
+  .tabbar{display:flex;position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:70;justify-content:space-around;padding:6px;border-radius:24px;border:1px solid rgba(255,214,138,.45);background:rgba(20,14,60,.8);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 0 26px rgba(245,193,75,.22)}
+  .tabbar a{flex:1 1 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:56px;border-radius:18px;color:#e6dcff;text-decoration:none;font:600 11px/1.1 system-ui,-apple-system,"Segoe UI",sans-serif}
+  .tabbar svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .tabbar a[aria-current]{color:#ffd98a;background:rgba(245,193,75,.14);box-shadow:inset 0 0 0 1px rgba(255,214,138,.5)}
+  body{padding-bottom:calc(92px + env(safe-area-inset-bottom,0px))}
+}
+@media (max-width:640px){
+  .top{background:transparent!important;border:0!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;padding:8px 10px 0!important}
+  .top .in{flex-wrap:nowrap!important;align-items:center;min-height:58px;padding:6px 8px 6px 16px!important;border-radius:22px;border:1px solid rgba(255,214,138,.45);background:rgba(20,14,60,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 0 22px rgba(245,193,75,.18);position:relative}
+  .top .btn{display:none!important}
+  .top .navpill{display:none!important;position:absolute!important;left:0;right:0;top:66px;flex-direction:column!important;flex-wrap:nowrap!important;gap:2px;padding:8px!important;border-radius:20px!important;border:1px solid rgba(255,214,138,.4)!important;background:rgba(16,10,46,.95)!important;overflow:visible!important}
+  .top.nav-open .navpill{display:flex!important}
+  .top .navpill a{min-height:46px;font-size:15px;padding:0 14px}
+  .stage-cta{flex-wrap:nowrap;gap:10px}
+  .stage-cta .sbtn{flex:1 1 0;min-width:0;justify-content:center;padding:0 10px;font-size:15px;white-space:nowrap}
+}
 @media (prefers-reduced-motion:reduce){.stage-scene .art{transition:none}}
 </style>
 <link rel="stylesheet" href="/assets/signature-world.css">
@@ -604,7 +624,8 @@ html[data-current-view]:not([data-current-view="home"]) .page-scene .tint{backgr
 <header class="top wrap">
   <div class="in">
     <a class="brand" href="#top">Juss <b>&amp;</b> Co</a>
-    <nav class="navpill" aria-label="Primary">
+    <button type="button" class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="primaryNav" aria-label="Open menu"><span></span><span></span><span></span></button>
+    <nav class="navpill" id="primaryNav" aria-label="Primary">
       <a class="on" href="#top" data-view-link="home">Home</a>
       <a href="portfolio.html">Portfolio</a>
       <a href="#products" data-view-link="products">Products</a>
@@ -962,6 +983,7 @@ html[data-current-view]:not([data-current-view="home"]) .page-scene .tint{backgr
   </div>
 </footer>
 </main>
+<nav class="tabbar" aria-label="Quick navigation"><a href="#top" data-view-link="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/></svg><span>Home</span></a><a href="#products" data-view-link="products"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg><span>Products</span></a><a href="/services.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5 9-5zM3 13l9 5 9-5"/></svg><span>Solutions</span></a><a href="/work.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18h18l1-11-6 4-4-7-4 7-6-4z"/></svg><span>Our Work</span></a><a href="#why" data-view-link="founder"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg><span>Founder</span></a></nav>
 
 <script>
 (function(){
@@ -1304,6 +1326,15 @@ Promise.all([
 })();
 </script>
 <script>
+/* Phone menu */
+function wireMenu(header, btn, nav){
+  if(!header||!btn||!nav) return;
+  function set(open){ header.classList.toggle('nav-open',open); btn.setAttribute('aria-expanded',String(open)); btn.setAttribute('aria-label',open?'Close menu':'Open menu'); }
+  btn.addEventListener('click',function(){ set(!header.classList.contains('nav-open')); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&header.classList.contains('nav-open')){ set(false); btn.focus(); } });
+  nav.addEventListener('click',function(e){ if(e.target.closest('a')) set(false); });
+}
+wireMenu(document.querySelector('header.top'), document.getElementById('menuBtn'), document.getElementById('primaryNav'));
 /* Page views: the hash picks the view; section anchors open the view that holds them. */
 (function(){
   var root=document.documentElement; if(!root.classList.contains('views')) return;

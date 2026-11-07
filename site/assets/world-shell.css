@@ -37,3 +37,22 @@ header.top.ws-top .ws-cta{order:3;display:inline-flex;align-items:center;min-hei
 /* Same headline voice as the world stage (Juss: "make the old pages match the new one"). */
 html.ws-on main h1,html.ws-on main h2,html.ws-on body > section h1,html.ws-on body > section h2{font-family:"Playfair Display",Georgia,serif!important;letter-spacing:-.01em!important}
 html.ws-on main h1{color:#f8ecd0;text-shadow:0 4px 30px rgba(20,6,50,.75)}
+
+/* Phone pattern shared with the homepage and Game Hub (founder mobile mockup). */
+.menu-btn,.tabbar{display:none}
+@media (max-width:640px){
+  .menu-btn{display:inline-grid;place-content:center;gap:5px;width:44px;height:44px;border-radius:14px;border:1px solid rgba(255,214,138,.4);background:rgba(10,6,34,.5);cursor:pointer;flex:0 0 auto}
+  .menu-btn span{display:block;width:20px;height:2px;border-radius:2px;background:#f8ecd0}
+  .tabbar{display:flex;position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:70;justify-content:space-around;padding:6px;border-radius:24px;border:1px solid rgba(255,214,138,.45);background:rgba(20,14,60,.8);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 0 26px rgba(245,193,75,.22)}
+  .tabbar a{flex:1 1 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:56px;border-radius:18px;color:#e6dcff;text-decoration:none;font:600 11px/1.1 system-ui,-apple-system,"Segoe UI",sans-serif}
+  .tabbar svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .tabbar a[aria-current]{color:#ffd98a;background:rgba(245,193,75,.14);box-shadow:inset 0 0 0 1px rgba(255,214,138,.5)}
+  body{padding-bottom:calc(92px + env(safe-area-inset-bottom,0px))}
+}
+@media (max-width:640px){
+  header.top.ws-top{flex-wrap:nowrap;margin:8px 10px 0;padding:6px 8px 6px 16px;border-radius:22px;border:1px solid rgba(255,214,138,.45);background:rgba(20,14,60,.62);box-shadow:0 0 22px rgba(245,193,75,.18);top:8px}
+  header.top.ws-top .ws-cta{display:none}
+  header.top.ws-top .ws-nav{display:none;position:absolute;left:0;right:0;top:66px;flex-direction:column;flex:none;gap:2px;padding:8px;border-radius:20px;border:1px solid rgba(255,214,138,.4);background:rgba(16,10,46,.95);overflow:visible}
+  header.top.ws-top.nav-open .ws-nav{display:flex}
+  header.top.ws-top .ws-nav a{min-height:46px;font-size:15px;padding:0 14px}
+}

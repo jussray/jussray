@@ -1,3 +1,13 @@
+## 2026-11-07 — One phone pattern across the site
+
+- FIX: the homepage (`site/index.html`) and every shell page (`world-shell.{css,js}`) now use the Game Hub phone pattern. That is a glass header pill with a real menu button (Escape closes it, and a link closes it) and a fixed bottom tab bar with the founder mockup's tabs: Home, Products, Solutions, Our Work, Founder.
+  - The current page is marked: Home and Founder views on the homepage, Solutions on services, Our Work on work.
+  - The sideways-scrolling nav row and the header CTA are gone on phones.
+  - The homepage hero buttons sit side by side.
+- PROOF (local): verify-site exit 0, 477 ok. New checks: homepage tabs and current tab, menu opens the nav, a menu link opens its view and closes the menu, and every shell page has the tab bar. `node --test` 80/81 (the known vitest gap). Phone screenshots reviewed: homepage, menu open, services, portfolio.
+- STILL BLOCKED: PR #68 merge waits on the `main` ruleset (founder-only setting).
+- ROLLBACK: revert this commit.
+
 ## 2026-11-07 — Game Hub phone layout (founder mobile mockup)
 
 - FIX (`site/games/index.html`, max-width 700px only):

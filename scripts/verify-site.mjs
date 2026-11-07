@@ -304,6 +304,15 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
     const st = await page.evaluate(([v, a, b]) => ({ view: document.documentElement.dataset.currentView, shown: getComputedStyle(document.querySelector(a)).display !== 'none', hidden: getComputedStyle(document.querySelector(b)).display === 'none', nav: document.querySelector('.navpill a[aria-current="page"]')?.getAttribute('data-view-link') }), [view, mustShow, mustHide]);
     say(st.view === view && st.shown && st.hidden && st.nav === view, `${vp.n}: ${hash} opens only the ${view} view and marks its nav button`);
   }
+  if (vp.n === 'mobile') {
+    await openView(page, '#top');
+    const tabs = await page.evaluate(() => [...document.querySelectorAll('.tabbar a')].map((a) => a.textContent.trim() + (a.getAttribute('aria-current') ? '*' : '')).join(','));
+    say(tabs === 'Home*,Products,Solutions,Our Work,Founder', 'mobile: bottom tab bar matches the founder mockup with Home current');
+    await page.click('#menuBtn'); say(await page.locator('#primaryNav').isVisible(), 'mobile: menu button opens the full nav');
+    await page.click('#primaryNav a[href="#why"]'); await page.waitForTimeout(80);
+    say((await page.evaluate(() => document.documentElement.dataset.currentView)) === 'founder' && !(await page.locator('#primaryNav').isVisible()), 'mobile: menu link opens its view and closes the menu');
+    await openView(page, '#proof');
+  }
   await page.goBack(); await page.waitForTimeout(80);
   say((await page.evaluate(() => document.documentElement.dataset.currentView)) === 'founder', `${vp.n}: back button returns to the previous view`);
   await openView(page, '#top');
@@ -373,6 +382,7 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'mobile', w: 390, h: 8
     say(JSON.stringify(st.links.map((l) => l[0])) === JSON.stringify(['Home','Portfolio','Products','Worlds','Solutions','Our Work','Proof','Founder','Contact']) && st.links.every((l) => /^\/(#[a-z]+|[a-z]+\.html)?$/.test(l[1])), `shell ${vp.n}: ${file} carries the shared nine-button nav`);
     say(st.current === current, `shell ${vp.n}: ${file} marks its own nav button`);
     say(st.scene && st.overflow === 0 && st.small === 0, `shell ${vp.n}: ${file} has the lake world, no overflow, 40px+ header targets`);
+    if (vp.n === 'mobile') say((await page.locator('.tabbar a').count()) === 5 && (await page.evaluate(() => getComputedStyle(document.querySelector('.tabbar')).position)) === 'fixed', `shell mobile: ${file} carries the shared bottom tab bar`);
   }
   say(errors.length === 0, `shell ${vp.n}: no page errors${errors.length ? ' — ' + errors.join(' | ') : ''}`);
   await ctx.close();
