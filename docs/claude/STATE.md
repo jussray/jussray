@@ -1,3 +1,19 @@
+## 2026-11-07 — Homepage world stage (Juss: "the main page should view like this")
+
+- TARGET: Juss's homepage mockup (crown, centred "Creative Technology for a More Beautiful Life", founder quote, ecosystem side panel, "Our Ecosystem" band, ambient sound and atmosphere controls, all over the lake scene).
+- FIX: a new `#world` stage in `site/index.html`:
+  - The day, sunset or night scene follows local time; tapping cycles Dawn, Daylight, Sunset, Night.
+  - The headline is the page's single h1; the old hero's "Juss & Co" became an h2, and its duplicated tagline lines were removed.
+  - The founder quote comes from Juss's own mockup.
+  - The ecosystem panel gained a Founder row linking to #why.
+  - The ecosystem band is unchanged in data: tiles still come from worlds.json and systems.json.
+  - Ambient sound is a generated tone that starts only on a tap.
+  - The nav is trimmed to the mockup set: Home, Portfolio, Products, Solutions, Our Work, Ideas, Founder, Contact. Live sites, Systems, Resources and Creative history moved to the footer. A `flagship.css` rule that hid nav items by position was removed.
+- NOT BUILT (no real function behind them): search, notifications and the "My Juss" account menu.
+- PROOF (local): verify-site exit 0, 383 ok. Six new homepage checks pass. Screenshots reviewed at 1440 and 390, and no horizontal overflow. `node --test`: 80 pass; one fail is the known vitest-only `evidence-sync-proof`, which also fails on the unchanged tree.
+- RISK: the ecosystem tiles still use letter badges, not the mockup's illustrated icons. Per-product icons need art that each brand owns.
+- ROLLBACK: revert this commit.
+
 ## 2026-11-07 — Sunset scene added
 
 - FIX: Juss's sunset scene (`ideas-sunset[-sm].webp`, 108–348 KB) is now the Sunset and Dawn art on `/ideas.html`. On the Games hub it shows 05:00–08:00 and 17:00–20:00; Daylight shows 08:00–17:00 and night otherwise. Both sites carry their own copy of the image.

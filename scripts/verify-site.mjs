@@ -233,6 +233,12 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
     img.onerror = () => resolve(false); img.src = '/assets/ideas-night.webp';
   })), `${vp.n}: hero artwork asset resolves`);
   say(!/jussco-signature-world/.test(readFileSync(join(ROOT, 'assets/flagship.css'), 'utf8') + readFileSync(join(ROOT, 'index.html'), 'utf8')) && !existsSync(join(ROOT, 'assets/jussco-signature-world.jpg')), `${vp.n}: founder-rejected living-room artwork stays retired`);
+  say((await page.locator('h1').count()) === 1 && /Creative Technology\s*for a More Beautiful Life/.test(await page.locator('#stage-title').innerText()), `${vp.n}: world stage carries the single page headline`);
+  say(await page.evaluate(() => Promise.all(['/assets/ideas-day.webp','/assets/ideas-sunset.webp','/assets/ideas-night.webp'].map((src) => new Promise((ok) => { const i = new Image(); i.onload = () => ok(i.naturalWidth > 0); i.onerror = () => ok(false); i.src = src; }))).then((r) => r.every(Boolean))), `${vp.n}: world stage scene art resolves`);
+  say(['dawn','day','sunset','night'].includes(await page.getAttribute('body', 'data-atmo')), `${vp.n}: world stage atmosphere follows local time`);
+  say(await page.evaluate(() => { const e = document.querySelector('#ecosystem').getBoundingClientRect(); const h = document.querySelector('.stage-hero').getBoundingClientRect(); return e.top >= h.bottom - 1; }), `${vp.n}: ecosystem band sits below the stage headline`);
+  if (vp.n === 'desktop') say((await page.locator('.navpill a').evaluateAll((as) => as.filter((a) => a.getBoundingClientRect().width > 0).length)) === 8, 'desktop: all eight primary nav links visible');
+  say((await page.locator('nav[aria-label="Footer"]').locator('a[href="/creative-history.html"], a[href="#live-sites"], a[href="#systems"], a[href="#resources"]').count()) === 4, `${vp.n}: destinations moved out of the nav stay reachable from the footer`);
   say((await page.locator('#products .jc-feature').count()) === 3, `${vp.n}: three product pathways render`);
   say((await page.locator('.jc-feature--shop a').getAttribute('href')) === 'https://jussbeautifulhair.com/' &&
       (await page.locator('.jc-feature--play a').getAttribute('href')) === 'https://sync.jussco.company/' &&

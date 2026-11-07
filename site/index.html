@@ -468,6 +468,66 @@ a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-colo
 @media (max-width:520px){.eco-band{padding-inline:12px}.eco-title::before,.eco-title::after{display:none}.eco-title{justify-content:center}}
 .hero-bg,.hero-notes,#stars{display:none!important}
 .hero{background:var(--void)}
+
+/* ================= World stage (founder mockup, 2026-11-07) ================= */
+.stage{position:relative;isolation:isolate;overflow:hidden;min-height:calc(100vh - 72px);padding:clamp(18px,2.4vw,34px) 0 clamp(28px,3vw,44px);border-bottom:1px solid rgba(255,214,138,.25)}
+.stage-scene{position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,#2a1a6e,#7b3fa8 45%,#0f0b2e)}
+.stage-scene .art{position:absolute;inset:0;background-size:cover;background-position:50% 55%;opacity:0;transition:opacity 1.2s ease}
+.stage-scene .day{background-image:url(assets/ideas-day.webp)}.stage-scene .sunset{background-image:url(assets/ideas-sunset.webp)}.stage-scene .night{background-image:url(assets/ideas-night.webp)}
+@media (max-width:700px){.stage-scene .day{background-image:url(assets/ideas-day-sm.webp)}.stage-scene .sunset{background-image:url(assets/ideas-sunset-sm.webp)}.stage-scene .night{background-image:url(assets/ideas-night-sm.webp)}}
+[data-atmo="day"] .stage-scene .day,[data-atmo="sunset"] .stage-scene .sunset,[data-atmo="dawn"] .stage-scene .sunset,[data-atmo="night"] .stage-scene .night{opacity:1}
+.stage-scene .tint{position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,8,40,.55),rgba(14,8,40,.12) 34%,rgba(14,8,40,.18) 60%,rgba(8,5,26,.7))}
+[data-atmo="day"] .stage-scene .tint{background:linear-gradient(180deg,rgba(14,8,40,.6),rgba(14,8,40,.25) 40%,rgba(8,5,26,.72))}
+.stage-in{position:relative;display:grid;grid-template-columns:minmax(0,1fr);gap:22px;align-items:start}
+.stage-hero{text-align:center;padding-top:6px}
+.stage-crown{width:52px;height:38px;fill:var(--gold);filter:drop-shadow(0 0 14px rgba(245,193,75,.75))}
+.stage-kicker{margin:6px 0 2px;font-family:var(--f-serif);letter-spacing:.42em;text-transform:uppercase;font-size:clamp(15px,1.6vw,22px);color:var(--cream)}
+.stage-hero h1{margin:4px auto 8px;max-width:22ch;font-family:var(--f-serif);font-weight:700;font-size:clamp(34px,3.9vw,60px);line-height:1.06;color:var(--cream);text-shadow:0 4px 30px rgba(20,6,50,.9),0 1px 2px rgba(20,6,50,.9)}
+.stage-hero h1 span{display:block}
+.stage-caps,.stage-verbs{margin:6px 0;text-transform:uppercase;font-size:clamp(11px,1vw,13px);font-weight:600;color:#fff;text-shadow:0 1px 2px rgba(10,4,30,.95),0 0 12px rgba(10,4,30,.85)}
+.stage-caps{letter-spacing:.16em}.stage-verbs{letter-spacing:.34em;color:var(--gold-2)}
+.stage-sign{margin:2px 0 6px;font-family:var(--f-script);font-size:clamp(28px,3vw,40px);color:var(--gold-2);text-shadow:0 0 18px rgba(245,193,75,.5)}
+.stage-cta{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:8px}
+.sbtn{display:inline-flex;align-items:center;gap:10px;min-height:50px;padding:0 26px;border-radius:999px;font-weight:700;font-size:16px;text-decoration:none;border:1px solid rgba(255,214,138,.5)}
+.sbtn-gold{background:linear-gradient(180deg,#fff0c8,#f5c46a);color:#2a1640;box-shadow:0 0 26px rgba(255,200,110,.55)}.sbtn-gold svg{fill:#2a1640}
+.sbtn-ghost{background:rgba(20,14,60,.62);color:#fff;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.sbtn:hover{filter:brightness(1.08)}.sbtn:focus-visible{outline:3px solid var(--gold-2);outline-offset:3px}
+.stage-quote{margin:0;padding:22px 22px 18px;border-radius:24px;border:1px solid rgba(255,214,138,.4);background:rgba(28,18,66,.45);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.stage-quote blockquote{margin:0}.stage-quote p{margin:0;font-family:var(--f-serif);font-style:italic;font-size:clamp(17px,1.5vw,21px);line-height:1.45;color:var(--cream)}
+.stage-quote p::before{content:"\201C";display:block;font-size:40px;line-height:.6;color:var(--gold-2)}
+.stage-quote figcaption{margin-top:10px;text-align:right;font-family:var(--f-script);font-size:28px;color:var(--gold-2)}
+.stage .eco-panel{background:rgba(20,14,60,.62);border-color:rgba(255,214,138,.4);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.stage .eco{padding:0;border:0;overflow:visible}.stage .eco::before{display:none}
+.stage .eco-band{background:rgba(20,14,60,.55);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:inset 0 1px 0 rgba(255,217,138,.2),0 0 50px rgba(245,193,75,.22)}
+.stage-ctrl{display:grid;gap:8px;padding:14px;border-radius:20px;border:1px solid rgba(255,214,138,.35);background:rgba(20,14,60,.62);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#fff;font-size:14px}
+.ctrl-row{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:44px}
+.ctrl-switch{position:relative;width:52px;height:44px;padding:0;border:0;background:none;cursor:pointer}
+.ctrl-switch::before{content:"";position:absolute;left:0;right:0;top:12px;height:20px;border-radius:999px;background:rgba(120,110,180,.6)}
+.ctrl-switch::after{content:"";position:absolute;left:3px;top:15px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform .2s}
+.ctrl-switch[aria-checked="true"]::before{background:#7c8cff}.ctrl-switch[aria-checked="true"]::after{transform:translateX(32px)}
+.stage-ctrl input[type=range]{width:100%;min-height:44px;accent-color:var(--gold)}
+.ctrl-atmo{display:flex;align-items:center;gap:12px;width:100%;min-height:52px;padding:6px 10px;border-radius:14px;border:1px solid rgba(255,214,138,.3);background:rgba(10,6,34,.5);color:#fff;font:inherit;text-align:left;cursor:pointer}
+.ctrl-atmo small{display:block;color:var(--muted);font-size:12px}.ctrl-atmo b{font-weight:600}.ctrl-atmo>span:last-child{margin-left:auto;font-size:20px;color:var(--gold-2)}
+.ctrl-sun{width:22px;height:22px;border-radius:50%;background:radial-gradient(circle,#ffe7a3 40%,#f5a54b 70%,transparent 72%);box-shadow:0 0 14px #f5c14b}
+.ctrl-switch:focus-visible,.ctrl-atmo:focus-visible{outline:3px solid var(--gold-2);outline-offset:2px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (min-width:1100px){
+  .stage-in{grid-template-columns:250px minmax(0,1fr) 290px;grid-template-areas:"quote hero panel" "ctrl eco panel";column-gap:26px;row-gap:26px}
+  .stage-hero{grid-area:hero}.stage-quote{grid-area:quote;align-self:center}.stage .eco-panel{grid-area:panel}.stage .eco{grid-area:eco;align-self:end}.stage-ctrl{grid-area:ctrl;align-self:end}
+  .stage .eco-grid{display:block}
+}
+@media (max-width:1099px){.stage-hero{order:1}.stage .eco{order:2}.stage-quote{order:3}.stage .eco-panel{order:4}.stage-ctrl{order:5}.stage-quote{max-width:560px;margin-inline:auto}.stage-ctrl{max-width:420px;width:100%;margin-inline:auto}}
+/* Header joins the world: one glass row on wide screens. */
+.top{background:linear-gradient(180deg,rgba(14,8,40,.82),rgba(14,8,40,.55));border-bottom:1px solid rgba(255,214,138,.22)}
+@media (min-width:1100px){
+  .top .in{flex-wrap:nowrap!important}
+  .top .navpill{order:0!important;flex:0 1 auto!important;justify-content:center;padding:5px;border-radius:999px;border:1px solid rgba(255,214,138,.35);background:rgba(20,14,60,.55)}
+  .top .navpill a{font-size:14px;padding:10px 16px;color:#e6dcff}
+  .top .navpill a.on{background:linear-gradient(180deg,#ffe3a8,#f3b25a);color:#2a1640}
+  .stage .eco-panel ul{gap:2px}.stage .eco-panel a{padding:9px 12px}.stage .eco-panel h3{font-size:20px}
+  .stage .eco-item{min-height:176px}
+}
+@media (prefers-reduced-motion:reduce){.stage-scene .art{transition:none}}
 </style>
 <link rel="stylesheet" href="/assets/signature-world.css">
 <link rel="stylesheet" href="/assets/atmosphere.css"><script type="module" src="/assets/atmosphere.mjs"></script>
@@ -479,16 +539,12 @@ a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-colo
     <a class="brand" href="#top">Juss <b>&amp;</b> Co</a>
     <nav class="navpill" aria-label="Primary">
       <a class="on" href="#top" data-nav="top">Home</a>
-      <a href="#live-sites">Live sites</a>
-      <a href="#worlds" data-nav="worlds">Worlds</a>
-      <a href="#systems" data-nav="systems">Systems</a>
       <a href="portfolio.html">Portfolio</a>
-      <a href="/work.html">Selected work</a>
-      <a href="#resources" data-nav="resources">Resources</a>
-      <a href="#proof" data-nav="proof">Proof</a>
-      <a href="/services.html">Work with Juss</a>
-      <a href="/creative-history.html">Creative history</a>
-      <a href="#why" data-nav="why">The why</a>
+      <a href="#products">Products</a>
+      <a href="/services.html">Solutions</a>
+      <a href="/work.html">Our Work</a>
+      <a href="/ideas.html">Ideas</a>
+      <a href="#why" data-nav="why">Founder</a>
       <a href="#contact" data-nav="contact">Contact</a>
     </nav>
     <a class="btn btn-gold" href="/services.html" style="min-height:44px;padding:10px 20px;font-size:14px">Work with Juss <span aria-hidden="true">→</span></a>
@@ -496,10 +552,38 @@ a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-colo
 </header>
 
 <main id="top">
-<!-- ================= OUR ECOSYSTEM (mockup carousel; items rendered from data/worlds.json + data/systems.json) ================= -->
-<section class="eco wrap" id="ecosystem" aria-labelledby="eco-title">
-  <div class="in">
-    <div class="eco-grid">
+<!-- ================= WORLD STAGE (founder mockup 2026-11-07; ecosystem items rendered from data/worlds.json + data/systems.json) ================= -->
+<section class="stage" id="world" aria-labelledby="stage-title">
+  <div class="stage-scene" aria-hidden="true"><div class="art day"></div><div class="art sunset"></div><div class="art night"></div><div class="tint"></div></div>
+  <div class="stage-in wrap">
+    <div class="stage-hero">
+      <svg class="stage-crown" viewBox="0 0 30 22" aria-hidden="true"><path d="M2 20h26l2-14-8 6-7-10-7 10-8-6z"/></svg>
+      <p class="stage-kicker">Juss &amp; Co</p>
+      <h1 id="stage-title">Creative Technology <span>for a More Beautiful Life</span></h1>
+      <p class="stage-caps">AI-powered product creation, systems, brands, and experiences</p>
+      <p class="stage-verbs">Create · Build · Launch · Grow · Protect</p>
+      <p class="stage-sign" aria-hidden="true">Juss &amp; Co</p>
+      <div class="stage-cta">
+        <a class="sbtn sbtn-gold" href="/work.html"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 1l11 7-11 7z"/></svg>Explore Our Work</a>
+        <a class="sbtn sbtn-ghost" href="#products">Our Products</a>
+      </div>
+    </div>
+    <figure class="stage-quote">
+      <blockquote><p>Building intelligent products and beautiful experiences for a more creative, free, and abundant life.</p></blockquote>
+      <figcaption>Juss</figcaption>
+    </figure>
+    <aside class="eco-panel" aria-labelledby="eco-panel-title">
+      <h3 id="eco-panel-title">The Juss &amp; Co Ecosystem</h3>
+      <ul>
+        <li><a href="#worlds"><b>Our Products</b><span>Flagship solutions, real impact.</span></a></li>
+        <li><a href="/portfolio.html"><b>Portfolio</b><span>See what we've built.</span></a></li>
+        <li><a href="/services.html"><b>Solutions</b><span>Custom for your goals.</span></a></li>
+        <li><a href="/work.html"><b>Our Work</b><span>Results, case studies, and proof.</span></a></li>
+        <li><a href="#why"><b>Founder</b><span>The vision behind it all.</span></a></li>
+        <li><a href="#contact"><b>Contact</b><span>Let's create together.</span></a></li>
+      </ul>
+    </aside>
+    <section class="eco" id="ecosystem" aria-labelledby="eco-title">
     <div class="eco-band">
       <div class="eco-title"><h2 id="eco-title">Our Ecosystem</h2></div>
       <div class="eco-row">
@@ -508,16 +592,11 @@ a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-colo
         <button type="button" class="eco-nav" id="ecoNext" aria-label="Scroll ecosystem forward" aria-controls="ecoTrack">›</button>
       </div>
     </div>
-    <aside class="eco-panel" aria-labelledby="eco-panel-title">
-      <h3 id="eco-panel-title">The Juss &amp; Co Ecosystem</h3>
-      <ul>
-        <li><a href="#worlds"><b>Our Products</b><span>Flagship solutions, real impact.</span></a></li>
-        <li><a href="/portfolio.html"><b>Portfolio</b><span>See what we've built.</span></a></li>
-        <li><a href="/services.html"><b>Solutions</b><span>Custom for your goals.</span></a></li>
-        <li><a href="/work.html"><b>Our Work</b><span>Results, case studies, and proof.</span></a></li>
-        <li><a href="#contact"><b>Contact</b><span>Let's create together.</span></a></li>
-      </ul>
-    </aside>
+    </section>
+    <div class="stage-ctrl" aria-label="Atmosphere controls" role="group">
+      <div class="ctrl-row"><span id="ambLabel">Ambient sound</span><button type="button" class="ctrl-switch" id="ambSwitch" role="switch" aria-checked="false" aria-labelledby="ambLabel"></button></div>
+      <label class="sr-only" for="ambVol">Ambient volume</label><input type="range" id="ambVol" min="0" max="100" value="35">
+      <button type="button" class="ctrl-atmo" id="atmoBtn"><span class="ctrl-sun" aria-hidden="true"></span><span><small>Current atmosphere</small><b id="atmoName">Sunset</b></span><span aria-hidden="true">›</span></button>
     </div>
   </div>
 </section>
@@ -529,11 +608,8 @@ a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-colo
   <div class="in">
     <div>
       <div class="eyebrow mono">INDEPENDENT CREATIVE &amp; TECHNOLOGY COMPANY</div>
-      <h1 class="h-brand" id="h-hero">Juss &amp; Co</h1>
+      <h2 class="h-brand" id="h-hero">Juss &amp; Co</h2>
       <p class="h-line">Turn thoughts into <span class="script">living works.</span></p>
-      <p class="hero-tagline">Creative Technology for a More Beautiful Life</p>
-      <p class="hero-caps mono">AI-powered product creation, systems, brands, and experiences</p>
-      <p class="hero-verbs mono">Create · Build · Launch · Grow · Protect</p>
       <p class="lede">We build products, systems, stories and proof that help more people live, create, and belong. From idea to impact, we make thoughts real.</p>
       <p class="founder-line">Founded by <strong>Juss Rayy</strong> · Product &amp; Full-Stack AI Systems Builder.</p>
       <div class="cta-row">
@@ -807,7 +883,7 @@ a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-colo
           </div>
         </div>
         <nav class="cols" aria-label="Footer">
-          <a href="#top">Home</a><a href="#worlds">Worlds</a><a href="#proof">Proof</a><a href="#contact">Contact</a><a href="/builds.html">Builds</a><a href="/ideas.html">Ideas</a><a href="https://jussbeautifulhair.com">Shop JBH</a>
+          <a href="#top">Home</a><a href="#live-sites">Live sites</a><a href="#worlds">Worlds</a><a href="#systems">Systems</a><a href="#resources">Resources</a><a href="#proof">Proof</a><a href="/creative-history.html">Creative history</a><a href="#contact">Contact</a><a href="/builds.html">Builds</a><a href="/ideas.html">Ideas</a><a href="https://jussbeautifulhair.com">Shop JBH</a>
         </nav>
       </div>
     </div>
@@ -1145,6 +1221,24 @@ Promise.all([
   function step(dir){ var c=track.querySelector('.eco-cell'); var w=c?c.getBoundingClientRect().width+14:152; track.scrollBy({left:dir*w*2,behavior:'smooth'}); }
   if(prev) prev.addEventListener('click',function(){step(-1);});
   if(next) next.addEventListener('click',function(){step(1);});
+})();
+</script>
+<script>
+/* World stage: atmosphere follows local time (tap to change); ambient sound is generated and starts only on a tap. */
+(function(){
+  var body=document.body, order=['dawn','day','sunset','night'], names={dawn:'Dawn',day:'Daylight',sunset:'Sunset',night:'Night'};
+  var h=new Date().getHours(), atmo=h>=5&&h<8?'dawn':h>=8&&h<17?'day':h>=17&&h<20?'sunset':'night';
+  var nameEl=document.getElementById('atmoName'), btn=document.getElementById('atmoBtn');
+  function set(a){ atmo=a; body.setAttribute('data-atmo',a); if(nameEl) nameEl.textContent=names[a]; }
+  set(atmo);
+  if(btn) btn.addEventListener('click',function(){ set(order[(order.indexOf(atmo)+1)%order.length]); });
+  var sw=document.getElementById('ambSwitch'), vol=document.getElementById('ambVol'), ctx=null, gain=null;
+  function level(){ return (vol?+vol.value:35)/100*0.5; }
+  function start(){ var AC=window.AudioContext||window.webkitAudioContext; if(!AC) return false; ctx=new AC(); gain=ctx.createGain(); gain.gain.value=0; gain.connect(ctx.destination);
+    var f=ctx.createBiquadFilter(); f.type='lowpass'; f.frequency.value=900; f.connect(gain);
+    [196,246.94,293.66,392].forEach(function(fr,i){ var o=ctx.createOscillator(); o.type=i%2?'sine':'triangle'; o.frequency.value=fr; o.detune.value=(i-1.5)*4; var g=ctx.createGain(); g.gain.value=.06; o.connect(g); g.connect(f); o.start(); }); return true; }
+  if(sw) sw.addEventListener('click',function(){ var on=sw.getAttribute('aria-checked')!=='true'; if(on&&!ctx&&!start()) return; if(ctx){ ctx.resume(); gain.gain.setTargetAtTime(on?level():0,ctx.currentTime,.4); } sw.setAttribute('aria-checked',String(on)); });
+  if(vol) vol.addEventListener('input',function(){ if(ctx&&sw.getAttribute('aria-checked')==='true') gain.gain.setTargetAtTime(level(),ctx.currentTime,.2); });
 })();
 </script>
 </body>
