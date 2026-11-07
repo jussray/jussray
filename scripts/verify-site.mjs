@@ -111,6 +111,7 @@ say(['truth-compass', 'truth-weaver', 'exact-match-engine'].every((slug) => proj
   const errors = [];
   page.on('pageerror', (error) => errors.push(String(error)));
   await page.goto(url, { waitUntil: 'load' });
+  await openView(page, '#contact');
   await page.locator('#copyBtn').click();
   await openView(page, '#worlds');
   await page.locator('.card').nth(3).click();
@@ -251,7 +252,8 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
       (await page.locator('.jc-feature--play a').getAttribute('href')) === 'https://sync.jussco.company/' &&
       (await page.locator('.jc-feature--coming a').getAttribute('href')) === '/portfolio.html',
       `${vp.n}: shop, public experience, and coming-soon destinations remain distinct`);
-  if (vp.n === 'mobile') say(await page.evaluate(() => { const top = (el) => el.getBoundingClientRect().top + window.scrollY; return top(document.querySelector('.hero .eyebrow')) >= top(document.querySelector('#ecosystem')) + document.querySelector('#ecosystem').getBoundingClientRect().height; }), 'mobile: hero eyebrow sits below the ecosystem band (page coordinates)');
+  say(await page.evaluate(() => getComputedStyle(document.querySelector('.hero')).display === 'none' && getComputedStyle(document.querySelector('#contact')).display === 'none'), `${vp.n}: landing is the world stage only (intro lives on Founder, contact on Contact)`);
+  say(await page.evaluate(() => getComputedStyle(document.querySelector('.page-scene')).position === 'fixed' && getComputedStyle(document.querySelector('.site-foot')).display !== 'none'), `${vp.n}: one lake world behind every view, shared footer visible`);
   await openView(page, '#worlds');
   say((await page.$$('.card')).length === EXPECTED_WORLDS.length, `${vp.n}: ${EXPECTED_WORLDS.length} portfolio worlds`);
   say((await page.locator('.os-card').count()) === 5, `${vp.n}: five public standalone OS builds`);

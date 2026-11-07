@@ -1,3 +1,17 @@
+## 2026-11-07 — One site, not two (Juss: "like two different sites", ULTRATHINK)
+
+- CAUSE: only the home stage had the lake world. Every other section painted its own near-black background, and Home still stacked the old dark hero and contact under the stage, so phones showed two visual languages.
+- FIX:
+  - The lake scene is a fixed page layer behind every view: lighter tint on Home, darker on content pages.
+  - Section backgrounds are now transparent.
+  - Home is the world stage only. The "Juss & Co / Turn thoughts into living works" intro moved to the Founder view, and contact has its own view.
+  - The footer was lifted out of #contact into a shared glass `<footer class="site-foot">` on every view.
+  - On phones: the stage's link panel is hidden (the nav row replaces it), the footer links wrap, and live-site cards use a 2-column grid.
+- NUMBERS (390px phone): Home 1,848px (was 4,269; 22,990 before views). Products 4,067, Worlds 10,177, Proof 4,439, Founder 2,451, Contact 1,428.
+- TESTS: the old check "hero eyebrow below the ecosystem band" encoded the #64 single-page order and was replaced by "landing is the stage only". New check: one fixed world layer and a shared footer. verify-site exit 0, 413 ok.
+- RISK: Worlds (16 cards) is still about 12 phone screens. The next step, if Juss wants it, is a short preview with "See all" linking to the portfolio.
+- ROLLBACK: revert this commit.
+
 ## 2026-11-07 — Homepage split into page views (Juss: phone was "a never ending scroll")
 
 - RULE (Juss, 2026-11-07): content belongs behind its own page button. The landing page stays short, and each page scrolls only as far as its own content.
