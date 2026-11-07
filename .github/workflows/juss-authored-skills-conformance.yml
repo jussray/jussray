@@ -4,6 +4,12 @@ on:
     paths:
       - 'skills/juss-authored/**'
       - '.github/workflows/juss-authored-skills-conformance.yml'
+      - '.agents/skills/**'
+      - '.codex/**'
+      - 'AGENTS.md'
+      - 'Codex.md'
+      - 'scripts/verify-codex-release.py'
+      - 'tests/test_codex_release.py'
   # Required PR checks must run on every PR, not only on skill-file edits.
   pull_request:
     branches:
@@ -21,6 +27,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Validate Codex config and skill dependency completeness
+        run: python scripts/verify-codex-release.py
+      - name: Test Codex release gate against broken bundles
+        run: python -m unittest discover -s tests -p 'test_codex_release.py' -v
+      - name: Run imported Juss OS Python mode tests
+        run: |
+          python -m compileall -q .agents/skills/juss-os/scripts
+          python .agents/skills/juss-os/scripts/test_modes.py
       - name: Compile receipt validators
         run: python -m compileall -q skills/juss-authored/juss-os/scripts skills/juss-authored/runtime-kernel/scripts
       - name: Run receipt regression tests
