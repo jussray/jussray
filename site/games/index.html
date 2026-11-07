@@ -183,6 +183,55 @@ header .inner{width:min(1380px,calc(100% - 36px))}
 [data-atmo="sunset"] .scene .sunset,[data-atmo="dawn"] .scene .sunset{background-image:url(assets/ideas-sunset.webp)}
 [data-atmo="night"] .scene .night{background-image:url(assets/ideas-night.webp)}
 @media (max-width:700px){[data-atmo="day"] .scene .day{background-image:url(assets/ideas-day-sm.webp)}[data-atmo="sunset"] .scene .sunset,[data-atmo="dawn"] .scene .sunset{background-image:url(assets/ideas-sunset-sm.webp)}[data-atmo="night"] .scene .night{background-image:url(assets/ideas-night-sm.webp)}}
+
+/* Phone layout from the founder's mobile Game Hub mockup (2026-11-07). Desktop is unchanged. */
+.menu-btn,.hub-mobile,.tabbar,.fx-dots{display:none}
+@media(max-width:700px){
+  header{position:sticky;top:0;z-index:50;background:transparent!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;padding:8px 10px 0}
+  header .inner{width:auto!important;flex-wrap:nowrap!important;justify-content:space-between;align-items:center;min-height:58px;padding:6px 8px 6px 16px!important;border-radius:22px;border:1px solid rgba(255,214,138,.45);background:rgba(20,14,60,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 0 22px rgba(245,193,75,.18)}
+  .brand{font-size:22px!important}
+  .menu-btn{display:inline-grid;place-content:center;gap:5px;width:44px;height:44px;border-radius:14px;border:1px solid rgba(255,214,138,.4);background:rgba(10,6,34,.5);cursor:pointer}
+  .menu-btn span{display:block;width:20px;height:2px;border-radius:2px;background:#f8ecd0}
+  header .gnav{display:none!important;position:absolute;left:10px;right:10px;top:72px;flex-direction:column;gap:2px;padding:8px;border-radius:20px;border:1px solid rgba(255,214,138,.4);background:rgba(16,10,46,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);overflow:visible!important}
+  header.nav-open .gnav{display:flex!important}
+  header .gnav a{min-height:46px!important;font-size:15px!important;padding:0 14px!important;white-space:nowrap}
+  .gstage{width:calc(100% - 28px);padding:10px 0 20px;gap:14px;min-height:0}
+  .gstage-hero h1{font-size:clamp(50px,15vw,64px);background:linear-gradient(180deg,#fff6dc,#f5c46a);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;filter:drop-shadow(0 3px 14px rgba(20,6,50,.85))}
+  .stage-crown{width:42px;height:30px}.stage-kicker{font-size:14px;margin-top:2px}
+  .stage-verbs{font-size:11px;letter-spacing:.22em}.stage-sub{font-size:13px}.stage-sign{font-size:28px;margin:0 0 4px}
+  .stage-cta{flex-wrap:nowrap;gap:10px}
+  .stage-cta .sbtn{flex:1 1 0;min-width:0;justify-content:center;min-height:48px;padding:0 10px;font-size:15px;white-space:nowrap}
+  .gstage-hero{margin-bottom:clamp(90px,17vh,170px)}
+  .stage-quote,.hub-panel{display:none!important}
+  .fx{position:relative;padding:14px 10px 10px;border-radius:24px}
+  .fx-title h2{font-size:24px}.fx-title{margin-bottom:10px}
+  .fx-row{display:block}
+  .fx-nav{position:absolute;top:50%;z-index:2;width:40px;height:40px;flex:none;font-size:20px;background:rgba(10,6,34,.82)}
+  #fxPrev{left:-8px}#fxNext{right:-8px}
+  .fx-track{gap:8px;padding:2px 2px 6px}
+  .fx-track li{flex:0 0 calc((100% - 16px)/3)!important;margin:0!important}
+  .fx-tile{min-height:132px;padding:10px 4px 8px;gap:6px;border-color:rgba(255,214,138,.45)}
+  .fx-glyph{width:56px;height:56px;font-size:20px}
+  .fx-tile strong{font-size:13px}.fx-tile small{font-size:10px}
+  .fx-dots{display:flex;justify-content:center;gap:6px;margin-top:6px}
+  .fx-dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.35)}
+  .fx-dots i.on{background:#ffd98a}
+  .hub-mobile{display:grid;justify-items:center;gap:6px;order:3}
+  .hub-pill{display:inline-flex;align-items:center;gap:12px;min-height:52px;padding:0 26px;border-radius:999px;border:1px solid rgba(255,214,138,.6);background:rgba(20,14,60,.62);color:#f8ecd0;text-decoration:none;font:600 20px/1 "Playfair Display",Georgia,serif;box-shadow:0 0 22px rgba(245,193,75,.28)}
+  .hub-links{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:2px 8px;margin:0;font-size:14px;color:#e6dcff}
+  .hub-links a{display:inline-flex;align-items:center;min-height:44px;padding:0 4px;color:#f3edff;text-decoration:none}
+  .stage-ctrl{order:4;max-width:none!important;display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0;border:0;background:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+  .stage-ctrl input[type=range],.stage-ctrl .sr-only{display:none}
+  .stage-ctrl .ctrl-row,.stage-ctrl .ctrl-atmo{min-height:52px;padding:4px 12px;border-radius:999px;border:1px solid rgba(255,214,138,.4);background:rgba(20,14,60,.62);font-size:13px}
+  .stage-ctrl .ctrl-atmo{padding:4px 10px}
+  .stage-ctrl .ctrl-row span,.stage-ctrl .ctrl-atmo small,.stage-ctrl .ctrl-atmo b{white-space:nowrap;font-size:12px}
+  .stage-ctrl .ctrl-atmo small{font-size:10px}
+  .tabbar{display:flex;position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:60;justify-content:space-around;padding:6px;border-radius:24px;border:1px solid rgba(255,214,138,.45);background:rgba(20,14,60,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 0 26px rgba(245,193,75,.22)}
+  .tabbar a{flex:1 1 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:56px;border-radius:18px;color:#e6dcff;text-decoration:none;font-size:11px;font-weight:600}
+  .tabbar svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .tabbar a[aria-current]{color:#ffd98a;background:rgba(245,193,75,.14);box-shadow:inset 0 0 0 1px rgba(255,214,138,.5)}
+  body{padding-bottom:calc(92px + env(safe-area-inset-bottom,0px))}
+}
 </style>
 </head>
 <body>
@@ -206,9 +255,17 @@ document.addEventListener('DOMContentLoaded',function(){
   var track=document.getElementById('fxTrack');
   function step(d){ var c=track.querySelector('li'); track.scrollBy({left:d*((c?c.getBoundingClientRect().width:140)+12)*2,behavior:'smooth'}); }
   document.getElementById('fxPrev').addEventListener('click',function(){step(-1);}); document.getElementById('fxNext').addEventListener('click',function(){step(1);});
+  var hdr=document.querySelector('header'), mb=document.getElementById('menuBtn');
+  if(mb) mb.addEventListener('click',function(){ var open=!hdr.classList.contains('nav-open'); hdr.classList.toggle('nav-open',open); mb.setAttribute('aria-expanded',String(open)); mb.setAttribute('aria-label',open?'Close menu':'Open menu'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&hdr.classList.contains('nav-open')){ hdr.classList.remove('nav-open'); mb.setAttribute('aria-expanded','false'); mb.focus(); } });
+  document.querySelectorAll('#gnav a').forEach(function(a){ a.addEventListener('click',function(){ hdr.classList.remove('nav-open'); mb.setAttribute('aria-expanded','false'); }); });
+  var dots=document.getElementById('fxDots');
+  function paintDots(){ if(!dots) return; var pages=Math.max(1,Math.ceil(track.scrollWidth/Math.max(1,track.clientWidth)-0.05)); if(dots.children.length!==pages){ dots.textContent=''; for(var i=0;i<pages;i++) dots.appendChild(document.createElement('i')); } var cur=Math.round(track.scrollLeft/Math.max(1,track.clientWidth)); [].forEach.call(dots.children,function(d,i){ d.classList.toggle('on',i===Math.min(cur,pages-1)); }); }
+  track.addEventListener('scroll',paintDots,{passive:true}); window.addEventListener('resize',paintDots); paintDots();
+
 });
 </script>
-<header><div class="inner"><a class="brand" href="https://jussco.company/">Juss <em>&amp;</em> Co. <span style="color:#ae8fff">GAMES</span></a><nav class="gnav" aria-label="Main navigation"><a href="https://www.jussco.company/">Home</a><a href="https://www.jussco.company/portfolio.html">Portfolio</a><a href="#games" aria-current="page">Games</a><a href="https://www.jussco.company/services.html">Solutions</a><a href="https://www.jussco.company/work.html">Our Work</a><a href="https://www.jussco.company/#why">Founder</a><a href="https://www.jussco.company/#contact">Contact</a></nav></div></header>
+<header><div class="inner"><a class="brand" href="https://jussco.company/">Juss <em>&amp;</em> Co. <span style="color:#ae8fff">GAMES</span></a><button type="button" class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="gnav" aria-label="Open menu"><span></span><span></span><span></span></button><nav class="gnav" id="gnav" aria-label="Main navigation"><a href="https://www.jussco.company/">Home</a><a href="https://www.jussco.company/portfolio.html">Portfolio</a><a href="#games" aria-current="page">Games</a><a href="https://www.jussco.company/services.html">Solutions</a><a href="https://www.jussco.company/work.html">Our Work</a><a href="https://www.jussco.company/#why">Founder</a><a href="https://www.jussco.company/#contact">Contact</a></nav></div></header>
 <main>
 <section class="gstage" aria-labelledby="hero-title">
   <div class="gstage-hero">
@@ -233,7 +290,12 @@ document.addEventListener('DOMContentLoaded',function(){
   <section class="fx" aria-labelledby="fx-title">
     <div class="fx-title"><h2 id="fx-title">Featured Experiences</h2></div>
     <div class="fx-row"><button type="button" class="fx-nav" id="fxPrev" aria-label="Scroll featured experiences back" aria-controls="fxTrack">‹</button><ul class="fx-track" id="fxTrack"><li><a class="fx-tile" href="https://sync.jussco.company/"><span class="fx-glyph sync-art" aria-hidden="true">🎉</span><strong>SYNC</strong><small>Group play · Live</small></a></li><li><a class="fx-tile" href="#game-lumora"><span class="fx-glyph forest-art" aria-hidden="true">🌲✨</span><strong>LUMORA</strong><small>In development</small></a></li><li><a class="fx-tile" href="#game-chatquest"><span class="fx-glyph quest-art" aria-hidden="true">🧭🤖</span><strong>ChatQuest</strong><small>In development</small></a></li><li><a class="fx-tile" href="#game-bip-seek"><span class="fx-glyph bip-art" aria-hidden="true">🌙🪁</span><strong>Bip &amp; Seek</strong><small>In development</small></a></li><li><a class="fx-tile" href="#game-jungle-jinx"><span class="fx-glyph forest-art" aria-hidden="true">🐒🌿</span><strong>Jungle Jinx</strong><small>In development</small></a></li><li><a class="fx-tile" href="#game-last-laugh"><span class="fx-glyph city-art" aria-hidden="true">🎭🌆</span><strong>Last Laugh</strong><small>Private prototype</small></a></li></ul><button type="button" class="fx-nav" id="fxNext" aria-label="Scroll featured experiences forward" aria-controls="fxTrack">›</button></div>
+    <div class="fx-dots" id="fxDots" aria-hidden="true"></div>
   </section>
+  <div class="hub-mobile">
+    <a class="hub-pill" href="#games"><span aria-hidden="true">🎮</span>Game Hub Center<span aria-hidden="true">›</span></a>
+    <p class="hub-links"><a href="#games">All Games</a><span aria-hidden="true">|</span><a href="https://sync.jussco.company/">SYNC</a><span aria-hidden="true">|</span><a href="#care">Play with care</a></p>
+  </div>
   <div class="stage-ctrl" role="group" aria-label="Atmosphere controls">
     <div class="ctrl-row"><span id="ambLabel">Ambient sound</span><button type="button" class="ctrl-switch" id="ambSwitch" role="switch" aria-checked="false" aria-labelledby="ambLabel"></button></div>
     <label class="sr-only" for="ambVol">Ambient volume</label><input type="range" id="ambVol" min="0" max="100" value="35">
@@ -253,5 +315,7 @@ document.addEventListener('DOMContentLoaded',function(){
 <article class="card" id="game-last-laugh"><div class="art city-art" aria-hidden="true"><span>🎭🌆</span><b class="art-title">Last Laugh</b></div><div class="card-body"><span class="meta">Story-driven 3D adventure / private prototype</span><h3>Last Laugh: City of Dreams</h3><p>A cinematic comedy-night adventure with exploration, performances, and choices. The original prototype is being tested across desktop and mobile.</p><span class="tag wait">Private prototype</span><p class="status">Public play is held pending release review, rights clearance, and live-device verification.</p></div></article>
 </div></section>
 <section class="notes" id="care" aria-label="Safety and availability"><h2>Play with care ✨</h2><p>Games with friend chat or younger-player features are only opened publicly after their age, moderation, privacy, and guardian safeguards are verified. A game listing never means its unfinished experience is live.</p></section>
-</div></main><footer><div class="inner"><span>© 2026 Juss &amp; Co. · Different worlds. One place to discover them.</span><a href="https://jussco.company/">Back to Juss &amp; Co. ↗</a></div></footer>
+</div></main>
+<nav class="tabbar" aria-label="Quick navigation"><a href="https://www.jussco.company/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/></svg><span>Home</span></a><a href="#games" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 11v3M5.5 12.5h3M15.5 12h.01M18 13.5h.01"/></svg><span>Games</span></a><a href="https://www.jussco.company/services.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5 9-5zM3 13l9 5 9-5"/></svg><span>Solutions</span></a><a href="https://www.jussco.company/work.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18h18l1-11-6 4-4-7-4 7-6-4z"/></svg><span>Our Work</span></a><a href="https://www.jussco.company/#why"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg><span>Founder</span></a></nav>
+<footer><div class="inner"><span>© 2026 Juss &amp; Co. · Different worlds. One place to discover them.</span><a href="https://jussco.company/">Back to Juss &amp; Co. ↗</a></div></footer>
 </body></html>

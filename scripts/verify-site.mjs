@@ -428,6 +428,13 @@ for (const vp of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile
   say(!/tournament|rewards|achievement|my library|creator zone|\bearn\b/i.test(stageText), `games hub: ${vp.name} stage shows no unbuilt features`);
   const fx = await page.locator('#fxTrack a').evaluateAll((as) => as.map((a) => a.getAttribute('href')));
   say(fx.length === 6 && fx.filter((h) => /^https?:/.test(h)).join() === 'https://sync.jussco.company/', `games hub: ${vp.name} only live SYNC leaves the page from featured experiences`);
+  if (vp.name === 'mobile') {
+    const m = await page.evaluate(() => ({ tabs: [...document.querySelectorAll('.tabbar a')].map((a) => a.textContent.trim()), cur: document.querySelector('.tabbar a[aria-current]')?.textContent.trim(), fixed: getComputedStyle(document.querySelector('.tabbar')).position, perView: Math.round(document.querySelector('#fxTrack').clientWidth / document.querySelector('#fxTrack li').getBoundingClientRect().width), hub: getComputedStyle(document.querySelector('.hub-mobile')).display }));
+    say(JSON.stringify(m.tabs) === JSON.stringify(['Home','Games','Solutions','Our Work','Founder']) && m.cur === 'Games' && m.fixed === 'fixed', 'games hub: mobile bottom tab bar with Games current');
+    say(m.perView === 3 && m.hub !== 'none', 'games hub: mobile shows three featured tiles and the Game Hub Center pill');
+    await page.click('#menuBtn'); say((await page.getAttribute('#menuBtn', 'aria-expanded')) === 'true' && await page.locator('#gnav').isVisible(), 'games hub: mobile menu button opens the real nav');
+    await page.click('#menuBtn');
+  }
   say(errors.length === 0, `games hub: ${vp.name} no JS errors`);
   await page.screenshot({ path: `proof/site/games-${vp.name}.png`, fullPage: true });
   await ctx.close();

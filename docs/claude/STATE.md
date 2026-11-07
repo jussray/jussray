@@ -1,3 +1,17 @@
+## 2026-11-07 — Game Hub phone layout (founder mobile mockup)
+
+- FIX (`site/games/index.html`, max-width 700px only):
+  - Single glass header pill with a real menu button: it opens the existing nav, and Escape closes it.
+  - Hero buttons side by side, with the lotus visible between the hero and the band.
+  - Three featured tiles per view, with edge arrows and page dots.
+  - A "Game Hub Center" pill plus a link row: All Games, SYNC, Play with care.
+  - Sound and atmosphere as two pills on one row.
+  - A fixed bottom tab bar: Home, Games (current), Solutions, Our Work, Founder.
+- NOT BUILT (nothing real behind them): search, bell, account, My Library, Tournaments, Events, Creator Zone, "EARN". The tab bar says Games where the mockup says Products, so the current page is marked.
+- PROOF (local): verify-site exit 0, 466 ok; three new phone checks (tab bar, three tiles plus pill, menu). `node --test` 80/81 (the known vitest gap). Phone screenshots reviewed.
+- STILL BLOCKED: PR #68 merge waits on the `main` ruleset listing the four systematic checks (founder-only setting).
+- ROLLBACK: revert this commit.
+
 ## 2026-11-07 — Old pages join the world; founder approval recorded
 
 - APPROVAL (Juss, 2026-11-07): "approved" for PR #68. Merge only on an exact head where every required check is green. The independent-review gate is not mine to satisfy or bypass.
