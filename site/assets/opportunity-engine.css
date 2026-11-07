@@ -82,6 +82,8 @@ h1{font-size:clamp(39px,4.2vw,64px);line-height:1.08;letter-spacing:-.015em;marg
 .card details p{margin:8px 0 0;font-size:12px}
 .deck-actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px;margin:14px 3px 0;font-size:11px;color:#f8e3dc}
 .deck-actions button{border:1px solid rgba(255,220,168,.7);border-radius:30px;padding:8px 12px;color:#ffedd4;background:rgba(40,24,70,.87);min-height:38px}
+.games-entry{margin:8px auto 0;text-align:center;color:#f7e8ed;font-size:11px;line-height:1.5}
+.games-entry a{color:#ffe3aa;text-underline-offset:3px;margin-left:6px}
 #signals-panel{position:absolute;z-index:4;top:67px;right:clamp(15px,2vw,35px);width:260px;border-radius:26px;padding:17px}
 #signals-panel h2{font-size:23px;margin:0 0 7px;line-height:1.1}
 #signals-panel .signals-sub{font:italic 12px Georgia,serif;color:#f5e3dd}
