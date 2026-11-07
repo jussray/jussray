@@ -228,8 +228,6 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   say((await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)) === 0, `${vp.n}: no horizontal overflow`);
   say(await page.evaluate(() => document.querySelector('.top .brand').getBoundingClientRect().height <= 44), `${vp.n}: header wordmark stays on one line`);
   say(await page.evaluate(() => document.querySelector('.top .btn').getBoundingClientRect().right <= window.innerWidth - 16), `${vp.n}: header CTA stays inside the side gutter`);
-<<<<<<< HEAD
-  say(await page.locator('.jc-scene__art').isVisible() && (await page.locator('.hero .h-line').innerText()).includes('Built from real life.'), `${vp.n}: cinematic living-world artwork and real-text headline render`);
   say(await page.evaluate(() => new Promise((resolve) => {
     const img = new Image(); img.onload = () => resolve(img.naturalWidth > 0);
     img.onerror = () => resolve(false); img.src = '/assets/jussco-signature-world.jpg';
@@ -239,15 +237,7 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
       (await page.locator('.jc-feature--play a').getAttribute('href')) === 'https://sync.jussco.company/' &&
       (await page.locator('.jc-feature--coming a').getAttribute('href')) === '/portfolio.html',
       `${vp.n}: shop, public experience, and coming-soon destinations remain distinct`);
-  if (vp.n === 'mobile') say(await page.evaluate(() => {
-    const scene = document.querySelector('.jc-scene')?.getBoundingClientRect();
-    const eyebrow = document.querySelector('.hero .eyebrow')?.getBoundingClientRect();
-    const title = document.querySelector('.hero .h-brand')?.getBoundingClientRect();
-    return !!scene && !!eyebrow && !!title && scene.bottom + 8 <= eyebrow.top && title.left >= 12 && title.right <= window.innerWidth - 12;
-  }), 'mobile: artwork clears headline and wordmark stays in viewport');
-=======
   if (vp.n === 'mobile') say(await page.evaluate(() => { const top = (el) => el.getBoundingClientRect().top + window.scrollY; return top(document.querySelector('.hero .eyebrow')) >= top(document.querySelector('#ecosystem')) + document.querySelector('#ecosystem').getBoundingClientRect().height; }), 'mobile: hero eyebrow sits below the ecosystem band (page coordinates)');
->>>>>>> main
   say((await page.$$('.card')).length === EXPECTED_WORLDS.length, `${vp.n}: ${EXPECTED_WORLDS.length} portfolio worlds`);
   say((await page.locator('.os-card').count()) === 5, `${vp.n}: five public standalone OS builds`);
   say(JSON.stringify(await page.evaluate(() => [...document.querySelectorAll('.os-card h3')].map((e) => e.textContent))) === JSON.stringify(expectedOS), `${vp.n}: standalone OS identities preserved`);
@@ -333,6 +323,32 @@ for (const vp of [{ n: 'portfolio-desktop', w: 1440, h: 900 }, { n: 'portfolio-m
   say((await page.locator('#projects .project').count()) === 10, `${vp.n}: category filter renders ten founder-software identities`);
   say(((await page.textContent('#countLine')) || '').startsWith('10 of 20'), `${vp.n}: filtered count updates`);
   say((await page.evaluate(() => [...document.querySelectorAll('a,button')].filter((e) => { const b = e.getBoundingClientRect(); return b.width > 0 && b.height < 40; }).length)) === 0, `${vp.n}: tap targets >= 40px`);
+  say(errors.length === 0, `${vp.n}: no console errors${errors.length ? ' — ' + errors.join(' | ') : ''}`);
+  await page.screenshot({ path: `proof/site/${vp.n}.png`, fullPage: true }); await ctx.close();
+}
+/* ---------- Creation Core idea generator ---------- */
+for (const vp of [{ n: 'ideas-desktop', w: 1440, h: 900 }, { n: 'ideas-tablet', w: 834, h: 1112, m: true }, { n: 'ideas-mobile', w: 390, h: 844, m: true }]) {
+  const ctx = await browser.newContext({ viewport: { width: vp.w, height: vp.h }, isMobile: !!vp.m, hasTouch: !!vp.m }); const page = await ctx.newPage();
+  const errors = []; page.on('pageerror', (e) => errors.push(String(e))); page.on('requestfailed', (r) => { if (!/fonts\.(googleapis|gstatic)\.com/.test(r.url())) errors.push(`${r.failure()?.errorText} ${r.url()}`); }); page.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) errors.push(m.text()); });
+  await page.goto(`${url}ideas.html`, { waitUntil: 'load' });
+  await page.waitForFunction(() => document.querySelectorAll('#products input').length > 0);
+  say((await page.locator('link[rel="canonical"]').getAttribute('href')) === 'https://www.jussco.company/ideas.html', `${vp.n}: canonical URL`);
+  say((await page.locator('#products input').count()) === portfolio.projects.length, `${vp.n}: product chips derive from portfolio.json`);
+  say((await page.locator('#cards .card').count()) === 3, `${vp.n}: three starting candidates`);
+  const text = await page.textContent('body');
+  say(!/\d+\s*%\s*YoY|\+\d+%/i.test(text), `${vp.n}: no fabricated demand statistics`);
+  say((await page.locator('#cards .status').allTextContents()).every((t) => /unverified/i.test(t)), `${vp.n}: every candidate labelled unverified`);
+  await page.fill('#goal', 'Find shopify store and product catalog opportunities');
+  await page.click('#generate');
+  await page.waitForFunction(() => /ranked by fit|Nothing matched/.test(document.querySelector('#candKicker').textContent));
+  say((await page.locator('#cards .card').first().getAttribute('data-lane')) === 'shopping', `${vp.n}: commerce goal ranks shopping lane first`);
+  say(/Fit is not demand/.test(await page.textContent('#candKicker')), `${vp.n}: fit/demand boundary visible`);
+  await page.click('#sound');
+  say((await page.getAttribute('#sound', 'aria-checked')) === 'true', `${vp.n}: ambient sound toggles on a user gesture`);
+  const before = await page.textContent('#atmoName'); await page.click('#atmo');
+  say((await page.textContent('#atmoName')) !== before, `${vp.n}: atmosphere cycles`);
+  say((await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)) === 0, `${vp.n}: no horizontal overflow`);
+  say((await page.evaluate(() => [...document.querySelectorAll('a,button,summary')].filter((e) => { const b = e.getBoundingClientRect(); return b.width > 0 && b.height < 40; }).length)) === 0, `${vp.n}: tap targets >= 40px`);
   say(errors.length === 0, `${vp.n}: no console errors${errors.length ? ' — ' + errors.join(' | ') : ''}`);
   await page.screenshot({ path: `proof/site/${vp.n}.png`, fullPage: true }); await ctx.close();
 }

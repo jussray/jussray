@@ -1,3 +1,13 @@
+## 2026-11-07 — Creation Core idea generator (`site/ideas.html`)
+
+- REALITY: new public page `/ideas.html`, built from Juss's mockups. It is client-side only: no backend, no LLM call, and no data leaves the browser. Product chips come from `site/data/portfolio.json`. Candidates are ranked by keyword and category fit, and every one is labelled "Research candidate · unverified". The page never shows demand numbers. The mockup's "+182% YoY" style signals were invented, so the signals panel shows an honest empty state instead. The search, bell and "My Juss" icons were dropped because they had no working function behind them.
+- FIX (same branch): `scripts/verify-site.mjs` on `main` contained committed merge-conflict markers from #62, so site-proof could not even parse. I kept the `main` side (the ecosystem-first hero from #64, which hides `.hero-notes`). I removed two HEAD-side assertions that describe the hidden hero artwork. HEAD-side checks that still hold were kept: asset resolves, three product pathways, distinct destinations.
+- PROOF (local, `claude/sleepy-mayer-1s8avr`): verify-site 356 ok / 1 FAIL. All 36 `ideas-*` checks pass at three widths. `node --test` 33/33 passing; approved-stories gate passed.
+- OPEN: `games hub: mobile no horizontal overflow` fails (scrollWidth 392 vs 390, no overflowing element found). This predates the branch; it was hidden by the parse error. DEAD END in one probe; needs its own fix.
+- RISK: the fit ranking is a heuristic, not research. Linked from the homepage footer and the sitemap only.
+- ROLLBACK: revert the branch commit.
+- NEXT GATE: exact-head CI on the draft PR. Merge and deploy are held for Juss.
+
 ## 2026-11-04 — Standing rule: never work around a blocker; implement the fix
 
 - RULE (Juss, 2026-11-04): when a blocker stands in the way of a project, do not route around it. Diagnose the cause, implement the needed fix in the project itself, and prove it. A workaround that leaves the blocker in place does not count as done.
