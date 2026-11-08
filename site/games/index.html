@@ -184,6 +184,8 @@ header .brand{font-size:23px}.brand .crown{font-size:27px;margin-right:7px}
 
 
 /* Responsive mobile doorway: cinematic stage stays visible; deep content is progressive. */
+.header-tools .utility{min-width:44px;min-height:44px}
+
 [hidden]{display:none!important}
 #hub-mobile-mount,#all-games-toggle{display:none}
 @media(max-width:800px){
@@ -231,7 +233,7 @@ header .brand{font-size:23px}.brand .crown{font-size:27px;margin-right:7px}
 <a aria-current="page" href="#games">Products</a><a href="https://jussco.company/#solutions">Solutions</a>
 <a href="https://jussco.company/#work">Our Work</a><a href="https://jussco.company/#founder">Founder</a><a href="https://jussco.company/#contact">Contact</a></nav>
 <div class="header-tools"><button class="utility" id="search-toggle" type="button" aria-label="Search games" aria-expanded="false">⌕</button>
-<a class="utility" href="https://jussco.company/" aria-label="Juss and Co home">My Juss ↗</a>
+<a class="utility" href="https://jussco.company/" aria-label="Company home">⌂</a>
 <button class="utility" id="mobile-menu" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Open navigation">☰</button></div></div>
 <div id="search-panel" class="glass-world" hidden><label for="game-search">Find a game</label>
 <input type="search" id="game-search" placeholder="Search SYNC and upcoming games" autocomplete="off"></div>
@@ -369,7 +371,7 @@ header .brand{font-size:23px}.brand .crown{font-size:27px;margin-right:7px}
     nav.classList.remove('is-open');
     menu.setAttribute('aria-expanded','false');
     if(mobile.matches)closeHub();
-    if(!search.hidden){search.hidden=true;toggle.setAttribute('aria-expanded','false');}
+    if(!search.hidden){search.hidden=true;toggle.setAttribute('aria-expanded','false');field.value='';document.querySelectorAll('#games article.card').forEach(card=>card.hidden=false);}
   });
   if(mobile.addEventListener)mobile.addEventListener('change',syncMobile);
   else mobile.addListener(syncMobile);
