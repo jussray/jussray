@@ -37,6 +37,7 @@ try {
     assert.equal(await page.locator('.header-tools .utility').evaluateAll(nodes=>nodes.filter(el=>getComputedStyle(el).display!=='none').every(el=>{const box=el.getBoundingClientRect();return box.width>=44&&box.height>=44;})),true,'header tools meet 44px touch targets');
     assert.equal(await page.locator('#game-hub-center').count(),1,'Game Hub Center visible in hub, not a game runtime');
     assert.equal(await page.locator('#living-world-scene').count(),1,'clean cinematic world is present');
+    assert.equal(await page.locator('#hub-lotus').count(),1,'decorative lotus sculpture is present without changing game identity');
     assert.equal(await page.locator('#site-nav a[aria-current="page"]').textContent(),'Games','Game Hub nav is the current destination, not Products');
     assert.equal(await page.locator('.skip-link').getAttribute('href'),'#main','keyboard users have a content bypass');
     assert.equal(await page.locator('#game-hub-center a[href="#lumora-world"]').count(),1,'upcoming shortcut targets real game details');
@@ -49,6 +50,7 @@ try {
     assert.equal(await page.locator('a[href="https://sync-playtest.lovable.app/"]').count()>0,true,'Lovable SYNC remains separate');
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,'no horizontal overflow');
     assert.equal(await page.locator('#ambient-toggle').getAttribute('aria-pressed'),'false','audio off initially');
+    await page.screenshot({path:'proof/site/game-hub-'+label+'-initial.png',fullPage:false});
     await page.locator('#search-toggle').click();
     assert.equal(await page.locator('#search-toggle').getAttribute('aria-expanded'),'true','search exposes expanded state');
     await page.locator('#game-search').fill('LUMORA');
@@ -63,13 +65,13 @@ try {
     assert.equal(await page.locator('#games article.card[hidden]').count(),0,'Escape restores all game listings');
     assert.equal(await page.locator('#games .cards').isVisible(),label==='desktop','Escape restores progressive mobile disclosure');
     assert.deepEqual(errors,[],'no page script errors');
-    await page.screenshot({path:'proof/site/game-hub-'+label+'-initial.png',fullPage:false});
     if(label!=='desktop'){
       assert.equal(await page.locator('html').getAttribute('data-hub-view'),'home','mobile lands on the one-screen hub');
       assert.equal(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight+1),true,'landing has no vertical scrolling');
       assert.equal(await page.locator('#hub-bottom-nav a').count(),5,'all five company page destinations are available');
       assert.equal(await page.locator('#ambient-mobile-mount #ambience').count(),1,'ambience stays on screen');
       assert.equal(await page.locator('#games').isVisible(),false,'game details do not extend the landing');
+      assert.equal(await page.locator('#hub-lotus').isVisible(),true,'illuminated lotus is visible on phone landing');
       const menu=page.locator('#mobile-menu');
       await menu.click();
       assert.equal(await menu.getAttribute('aria-expanded'),'true','mobile nav opens');

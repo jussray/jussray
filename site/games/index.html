@@ -312,6 +312,19 @@ header .brand{font-size:23px}.brand .crown{font-size:27px;margin-right:7px}
  #featured .featured-tile:nth-child(2) small,#featured .featured-tile:nth-child(3) small{display:none}
  #featured .featured-tile:nth-child(2) strong,#featured .featured-tile:nth-child(3) strong{font-family:Georgia,serif;font-weight:500;letter-spacing:-.03em}
 }
+
+/* Bright glass, gold lettering and centered light sculpture match the cinematic reference. */
+#hub-lotus{display:none}
+@media(max-width:800px){
+ .hero h1,.hero h1 span{color:#ffdfab;text-shadow:0 0 18px #ffcb9ba4,0 5px 18px #140a32}
+ .hero-actions .action{color:#fff9df;border:1.5px solid #ffd29a;background:linear-gradient(120deg,#49304ecc,#251a48e5);box-shadow:0 0 20px #ff9f61a6,inset 0 0 11px #ffbd8860}
+ .hero-actions .action.outline{border-color:#94e1ff;color:#f3fbff;background:linear-gradient(125deg,#23365de3,#241845d9);box-shadow:0 0 18px #5dafff9e,inset 0 0 10px #7a96ec44}
+ #featured h2{color:#ffe6b5;text-shadow:0 0 14px #ffc49b99}
+ #hub-lotus{display:block;position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:min(86vw,344px);height:clamp(105px,19dvh,166px);z-index:0;opacity:.92;pointer-events:none;filter:drop-shadow(0 0 12px #b969ff8c)}
+ .hero .hero-actions{position:relative;z-index:1}
+}
+@media(max-width:800px) and (max-height:720px){#hub-lotus{height:clamp(61px,11.5dvh,85px);bottom:0;opacity:.85}}
+@media(prefers-reduced-motion:reduce){#hub-lotus{animation:none}}
 </style>
 </head>
 <body>
@@ -345,6 +358,22 @@ header .brand{font-size:23px}.brand .crown{font-size:27px;margin-right:7px}
 <a href="#lumora-world"><span class="nav-ico">✧</span> Upcoming Worlds <small>In development, not open for play</small></a>
 <a href="#safety"><span class="nav-ico">◇</span> Safety &amp; Availability <small>Verified access and age safeguards</small></a>
 </aside>
+<svg id="hub-lotus" viewBox="0 0 440 212" aria-hidden="true" focusable="false">
+<defs><linearGradient id="hub-petal-gradient" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#68edff"/><stop offset=".45" stop-color="#bc69ff"/><stop offset=".75" stop-color="#ff9de3"/><stop offset="1" stop-color="#ffd680"/></linearGradient><radialGradient id="hub-orb-gradient"><stop stop-color="#5eecff" stop-opacity=".82"/><stop offset=".57" stop-color="#6c6dff" stop-opacity=".31"/><stop offset="1" stop-color="#a157ff" stop-opacity=".08"/></radialGradient><filter id="hub-petal-glow" x="-50%" y="-60%" width="200%" height="220%"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<g filter="url(#hub-petal-glow)" fill="none" stroke="url(#hub-petal-gradient)" stroke-width="2.8" stroke-linejoin="round">
+<ellipse cx="220" cy="192" rx="201" ry="14" stroke="#ffd59b" stroke-width="2"/>
+<ellipse cx="220" cy="188" rx="169" ry="10" stroke="#74d9ff" stroke-width="1.5"/>
+<path d="M220 186 Q136 190 67 104 Q132 111 220 186 Q310 111 373 104 Q306 190 220 186Z"/>
+<path d="M220 182 Q112 177 101 81 Q157 97 220 182 Q283 97 339 81 Q329 177 220 182Z"/>
+<path d="M220 184 Q158 154 159 48 Q194 76 220 184 Q246 76 281 48 Q282 154 220 184Z"/>
+<path d="M220 184 Q188 137 220 23 Q253 137 220 184Z"/>
+<path d="M220 185 Q93 196 35 143 Q125 143 220 185 Q315 143 405 143 Q349 196 220 185Z"/>
+<path d="M220 183 Q154 195 80 172 M220 183 Q287 195 360 172" stroke-width="1.4"/>
+</g>
+<circle cx="220" cy="113" r="62" fill="url(#hub-orb-gradient)" stroke="#78e8ff" stroke-width="2.5" opacity=".94"/>
+<g fill="none" stroke="#d7adff" stroke-width="1.35" opacity=".9"><ellipse cx="220" cy="113" rx="26" ry="62"/><ellipse cx="220" cy="113" rx="52" ry="62"/><ellipse cx="220" cy="113" rx="62" ry="25"/><path d="M158 113h124 M178 72l84 82 M178 154l84-82"/></g>
+<circle cx="220" cy="183" r="11" fill="#fff1ad" filter="url(#hub-petal-glow)"/>
+</svg>
 <div id="ambience" class="glass-world" aria-label="Ambient sound and atmosphere">
 <div class="amb-row"><span>♫ &nbsp; Ambient sound</span><button id="ambient-toggle" type="button" aria-pressed="false" aria-label="Turn on soft water ambience">Off</button></div>
 <div class="amb-row"><span>☀ &nbsp; Current atmosphere</span><strong id="current-season" style="text-transform:capitalize">Automatic</strong></div>
