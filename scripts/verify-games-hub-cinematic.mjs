@@ -35,6 +35,9 @@ try {
     assert.equal(await page.locator('.header-tools .utility').evaluateAll(nodes=>nodes.filter(el=>getComputedStyle(el).display!=='none').every(el=>{const box=el.getBoundingClientRect();return box.width>=44&&box.height>=44;})),true,'header tools meet 44px touch targets');
     assert.equal(await page.locator('#game-hub-center').count(),1,'Game Hub Center visible in hub, not a game runtime');
     assert.equal(await page.locator('#living-world-scene').count(),1,'clean cinematic world is present');
+    assert.equal(await page.locator('#site-nav a[aria-current="page"]').textContent(),'Games','Game Hub nav is the current destination, not Products');
+    assert.equal(await page.locator('.skip-link').getAttribute('href'),'#main','keyboard users have a content bypass');
+    assert.equal(await page.locator('#game-hub-center a[href="#lumora-world"]').count(),1,'upcoming shortcut targets real game details');
     assert.match(await page.locator('#living-world-scene').evaluate(el=>getComputedStyle(el).backgroundImage),/home-scene\.webp/);
     const imageResponse=await page.request.get('http://127.0.0.1:'+address.port+'/assets/home-scene.webp');
     assert.equal(imageResponse.status(),200,'cinematic scene is packaged with Games Worker assets');
@@ -44,6 +47,19 @@ try {
     assert.equal(await page.locator('a[href="https://sync-playtest.lovable.app/"]').count()>0,true,'Lovable SYNC remains separate');
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,'no horizontal overflow');
     assert.equal(await page.locator('#ambient-toggle').getAttribute('aria-pressed'),'false','audio off initially');
+    await page.locator('#search-toggle').click();
+    assert.equal(await page.locator('#search-toggle').getAttribute('aria-expanded'),'true','search exposes expanded state');
+    await page.locator('#game-search').fill('LUMORA');
+    assert.equal(await page.locator('#games article.card:visible').count(),1,'search reveals matching game even on a collapsed mobile collection');
+    assert.match(await page.locator('#search-status').innerText(),/1 game found/,'search announces the match count accessibly');
+    assert.equal(await page.locator('#search-view').isVisible(),true,'search provides a jump to visible matches');
+    await page.locator('#game-search').fill('game-title-that-does-not-exist');
+    assert.equal(await page.locator('#games article.card:visible').count(),0,'unknown games have no false matches');
+    assert.match(await page.locator('#search-status').innerText(),/No games found/,'empty results are announced');
+    await page.keyboard.press('Escape');
+    assert.equal(await page.locator('#search-panel').isVisible(),false,'Escape closes search');
+    assert.equal(await page.locator('#games article.card[hidden]').count(),0,'Escape restores all game listings');
+    assert.equal(await page.locator('#games .cards').isVisible(),label==='desktop','Escape restores progressive mobile disclosure');
     assert.deepEqual(errors,[],'no page script errors');
     if(label==='mobile'){
       const menu=page.locator('#mobile-menu');
@@ -67,6 +83,9 @@ try {
       await page.waitForTimeout(200);
       assert.equal(await track.evaluate(el=>el.scrollLeft>0),true,'carousel next control reveals more games');
       assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,'mobile interactions never create horizontal overflow');
+      await hubToggle.click();
+      await page.locator('#game-hub-center a[href="#lumora-world"]').click();
+      assert.equal(await page.locator('#lumora-world').isVisible(),true,'Upcoming Worlds reveals an actual in-development card');
     }
     await page.screenshot({path:'proof/game-hub/'+label+'.png',fullPage:false});
     await page.close();
