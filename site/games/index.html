@@ -53,26 +53,358 @@ header{box-shadow:0 12px 45px #02031938}
 .edition{background:linear-gradient(145deg,#211d4fd9,#090b28cc);border-color:#7364ad}
 .action{min-height:46px;transition:transform .18s ease,background .18s ease}.action:hover{transform:translateY(-1px)}
 .notes{background:linear-gradient(140deg,#19163fdf,#101d3ddb);border-color:#7a6cac82}
-@media(max-width:700px){header .inner{flex-wrap:wrap;gap:3px 15px;padding:10px 0}header{position:relative}nav{width:100%;justify-content:space-between}nav a{min-height:40px;display:inline-flex;align-items:center}.hero{min-height:unset}.hero:before{width:220px;height:220px;right:0;top:6%;opacity:.20}.hero h1{font-size:clamp(46px,11vw,73px)}.art{min-height:190px}.art-title{font-size:35px;left:20px;bottom:18px}.card-body{padding:21px}.card:hover{transform:none}}
+@media(max-width:700px){header .inner{flex-wrap:wrap;gap:3px 15px;padding:10px 0}header{position:relative}nav{width:100%;justify-content:space-between}nav a{min-height:40px;display:inline-flex;align-items:center}.hero{min-height:unset}.hero:before{width:220px;height:220px;right:-20px;top:6%;opacity:.20}.hero h1{font-size:clamp(46px,11vw,73px)}.art{min-height:190px}.art-title{font-size:35px;left:20px;bottom:18px}.card-body{padding:21px}.card:hover{transform:none}}
 @media(prefers-reduced-motion:reduce){.card,.action{transition:none}.card:hover,.action:hover{transform:none}}
+
+
+/* Game Hub is a Juss & Co doorway, not an override of any individual game. */
+html{background:#0c1935}
+body{position:relative;isolation:isolate;background:transparent;color:#fff9ef;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+#living-world-scene{position:fixed;inset:0;z-index:-2;background:#0e2544 url('/assets/home-scene.webp') center center/cover no-repeat;pointer-events:none}
+#living-world-scene:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,34,.30),transparent 27%,rgba(9,11,32,.30) 57%,rgba(7,9,28,.72)),linear-gradient(90deg,rgba(9,8,28,.24),transparent 54%,rgba(9,8,28,.10))}
+header{position:relative;z-index:30;background:transparent;border:0;box-shadow:none;backdrop-filter:none}
+header .inner{width:min(1540px,calc(100% - 40px));min-height:81px;display:grid;grid-template-columns:auto 1fr auto;gap:28px}
+.brand{font-family:Georgia,serif;font-size:clamp(24px,2.3vw,36px);font-weight:400;text-shadow:0 3px 15px #100c32;letter-spacing:-.045em}.brand em{color:#ffe2a3}.brand .crown{font-size:clamp(27px,2.8vw,43px);vertical-align:middle;margin-right:12px;color:#ffd987;filter:drop-shadow(0 0 9px #ffaa6a)}
+.brand small{display:block;text-align:right;font:600 9px system-ui,sans-serif;letter-spacing:.47em;color:#f9e8e3;margin-top:-9px}
+header nav{justify-self:center;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;max-width:870px;padding:6px 10px;border-radius:50px;border:1px solid #ffe5c58a;background:linear-gradient(100deg,#1c153b91,#383264a8);box-shadow:inset 0 1px #ffffff38,0 10px 35px #03041466;backdrop-filter:blur(18px)}
+header nav a{font-size:12px;color:#fff6ee;padding:10px 16px;line-height:1.2;min-height:40px;text-decoration:none;border-radius:30px;font-weight:500}
+header nav a[aria-current="page"]{color:#271632;background:linear-gradient(90deg,#ffc38f,#ffeec6);box-shadow:0 0 16px #ffc3a7aa}
+.header-tools{display:flex;align-items:center;justify-content:flex-end;gap:8px}
+.utility{min-height:43px;min-width:43px;border-radius:28px;border:1px solid #f4d2c38a;background:linear-gradient(110deg,#171631c7,#483251a1);box-shadow:inset 0 1px #fff4,0 6px 20px #10091a9e;color:#fff8ef;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-size:13px;padding:8px 13px}
+.utility:hover{border-color:#ffe8bb;box-shadow:0 0 20px #ffc79a88}
+#mobile-menu{display:none}
+main{width:min(1480px,calc(100% - 44px));padding-bottom:70px}
+.glass-world{background:linear-gradient(135deg,#30244ecf,#15192dd6 78%);border:1px solid #ffddb68f;box-shadow:inset 0 1px #fff5,0 14px 50px #0906219a,0 0 25px #f1a67530;backdrop-filter:blur(19px);-webkit-backdrop-filter:blur(19px);border-radius:25px}
+.hero{padding:28px 295px 165px 236px;min-height:535px;display:flex;align-items:center;justify-content:flex-start;text-align:center;flex-direction:column;isolation:auto}
+.hero:before{display:none}
+.hero .eyebrow{padding:0;border:0;background:transparent;font-family:Georgia,serif;font-size:12px;color:#fff4da;letter-spacing:.42em;font-weight:400}
+.hero h1{margin:5px 0 3px;font:400 clamp(62px,8.7vw,116px)/1 Georgia,serif;letter-spacing:-.06em;text-shadow:0 6px 18px #11132c}
+.hero h1 span{color:#fff2db;background:none}
+.hero .lead{font-size:12px;font-weight:650;letter-spacing:.23em;text-transform:uppercase;max-width:520px;color:#fff2e4}
+.hero .description{font-size:14px;line-height:1.55;color:#fceadd;text-shadow:0 2px 16px #120b37;max-width:510px;margin:12px 0 0}
+.hero-actions{margin:21px 0 0;display:flex;justify-content:center;gap:13px}
+.hero-actions .action{min-height:45px;border-radius:28px;padding:10px 23px;background:linear-gradient(120deg,#ffbd82,#ffedba);color:#28152e;border:1px solid #ffe2b4;box-shadow:0 0 24px #f5ad75b3;text-decoration:none;font-size:13px}
+.hero-actions .action.outline{color:#fff9ed;background:#1e1c40b8;border:1px solid #ffe1e3a1;box-shadow:0 0 18px #a790d077}
+.hero-quote{position:absolute;left:0;top:128px;width:200px;text-align:left;padding:20px 22px;font:italic 18px/1.4 Georgia,serif;text-shadow:0 3px 16px #07091e;background:linear-gradient(90deg,#16162b8a,#121c3d1e);border-left:1px solid #ffe0a572;border-radius:16px}
+.hero-quote b{display:block;font:italic 22px Georgia,serif;text-align:right;color:#ffdf99;margin-top:14px}
+#game-hub-center{position:absolute;right:0;top:54px;width:269px;padding:18px 18px 13px;text-align:left}
+#game-hub-center h2{font:400 26px/1.1 Georgia,serif;text-align:center;margin:3px 0 12px}
+#game-hub-center a{display:block;border-top:1px solid #e6d1d055;padding:10px 7px;text-decoration:none;font-size:13px;color:#fff8ed}
+#game-hub-center a:hover{background:#ead6ff17}
+#game-hub-center a small{display:block;margin-left:23px;color:#e3d5df;font-size:10px}
+#game-hub-center .nav-ico{display:inline-block;width:25px;text-align:center;color:#ffdb94}
+#ambience{position:absolute;left:0;bottom:40px;padding:13px 15px;width:213px;text-align:left;font-size:12px}
+#ambience .amb-row{display:flex;align-items:center;justify-content:space-between;gap:9px}
+#ambience .amb-row + .amb-row{border-top:1px solid #ddc1e258;padding-top:9px;margin-top:10px}
+#ambient-toggle{border:1px solid #dccce9aa;color:#fff7e4;background:#2b244e;padding:6px 12px;border-radius:20px;min-width:48px}
+#ambient-toggle[aria-pressed="true"]{background:#a9e6f9;color:#122038}
+#featured{position:relative;margin:-98px auto 45px;max-width:1190px;padding:18px 27px 25px;border-radius:40px;border:1px solid #ffe4bba8;background:linear-gradient(180deg,#30203dcf,#181838dd);box-shadow:0 0 37px #fc9b6654,0 24px 50px #080c30a6,inset 0 1px #fffffc44;backdrop-filter:blur(23px)}
+#featured h2{text-align:center;font:400 clamp(29px,3vw,42px)/1.15 Georgia,serif;margin:0 0 19px}
+.featured-track{display:grid;grid-auto-columns:minmax(0,1fr);grid-auto-flow:column;gap:11px;overflow-x:auto;scrollbar-width:thin;scroll-snap-type:x mandatory;padding:5px 2px 9px}
+.featured-tile{min-width:0;scroll-snap-align:start;padding:14px 10px 13px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border-radius:21px;border:1px solid #f9c6be9b;background:linear-gradient(145deg,#292044dd,#151738db);box-shadow:inset 0 1px #ffffff66,0 0 18px #fba46d37;text-align:center;min-height:152px;text-decoration:none}
+.featured-tile:hover,.featured-tile:focus-visible{border-color:#fff2cb;box-shadow:0 0 28px #f3ba74b7}
+.featured-tile .symbol{font:51px/1.1 system-ui;filter:drop-shadow(0 0 13px #a970ff)}
+.featured-tile strong{font:400 20px/1.15 Georgia,serif}
+.featured-tile small{font-size:10px;color:#f5d9dc;line-height:1.3}
+#featured .hint{font:11px system-ui,sans-serif;color:#ffe9c9;text-align:center;margin:11px 0 0}
+.featured-toolbar{display:flex;justify-content:flex-end;gap:8px}
+.featured-toolbar button{min-height:35px;min-width:35px;border-radius:50%;background:#2b2350c9;color:#ffe3bb;border:1px solid #ffd3ab8c}
+#games{scroll-margin-top:20px}
+#games .section-heading{margin:30px 0 20px}
+#games .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+#games .card{background:linear-gradient(153deg,#30244adf,#0a1837ec);border-color:#ffddc496;box-shadow:0 20px 55px #07031b9e,0 0 21px #ffb97c22;backdrop-filter:blur(20px)}
+#games .card .art{min-height:195px}
+#games .card-body{background:#14112eb8}
+#games .card .tag.wait{color:#ffdeb6;border-color:#ffce9677}
+#games .card .tag.live{color:#c2ffd8;border-color:#adf3ce}
+#games .edition{background:#171536d6;border:1px solid #c3adeb8a}
+#games .action{background:linear-gradient(115deg,#a86beb,#7958f0);border:1px solid #bc9ef0}
+#games .action.outline{background:#1c234bc7}
+.notes{scroll-margin-top:55px;background:#0d1832df;border-color:#c7a5c2a6;backdrop-filter:blur(22px)}
+footer{background:#080e27dd;border-color:#e6cebf3b}
+#search-panel{padding:14px 20px;max-width:550px;margin:12px auto;border-radius:20px}
+#search-panel[hidden]{display:none}
+#search-panel label{font-size:12px;color:#ffdfac}
+#search-panel input{width:100%;padding:12px;color:#fff8ed;border-radius:14px;background:#151733;border:1px solid #d8bdc8;font:inherit}
+html[data-season="winter"] #living-world-scene{filter:saturate(.92) brightness(.95)}
+html[data-season="summer"] #living-world-scene{filter:saturate(1.13) brightness(1.03)}
+html[data-season="autumn"] #living-world-scene{filter:saturate(1.08) sepia(.08)}
+.world-atmosphere{position:fixed;inset:0;z-index:5;pointer-events:none}
+@media(max-width:1120px){
+header .inner{grid-template-columns:1fr auto;gap:11px}
+header nav{grid-row:2;grid-column:1/-1;max-width:100%}
+.hero{padding:29px 230px 160px 190px}
+.hero-quote{width:166px;font-size:15px}
+#game-hub-center{width:210px;padding:14px 12px}
+#game-hub-center h2{font-size:23px}
+#ambience{width:170px;font-size:11px}
+.featured-track{grid-auto-columns:minmax(150px,1fr)}
+}
+@media(max-width:800px){
+header .inner{display:flex;flex-wrap:wrap;justify-content:space-between;width:calc(100% - 26px);padding:14px 0}
+#mobile-menu{display:inline-flex}
+header nav{display:none;order:3;width:100%;justify-content:center;flex-wrap:wrap}
+header nav.is-open{display:flex}
+header nav a{font-size:12px}
+.header-tools{margin-left:auto}
+#living-world-scene{background-position:50% center}
+main{width:calc(100% - 22px)}
+.hero{min-height:610px;padding:24px 12px 150px}
+.hero-quote{display:none}
+.hero h1{font-size:clamp(66px,12vw,94px)}
+.hero .lead{font-size:11px;letter-spacing:.12em}
+.hero .description{font-size:13px;max-width:470px}
+#game-hub-center{position:static;width:min(100%,560px);margin:210px auto 0}
+#ambience{position:static;width:min(100%,560px);margin:12px auto 0}
+#featured{margin:16px 0 33px;border-radius:28px;padding:20px 15px}
+.featured-track{grid-auto-columns:clamp(140px,39vw,185px)}
+#games .cards{grid-template-columns:1fr}
+}
+@media(max-width:520px){
+header .brand{font-size:23px}.brand .crown{font-size:27px;margin-right:7px}
+.header-tools .utility{padding:8px;min-width:38px;font-size:12px}
+.hero{min-height:710px;padding-top:29px}
+.hero h1{font-size:69px}
+.hero .description{max-width:360px}
+.hero-actions{flex-wrap:wrap;gap:9px}
+.hero-actions .action{font-size:12px;padding:9px 15px}
+#game-hub-center{margin-top:200px}
+#featured{margin-top:18px}
+#featured h2{font-size:29px}
+.featured-tile{min-height:138px}
+.featured-tile .symbol{font-size:45px}
+.featured-tile strong{font-size:18px}
+}
+@media(prefers-reduced-motion:reduce){
+.featured-track{scroll-behavior:auto}
+#living-world-scene{transition:none}
+.world-atmosphere{display:none}
+.featured-tile,#games .card{transition:none!important;transform:none!important}
+}
+
+
+/* Responsive mobile doorway: cinematic stage stays visible; deep content is progressive. */
+.header-tools .utility{min-width:44px;min-height:44px}
+
+[hidden]{display:none!important}
+#hub-mobile-mount,#all-games-toggle{display:none}
+@media(max-width:800px){
+  #living-world-scene{background-position:50% 54%}
+  .hero{min-height:clamp(465px,65svh,575px);padding:26px 12px 108px}
+  .hero .description{max-width:36ch}
+  #ambience{position:absolute;left:50%;bottom:6px;transform:translateX(-50%);width:min(100%,350px);margin:0;padding:10px 14px}
+  #featured{margin:-8px auto 16px;padding:17px 13px 19px}
+  .featured-track{grid-auto-columns:clamp(150px,58vw,230px);scroll-padding-inline:4px;overscroll-behavior-inline:contain}
+  #hub-mobile-mount{display:block;width:min(100%,580px);margin:6px auto 22px}
+  #game-hub-toggle,#all-games-toggle{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:11px 18px;border-radius:999px;border:1px solid #ffe0a7;background:linear-gradient(130deg,#372044d9,#151836ea);color:#fff3d6;box-shadow:0 0 18px #f4b67777,inset 0 1px #ffffff66;font:600 15px system-ui;cursor:pointer}
+  #game-hub-toggle{width:100%;font:400 24px Georgia,serif}
+  #game-hub-toggle:after{content:"⌄";margin-left:auto;font:25px system-ui}
+  #game-hub-toggle[aria-expanded="true"]:after{content:"⌃"}
+  #game-hub-center{position:static;width:100%;margin:12px auto 0}
+  #games .section-heading{gap:13px}
+  #games[data-collapsed="true"] .cards{display:none}
+  #all-games-toggle{font-size:13px}
+  #games .cards{margin-top:16px}
+}
+@media(max-width:520px){
+  header .inner{min-height:64px}
+  .hero{min-height:clamp(475px,67svh,570px);padding:22px 5px 100px}
+  .hero h1{font-size:clamp(55px,15.5vw,69px)}
+  .hero .lead{font-size:10px;letter-spacing:.1em}
+  .hero .description{font-size:12px;line-height:1.5}
+  .hero-actions{flex-wrap:nowrap;gap:7px;margin-top:17px}
+  .hero-actions .action{font-size:12px;padding:10px 13px;white-space:nowrap}
+  #featured h2{font-size:clamp(24px,7vw,30px)}
+  .featured-tile{min-height:145px}
+  .featured-toolbar button{min-height:44px;min-width:44px}
+  #games .section-heading{align-items:flex-start}
+  #games .section-heading h2{font-size:29px}
+}
+@media(prefers-reduced-motion:reduce){#game-hub-toggle,#all-games-toggle{transition:none}}
 
 </style>
 </head>
 <body>
-<header><div class="inner"><a class="brand" href="https://jussco.company/">Juss <em>&amp;</em> Co. <span style="color:#ae8fff">GAMES</span></a><nav aria-label="Main navigation"><a href="#games">Explore games</a><a href="https://jussco.company/">Company home ↗</a></nav></div></header>
+<div id="living-world-scene" aria-hidden="true"></div>
+<header><div class="inner">
+<a class="brand" href="https://jussco.company/" aria-label="Juss and Co home"><span class="crown" aria-hidden="true">♛</span>Juss <em>&amp;</em> Co<small>COMPANY</small></a>
+<nav id="site-nav" aria-label="Juss and Co sections">
+<a href="https://jussco.company/">Home</a><a href="https://jussco.company/#worlds">Portfolio</a>
+<a aria-current="page" href="#games">Products</a><a href="https://jussco.company/#solutions">Solutions</a>
+<a href="https://jussco.company/#work">Our Work</a><a href="https://jussco.company/#founder">Founder</a><a href="https://jussco.company/#contact">Contact</a></nav>
+<div class="header-tools"><button class="utility" id="search-toggle" type="button" aria-label="Search games" aria-expanded="false">⌕</button>
+<a class="utility" href="https://jussco.company/" aria-label="Company home">⌂</a>
+<button class="utility" id="mobile-menu" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Open navigation">☰</button></div></div>
+<div id="search-panel" class="glass-world" hidden><label for="game-search">Find a game</label>
+<input type="search" id="game-search" placeholder="Search SYNC and upcoming games" autocomplete="off"></div>
+</header>
 <main>
-<section class="hero" aria-labelledby="hero-title"><div class="eyebrow">Welcome to the play universe</div><h1 id="hero-title">Choose your <span>next adventure.</span></h1><p class="lead">Games for friends, families, and curious minds. Enter a live party or discover the worlds we're building next.</p><div class="spark" aria-hidden="true">✦</div><div class="hero-actions"><a class="action" href="#games">Explore the worlds ↓</a><span class="hero-note">SYNC is playable · More adventures in development</span></div></section>
-<section id="games" aria-labelledby="games-title"><div class="section-heading"><h2 id="games-title">Our game worlds</h2><p>One home. Different adventures.</p></div><div class="cards">
-<article class="card"><div class="art sync-art" aria-hidden="true"><span>🎉</span><b class="art-title">SYNC</b></div><div class="card-body"><span class="meta">Game family / three distinct experiences</span><h3>SYNC</h3><p>Think alike. Beat the clock. Read the room. SYNC has three flavors, each with its own personality.</p><span class="tag live">Live Site SYNC</span>
+<section class="hero" aria-labelledby="hero-title">
+<div class="eyebrow">♛ &nbsp; J U S S &amp; C O</div>
+<h1 id="hero-title">Game <span>Hub</span></h1>
+<p class="lead">Play · Connect · Create · Compete</p>
+<p class="description">A world for discovering Juss &amp; Co games and experiences. Each game opens with its own established look, rules, and identity.</p>
+<div class="hero-actions"><a class="action" href="#featured">✦ Explore Games</a><a class="action outline" href="#sync-world">Enter SYNC</a></div>
+<blockquote class="hero-quote glass-world">“More than games—interactive worlds that bring people, ideas, and experiences together.”<b>Juss &amp; Co</b></blockquote>
+<aside id="game-hub-center" class="glass-world" aria-labelledby="hub-center-title">
+<h2 id="hub-center-title">Game Hub Center</h2>
+<a href="#games"><span class="nav-ico">◈</span> All Games <small>Explore the existing game collection</small></a>
+<a href="#sync-world"><span class="nav-ico">∞</span> SYNC Game Center <small>Think alike. Beat the clock.</small></a>
+<a href="#upcoming"><span class="nav-ico">✧</span> Upcoming Worlds <small>In development, not open for play</small></a>
+<a href="#safety"><span class="nav-ico">◇</span> Safety &amp; Availability <small>Verified access and age safeguards</small></a>
+</aside>
+<div id="ambience" class="glass-world" aria-label="Ambient sound and atmosphere">
+<div class="amb-row"><span>♫ &nbsp; Ambient sound</span><button id="ambient-toggle" type="button" aria-pressed="false" aria-label="Turn on soft water ambience">Off</button></div>
+<div class="amb-row"><span>☀ &nbsp; Current atmosphere</span><strong id="current-season" style="text-transform:capitalize">Automatic</strong></div>
+</div>
+</section>
+<section id="featured" aria-labelledby="featured-title"><h2 id="featured-title">✦ &nbsp; Featured Experiences &nbsp; ✦</h2>
+<div class="featured-track" id="featured-track">
+<a class="featured-tile" href="#sync-world"><span class="symbol" aria-hidden="true">∞</span><strong>SYNC</strong><small>Group play · Explore editions</small></a>
+<a class="featured-tile" href="#lumora-world"><span class="symbol" aria-hidden="true">✧</span><strong>LUMORA</strong><small>Learning adventure · Building</small></a>
+<a class="featured-tile" href="#chatquest-world"><span class="symbol" aria-hidden="true">◇</span><strong>ChatQuest</strong><small>Co-op adventure · Building</small></a>
+<a class="featured-tile" href="#bipseek-world"><span class="symbol" aria-hidden="true">☾</span><strong>Bip &amp; Seek</strong><small>Bip universe · Building</small></a>
+<a class="featured-tile" href="#junglejinx-world"><span class="symbol" aria-hidden="true">❋</span><strong>Jungle Jinx</strong><small>Game concept · Building</small></a>
+<a class="featured-tile" href="#lastlaugh-world"><span class="symbol" aria-hidden="true">✦</span><strong>Last Laugh</strong><small>Private prototype</small></a>
+</div>
+<div class="featured-toolbar"><button type="button" id="featured-back" aria-label="Scroll featured games left">‹</button><button type="button" id="featured-next" aria-label="Scroll featured games right">›</button></div>
+<p class="hint">Explore here. Play on each game’s own domain, with its original look preserved.</p>
+</section>
+<section id="hub-mobile-mount" aria-label="Game Hub Center controls"><button type="button" id="game-hub-toggle" aria-expanded="false" aria-controls="game-hub-center">♧ &nbsp; Game Hub Center</button></section>
+<div id="upcoming" aria-hidden="true"></div>
+<section id="games" aria-labelledby="games-title"><div class="section-heading"><h2 id="games-title">Our game worlds</h2><p>One home. Different adventures.</p><button type="button" id="all-games-toggle" aria-controls="game-cards" aria-expanded="true">Show all game worlds</button></div><div class="cards" id="game-cards">
+<article class="card" id="sync-world"><div class="art sync-art" aria-hidden="true"><span>🎉</span><b class="art-title">SYNC</b></div><div class="card-body"><span class="meta">Game family / three distinct experiences</span><h3>SYNC</h3><p>Think alike. Beat the clock. Read the room. SYNC has three flavors, each with its own personality.</p><span class="tag live">Live Site SYNC</span>
 <div class="edition"><h4>⚡ Live Site SYNC</h4><p>The real-time party arena. Join or create a room, answer privately, and reveal together.</p><a class="action" href="https://sync.jussco.company/">Play Live SYNC ↗</a></div>
 <div class="edition"><h4>💬 Chat SYNC</h4><p>The AI-hosted chat edition. Predict the room with your own local guesses. It shares SYNC's game authority.</p><a class="action outline" href="https://sync.jussco.company/chat/">Explore Chat SYNC ↗</a></div>
 <div class="edition"><h4>💜 Lovable SYNC</h4><p>The social-vibe and playtest side of the SYNC family. Currently available as a playtest signup experience.</p><a class="action outline" href="https://sync-playtest.lovable.app/">Join the SYNC playtest ↗</a></div></div></article>
-<article class="card"><div class="art forest-art" aria-hidden="true"><span>🌲✨</span><b class="art-title">LUMORA</b></div><div class="card-body"><span class="meta">Learning adventure / in development</span><h3>LUMORA</h3><p>A magical world to explore, beginning with <strong>The Lost Letters</strong>. Discover letters and numbers, practice tracing, and collect stars.</p><span class="tag wait">In development</span><p class="status">Future realms: Kingdom of Numbers and Starbound. Public gameplay is not open yet.</p></div></article>
-<article class="card"><div class="art quest-art" aria-hidden="true"><span>🧭🤖</span><b class="art-title">ChatQuest</b></div><div class="card-body"><span class="meta">Cooperative adventure / in development</span><h3>ChatQuest</h3><p>Friends and AI characters team up for adventures, with moderated chat and guardian controls planned for safe play.</p><span class="tag wait">In development</span><p class="status">Friend chat and child-safety gates must pass before public play.</p></div></article>
-<article class="card"><div class="art bip-art" aria-hidden="true"><span>🌙🪁</span><b class="art-title">Bip & Seek</b></div><div class="card-body"><span class="meta">Bip universe / in development</span><h3>Bip &amp; Seek</h3><p>Explore, hide, find, and celebrate in a family-friendly adventure from the Bip universe.</p><span class="tag wait">In development</span><p class="status">Private Roblox build. Public game access is not open yet.</p></div></article>
-<article class="card"><div class="art forest-art" aria-hidden="true"><span>🐒🌿</span><b class="art-title">Jungle Jinx</b></div><div class="card-body"><span class="meta">Game concept / in development</span><h3>Jungle Jinx</h3><p>Another Juss &amp; Co. game world in development. Gameplay details and public availability will be shared after verification.</p><span class="tag wait">In development</span><p class="status">Not open for public play.</p></div></article>
-<article class="card"><div class="art city-art" aria-hidden="true"><span>🎭🌆</span><b class="art-title">Last Laugh</b></div><div class="card-body"><span class="meta">Story-driven 3D adventure / private prototype</span><h3>Last Laugh: City of Dreams</h3><p>A cinematic comedy-night adventure with exploration, performances, and choices. The original prototype is being tested across desktop and mobile.</p><span class="tag wait">Private prototype</span><p class="status">Public play is held pending release review, rights clearance, and live-device verification.</p></div></article>
+<article class="card" id="lumora-world"><div class="art forest-art" aria-hidden="true"><span>🌲✨</span><b class="art-title">LUMORA</b></div><div class="card-body"><span class="meta">Learning adventure / in development</span><h3>LUMORA</h3><p>A magical world to explore, beginning with <strong>The Lost Letters</strong>. Discover letters and numbers, practice tracing, and collect stars.</p><span class="tag wait">In development</span><p class="status">Future realms: Kingdom of Numbers and Starbound. Public gameplay is not open yet.</p></div></article>
+<article class="card" id="chatquest-world"><div class="art quest-art" aria-hidden="true"><span>🧭🤖</span><b class="art-title">ChatQuest</b></div><div class="card-body"><span class="meta">Cooperative adventure / in development</span><h3>ChatQuest</h3><p>Friends and AI characters team up for adventures, with moderated chat and guardian controls planned for safe play.</p><span class="tag wait">In development</span><p class="status">Friend chat and child-safety gates must pass before public play.</p></div></article>
+<article class="card" id="bipseek-world"><div class="art bip-art" aria-hidden="true"><span>🌙🪁</span><b class="art-title">Bip & Seek</b></div><div class="card-body"><span class="meta">Bip universe / in development</span><h3>Bip &amp; Seek</h3><p>Explore, hide, find, and celebrate in a family-friendly adventure from the Bip universe.</p><span class="tag wait">In development</span><p class="status">Private Roblox build. Public game access is not open yet.</p></div></article>
+<article class="card" id="junglejinx-world"><div class="art forest-art" aria-hidden="true"><span>🐒🌿</span><b class="art-title">Jungle Jinx</b></div><div class="card-body"><span class="meta">Game concept / in development</span><h3>Jungle Jinx</h3><p>Another Juss &amp; Co. game world in development. Gameplay details and public availability will be shared after verification.</p><span class="tag wait">In development</span><p class="status">Not open for public play.</p></div></article>
+<article class="card" id="lastlaugh-world"><div class="art city-art" aria-hidden="true"><span>🎭🌆</span><b class="art-title">Last Laugh</b></div><div class="card-body"><span class="meta">Story-driven 3D adventure / private prototype</span><h3>Last Laugh: City of Dreams</h3><p>A cinematic comedy-night adventure with exploration, performances, and choices. The original prototype is being tested across desktop and mobile.</p><span class="tag wait">Private prototype</span><p class="status">Public play is held pending release review, rights clearance, and live-device verification.</p></div></article>
 </div></section>
-<section class="notes" aria-label="Safety and availability"><h2>Play with care ✨</h2><p>Games with friend chat or younger-player features are only opened publicly after their age, moderation, privacy, and guardian safeguards are verified. A game listing never means its unfinished experience is live.</p></section>
+<section class="notes" id="safety" aria-label="Safety and availability"><h2>Play with care ✨</h2><p>Games with friend chat or younger-player features are only opened publicly after their age, moderation, privacy, and guardian safeguards are verified. A game listing never means its unfinished experience is live.</p></section>
 </main><footer><div class="inner"><span>© 2026 Juss &amp; Co. · Different worlds. One place to discover them.</span><a href="https://jussco.company/">Back to Juss &amp; Co. ↗</a></div></footer>
+<script type="module" src="/assets/atmosphere.mjs"></script>
+<script>
+(() => {
+  const menu=document.getElementById('mobile-menu');
+  const nav=document.getElementById('site-nav');
+  menu.addEventListener('click',()=>{
+    const expanded=menu.getAttribute('aria-expanded')==='true';
+    menu.setAttribute('aria-expanded',String(!expanded));nav.classList.toggle('is-open',!expanded);
+  });
+  const toggle=document.getElementById('search-toggle');
+  const search=document.getElementById('search-panel');
+  const field=document.getElementById('game-search');
+  toggle.addEventListener('click',()=>{
+    search.hidden=!search.hidden;toggle.setAttribute('aria-expanded',String(!search.hidden));
+    if(!search.hidden)field.focus();else{
+      field.value='';document.querySelectorAll('#games article.card').forEach(card=>card.hidden=false);
+    }
+  });
+  field.addEventListener('input',()=>{
+    const q=field.value.trim().toLocaleLowerCase();
+    for(const card of document.querySelectorAll('#games article.card')){
+      card.hidden=Boolean(q && !card.textContent.toLocaleLowerCase().includes(q));
+    }
+  });
+  const track=document.getElementById('featured-track');
+  for(const [id,direction] of [['featured-back',-1],['featured-next',1]]){
+    document.getElementById(id).addEventListener('click',()=>{
+      track.scrollBy({left:direction*Math.max(170,track.clientWidth*.6),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+    });
+  }
+  // Keep the desktop sidebar intact; relocate it under one mobile disclosure button.
+  const hub=document.getElementById('game-hub-center');
+  const hubOrigin=hub.parentNode,hubNext=hub.nextSibling;
+  const mount=document.getElementById('hub-mobile-mount');
+  const hubToggle=document.getElementById('game-hub-toggle');
+  const allToggle=document.getElementById('all-games-toggle');
+  const games=document.getElementById('games');
+  const mobile=matchMedia('(max-width:800px)');
+  function closeHub(){
+    hubToggle.setAttribute('aria-expanded','false');
+    if(mobile.matches)hub.hidden=true;
+  }
+  function collapseGames(collapsed){
+    games.dataset.collapsed=String(collapsed);
+    allToggle.setAttribute('aria-expanded',String(!collapsed));
+    allToggle.textContent=collapsed?'Show all game worlds':'Hide detailed game worlds';
+  }
+  function syncMobile(){
+    if(mobile.matches){
+      mount.appendChild(hub);
+      hub.hidden=hubToggle.getAttribute('aria-expanded')!=='true';
+      collapseGames(games.dataset.collapsed!=='false');
+    }else{
+      hubOrigin.insertBefore(hub,hubNext);
+      hub.hidden=false;
+      collapseGames(false);
+      hubToggle.setAttribute('aria-expanded','false');
+      nav.classList.remove('is-open');
+      menu.setAttribute('aria-expanded','false');
+    }
+  }
+  hubToggle.addEventListener('click',()=>{
+    const expanded=hubToggle.getAttribute('aria-expanded')==='true';
+    hubToggle.setAttribute('aria-expanded',String(!expanded));
+    hub.hidden=expanded;
+  });
+  allToggle.addEventListener('click',()=>collapseGames(games.dataset.collapsed==='false'));
+  document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',()=>{
+    const id=a.getAttribute('href').slice(1);
+    const target=document.getElementById(id);
+    if(id==='games'||id==='upcoming'||target?.closest('#games')){
+      collapseGames(false);
+      if(mobile.matches)closeHub();
+    }
+  }));
+  nav.addEventListener('click',event=>{
+    if(event.target.closest('a')){
+      nav.classList.remove('is-open');
+      menu.setAttribute('aria-expanded','false');
+    }
+  });
+  document.addEventListener('keydown',event=>{
+    if(event.key!=='Escape')return;
+    nav.classList.remove('is-open');
+    menu.setAttribute('aria-expanded','false');
+    if(mobile.matches)closeHub();
+    if(!search.hidden){search.hidden=true;toggle.setAttribute('aria-expanded','false');field.value='';document.querySelectorAll('#games article.card').forEach(card=>card.hidden=false);}
+  });
+  if(mobile.addEventListener)mobile.addEventListener('change',syncMobile);
+  else mobile.addListener(syncMobile);
+  syncMobile();
+  const season=document.getElementById('current-season');
+  // The parent company's atmosphere module determines seasons automatically.
+  season.textContent=new Intl.DateTimeFormat('en',{month:'long'}).format(new Date())+' · Automatic';
+  const sound=document.getElementById('ambient-toggle');
+  let ctx=null, source=null;
+  async function stop(){
+    try{source?.stop();}catch{}
+    source=null;const prior=ctx;ctx=null;
+    if(prior)await prior.close().catch(()=>{});
+    sound.setAttribute('aria-pressed','false');sound.textContent='Off';
+  }
+  sound.addEventListener('click',async()=>{
+    if(ctx){await stop();return;}
+    const AudioContext=window.AudioContext||window.webkitAudioContext;
+    if(!AudioContext){sound.textContent='Unavailable';return;}
+    const next=new AudioContext();
+    try{
+      const buffer=next.createBuffer(1,next.sampleRate*2,next.sampleRate);
+      const samples=buffer.getChannelData(0);
+      for(let i=0;i<samples.length;i++)samples[i]=Math.random()*2-1;
+      const src=next.createBufferSource();src.buffer=buffer;src.loop=true;
+      const low=next.createBiquadFilter();low.type='lowpass';low.frequency.value=220;
+      const volume=next.createGain();volume.gain.value=.008;
+      src.connect(low);low.connect(volume);volume.connect(next.destination);
+      await next.resume();src.start();ctx=next;source=src;
+      sound.setAttribute('aria-pressed','true');sound.textContent='On';
+    }catch{await next.close().catch(()=>{});sound.textContent='Unavailable';}
+  });
+  document.addEventListener('visibilitychange',()=>{if(document.hidden&&ctx)stop();});
+})();
+</script>
 </body></html>
