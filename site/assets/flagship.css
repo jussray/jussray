@@ -42,7 +42,7 @@ body { background:#09070e; color:#f7f2ed; }
    Crop away the baked-in navigation/heading and keep live content accessible. */
 .jc-scene { width:100%; min-height:clamp(420px,43vw,610px); overflow:hidden; border:1px solid rgba(243,208,157,.28); border-radius:clamp(18px,2vw,30px); background:#201526; box-shadow:0 32px 90px rgba(0,0,0,.48),0 0 70px rgba(176,105,147,.16); }
 .jc-scene::before { content:""; position:absolute; inset:0; z-index:2; pointer-events:none; background:linear-gradient(180deg,rgba(6,4,16,.06) 0%,transparent 48%,rgba(9,4,15,.52) 100%); }
-.jc-scene__art { position:absolute; inset:0; background-image:url('/assets/jussco-signature-world.jpg'); background-size:auto 185%; background-position:74% 94%; background-repeat:no-repeat; transform:scale(1.015); filter:saturate(1.1) contrast(1.06); transition:transform .9s ease; }
+.jc-scene__art { position:absolute; inset:0; background-image:url('/assets/ideas-night.webp'); background-size:cover; background-position:50% 60%; background-repeat:no-repeat; transform:scale(1.015); filter:saturate(1.1) contrast(1.06); transition:transform .9s ease; }
 .jc-scene:hover .jc-scene__art { transform:scale(1.055); }
 .jc-scene__light { position:absolute; inset:-10%; pointer-events:none; background:radial-gradient(ellipse 54% 41% at 54% 63%,rgba(255,214,153,.15),transparent 80%); mix-blend-mode:screen; }
 .jc-scene__caption { position:absolute; z-index:3; bottom:24px; right:25px; color:#fff1d5; font:600 10px/1.5 var(--f-mono); letter-spacing:.18em; text-align:right; text-transform:uppercase; text-shadow:0 2px 8px #120819; }
@@ -109,7 +109,7 @@ body { background:#09070e; color:#f7f2ed; }
 .jc-showcase__foot p { color:#baadbb; font-size:12px; max-width:60ch; }
 .jc-showcase__foot a { min-height:44px; display:inline-flex; align-items:center; color:#f5d9ac; font-size:13px; font-weight:600; }
 @media(max-width:900px) { .jc-scene { max-width:620px; min-height:380px; margin:0 auto 8px; } .jc-feature-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .jc-showcase__heading { align-items:start; flex-direction:column; } }
-@media(max-width:600px) { .hero-notes.jc-scene { max-width:100%; min-height:330px; margin:0 auto 18px; } .jc-scene__art { background-size:auto 187%; background-position:74% 94%; } .jc-scene__caption { bottom:16px; right:18px; font-size:9px; } .jc-feature-grid { grid-template-columns:1fr; } .jc-feature__visual { aspect-ratio:322 / 145; } .jc-feature__content { padding:20px; } .jc-showcase__heading { margin-bottom:22px; } }
+@media(max-width:600px) { .hero-notes.jc-scene { max-width:100%; min-height:330px; margin:0 auto 18px; } .jc-scene__art { background-image:url('/assets/ideas-night-sm.webp'); background-size:cover; background-position:50% 55%; } .jc-scene__caption { bottom:16px; right:18px; font-size:9px; } .jc-feature-grid { grid-template-columns:1fr; } .jc-feature__visual { aspect-ratio:322 / 145; } .jc-feature__content { padding:20px; } .jc-showcase__heading { margin-bottom:22px; } }
 @media(prefers-reduced-motion:reduce) { .jc-feature,.jc-feature__visual img,.jc-scene__art { transition:none; } .jc-feature:hover,.jc-feature:hover img,.jc-scene:hover .jc-scene__art { transform:none; } }
 
 /* Maintain comfortably sized keyboard and touch targets across breakpoints. */

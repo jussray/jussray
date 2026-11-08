@@ -26,7 +26,7 @@ Juss & Co's public runtime is served by Cloudflare Worker `jussray` from `site/`
 - A repository, Lovable/Base44 app, domain, deployment, or other carrier is not automatically a separate company or product. Duplicate, legacy, quarantined, private-operations-only and unresolved carriers stay out of the public product index until their canonical relationship is proven.
 - Technical standalone identity and commercial packaging are separate truth planes. A system may remain independently runnable and publicly represented without automatically becoming a separate company, price, or acquisition funnel.
 - Placeholders are written `[LIKE THIS]` and render as "pending". Never replace one with a guess.
-- Se'kret Bip and StoryEngine get no public product link until their front doors are live.
+- StoryEngine gets no public product link until its front door is live. Se'kret Bip's front door (sekretbip.net) was confirmed live by Juss on 2026-11-08, so its founder-declared link may render; its status label still comes only from `worlds.json`.
 - Never delete or rewrite the existing profile, Juss Digital or picks source pages merely to make a runtime change easier.
 - Do not treat a stale deployment workflow, historical URL, build artifact, or repository file as proof of current runtime state. Re-observe the canonical Cloudflare domains.
 
@@ -61,6 +61,9 @@ Report: REALITY / FIX / PROOF / RISK / ROLLBACK / NEXT GATE.
 - **Challenge, don't validate:** give honest evaluation. Say when an idea, premise, or prior claim is wrong, with the evidence.
 - **Platform rule (Juss, 2026-10-26):** Founder Control Room (FCR) is the source platform: apps are pulled from its skills and systems. Some apps are FCR-branded; some are both standalone products and FCR extensions. A standalone app's live site is its own real domain on `*.jussco.company`, with its own brand, built from its own GitHub repo (and Lovable where used).
 - **Truth Compass and Truth Weaver (Juss, 2026-10-26):** standalone apps pulled from FCR. Live sites: `compass.jussco.company` and `truthweaver.jussco.company`. Their FCR-branded URLs (`truthcompass.foundercontrolroom.org`, `truthweaver.foundercontrolroom.org`) are dropped: DNS records and Pages domains removed 2026-10-27. Do not recreate them.
+- **Skills (Juss, 2026-11-07):** use all of the skills in `skills/juss-authored/` to reach Juss's goal (godmode, goalfix, truthmode, confess, juss-os, reasoning-stack and the rest), picking by what each owns. Do not wait for them to be named.
+- **Game Hub worlds (Juss, 2026-11-08):** SYNC, LUMORA, ChatQuest, Bip & Seek, Jungle Jinx and Last Laugh belong on the Game Hub (`site/games/`). They are founder-confirmed and must not be flagged as unbacked or removed. Only SYNC is live; the others keep their in-development/prototype labels and get no public play link.
+- **Match the founder's images (Juss, 2026-11-07):** when Juss sends a mockup, match its proportions (card sizes, spacing, what stays visible), not only its parts.
 - **Never make Juss say anything twice.** Re-reading earlier turns, this file, and the repo's own docs is Claude's job. Asking again stops productivity.
 - **Repo docs first:** every repo carries its own MD docs written as instructions for Claude (`CLAUDE.md`, `AGENTS.md`, `.claude/`). Read and follow them; never ask Juss to restate what is already there.
 - **Durable state, written the moment it lands:** track everything worked on in memory / `docs/claude/STATE.md` (decisions, branches, heads, PRs, gates, open findings) as soon as each decision or state change happens — not at the end of a conversation — so a fresh chat resumes mid-thread without Juss re-explaining. State about private repos stays in those repos' own docs, never in this public one.

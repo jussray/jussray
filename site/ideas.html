@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Juss & Co Creation Core: map business opportunities from the products and systems Juss & Co already built. Every idea starts as an unverified research candidate.">
+<meta name="robots" content="index,follow">
+<meta property="og:title" content="AI Business Idea Generator — Juss & Co Creation Core">
+<meta property="og:description" content="Turn existing products into research candidates. Demand and competition are checked before anything is called verified.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.jussco.company/ideas.html">
+<meta property="og:image" content="https://www.jussco.company/assets/hero.jpg">
+<meta name="theme-color" content="#120a33">
+<link rel="canonical" href="https://www.jussco.company/ideas.html">
+<title>AI Business Idea Generator | Juss &amp; Co Creation Core</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Sora:wght@400;500;600;700&display=swap">
+<style>
+:root{color-scheme:dark;--ink:#f6f1ff;--muted:#cfc6f0;--cream:#f8ecd0;--gold:#f5c14b;--gold2:#ffd98a;--violet:#8b5cf6;--pink:#ff8fc7;--cyan:#7fe6ff;--glass:rgba(28,18,66,.62);--glass2:rgba(40,24,88,.5);--edge:rgba(255,214,138,.42);--max:1180px;
+--sky1:#2a1a6e;--sky2:#7b3fa8;--sky3:#ff9a6b;--sun:#ffd27a;--water1:#3a2a8a;--water2:#0f0b2e;--serif:"Playfair Display",Georgia,serif;--sans:Sora,system-ui,-apple-system,"Segoe UI",sans-serif}
+[data-atmo="dawn"]{--sky1:#3b3a8c;--sky2:#c07ab8;--sky3:#ffc3a0;--sun:#ffe3b0;--water1:#4b4aa0}
+[data-atmo="day"]{--sky1:#3b5bd1;--sky2:#7aa7ff;--sky3:#ffd9f0;--sun:#fff3c4;--water1:#3f6fd8;--water2:#1a1a52}
+[data-atmo="night"]{--sky1:#070620;--sky2:#1b1252;--sky3:#4a2a7a;--sun:#dfe6ff;--water1:#1a1450;--water2:#05041a}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;min-height:100vh;color:var(--ink);font-family:var(--sans);line-height:1.55;background:var(--water2);overflow-x:hidden}
+a{color:inherit}
+.skip{position:absolute;left:-999px;top:8px;z-index:50;background:var(--gold);color:#1a1033;padding:12px 16px;border-radius:12px;font-weight:700}.skip:focus{left:12px}
+:focus-visible{outline:3px solid var(--gold2);outline-offset:3px;border-radius:10px}
+/* ---------- scene ---------- */
+.scene{position:fixed;inset:0;z-index:-1;overflow:hidden;background:linear-gradient(180deg,var(--sky1) 0%,var(--sky2) 38%,var(--sky3) 56%,var(--water1) 57%,var(--water2) 100%);transition:background 1.2s}
+.scene .art{position:absolute;inset:0;background-size:cover;background-position:50% 60%;transition:opacity 1.2s ease}
+
+.scene .night{opacity:0}
+.scene .sunset{opacity:0}
+@media (max-width:700px){.scene .art{background-position:50% 55%}}
+[data-atmo="night"] .scene .night,[data-atmo="sunset"] .scene .sunset,[data-atmo="dawn"] .scene .sunset{opacity:1}
+.scene .tint{position:absolute;inset:0;transition:background 1.2s}
+[data-atmo="day"] .scene .tint{background:linear-gradient(180deg,rgba(18,10,51,.45),rgba(18,10,51,.15) 40%,rgba(18,10,51,.5))}
+[data-atmo="dawn"] .scene .tint{background:linear-gradient(180deg,rgba(150,120,200,.4),rgba(255,200,220,.14) 45%,rgba(30,16,70,.55))}
+[data-atmo="sunset"] .scene .tint{background:linear-gradient(180deg,rgba(40,14,70,.35),rgba(40,14,70,.1) 42%,rgba(20,8,50,.6))}
+[data-atmo="night"] .scene .tint{background:linear-gradient(180deg,rgba(6,4,24,.25),transparent 45%,rgba(6,4,24,.5))}
+.petal{position:absolute;top:-20px;width:12px;height:9px;border-radius:12px 1px 12px 1px;background:#ffb6d9;opacity:.85;animation:fall linear infinite}
+@keyframes fall{to{transform:translate3d(-12vw,110vh,0) rotate(540deg)}}
+.lantern{position:absolute;bottom:22%;width:14px;height:20px;border-radius:4px;background:radial-gradient(circle,#ffe7a3,#f5a54b);box-shadow:0 0 22px 6px rgba(255,190,90,.55)}
+@media (prefers-reduced-motion:reduce){.petal,.orb,.orb-ring{animation:none!important}.scene .art{transition:none}.petal{display:none}}
+/* ---------- chrome ---------- */
+.wrap{max-width:var(--max);margin:auto;padding:16px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 10px 8px 16px;border:1px solid var(--edge);border-radius:999px;background:rgba(20,12,52,.55);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--serif);font-weight:800;font-size:22px;color:var(--cream);min-height:44px}.brand b{color:var(--gold)}
+.brand svg{width:30px;height:22px}
+nav.primary{display:flex;gap:4px;flex-wrap:wrap}
+nav.primary a{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:999px;text-decoration:none;font-size:14px;color:var(--muted);font-weight:600}
+nav.primary a:hover{color:var(--ink);background:rgba(255,255,255,.08)}
+nav.primary a[aria-current]{background:linear-gradient(180deg,#ffe3a8,#f3b25a);color:#2a1640}
+@media (max-width:860px){nav.primary a.opt{display:none}}
+@media (max-width:520px){nav.primary{display:none}}
+/* ---------- hero ---------- */
+.hero{text-align:center;padding:42px 4px 10px}
+.crown{width:54px;height:40px;filter:drop-shadow(0 0 12px rgba(245,193,75,.7))}
+.eyebrow{letter-spacing:.42em;font-size:13px;font-weight:600;color:var(--cream);text-transform:uppercase;margin:8px 0 4px}
+h1{font-family:var(--serif);font-weight:800;color:var(--cream);font-size:clamp(2.4rem,7vw,4.6rem);line-height:1.04;margin:4px 0 10px;text-shadow:0 4px 30px rgba(40,10,80,.8)}
+.sub{letter-spacing:.2em;text-transform:uppercase;font-size:12px;font-weight:700;color:#fff;margin:0 auto;max-width:700px;text-shadow:0 1px 2px rgba(10,4,30,.95),0 0 14px rgba(10,4,30,.9)}
+.eyebrow{text-shadow:0 1px 2px rgba(10,4,30,.95),0 0 12px rgba(10,4,30,.85)}
+/* ---------- glass ---------- */
+.glass{background:var(--glass);border:1px solid var(--edge);border-radius:28px;backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);box-shadow:0 0 0 1px rgba(255,255,255,.05) inset,0 0 40px rgba(245,170,80,.18),0 20px 60px rgba(8,4,30,.55)}
+.engine{max-width:860px;margin:26px auto 0;padding:22px}
+.engine h2,.section-title{font-family:var(--serif);color:var(--cream);margin:0}
+.engine .lede{color:var(--muted);margin:6px 0 16px}
+label.big{display:block;font-weight:600;font-size:14px;margin-bottom:8px;color:var(--cream)}
+textarea{width:100%;min-height:96px;resize:vertical;border-radius:22px;border:1px solid var(--edge);background:rgba(14,8,40,.7);color:var(--ink);font:inherit;font-size:16px;padding:14px 18px}
+textarea::placeholder{color:#a99fd6;font-style:italic}
+fieldset{border:0;padding:0;margin:16px 0 0}
+legend{font-weight:600;font-size:14px;color:var(--cream);margin-bottom:8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.chip span{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:999px;border:1px solid rgba(190,170,255,.4);background:rgba(60,40,130,.45);font-size:14px;color:var(--muted)}
+.chip input:checked+span{background:linear-gradient(180deg,rgba(255,215,140,.95),rgba(240,170,80,.95));color:#2a1640;border-color:transparent;font-weight:700}
+.chip input:focus-visible+span{outline:3px solid var(--gold2);outline-offset:2px}
+.actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:18px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 26px;border-radius:999px;font:inherit;font-weight:700;font-size:17px;cursor:pointer;text-decoration:none;border:1px solid var(--edge)}
+.btn-gold{background:linear-gradient(180deg,#fff0c8,#f5c46a);color:#2a1640;box-shadow:0 0 26px rgba(255,200,110,.55)}
+.btn-ghost{background:rgba(30,20,80,.65);color:var(--ink)}
+.btn:hover{filter:brightness(1.07)}
+.note{font-size:13px;color:var(--muted);text-align:center;margin:12px 0 0}
+/* ---------- orb ---------- */
+.orb-stage{position:relative;height:200px;display:grid;place-items:center;margin-top:8px}
+.orb{width:120px;height:120px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0 6%,#b9a2ff 20%,#5b47e0 52%,#241a70 80%);box-shadow:0 0 50px 10px rgba(160,130,255,.6),0 0 120px rgba(255,170,230,.35);animation:float 6s ease-in-out infinite;position:relative;z-index:2}
+.orb svg{position:absolute;inset:0;width:100%;height:100%}
+.lotus{position:absolute;bottom:26px;width:300px;height:110px}
+.orb-ring{position:absolute;bottom:20px;width:320px;height:40px;border-radius:50%;border:2px solid rgba(255,214,138,.75);box-shadow:0 0 30px rgba(255,200,110,.6);animation:pulse 4s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-10px)}}
+@keyframes pulse{50%{transform:scale(1.06);opacity:.7}}
+.orb-stage.busy .orb{animation:float 1s ease-in-out infinite;filter:brightness(1.3)}
+/* ---------- results ---------- */
+.layout{display:grid;grid-template-columns:1fr 320px;gap:22px;margin-top:10px;align-items:start}
+@media (max-width:960px){.layout{grid-template-columns:1fr}}
+.board{padding:22px}
+.section-title{display:flex;align-items:center;gap:14px;justify-content:center;font-size:clamp(1.5rem,3.4vw,2.2rem);text-align:center}
+.section-title::before,.section-title::after{content:"";flex:0 1 70px;height:1px;background:linear-gradient(90deg,transparent,var(--gold))}
+.section-title::after{transform:scaleX(-1)}
+.kicker{text-align:center;color:var(--muted);font-size:14px;margin:6px 0 16px}
+.cards{display:grid;gap:14px;list-style:none;padding:0;margin:0}
+.card{display:grid;grid-template-columns:96px 1fr;gap:16px;padding:16px;border-radius:22px;border:1px solid var(--edge);background:var(--glass2);box-shadow:0 0 22px rgba(245,170,80,.14)}
+@media (max-width:520px){.card{grid-template-columns:1fr}.card .icon{width:72px;height:72px}}
+.icon{width:96px;height:96px;border-radius:18px;display:grid;place-items:center;background:radial-gradient(circle at 50% 40%,rgba(160,120,255,.6),rgba(30,16,80,.9));border:1px solid rgba(190,170,255,.35)}
+.icon svg{width:60%;height:60%}
+.icon.gold{background:radial-gradient(circle at 50% 40%,rgba(255,170,70,.55),rgba(60,24,40,.9))}
+.status{display:inline-block;font-size:11px;letter-spacing:.14em;font-weight:700;color:var(--gold2);text-transform:uppercase}
+.card h3{font-family:var(--sans);font-size:1.25rem;margin:2px 0 4px;color:#fff}
+.card p{margin:0 0 8px;color:var(--muted);font-size:15px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.tag{font-size:13px;padding:3px 12px;border-radius:999px;border:1px solid rgba(190,170,255,.5);background:rgba(90,60,180,.35)}
+.tag.g{border-color:rgba(255,200,110,.6);background:rgba(160,100,30,.35)}
+details{margin-top:6px}
+summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:600;color:var(--cream);font-size:14px}
+.verify{margin:4px 0 0;padding-left:18px;color:var(--muted);font-size:14px}
+.built{font-size:13px;color:#e4dcff}
+.card .go{display:inline-flex;align-items:center;min-height:44px;color:var(--gold2);font-weight:700;font-size:14px}
+/* ---------- side ---------- */
+.side{display:grid;gap:16px}
+.panel{padding:18px}
+.panel h2{font-size:1.1rem;margin:0 0 10px;display:flex;gap:10px;align-items:center;color:var(--cream)}
+.empty{border:1px dashed rgba(255,214,138,.45);border-radius:16px;padding:14px;color:var(--muted);font-size:14px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px}
+.switch{position:relative;width:58px;height:32px;border-radius:999px;border:1px solid var(--edge);background:rgba(60,40,120,.7);cursor:pointer;padding:0;min-height:44px;background-clip:content-box;border-width:6px 0;border-color:transparent}
+.switch::after{content:"";position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:50%;background:#fff;transition:transform .2s}
+.switch[aria-checked="true"]{background-color:#7c8cff}
+.switch[aria-checked="true"]::after{transform:translateX(26px)}
+input[type=range]{width:100%;min-height:44px;accent-color:var(--gold)}
+.atmo-btn{width:100%;justify-content:space-between;min-height:56px;font-size:15px;border-radius:18px}
+.atmo-btn small{display:block;color:var(--muted);font-weight:500}
+footer{padding:30px 0 40px;text-align:center;color:var(--muted);font-size:13px}
+footer a{display:inline-flex;align-items:center;min-height:44px;padding:0 10px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* Load only the active scene (devil pass 2026-11-07: three downloads to show one). */
+[data-atmo="day"] .scene .day{background-image:url(/assets/ideas-day.webp)}
+[data-atmo="sunset"] .scene .sunset,[data-atmo="dawn"] .scene .sunset{background-image:url(/assets/ideas-sunset.webp)}
+[data-atmo="night"] .scene .night{background-image:url(/assets/ideas-night.webp)}
+@media (max-width:700px){[data-atmo="day"] .scene .day{background-image:url(/assets/ideas-day-sm.webp)}[data-atmo="sunset"] .scene .sunset,[data-atmo="dawn"] .scene .sunset{background-image:url(/assets/ideas-sunset-sm.webp)}[data-atmo="night"] .scene .night{background-image:url(/assets/ideas-night-sm.webp)}}
+/* Founder mockup layout (2026-11-08): one stage, prompt pill, lotus visible, candidates band, signals panel. */
+.orb-stage{display:none!important}
+.engine{background:none!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;padding:0!important;margin:0 auto!important;max-width:760px}
+#engine-title,.engine .lede,label.big{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+textarea#goal{min-height:64px;height:64px;border-radius:999px;padding:18px 26px 18px 52px;background:rgba(20,14,60,.62) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2l2 6 6 2-6 2-2 6-2-6-6-2 6-2z' fill='%23f5c14b'/%3E%3C/svg%3E") no-repeat 18px 50%/22px;border:1.5px solid rgba(255,214,138,.6);box-shadow:0 0 26px rgba(245,193,75,.25);resize:none;font-size:15px;line-height:1.4}
+.pick{margin-top:6px;text-align:center}.pick summary{display:inline-flex;align-items:center;min-height:40px;font-size:13px;color:#ffd98a;cursor:pointer}
+.pick fieldset{margin-top:6px}.engine .actions{margin-top:10px}.engine .note{font-size:12px;margin-top:6px}
+.iquote{margin:0;padding:16px;border-radius:20px;border:1px solid rgba(255,214,138,.35);background:rgba(28,18,66,.35);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.iquote blockquote{margin:0}.iquote p{margin:0;font-family:var(--serif);font-style:italic;font-size:17px;line-height:1.45;color:var(--cream)}
+.iquote p::before{content:"\201C";display:block;font-size:34px;line-height:.6;color:#ffd98a}
+.iquote figcaption{margin-top:8px;text-align:right;font-family:"Kaushan Script",cursive;font-size:22px;color:#ffd98a}
+.board{padding:14px 14px 12px!important;border-radius:24px!important}
+.board .section-title{font-size:clamp(22px,2.4vw,32px)}.board .kicker{margin:2px 0 10px;font-size:12px}
+.card{grid-template-columns:72px 1fr!important;gap:12px!important;padding:12px!important;border-radius:18px!important}
+.card .icon{width:72px!important;height:72px!important;border-radius:16px!important}
+.card h3{font-size:1.05rem!important}.card p{font-size:13px!important;margin:0 0 4px!important}
+.card details{display:none}.card .tag{font-size:11px}.card .built{font-size:11px;margin:0}
+.card .go{min-height:40px;font-size:12px}
+.card .status{display:block;font-size:9px!important;letter-spacing:.1em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card .tags{display:flex!important;flex-direction:row!important;flex-wrap:wrap;gap:4px;margin:4px 0}
+.card .tag{padding:2px 9px!important;white-space:nowrap}
+.card .go{white-space:nowrap}
+.card p{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ictrl .panel h2{display:inline-block}
+.ictrl .row{min-height:40px!important}
+.ictrl{display:grid;gap:8px}.ictrl .panel{padding:10px 12px!important;border-radius:16px!important}
+.ictrl .panel h2{font-size:13px!important;margin:0 0 4px!important}
+.ictrl .atmo-btn{min-height:44px!important;font-size:13px}
+.side .panel{padding:14px!important}.side .panel h2{font-size:1rem}
+@media (min-width:1100px){
+  html,body{height:100%}
+  main#top{display:grid;grid-template-columns:220px minmax(0,1fr) 260px;grid-template-areas:"quote hero side" "quote engine side" "quote gap side" "ctrl board board";column-gap:32px;row-gap:8px;height:calc(100vh - 110px);box-sizing:border-box;padding:6px 0 14px}
+  .layout{display:contents}
+  .iquote{grid-area:quote;align-self:center}
+  .hero{grid-area:hero;padding:4px 0 0!important}
+  .engine{grid-area:engine}
+  .board{grid-area:board;align-self:end}
+  .card{grid-template-columns:56px 1fr!important}.card .icon{width:56px!important;height:56px!important}
+  .ictrl input[type=range]{display:none}
+  .side{grid-area:side;align-self:start}
+  .ictrl{grid-area:ctrl;align-self:end}
+  .hero h1{font-size:clamp(34px,3.6vw,54px)!important;margin:0 0 4px!important}
+  .crown{width:40px;height:30px}.eyebrow{margin:2px 0!important}
+  .cards{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .cards .card:nth-child(n+4){display:none}
+  footer{display:none}
+  .wrap{max-width:1500px}
+}
+@media (max-width:1099px){
+  main#top{display:flex;flex-direction:column;gap:14px}
+  .layout{display:flex;flex-direction:column;gap:14px}
+  .hero{order:1;padding-top:16px!important}.engine{order:2}.layout{order:3}.ictrl{order:4;grid-template-columns:1fr 1fr}.iquote{display:none}
+  .hero h1{font-size:clamp(32px,9vw,44px)!important}
+  textarea#goal{border-radius:28px;height:72px}
+  .engine .actions{flex-wrap:nowrap;gap:8px}.engine .actions .btn{flex:1 1 0;min-width:0;padding:0 8px;font-size:14px;white-space:nowrap}
+  .side .panel{padding:12px!important}.side .empty{font-size:12px;padding:10px}
+  .ictrl .panel{margin:0}
+}
+</style>
+<link rel="stylesheet" href="/assets/world-shell.css">
+<script src="/assets/world-shell.js" defer></script>
+</head>
+<body data-atmo="sunset">
+<a class="skip" href="#controls">Skip to controls</a>
+<div class="scene" aria-hidden="true">
+  <div class="art day"></div><div class="art night"></div><div class="art sunset"></div><div class="tint"></div>
+  <div id="petals"></div>
+</div>
+
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="/"><svg viewBox="0 0 30 22" aria-hidden="true"><path d="M2 20h26l2-14-8 6-7-10-7 10-8-6z" fill="#f5c14b"/></svg>Juss <b>&amp;</b> Co</a>
+    <nav class="primary" aria-label="Primary">
+      <a href="/">Home</a>
+      <a href="/portfolio.html">Portfolio</a>
+      <a class="opt" href="/work.html">Our work</a>
+      <a href="/services.html">Work with Juss</a>
+      <a href="/ideas.html" aria-current="page">Ideas</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <figure class="iquote"><blockquote><p>Turn what you already have into new, viable business opportunities with the power of AI.</p></blockquote><figcaption>Juss &amp; Co</figcaption></figure>
+    <section class="hero">
+      <svg class="crown" viewBox="0 0 30 22" aria-hidden="true"><path d="M2 20h26l2-14-8 6-7-10-7 10-8-6z" fill="#f5c14b"/></svg>
+      <p class="eyebrow">Juss &amp; Co · Creation Core</p>
+      <h1>AI Business Idea Generator</h1>
+      <p class="sub">Evidence-led opportunities from the systems you've already built.</p>
+    </section>
+
+    <section class="engine glass" id="controls" aria-labelledby="engine-title" tabindex="-1">
+      <h2 id="engine-title">Turn your existing products into possibilities.</h2>
+      <p class="lede">Research opportunities that reuse what Juss &amp; Co already built. Demand and competition must be checked before anything is called verified.</p>
+      <form id="engineForm" novalidate>
+        <label class="big" for="goal">Describe your business, systems, audience, or goal</label>
+        <textarea id="goal" name="goal" maxlength="600" placeholder="Help me find the top business opportunities I can create using my existing products, systems, and workflows. Look for ideas I can realistically launch and grow."></textarea>
+        <details class="pick"><summary>Choose products to build from</summary>
+        <fieldset>
+          <legend>Products to build from <span id="pickCount" class="sr"></span></legend>
+          <div class="chips" id="products"><span class="note" style="margin:0">Loading the public portfolio…</span></div>
+        </fieldset>
+        </details>
+        <div class="actions">
+          <button class="btn btn-gold" type="submit" id="generate"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 1l11 7-11 7z" fill="#2a1640"/></svg>Generate ideas</button>
+          <a class="btn btn-ghost" href="#candidates">Explore opportunities</a>
+        </div>
+        <p class="note">Runs in your browser. Nothing you type is sent anywhere or stored.</p>
+      </form>
+      <div class="orb-stage" id="orbStage" aria-hidden="true">
+        <svg class="lotus" viewBox="0 0 300 110"><g fill="rgba(220,200,255,.35)" stroke="rgba(255,220,160,.8)" stroke-width="1.2"><path d="M150 100C120 70 118 30 150 6c32 24 30 64 0 94z"/><path d="M150 100C110 90 80 60 78 22c40 6 66 40 72 78z"/><path d="M150 100c40-10 70-40 72-78-40 6-66 40-72 78z"/><path d="M150 102C100 104 50 86 26 56c48-8 98 10 124 46z"/><path d="M150 102c50 2 100-16 124-46-48-8-98 10-124 46z"/></g></svg>
+        <div class="orb-ring"></div>
+        <div class="orb"><svg viewBox="0 0 120 120"><g stroke="rgba(255,255,255,.7)" stroke-width=".8" fill="none"><path d="M20 50L45 30L75 38L98 60L80 90L45 95L22 75Z"/><path d="M45 30L60 60L98 60M60 60L45 95M60 60L22 75M60 60L75 38M60 60L80 90"/></g><g fill="#fff"><circle cx="60" cy="60" r="2.4"/><circle cx="45" cy="30" r="1.6"/><circle cx="98" cy="60" r="1.6"/><circle cx="22" cy="75" r="1.6"/><circle cx="80" cy="90" r="1.6"/></g></svg></div>
+      </div>
+    </section>
+
+    <div class="layout">
+      <section class="board glass" id="candidates" aria-labelledby="cand-title">
+        <h2 class="section-title" id="cand-title">Top Opportunity Candidates</h2>
+        <p class="kicker" id="candKicker">Inside the Creation Core: three starting lanes. Generate ideas to rank them against your goal and products.</p>
+        <ul class="cards" id="cards" aria-live="polite"></ul>
+      </section>
+
+      <aside class="side" aria-label="Signals and atmosphere">
+        <section class="panel glass" aria-labelledby="sig-title">
+          <h2 id="sig-title"><svg width="20" height="18" viewBox="0 0 20 18" aria-hidden="true"><g fill="#f5c14b"><rect x="0" y="12" width="4" height="6" rx="1"/><rect x="6" y="8" width="4" height="10" rx="1"/><rect x="12" y="4" width="4" height="14" rx="1"/></g></svg>Public research signals</h2>
+          <div class="empty" id="signals">No verified signals are connected yet. A signal appears here only with a named public source and a date. Until then, every candidate stays unverified. No demand numbers are shown.</div>
+        </section>
+      </aside>
+    </div>
+    <div class="ictrl">
+        <section class="panel glass" aria-labelledby="amb-title">
+          <h2 id="amb-title">Ambient sound</h2>
+          <div class="row"><span id="soundLabel">Off</span><button class="switch" id="sound" role="switch" aria-checked="false" aria-labelledby="amb-title"></button></div>
+          <label for="vol" class="sr">Ambient volume</label>
+          <input type="range" id="vol" min="0" max="100" value="35">
+        </section>
+        <section class="panel glass" aria-labelledby="atmo-title">
+          <h2 id="atmo-title">Current atmosphere</h2>
+          <button class="btn btn-ghost atmo-btn" id="atmo" type="button"><span><span id="atmoName">Sunset</span><small id="atmoHint">Matches your local time · tap to change</small></span><span aria-hidden="true">›</span></button>
+        </section>
+    </div>
+  </main>
+
+  <footer>
+    <p>Every candidate here is a research lead, not proof of demand, revenue or a launched product.</p>
+    <a href="/">Home</a><a href="/portfolio.html">Portfolio</a><a href="/services.html">Work with Juss</a><a href="/work.html">Selected work</a>
+  </footer>
+</div>
+
+<script>
+(() => {
+  'use strict';
+  const $ = (s) => document.querySelector(s);
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  /* Opportunity lanes. Fit reasons are computed from portfolio data; nothing here claims demand. */
+  const ICONS = {
+    audit: '<svg viewBox="0 0 60 60"><g fill="none" stroke="#e9dcff" stroke-width="2"><path d="M30 8 52 19 30 30 8 19Z" fill="rgba(170,130,255,.55)"/><path d="M8 28 30 39 52 28"/><path d="M8 37 30 48 52 37"/></g></svg>',
+    gear: '<svg viewBox="0 0 60 60"><g fill="none" stroke="#ffcf7a" stroke-width="3"><circle cx="30" cy="30" r="14"/><path d="M30 6v8M30 46v8M6 30h8M46 30h8M13 13l6 6M41 41l6 6M13 47l6-6M41 19l6-6"/><path d="m23 30 5 5 9-10" stroke-width="3.5"/></g></svg>',
+    cart: '<svg viewBox="0 0 60 60"><g fill="none" stroke="#e9b8ff" stroke-width="2.5"><path d="M6 12h8l6 26h26l6-18H17"/><circle cx="24" cy="46" r="3"/><circle cx="42" cy="46" r="3"/><path d="M22 24h26M24 31h20M28 20v18M36 20v18" stroke-width="1.5"/></g></svg>',
+    spark: '<svg viewBox="0 0 60 60"><g fill="#ffe3a8"><path d="M30 6l4 18 18 6-18 6-4 18-4-18-18-6 18-6z"/></g></svg>'
+  };
+  const LANES = [
+    { id: 'discovery', title: 'AI Discovery Audits', icon: 'audit', tags: ['AI', 'Systems', 'Growth'],
+      summary: 'Explore AI-search discoverability issues for businesses using Juss & Co capabilities.',
+      words: ['ai', 'search', 'discover', 'seo', 'visibility', 'audit', 'content', 'brand', 'agent', 'llm'],
+      cats: ['Founder software', 'Creator software'],
+      verify: ['Who already sells AI-search audits, and at what price', 'Whether 5 target businesses will take a paid pilot', 'A repeatable audit checklist you can prove on one real site'] },
+    { id: 'workflow', title: 'Workflow Proof & Repair', icon: 'gear', gold: true, tags: ['Automation', 'Operations', 'Optimization'],
+      summary: 'Test and verify AI workflows with the principles behind PromptOS and Founder Control Room.',
+      words: ['workflow', 'automation', 'proof', 'repair', 'fix', 'verify', 'test', 'ops', 'operation', 'process', 'prompt'],
+      cats: ['Founder software', 'Research'],
+      verify: ['Which teams pay for workflow reliability today', 'How competitors price verification work', 'One before/after receipt on a real workflow'] },
+    { id: 'shopping', title: 'AI Shopping Discovery Checks', icon: 'cart', tags: ['Commerce', 'Products', 'Conversion'],
+      summary: 'Review public catalog, product information, and shopping discovery gaps.',
+      words: ['shop', 'store', 'commerce', 'product', 'catalog', 'shopify', 'conversion', 'sell', 'retail', 'cart'],
+      cats: ['Commerce', 'Networks'],
+      verify: ['Whether store owners already buy catalog audits', 'Which tools cover this already', 'One store where a fix moved a measurable metric'] },
+    { id: 'experience', title: 'Experience & Community Pilots', icon: 'spark', tags: ['Experiences', 'Community', 'Launch'],
+      summary: 'Package a consumer or family experience as a small, testable pilot for one audience.',
+      words: ['party', 'social', 'community', 'family', 'event', 'experience', 'game', 'teen', 'audience', 'creator', 'story'],
+      cats: ['Consumer experiences', 'Family product', 'Creator software'],
+      verify: ['Who the first 20 participants are, by name or channel', 'What a pilot costs to run once', 'What consent and safety rules apply to this audience'] }
+  ];
+
+  let projects = [];
+  const words = (t) => (t || '').toLowerCase().match(/[a-z]+/g) || [];
+
+  function rank(goal, picked) {
+    const g = new Set(words(goal));
+    return LANES.map((lane) => {
+      const hits = lane.words.filter((w) => [...g].some((x) => x.startsWith(w)));
+      const from = picked.filter((p) => lane.cats.includes(p.category));
+      return { lane, hits, from, fit: hits.length * 2 + from.length * 3 };
+    }).sort((a, b) => b.fit - a.fit);
+  }
+
+  function card(r, generated) {
+    const { lane, hits, from } = r;
+    const built = from.length ? 'Built from: ' + from.map((p) => esc(p.name)).join(', ') : (generated ? 'No selected product maps to this lane yet.' : '');
+    const why = generated && hits.length ? `<p class="built">Matches your goal on: ${hits.map(esc).join(', ')}</p>` : '';
+    return `<li class="card" data-lane="${lane.id}">
+      <div class="icon${lane.gold ? ' gold' : ''}" aria-hidden="true">${ICONS[lane.icon]}</div>
+      <div>
+        <span class="status">Research candidate · unverified</span>
+        <h3>${esc(lane.title)}</h3>
+        <p>${esc(lane.summary)}</p>
+        <div class="tags">${lane.tags.map((t, i) => `<span class="tag${i === 2 ? ' g' : ''}">${esc(t)}</span>`).join('')}</div>
+        ${built ? `<p class="built">${built}</p>` : ''}${why}
+        <details><summary>What must be verified first</summary><ul class="verify">${lane.verify.map((v) => `<li>${esc(v)}</li>`).join('')}</ul></details>
+        <a class="go" href="/services.html">Take this to Work with Juss →</a>
+      </div></li>`;
+  }
+
+  function render(results, generated) {
+    const list = generated ? results.filter((r) => r.fit > 0) : results.slice(0, 3);
+    const shown = list.length ? list : results.slice(0, 3);
+    $('#cards').innerHTML = shown.map((r) => card(r, generated)).join('');
+    $('#candKicker').textContent = generated
+      ? (list.length ? `${list.length} candidate${list.length > 1 ? 's' : ''} ranked by fit with your goal and selected products. Fit is not demand.` : 'Nothing matched your goal or products closely. Showing the starting lanes.')
+      : 'Inside the Creation Core: three starting lanes. Generate ideas to rank them against your goal and products.';
+  }
+
+  async function loadProducts() {
+    try {
+      const res = await fetch('/data/portfolio.json', { cache: 'no-store' });
+      if (!res.ok) throw new Error(res.status);
+      const data = await res.json();
+      projects = (data.projects || []).filter((p) => p && p.name && p.category);
+      $('#products').innerHTML = projects.map((p, i) =>
+        `<label class="chip"><input type="checkbox" name="p" value="${i}"${p.featured ? ' checked' : ''}><span>${esc(p.name)}</span></label>`).join('');
+    } catch (e) {
+      $('#products').innerHTML = '<span class="note" style="margin:0">The portfolio list could not load. You can still generate ideas from your goal.</span>';
+    }
+  }
+
+  $('#engineForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const picked = [...document.querySelectorAll('#products input:checked')].map((i) => projects[+i.value]).filter(Boolean);
+    const stage = $('#orbStage'); stage.classList.add('busy');
+    setTimeout(() => {
+      stage.classList.remove('busy');
+      render(rank($('#goal').value, picked), true);
+      $('#candidates').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+    }, 450);
+  });
+
+  /* Atmosphere: follows local time, cycles on tap. */
+  const ATMOS = ['dawn', 'day', 'sunset', 'night'];
+  const NAMES = { dawn: 'Dawn', day: 'Daylight', sunset: 'Sunset', night: 'Night' };
+  const h = new Date().getHours();
+  let atmo = h >= 5 && h < 8 ? 'dawn' : h >= 8 && h < 17 ? 'day' : h >= 17 && h < 20 ? 'sunset' : 'night';
+  const setAtmo = (a, manual) => { atmo = a; document.body.dataset.atmo = a; $('#atmoName').textContent = NAMES[a]; $('#atmoHint').textContent = manual ? 'Chosen by you · tap to change' : 'Matches your local time · tap to change'; };
+  setAtmo(atmo, false);
+  $('#atmo').addEventListener('click', () => setAtmo(ATMOS[(ATMOS.indexOf(atmo) + 1) % ATMOS.length], true));
+
+  /* Ambient sound: generated pad, off by default, starts only on a user gesture. */
+  let ctx, gain;
+  function startSound() {
+    const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return false;
+    ctx = new AC(); gain = ctx.createGain(); gain.gain.value = 0; gain.connect(ctx.destination);
+    const filter = ctx.createBiquadFilter(); filter.type = 'lowpass'; filter.frequency.value = 900; filter.connect(gain);
+    [196, 246.94, 293.66, 392].forEach((f, i) => { const o = ctx.createOscillator(); o.type = i % 2 ? 'sine' : 'triangle'; o.frequency.value = f; o.detune.value = (i - 1.5) * 4; const g = ctx.createGain(); g.gain.value = 0.06; o.connect(g); g.connect(filter); o.start(); });
+    return true;
+  }
+  const vol = () => (+$('#vol').value / 100) * 0.5;
+  $('#sound').addEventListener('click', async () => {
+    const on = $('#sound').getAttribute('aria-checked') !== 'true';
+    if (on && !ctx && !startSound()) return;
+    if (ctx) { await ctx.resume(); gain.gain.setTargetAtTime(on ? vol() : 0, ctx.currentTime, 0.4); }
+    $('#sound').setAttribute('aria-checked', String(on)); $('#soundLabel').textContent = on ? 'On' : 'Off';
+  });
+  $('#vol').addEventListener('input', () => { if (ctx && $('#sound').getAttribute('aria-checked') === 'true') gain.gain.setTargetAtTime(vol(), ctx.currentTime, 0.2); });
+
+  /* Petals */
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const box = $('#petals');
+    for (let i = 0; i < 18; i++) { const p = document.createElement('i'); p.className = 'petal'; p.style.left = (Math.random() * 110) + 'vw'; p.style.animationDuration = (9 + Math.random() * 10) + 's'; p.style.animationDelay = (-Math.random() * 18) + 's'; box.appendChild(p); }
+  }
+
+  render(LANES.map((lane) => ({ lane, hits: [], from: [], fit: 0 })), false);
+  loadProducts();
+})();
+</script>
+</body>
+</html>

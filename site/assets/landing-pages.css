@@ -23,3 +23,10 @@ h1,h2,h3,p{margin-top:0}h1,h2,h3{font-family:"Playfair Display",Georgia,serif}h1
 
 /* Accessible touch areas for all mobile and desktop navigation destinations. */
 .site-logo,.site-nav a,.page-footer a{display:inline-flex;align-items:center;min-height:44px}
+
+/* One world (founder mockup 2026-11-08): glass header with a pill nav on every page. */
+.site-header{background:linear-gradient(180deg,rgba(18,10,44,.9),rgba(18,10,44,.72));backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom-color:rgba(255,214,138,.18)}
+@media(min-width:761px){.site-nav{flex-wrap:nowrap;gap:2px;padding:4px;border:1px solid rgba(255,214,138,.22);border-radius:999px;background:rgba(20,12,44,.45)}
+.site-nav a{padding:8px 14px;border:0;border-radius:999px;white-space:nowrap}
+.site-nav a:hover{color:var(--gold)}.site-nav a[aria-current=page]{background:linear-gradient(180deg,#ffe2a3,#f5c14b);color:#24183a}}
+@media(min-width:761px) and (max-width:1100px){.site-nav a{padding:8px 9px;font-size:12px}}

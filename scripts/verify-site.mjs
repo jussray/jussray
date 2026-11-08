@@ -59,10 +59,27 @@ for (const vp of [{n:'desktop',w:1440,h:900},{n:'mobile',w:390,h:844}]) {
   say((await page.locator('.site-header a[href="/products.html"]').count())===1,`${vp.n}: products has a proper page route`);
   say((await page.locator('.site-header a[href="/portfolio.html"]').count())===1,`${vp.n}: portfolio has a proper page route`);
   say((await page.locator('a[href="https://games.jussco.company/"]').count())>=2,`${vp.n}: game hub remains independent`);
-  say(!(await page.locator('body').innerText()).includes('Work with Juss'),`${vp.n}: oversized work button absent`);
+  { const cta=page.locator('.site-header .work-cta'); const shown=await cta.isVisible(); say(!shown||(await cta.boundingBox()).height<=48,`${vp.n}: Work with Juss stays a compact header button (founder mockup), never oversized`); }
   say(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`${vp.n}: homepage has no horizontal overflow`);
   say(await page.evaluate(()=>document.documentElement.scrollHeight<innerHeight*3.8),`${vp.n}: homepage scroll is bounded`);
   say(await page.evaluate(()=>getComputedStyle(document.querySelector('.cinematic'),'::before').backgroundImage.includes('home-scene.webp')),`${vp.n}: cinematic background retained`);
+  // Founder mockup world stage (2026-11-08): crown, headline, ecosystem band from worlds.json, ambience controls.
+  await page.waitForFunction(()=>document.querySelectorAll('#ecoTrack .eco-tile').length>0,null,{timeout:5000});
+  const worldsData=JSON.parse(readFileSync(join(ROOT,'data/worlds.json'),'utf8')).worlds;
+  say((await page.locator('#ecoTrack .eco-tile').count())===worldsData.length,`${vp.n}: Our Ecosystem band renders every world from worlds.json`);
+  say(JSON.stringify(await page.locator('#ecoTrack .eco-tile small').allTextContents())===JSON.stringify(worldsData.map(w=>w.label)),`${vp.n}: band statuses equal founder-declared labels`);
+  say((await page.locator('#ecoTrack .eco-tile a').evaluateAll(a=>a.map(x=>x.getAttribute('href')))).every(h=>worldsData.some(w=>w.link?.url===h&&(w.st!=='soon'||w.name==="Se'kret Bip"))),`${vp.n}: band links only real destinations with live front doors`);
+  say((await page.locator('#ecoTrack a[href*="storyengine" i]').count())===0 && (await page.locator('#ecoTrack a[href="https://sekretbip.net"]').count())===1,`${vp.n}: StoryEngine stays unlinked; Se'kret Bip links to its founder-confirmed live front door`);
+  say(/Creative Technology/.test(await page.locator('#landing-title').innerText())&&/AI-powered product creation/i.test(await page.locator('.subline').innerText()),`${vp.n}: mockup headline and subline render`);
+  const bandBox=await page.locator('.eco-band').boundingBox();
+  say(bandBox&&bandBox.y+bandBox.height<=vp.h+1,`${vp.n}: Our Ecosystem band is fully visible on the first screen`);
+  const perView=await page.evaluate(()=>{const t=document.querySelector('#ecoTrack');const r=t.getBoundingClientRect();return [...t.querySelectorAll('.eco-tile')].filter(e=>{const b=e.getBoundingClientRect();return b.left>=r.left-1&&b.right<=r.right+1}).length});
+  say(vp.n==='mobile'?perView===3:perView>=6,`${vp.n}: ${vp.n==='mobile'?'three':'six or more'} ecosystem tiles per view (${perView})`);
+  await page.click('#sound');
+  say((await page.getAttribute('#sound','aria-checked'))==='true',`${vp.n}: ambient sound toggles on a user gesture`);
+  const atmoBefore=await page.textContent('#atmoName');await page.click('#atmo');
+  say((await page.textContent('#atmoName'))!==atmoBefore,`${vp.n}: atmosphere cycles`);
+  say((await page.locator('.site-header a[href="/ideas.html"]').count())===1,`${vp.n}: Ideas is in the main navigation`);
   if(vp.n==='mobile') {
     const button=page.locator('.menu-toggle');const menu=page.locator('#site-navigation');
     say(!(await menu.isVisible()),'mobile: main navigation starts collapsed');
@@ -266,7 +283,7 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   say(await page.locator('.hero .h-brand').isVisible() && (await page.locator('.hero .h-line').innerText()).includes('Turn thoughts into'), `${vp.n}: cinematic living-world artwork and real-text headline render`);
   say(await page.evaluate(() => new Promise((resolve) => {
     const img = new Image(); img.onload = () => resolve(img.naturalWidth > 0);
-    img.onerror = () => resolve(false); img.src = '/assets/jussco-signature-world.jpg';
+    img.onerror = () => resolve(false); img.src = '/assets/ideas-night.webp';
   })), `${vp.n}: hero artwork asset resolves`);
   say((await page.locator('#products .jc-feature').count()) === 3, `${vp.n}: three product pathways render`);
   say((await page.locator('.jc-feature--shop a').getAttribute('href')) === 'https://jussbeautifulhair.com/' &&
@@ -428,6 +445,36 @@ for (const vp of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile
   await ctx.close();
 }
 
+
+/* ---------- Creation Core idea generator ---------- */
+for (const vp of [{ n: 'ideas-desktop', w: 1440, h: 900 }, { n: 'ideas-tablet', w: 834, h: 1112, m: true }, { n: 'ideas-mobile', w: 390, h: 844, m: true }]) {
+  const ctx = await browser.newContext({ viewport: { width: vp.w, height: vp.h }, isMobile: !!vp.m, hasTouch: !!vp.m }); const page = await ctx.newPage();
+  const errors = []; page.on('pageerror', (e) => errors.push(String(e))); page.on('requestfailed', (r) => { if (!/fonts\.(googleapis|gstatic)\.com/.test(r.url())) errors.push(`${r.failure()?.errorText} ${r.url()}`); }); page.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) errors.push(m.text()); });
+  await page.goto(`${url}ideas.html`, { waitUntil: 'load' });
+  await page.waitForFunction(() => document.querySelectorAll('#products input').length > 0);
+  say((await page.locator('link[rel="canonical"]').getAttribute('href')) === 'https://www.jussco.company/ideas.html', `${vp.n}: canonical URL`);
+  say((await page.locator('#products input').count()) === portfolio.projects.length, `${vp.n}: product chips derive from portfolio.json`);
+  say((await page.locator('#cards .card').count()) === 3, `${vp.n}: three starting candidates`);
+  say(await page.evaluate(() => Promise.all(['/assets/ideas-day.webp','/assets/ideas-night.webp','/assets/ideas-sunset.webp','/assets/ideas-day-sm.webp','/assets/ideas-night-sm.webp','/assets/ideas-sunset-sm.webp'].map((src) => new Promise((ok) => { const i = new Image(); i.onload = () => ok(i.naturalWidth > 0); i.onerror = () => ok(false); i.src = src; }))).then((r) => r.every(Boolean))), `${vp.n}: day and night scene art resolves`);
+  const text = await page.textContent('body');
+  say(!/\d+\s*%\s*YoY|\+\d+%/i.test(text), `${vp.n}: no fabricated demand statistics`);
+  say((await page.locator('#cards .status').allTextContents()).every((t) => /unverified/i.test(t)), `${vp.n}: every candidate labelled unverified`);
+  await page.fill('#goal', 'Find shopify store and product catalog opportunities');
+  await page.click('#generate');
+  await page.waitForFunction(() => /ranked by fit|Nothing matched/.test(document.querySelector('#candKicker').textContent));
+  say((await page.locator('#cards .card').first().getAttribute('data-lane')) === 'shopping', `${vp.n}: commerce goal ranks shopping lane first`);
+  say(/Fit is not demand/.test(await page.textContent('#candKicker')), `${vp.n}: fit/demand boundary visible`);
+  await page.click('#sound');
+  say((await page.getAttribute('#sound', 'aria-checked')) === 'true', `${vp.n}: ambient sound toggles on a user gesture`);
+  const before = await page.textContent('#atmoName'); await page.click('#atmo');
+  say((await page.textContent('#atmoName')) !== before, `${vp.n}: atmosphere cycles`);
+  say((await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)) === 0, `${vp.n}: no horizontal overflow`);
+  say((await page.evaluate(() => [...document.querySelectorAll('a,button,summary')].filter((e) => { const b = e.getBoundingClientRect(); return b.width > 0 && b.height < 40; }).length)) === 0, `${vp.n}: tap targets >= 40px`);
+  say((await page.locator('header.ws-top nav a[href="/products.html"]').count()) === 1 && (await page.locator('a[href^="/#"]').count()) === 0, `${vp.n}: shell nav uses the destination pages, no stale homepage anchors`);
+  say(!/jussco-signature-world/.test(readFileSync(join(ROOT, 'assets/flagship.css'), 'utf8')) && !existsSync(join(ROOT, 'assets/jussco-signature-world.jpg')), `${vp.n}: founder-rejected living-room artwork stays retired`);
+  say(errors.length === 0, `${vp.n}: no console errors${errors.length ? ' — ' + errors.join(' | ') : ''}`);
+  await page.screenshot({ path: `proof/site/${vp.n}.png`, fullPage: true }); await ctx.close();
+}
 
 await browser.close(); srv.close();
 console.log(failed ? `\n${failed} check(s) FAILED` : '\nall checks passed'); process.exit(failed ? 1 : 0);

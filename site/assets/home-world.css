@@ -1,0 +1,89 @@
+/* Juss & Co homepage world stage (founder mockup, 2026-11-08).
+   One screen: crown + headline over the lake, founder quote left, ecosystem routes right,
+   ambience bottom-left, "Our Ecosystem" band along the bottom. Routes go to main's pages. */
+.home-world{--glass:linear-gradient(150deg,rgba(40,24,78,.55),rgba(18,10,40,.42));--gline:rgba(255,214,138,.34)}
+.home-world .glass{background:var(--glass);border:1px solid var(--gline);border-radius:22px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 18px 60px rgba(8,4,24,.35)}
+.home-world .site-header{position:absolute;left:0;right:0;top:0;background:linear-gradient(180deg,rgba(14,8,40,.66),rgba(14,8,40,.18));border-bottom-color:rgba(255,214,138,.16);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.home-world main{position:relative;height:100svh;min-height:700px;overflow:hidden}
+.world-stage.cinematic{position:absolute;inset:0;min-height:0;padding:0;display:block;background:#1e122b}
+.world-stage.cinematic:after{background:radial-gradient(ellipse 60% 55% at 50% 30%,rgba(10,6,28,.35),transparent 70%),linear-gradient(0deg,rgba(14,10,23,.55),transparent 38%)}
+.tod-art{position:absolute;inset:0;z-index:-1;background:center/cover no-repeat;opacity:0;transition:opacity 1.2s ease}
+html[data-tod=day] .tod-art{background-image:url('/assets/ideas-day.webp');opacity:1}
+html[data-tod=night] .tod-art{background-image:url('/assets/ideas-night.webp');opacity:1}
+.stage-center{position:absolute;left:50%;top:calc(76px + clamp(10px,3vh,40px));transform:translateX(-50%);width:min(760px,calc(100% - 640px));text-align:center;text-shadow:0 2px 18px rgba(20,8,40,.55)}
+.crown{width:52px;height:38px;fill:#f5c14b;filter:drop-shadow(0 0 14px rgba(245,193,75,.6))}
+.brandline{margin:6px 0 4px;font:600 15px/1.4 "Playfair Display",Georgia,serif;letter-spacing:.42em;color:#fff1d8}
+.world-stage h1{margin:4px 0 10px;font-size:clamp(34px,3.9vw,60px);line-height:1.08;letter-spacing:-.02em;color:#ffe9c4}
+.world-stage h1 .br{display:block}
+.world-stage .promise{margin:0 0 6px;font-size:clamp(17px,1.5vw,22px);color:#fff4e2}
+.pillars{margin:0;font:600 11px/1.8 "JetBrains Mono",monospace;letter-spacing:.32em;text-transform:uppercase;color:#ffd98a}
+.world-stage .actions{justify-content:center;margin-top:16px}
+.world-stage .action{border-radius:999px;background:rgba(20,12,44,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.world-stage .action.primary{background:linear-gradient(180deg,#ffe2a3,#f5c14b);color:#24183a}
+.founder-quote{position:absolute;left:max(20px,calc((100vw - 1400px)/2));top:30%;width:210px;margin:0;padding:16px 18px}
+.founder-quote blockquote{margin:0}.founder-quote p{margin:0;font:italic 500 16px/1.45 "Playfair Display",Georgia,serif;color:#fff1de}
+.founder-quote p:before{content:"\201C";display:block;font-size:30px;line-height:.7;color:#ffd98a}
+.founder-quote figcaption{margin-top:6px;text-align:right;font:22px/1 "Kaushan Script",cursive;color:#ffd98a}
+.eco-panel{position:absolute;right:max(20px,calc((100vw - 1400px)/2));top:100px;width:236px;padding:14px 16px;display:flex;flex-direction:column}
+.eco-panel h2{margin:0 0 6px;font-size:17px;color:#fff1de}
+.eco-panel a{display:flex;flex-direction:column;justify-content:center;min-height:44px;padding:4px 0;text-decoration:none}
+.eco-panel strong{font-size:13.5px;color:#fff1de}.eco-panel span{font-size:11.5px;color:#d9c9e6}
+.eco-panel a:hover strong{color:#ffd98a}
+.stage-controls{position:absolute;left:max(20px,calc((100vw - 1400px)/2));bottom:20px;width:210px;padding:12px;display:grid;gap:10px;z-index:3}
+.ctl-row{display:flex;align-items:center;justify-content:space-between;font-size:13px}
+.switch{position:relative;width:52px;height:44px;border:0;background:none;cursor:pointer}
+.switch:before{content:"";position:absolute;left:4px;right:4px;top:12px;height:20px;border-radius:999px;background:rgba(255,255,255,.18);border:1px solid var(--gline)}
+.switch:after{content:"";position:absolute;left:8px;top:16px;width:12px;height:12px;border-radius:50%;background:#fff;transition:left .2s}
+.switch[aria-checked=true]:before{background:#f5c14b}.switch[aria-checked=true]:after{left:32px}
+.atmo-btn{display:flex;align-items:center;gap:10px;min-height:48px;padding:6px 10px;border:1px solid var(--gline);border-radius:14px;background:rgba(20,12,44,.5);color:var(--cream);text-align:left;cursor:pointer}
+.atmo-btn>span:nth-child(2){flex:1;display:flex;flex-direction:column;font-weight:600;font-size:14px}.atmo-btn small{font-weight:400;font-size:11px;color:#d9c9e6}
+.sun{width:22px;height:22px;border-radius:50%;background:radial-gradient(circle,#ffe7a8,#f5a94b);box-shadow:0 0 12px #f5c14b}
+.eco-band{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);width:min(830px,calc(100% - 520px));padding:12px 16px 8px;z-index:2}
+.eco-band h2{display:flex;align-items:center;gap:16px;margin:0 0 10px;font-size:clamp(22px,2vw,30px);color:#fff1de;justify-content:center}
+.eco-band h2:before,.eco-band h2:after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gline))}.eco-band h2:after{transform:scaleX(-1)}
+.eco-row{position:relative;display:flex;align-items:center;gap:8px}
+.eco-track{flex:1;min-width:0;display:flex;gap:10px;margin:0;padding:2px;list-style:none;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.eco-track::-webkit-scrollbar{display:none}
+.eco-tile{flex:0 0 calc((100% - 50px)/6);min-width:96px;scroll-snap-align:start}
+.eco-tile>a,.eco-tile>div{display:flex;flex-direction:column;align-items:center;gap:5px;height:150px;padding:10px 6px;border:1px solid var(--gline);border-radius:14px;background:linear-gradient(180deg,rgba(60,36,110,.6),rgba(24,14,52,.7));text-decoration:none;text-align:center}
+.eco-tile>a:hover{border-color:#ffd98a;transform:translateY(-2px)}
+.eco-badge{display:grid;place-items:center;width:46px;height:46px;border-radius:12px;background:linear-gradient(160deg,#d6a6ff,#7b4fd6 55%,#f5c14b);box-shadow:0 0 16px rgba(190,140,255,.55);font:700 17px/1 "Playfair Display",Georgia,serif;color:#fff}
+.eco-tile strong{font-size:12.5px;line-height:1.25;color:#fff1de}
+.eco-tile small{margin-top:auto;font-size:10.5px;line-height:1.3;color:#d9c9e6}
+.eco-tile[data-st=live] small{color:#9ff0b8}
+.eco-nav{flex:0 0 auto;width:44px;height:44px;border-radius:50%;border:1px solid var(--gline);background:rgba(20,12,44,.6);color:#fff1de;font-size:22px;cursor:pointer}
+.eco-foot{margin:6px 0 0;text-align:center;font-size:12px}.eco-foot a{display:inline-flex;align-items:center;min-height:44px;color:#ffd98a;text-decoration:none}
+.eco-loading{padding:40px;color:#d9c9e6}
+@media(max-width:1180px){.founder-quote{display:none}.stage-center{width:min(700px,calc(100% - 320px));left:calc(50% - 130px)}.eco-band{width:calc(100% - 290px);left:20px;transform:none}.stage-controls{display:none}}
+@media(max-width:760px){
+  .home-world .site-header{position:relative;background:rgba(14,8,40,.92)}
+  .home-world main{height:auto;min-height:calc(100svh - 74px);display:flex;flex-direction:column}
+  .world-stage.cinematic{position:relative;inset:auto;flex:1;display:flex;flex-direction:column;padding:18px 16px 0;min-height:0}
+  .stage-center{position:static;transform:none;width:100%}
+  .crown{width:40px;height:30px}.brandline{font-size:12px}
+  .world-stage h1{font-size:clamp(28px,8.4vw,38px)}.world-stage .promise{font-size:16px}.pillars{font-size:9.5px;letter-spacing:.2em}
+  .world-stage .actions{flex-direction:row;flex-wrap:nowrap;gap:10px;margin-top:12px}.world-stage .action{flex:1 1 0;width:auto;min-height:46px;padding:10px 12px;font-size:13.5px}
+  .eco-panel{display:none}
+  .stage-controls{display:flex;position:static;width:auto;margin:14px auto 0;padding:6px 10px;gap:10px;border-radius:999px;align-items:center}
+  .stage-controls .ctl-row span{font-size:12px}.atmo-btn{min-height:44px;border:0;background:none;padding:0 4px}.atmo-btn small{display:none}
+  .eco-band{position:relative;left:auto;bottom:auto;transform:none;width:auto;margin:12px 12px 14px;padding:10px 8px 4px}
+  .eco-band h2{font-size:21px;margin-bottom:8px}
+  .eco-row{gap:4px}.eco-nav{width:34px;height:44px;font-size:18px}
+  .eco-tile{flex:0 0 calc((100% - 20px)/3);min-width:0}
+  .eco-tile>a,.eco-tile>div{height:132px}
+}
+@media(prefers-reduced-motion:reduce){.tod-art{transition:none}}
+
+/* Founder mockup copy details (2026-11-08) */
+.subline{margin:0 0 8px;font:600 12.5px/1.6 "Sora",system-ui,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#fff1de}
+.world-stage .sig{margin:6px 0 0;font:clamp(28px,2.6vw,38px)/1.1 "Kaushan Script",cursive;color:#f5c97a;text-shadow:0 2px 14px rgba(58,29,74,.7)}
+.world-stage .actions{margin-top:12px}
+.vol{width:100%;accent-color:#f5c14b;min-height:24px;margin:0}
+.work-cta{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 18px;border:1px solid rgba(255,214,138,.6);border-radius:6px;color:#fff1de;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap}
+.work-cta:hover{border-color:#ffd98a;color:#ffd98a}
+@media(max-width:1100px){.work-cta{display:none}}
+@media(max-width:760px){.subline{font-size:9.5px;letter-spacing:.12em;margin-bottom:4px}.world-stage .sig{font-size:24px;margin-top:2px}.stage-controls .vol{display:none}}
+
+/* Dawn gets its own art; sunset is home-scene. Slider tap target >= 44px. */
+html[data-tod=dawn] .tod-art{background-image:url('/assets/ideas-sunset.webp');opacity:1}
+.vol{min-height:44px}

@@ -23,15 +23,16 @@ if(!address || typeof address==='string')throw Error('test server unavailable');
 const browser=await chromium.launch({headless:true});
 await mkdir('proof/site',{recursive:true});
 try {
-  for(const [label,width,height] of [['desktop',1440,900],['mobile',390,844],['compact',360,667]]) {
+  for(const [label,width,height] of [['desktop',1440,900],['laptop',1280,720],['mobile',390,844],['compact',360,667]]) {
     const page=await browser.newPage({viewport:{width,height},reducedMotion:'reduce'});
     const errors=[];
     page.on('pageerror',error=>errors.push(String(error)));
     const response=await page.goto('http://127.0.0.1:'+address.port+'/',{waitUntil:'load'});
     assert.equal(response?.status(),200);
-    assert.equal(await page.locator('#featured .featured-tile').count(),8,'six game worlds plus two collection shortcuts in featured carousel');
-    assert.deepEqual(await page.locator('#featured .featured-tile').evaluateAll(els=>els.slice(0,3).map(el=>el.querySelector('strong')?.textContent?.trim())),['SYNC','Juss & Co Games','Worlds & Experiences'],'first three cards match approved featured reference');
-    assert.equal(await page.locator('#featured .featured-icon').count(),3,'three prominent neon vector symbols label actual destinations');
+    assert.equal(await page.locator('#featured .featured-tile').count(),6,'six game worlds in the featured carousel (founder mockups)');
+    assert.deepEqual(await page.locator('#featured .featured-tile').evaluateAll(els=>els.slice(0,3).map(el=>el.querySelector('strong')?.textContent?.trim())),['SYNC','LUMORA','ChatQuest'],'first three cards match the founder Game Hub mockups');
+    assert.equal(await page.locator('#featured .featured-icon').count(),6,'every featured game has its app-style icon (founder icon reference)');
+    assert.deepEqual(await page.locator('#featured .featured-tile small').allTextContents(),['Group play · Live','In development','In development','In development','In development','Private prototype'],'featured statuses match the founder mockups');
     assert.equal(await page.locator('#games article.card').count(),6,'existing game detail cards preserved');
     assert.equal(await page.locator('#games article.card:has(.tag.wait) a').count(),0,'unreleased game cards have no public play links');
     assert.equal(await page.locator('.header-tools .utility').evaluateAll(nodes=>nodes.filter(el=>getComputedStyle(el).display!=='none').every(el=>{const box=el.getBoundingClientRect();return box.width>=44&&box.height>=44;})),true,'header tools meet 44px touch targets');
@@ -40,7 +41,8 @@ try {
     assert.equal(await page.locator('#hub-lotus').count(),1,'decorative lotus sculpture is present without changing game identity');
     assert.equal(await page.locator('#site-nav a[aria-current="page"]').textContent(),'Games','Game Hub nav is the current destination, not Products');
     assert.equal(await page.locator('.skip-link').getAttribute('href'),'#main','keyboard users have a content bypass');
-    assert.equal(await page.locator('#game-hub-center a[href="#lumora-world"]').count(),1,'upcoming shortcut targets real game details');
+    assert.deepEqual(await page.locator('#game-hub-center a').evaluateAll(a=>a.map(x=>x.getAttribute('href'))),['#games','#sync-world','#safety','https://jussco.company/'],'Game Hub Center rows match the founder mockups');
+    assert.equal(await page.locator('.hero-actions a[href="https://sync.jussco.company/"]').count(),1,'Play SYNC opens the live SYNC domain');
     assert.match(await page.locator('#living-world-scene').evaluate(el=>getComputedStyle(el).backgroundImage),/home-scene\.webp/);
     const imageResponse=await page.request.get('http://127.0.0.1:'+address.port+'/assets/home-scene.webp');
     assert.equal(imageResponse.status(),200,'cinematic scene is packaged with Games Worker assets');
@@ -51,6 +53,7 @@ try {
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,'no horizontal overflow');
     assert.equal(await page.locator('#ambient-toggle').getAttribute('aria-pressed'),'false','audio off initially');
     await page.screenshot({path:'proof/site/game-hub-'+label+'-initial.png',fullPage:false});
+    if(width>800){
     await page.locator('#search-toggle').click();
     assert.equal(await page.locator('#search-toggle').getAttribute('aria-expanded'),'true','search exposes expanded state');
     await page.locator('#game-search').fill('LUMORA');
@@ -63,9 +66,14 @@ try {
     await page.keyboard.press('Escape');
     assert.equal(await page.locator('#search-panel').isVisible(),false,'Escape closes search');
     assert.equal(await page.locator('#games article.card[hidden]').count(),0,'Escape restores all game listings');
-    assert.equal(await page.locator('#games .cards').isVisible(),label==='desktop','Escape restores progressive mobile disclosure');
+    } else {
+      assert.equal(await page.locator('#search-toggle').isVisible(),false,'phone header shows only the menu button, by founder phone mockup (search is a desktop tool)');
+    }
+    assert.equal(await page.locator('#games .cards').isVisible(),false,'every width lands on the one-screen hub');
+    assert.equal(await page.locator('html').getAttribute('data-hub-view'),'home','hub lands on its one-screen view at every width');
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight+1),true,'hub landing has no vertical scrolling at '+label);
     assert.deepEqual(errors,[],'no page script errors');
-    if(label!=='desktop'){
+    if(width<=800){
       assert.equal(await page.locator('html').getAttribute('data-hub-view'),'home','mobile lands on the one-screen hub');
       assert.equal(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight+1),true,'landing has no vertical scrolling');
       assert.equal(await page.locator('#hub-bottom-nav a').count(),5,'all five company page destinations are available');
@@ -87,13 +95,18 @@ try {
       await page.locator('#featured-next').click();
       await page.waitForTimeout(200);
       assert.equal(await track.evaluate(el=>el.scrollLeft>0),true,'next reveals more featured tiles');
+      assert.equal(await page.locator('#game-hub-toggle').isVisible(),false,'phone landing shows only hero and featured (founder frame 1)');
+      await page.evaluate(()=>{location.hash='games';});
+      await page.waitForFunction(()=>document.documentElement.dataset.hubView==='details');
       const hubToggle=page.locator('#game-hub-toggle');
-      assert.equal(await hubToggle.isVisible(),true,'mobile Game Hub disclosure is visible below the feature deck');
+      assert.equal(await hubToggle.isVisible(),true,'details view shows the Game Hub Center pill (founder frame 2)');
+      assert.equal(await page.locator('.hub-quick a').count(),3,'details view shows the All Games / SYNC / Play with care shortcuts');
       assert.equal(await hubToggle.getAttribute('aria-expanded'),'false','mobile Game Hub Center exposes closed state');
       await hubToggle.click();
       assert.equal(await hubToggle.getAttribute('aria-expanded'),'true','Game Hub Center opens on demand');
       assert.equal(await page.locator('#game-hub-center').isVisible(),true,'Game Hub Center details are accessible after opening');
-      assert.equal(await page.locator('#games .cards').isVisible(),false,'long game descriptions remain collapsed initially');
+      await page.locator('#game-hub-center a[href="#safety"]').click();
+      await page.waitForFunction(()=>location.hash==='#safety');
       await page.locator('#game-hub-center a[href="#games"]').click();
       await page.locator('#games .cards').waitFor({state:'visible'});
       assert.equal(await page.locator('html').getAttribute('data-hub-view'),'details','All Games has its own detail view');
@@ -104,17 +117,12 @@ try {
       assert.equal(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight+1),true,'landing still fits after return');
       await page.locator('#featured .featured-tile').nth(1).click();
       await page.waitForFunction(()=>document.documentElement.dataset.hubView==='details');
-      assert.equal(await page.locator('#games .cards').isVisible(),true,'featured collection enters the existing All Games view');
-      await page.locator('#details-back').click();
-      await page.waitForFunction(()=>document.documentElement.dataset.hubView==='home');
-      await page.locator('#featured .featured-tile').nth(2).click();
-      await page.waitForFunction(()=>document.documentElement.dataset.hubView==='details');
       assert.equal(await page.evaluate(()=>location.hash),'#lumora-world','featured world shortcut enters an existing upcoming game');
       assert.equal(await page.locator('#lumora-world').isVisible(),true,'upcoming game details are shown');
       assert.equal(await page.locator('#lumora-world a').count(),0,'unreleased world never gets a public play link');
       await page.locator('#details-back').click();
       await page.waitForFunction(()=>document.documentElement.dataset.hubView==='home');
-      await page.locator('.hero-actions a[href="#sync-world"]').click();
+      await page.locator('#featured .featured-tile').nth(0).click();
       await page.waitForFunction(()=>document.documentElement.dataset.hubView==='details');
       assert.equal(await page.locator('#sync-world .edition a').count(),3,'SYNC detail view retains all three actual destinations');
       await page.locator('#details-back').click();
