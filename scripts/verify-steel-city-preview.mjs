@@ -16,6 +16,13 @@ const game = await readFile(gameFile, 'utf8');
 assert.match(game, /const sagaStages\s*=/);
 assert.match(game, /const sagaNeighbors\s*=/);
 assert.match(game, /__steelCityDebug/);
+assert.match(game, /id="moveJoystick"/);
+assert.match(game, /assets\/pittsburgh-night-skyline\.jpg/);
+assert.doesNotMatch(game, /id="(?:up|down|left|right)"/);
+const artFile = resolve(assetRoot, 'steel-city/assets/pittsburgh-night-skyline.jpg');
+const embedded = game.match(/data:image\/jpeg;base64,([A-Za-z0-9+/=]+)/);
+assert.ok(embedded, 'approved art source missing');
+assert.deepEqual(await readFile(artFile), Buffer.from(embedded[1], 'base64'), 'production graphics asset differs from approved image');
 assert.ok(game.length > 100_000, 'unexpected truncated game source');
 
 const server = createServer(async (req, res) => {
@@ -24,7 +31,7 @@ const server = createServer(async (req, res) => {
     const relative = path === '/' ? 'index.html' : path.endsWith('/') ? `${path.slice(1)}index.html` : path.slice(1);
     const full = await realpath(resolve(assetRoot, relative));
     if (!full.startsWith(`${assetRoot}${sep}`) || !(await stat(full)).isFile()) throw Error('not_found');
-    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'X-Content-Type-Options': 'nosniff' });
+    res.writeHead(200, { 'Content-Type': relative.endsWith('.jpg') ? 'image/jpeg' : 'text/html; charset=utf-8', 'X-Content-Type-Options': 'nosniff' });
     res.end(await readFile(full));
   } catch {
     res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
@@ -46,6 +53,7 @@ try {
     const response = await page.goto(`http://127.0.0.1:${port}/steel-city/`, { waitUntil: 'domcontentloaded' });
     assert.equal(response?.status(), 200, 'Steel City preview route unavailable');
     await page.waitForFunction(() => typeof window.__steelCityDebug === 'function');
+    await page.waitForFunction(() => document.getElementById('skyBackdrop')?.dataset.graphicsAsset === 'loaded', { timeout: 15_000 });
     let status = await page.evaluate(() => window.__steelCityDebug());
     assert.equal(status.started, false);
     assert.equal(status.campaignStage, 0);
@@ -64,6 +72,20 @@ try {
     status = await page.evaluate(() => window.__steelCityDebug());
     assert.equal(status.campaignStage, 0);
     assert.equal(status.skyMode, false);
+    if (label === 'mobile-emulated') {
+      assert.equal(await page.locator('#jump2').isVisible(), true, 'jump control hidden behind canvas');
+      const bounds = await page.locator('#moveJoystick').boundingBox();
+      assert.ok(bounds && bounds.width > 100, 'joystick touch target missing');
+      const initial = await page.evaluate(() => window.__steelCityDebug());
+      await page.mouse.move(bounds.x + bounds.width * .82, bounds.y + bounds.height / 2);
+      await page.mouse.down();
+      await page.waitForTimeout(550);
+      const steered = await page.evaluate(() => window.__steelCityDebug());
+      await page.mouse.up();
+      assert.ok(steered.x - initial.x > 1.0, 'joystick did not move player');
+      assert.ok(Math.abs(steered.cameraYaw - initial.cameraYaw) > .4, 'camera did not rotate toward joystick');
+      assert.equal(await page.evaluate(() => window.__steelJoystick.active), false, 'joystick remained stuck after release');
+    }
     assert.deepEqual(errors, [], 'browser JavaScript error');
     console.log(`PASS ${label}: hub + /steel-city/ HTTP, story start, flight, reset, no JS errors; WebGL=${status.webgl}`);
     await page.close();
