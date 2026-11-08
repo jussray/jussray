@@ -71,11 +71,12 @@ for (const vp of [{n:'desktop',w:1440,h:900},{n:'mobile',w:390,h:844}]) {
     await page.keyboard.press('Escape');
     say(!(await menu.isVisible())&&await button.getAttribute('aria-expanded')==='false','mobile: nav closes on Escape');
   }
-  for(const route of ['products.html','sites.html','founder.html','contact.html','portfolio.html','services.html','work.html','games/index.html','universe.html']){
+  for(const route of ['products.html','sites.html','founder.html','contact.html','portfolio.html','services.html','work.html','games/index.html','opportunity-engine.html','universe.html']){
     const res=await page.request.get(url+route);say(res.status()===200,`${vp.n}: ${route} returns 200`);
   }
   await page.goto(url+'products.html',{waitUntil:'load'});
-  say((await page.locator('.feature-card').count())===5,`${vp.n}: featured products on product page`);
+  say((await page.locator('.feature-card').count())===6,`${vp.n}: all six featured products on product page`);
+   say((await page.locator('.feature-card a[href="/opportunity-engine.html"]').count())===1,`${vp.n}: Opportunity Engine is a discoverable product route`);
   await page.goto(url+'sites.html',{waitUntil:'load'});
   say((await page.locator('.directory-card').count())===11,`${vp.n}: eleven public destination cards on sites page`);
   say(errors.length===0,`${vp.n}: no JS exceptions on new routed pages${errors.length?' — '+errors.join(' | '):''}`);
