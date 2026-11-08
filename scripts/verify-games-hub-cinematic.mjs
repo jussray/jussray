@@ -92,6 +92,7 @@ try {
       assert.equal(await page.locator('html').getAttribute('data-hub-view'),'details','All Games has its own detail view');
       assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,'game details have no horizontal overflow');
       await page.locator('#details-back').click();
+      await page.waitForFunction(()=>document.documentElement.dataset.hubView==='home');
       assert.equal(await page.locator('html').getAttribute('data-hub-view'),'home','back opens the no-scroll landing');
       assert.equal(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight+1),true,'landing still fits after return');
     }
