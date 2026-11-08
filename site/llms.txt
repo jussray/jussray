@@ -15,6 +15,12 @@ Public visibility is not a license grant.
 ## Safe public sources
 
 - https://www.jussco.company/
+- https://www.jussco.company/products.html
+- https://www.jussco.company/opportunity-engine.html
+- https://www.jussco.company/portfolio.html
+- https://www.jussco.company/sites.html
+- https://www.jussco.company/founder.html
+- https://www.jussco.company/contact.html
 - https://www.jussco.company/work.html
 - https://www.jussco.company/downloads/juss-co-company-overview.pdf
 - https://www.jussco.company/downloads/juss-co-selected-work-evidence.pdf
