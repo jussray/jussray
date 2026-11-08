@@ -31,7 +31,7 @@ export function planNativeRepair(live) {
     throw new Error('Unrecognized or incomplete active repository ruleset');
   const types=live.rules.map(x=>x.type);
   if (new Set(types).size!==types.length) throw new Error('Duplicate rules; refuse ambiguous update');
-  for(const needed of ['pull_request','required_status_checks','deletion','non_fast_forward'])
+  for(const needed of ['pull_request','required_status_checks','deletion'])
     if(!types.includes(needed))throw new Error('Missing mandatory existing rule: '+needed);
   const pull=live.rules.find(x=>x.type==='pull_request').parameters;
   if(pull?.required_review_thread_resolution!==true || pull.required_approving_review_count!==0)
@@ -47,11 +47,16 @@ export function planNativeRepair(live) {
     name:live.name, target:live.target, enforcement:live.enforcement,
     conditions:structuredClone(live.conditions),
     bypass_actors:[],
-    rules:stableRules(live.rules).map(rule=>rule.type==='required_status_checks'
-      ? {type:rule.type,parameters:{...rule.parameters,required_status_checks:[...rule.parameters.required_status_checks,...extra]}}
-      : rule),
+    rules:[
+      ...stableRules(live.rules).map(rule=>rule.type==='required_status_checks'
+        ? {type:rule.type,parameters:{...rule.parameters,required_status_checks:[...rule.parameters.required_status_checks,...extra]}}
+        : rule),
+      ...(!types.includes('non_fast_forward') ? [{type:'non_fast_forward'}] : []),
+    ],
   };
   const warnings=[];
+  if(!types.includes('non_fast_forward'))
+    warnings.push('Missing non-fast-forward protection will be enabled');
   if(live.conditions.ref_name.include.includes('~ALL'))
     warnings.push('Global ~ALL branch scope: applying affects every included branch');
   if(live.bypass_actors.length)

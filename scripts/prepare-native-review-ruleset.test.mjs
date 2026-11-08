@@ -32,6 +32,20 @@ test('repair adds four systematic checks but preserves all other rules and produ
   assert.equal(plan.existingDigest,fingerprint(current));
 });
 
+test('repair adds missing non-fast-forward protection, without duplication or weakening other rules',()=>{
+  const original=live();
+  const alreadyProtected=planNativeRepair(original);
+  assert.equal(alreadyProtected.payload.rules.filter(r=>r.type==='non_fast_forward').length,1);
+  const missing=live();
+  missing.rules=missing.rules.filter(r=>r.type!=='non_fast_forward');
+  const result=planNativeRepair(missing);
+  assert.equal(result.payload.rules.filter(r=>r.type==='non_fast_forward').length,1);
+  assert.equal(getRule(result.payload,'pull_request').parameters.required_approving_review_count,0);
+  assert.equal(getRule(result.payload,'required_status_checks').parameters.strict_required_status_checks_policy,true);
+  assert.ok(result.warnings.includes('Missing non-fast-forward protection will be enabled'));
+  assert.equal(result.existingDigest,fingerprint(missing));
+});
+
 test('repair preserves existing check contexts without duplicating them',()=>{
   const c=live();
   getRule(c,'required_status_checks').parameters.required_status_checks=[{context:'Repo Reality / exact-head'},{context:'custom-lint',integration_id:12}];
@@ -45,7 +59,6 @@ test('rejects wrong repo, disabled ruleset, unresolved conversations and unexpec
     x=>{x.source='someone/else'}, x=>{x.enforcement='disabled'},
     x=>{getRule(x,'pull_request').parameters.required_review_thread_resolution=false},
     x=>{getRule(x,'pull_request').parameters.required_approving_review_count=1},
-    x=>{x.rules=x.rules.filter(r=>r.type!=='non_fast_forward')},
   ]) {const x=live();mutate(x);assert.throws(()=>planNativeRepair(x));}
 });
 

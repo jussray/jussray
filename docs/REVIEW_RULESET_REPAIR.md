@@ -27,6 +27,6 @@ Only after reviewing *that exact current snapshot* and explicitly authorizing th
 node scripts/prepare-native-review-ruleset.mjs --apply --approve-all-branches --approve-bypass-removal
 ```
 
-The script rejects missing admin credentials, stale snapshots, wrong repository identity, unexpected rules, and absent explicit approvals. It keeps existing branch scope, strict checking, merge-review rules, non-fast-forward/deletion protections, signatures, code scanning, linear history, and deployment environments. It adds the four systematic check contexts, removes existing bypass actors only with approval, and rereads GitHub to verify the update. **No GitHub API write or CI status is a merge/deploy approval.**
+The script rejects missing admin credentials, stale snapshots, wrong repository identity, unexpected rules, and absent explicit approvals. It keeps existing branch scope, strict checking, merge-review rules, deletion protection, signatures, code scanning, linear history, and deployment environments. It adds missing non-fast-forward protection and the four systematic check contexts, removes existing bypass actors only with approval, and rereads GitHub to verify the update. **No GitHub API write or CI status is a merge/deploy approval.**
 
 A GitHub API denial or a failed readback is **BLOCKED**, not verified. If the ruleset changes between plan and apply, obtain a new snapshot instead of forcing it.
