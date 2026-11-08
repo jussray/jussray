@@ -67,6 +67,17 @@ export function verifyDestinationMarkdown(content, kind) {
   if (kind === 'games' && !/title:\s*["']Juss\s*&\s*Co\.? Games/i.test(content)) throw new Error('Games hub destination title mismatch');
 }
 
+export function verifyGamesHubMarkdown(content) {
+  verifyDestinationMarkdown(content,'games');
+  if (!/^# Game Hub\s*$/m.test(content)) throw new Error('Games hub public Game Hub heading missing');
+  if (!content.includes('[Play Live SYNC ↗](https://sync.jussco.company/)')) {
+    throw new Error('Games hub live SYNC destination missing');
+  }
+  if (!/In development/i.test(content) || !/Private prototype/i.test(content)) {
+    throw new Error('Games hub unreleased status labels missing');
+  }
+}
+
 export function verifyBipContent(html, stage) {
   if (typeof html !== 'string' || !html.startsWith('<!DOCTYPE html>')) {
     throw new Error('Se’kret Bip returned no rendered HTML');
@@ -273,11 +284,7 @@ export async function runProof({env=process.env, fetchImpl=fetch, root=ROOT}={})
   // unrelated or unfinished product flows.
   const gamesUrl = 'https://games.jussco.company/';
   const gamesMarkdown = await request('markdown',{url:gamesUrl,actionTimeout:18_000});
-  verifyDestinationMarkdown(gamesMarkdown,'games');
-  if (!gamesMarkdown.includes('# Choose your next adventure.') ||
-      !gamesMarkdown.includes('[Play Live SYNC ↗](https://sync.jussco.company/)')) {
-    throw new Error('Games hub public gameplay discovery markers missing');
-  }
+  verifyGamesHubMarkdown(gamesMarkdown);
   witness.pageProof.push({host:'games.jussco.company',publicDestination:true,rendered:true});
   console.log('VERIFIED public Games hub and live SYNC discovery link');
   if (await fetchHead(env.GITHUB_TOKEN, fetchImpl) !== expectedHead) throw new Error('main moved during proof; evidence superseded');
