@@ -3,9 +3,10 @@
 (function () {
   var root = document.documentElement;
   var NAV = [
-    ['Home', '/', 'home'], ['Portfolio', '/portfolio.html', 'portfolio'], ['Products', '/#products', 'products'],
-    ['Solutions', '/services.html', 'services'], ['Our Work', '/work.html', 'work'],
-    ['Founder', '/#why', 'founder'], ['Contact', '/#contact', 'contact']
+    ['Home', '/', 'home'], ['Products', '/products.html', 'products'], ['Portfolio', '/portfolio.html', 'portfolio'],
+    ['Games', 'https://games.jussco.company/', 'games'], ['Solutions', '/services.html', 'services'],
+    ['Our Work', '/work.html', 'work'], ['Sites', '/sites.html', 'sites'],
+    ['Founder', '/founder.html', 'founder'], ['Contact', '/contact.html', 'contact']
   ];
   var path = location.pathname.replace(/\/+$/, '') || '/';
   var current = { '/portfolio.html': 'portfolio', '/services.html': 'services', '/work.html': 'work' }[path] || '';
@@ -55,7 +56,7 @@ function wireMenu(header, btn, nav){
     nav.id = 'wsNav'; mb.setAttribute('aria-controls', 'wsNav'); mb.innerHTML = '<span></span><span></span><span></span>';
     header.appendChild(brand); if (current !== 'services') header.appendChild(cta); header.appendChild(mb); header.appendChild(nav);
     wireMenu(header, mb, nav);
-    var TABS = [['Home', '/', 'home'], ['Products', '/#products', 'products'], ['Solutions', '/services.html', 'services'], ['Our Work', '/work.html', 'work'], ['Founder', '/#why', 'founder']];
+    var TABS = [['Home', '/', 'home'], ['Products', '/products.html', 'products'], ['Solutions', '/services.html', 'services'], ['Our Work', '/work.html', 'work'], ['Founder', '/founder.html', 'founder']];
     var ICON = {'home': '<path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/>', 'products': '<rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/>', 'solutions': '<path d="M12 3l9 5-9 5-9-5 9-5zM3 13l9 5 9-5"/>', 'work': '<path d="M3 18h18l1-11-6 4-4-7-4 7-6-4z"/>', 'founder': '<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/>'};
     var ICON_KEY = { home: 'home', products: 'products', services: 'solutions', work: 'work', founder: 'founder' };
     var bar = document.createElement('nav'); bar.className = 'tabbar'; bar.setAttribute('aria-label', 'Quick navigation');

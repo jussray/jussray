@@ -3,5 +3,6 @@
   "name": "jussco-games",
   "compatibility_date": "2026-10-01",
   "assets": { "directory": "./site/games" },
+  "previews": {},
   "routes": [{ "pattern": "games.jussco.company", "custom_domain": true }]
 }

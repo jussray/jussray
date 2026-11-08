@@ -1,12 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-hub-view="home">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#120a33">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Kaushan+Script&display=swap">
+<meta name="theme-color" content="#07071e">
 <meta name="description" content="Discover the games and adventures from Juss & Co. Play SYNC, explore upcoming worlds, and choose your next adventure.">
 <meta property="og:title" content="Juss & Co. Games | Choose your adventure">
 <meta property="og:description" content="One arcade. Different worlds. Made for play, friendship, and discovery.">
@@ -59,314 +56,536 @@ header{box-shadow:0 12px 45px #02031938}
 @media(max-width:700px){header .inner{flex-wrap:wrap;gap:3px 15px;padding:10px 0}header{position:relative}nav{width:100%;justify-content:space-between}nav a{min-height:40px;display:inline-flex;align-items:center}.hero{min-height:unset}.hero:before{width:220px;height:220px;right:-20px;top:6%;opacity:.20}.hero h1{font-size:clamp(46px,11vw,73px)}.art{min-height:190px}.art-title{font-size:35px;left:20px;bottom:18px}.card-body{padding:21px}.card:hover{transform:none}}
 @media(prefers-reduced-motion:reduce){.card,.action{transition:none}.card:hover,.action:hover{transform:none}}
 
-/* Juss & Co living world (matches /ideas.html): founder day/night scene, glass panels, gold edges. */
-:root{--edge:rgba(255,214,138,.42);--cream:#f8ecd0;--serif:"Playfair Display",Georgia,serif}
-body{background:#120a33}
-.scene{position:fixed;inset:0;z-index:-1;overflow:hidden;background:linear-gradient(180deg,#2a1a6e,#7b3fa8 45%,#0f0b2e)}
-.scene .art{position:absolute;inset:0;background-size:cover;background-position:50% 60%;transition:opacity 1.2s ease}
 
-.scene .night{opacity:0}
-.scene .sunset{opacity:0}
-[data-atmo="sunset"] .scene .sunset{opacity:1}
-[data-atmo="sunset"] .scene .tint{background:linear-gradient(180deg,rgba(40,14,70,.3),rgba(40,14,70,.08) 40%,rgba(14,8,40,.7))}
-[data-atmo="night"] .scene .night{opacity:1}
-.scene .tint{position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,10,51,.55),rgba(18,10,51,.3) 40%,rgba(10,6,34,.75))}
-[data-atmo="night"] .scene .tint{background:linear-gradient(180deg,rgba(6,4,24,.35),rgba(6,4,24,.15) 45%,rgba(6,4,24,.7))}
-@media (max-width:700px){}
-header{background:rgba(20,12,52,.6);border-bottom:1px solid var(--edge);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2)}
-.brand{font-family:var(--serif);color:var(--cream)}
-.hero:before{right:0}
-.hero h1{font-family:var(--serif);letter-spacing:-.02em;color:var(--cream);text-shadow:0 4px 30px rgba(20,6,50,.9)}
-.hero h1 span{background:linear-gradient(110deg,#fff6dc,#ffd98a 45%,#ffc6e6);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 3px 14px rgba(20,6,50,.85))}
-.edition .action:not(.outline){background:linear-gradient(180deg,#fff0c8,#f5c46a);color:#2a1640;border-color:transparent}
-.hero .eyebrow{border-color:var(--edge);background:rgba(28,18,66,.7);color:var(--cream)}
-.lead,.hero-note{text-shadow:0 1px 2px rgba(10,4,30,.95),0 0 14px rgba(10,4,30,.85)}
-.hero-actions .action{background:linear-gradient(180deg,#fff0c8,#f5c46a);color:#2a1640;border-color:transparent;box-shadow:0 0 26px rgba(255,200,110,.5)}
-.section-heading h2,.notes h2{font-family:var(--serif);color:var(--cream);text-shadow:0 2px 14px rgba(10,4,30,.9)}
-.section-heading p{color:#efe8ff;text-shadow:0 1px 8px rgba(10,4,30,.9)}
-.card{background:rgba(28,18,66,.66);border-color:var(--edge);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);box-shadow:0 0 40px rgba(245,170,80,.16),0 20px 60px rgba(8,4,30,.55),inset 0 1px #ffffff18}
-.card:hover,.card:focus-within{border-color:#ffd98a;box-shadow:0 0 46px rgba(255,200,110,.28),0 26px 64px rgba(8,4,30,.6)}
-.edition{background:rgba(40,24,88,.55);border-color:rgba(255,214,138,.32)}
-.notes{background:rgba(28,18,66,.66);border-color:var(--edge);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
-footer{background:rgba(14,8,40,.7)}
-@media(prefers-reduced-motion:reduce){.scene .art{transition:none}}
-
-/* Game Hub world stage (founder mockup 2026-11-07). */
-main{width:100%!important;max-width:none}.mainwrap{width:min(1160px,calc(100% - 36px));margin:auto}
-header .inner{width:min(1380px,calc(100% - 36px))}
-.gnav{display:flex;gap:4px;flex-wrap:wrap}
-.gnav a{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:999px;font-size:14px;color:#e6dcff}
-.gnav a[aria-current]{background:linear-gradient(180deg,#ffe3a8,#f3b25a);color:#2a1640}
-@media(min-width:1100px){.gnav{flex-wrap:nowrap;padding:4px;border-radius:999px;border:1px solid var(--edge);background:rgba(20,14,60,.55)}}
-.gstage{position:relative;width:min(1380px,calc(100% - 36px));margin:auto;padding:clamp(18px,2.4vw,34px) 0 34px;display:grid;grid-template-columns:minmax(0,1fr);gap:22px;align-items:start;min-height:calc(100vh - 77px)}
-.gstage-hero{text-align:center}
-.stage-crown{width:52px;height:38px;fill:var(--gold);filter:drop-shadow(0 0 14px rgba(245,193,75,.75))}
-.stage-kicker{margin:6px 0 0;font-family:var(--serif);letter-spacing:.42em;text-transform:uppercase;font-size:clamp(15px,1.6vw,22px);color:var(--cream)}
-.gstage-hero h1{margin:0;font-family:var(--serif);font-weight:700;font-size:clamp(52px,7vw,104px);line-height:1.02;letter-spacing:0;color:var(--cream);text-shadow:0 4px 30px rgba(20,6,50,.9)}
-.stage-verbs,.stage-sub{margin:6px 0;font-weight:600;color:#fff;text-shadow:0 1px 2px rgba(10,4,30,.95),0 0 12px rgba(10,4,30,.85)}
-.stage-verbs{text-transform:uppercase;letter-spacing:.3em;font-size:clamp(12px,1.3vw,17px)}
-.stage-sub{max-width:560px;margin-inline:auto;font-size:clamp(14px,1.2vw,17px);letter-spacing:.03em}
-.stage-sign{margin:2px 0 6px;font-family:"Kaushan Script",cursive;font-size:clamp(28px,3vw,40px);color:var(--gold2,#ffd98a);text-shadow:0 0 18px rgba(245,193,75,.5)}
-.stage-cta{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:8px}
-.sbtn{display:inline-flex;align-items:center;gap:10px;min-height:50px;padding:0 26px;border-radius:999px;font-weight:700;font-size:16px;text-decoration:none;border:1px solid rgba(255,214,138,.5)}
-.sbtn-gold{background:linear-gradient(180deg,#fff0c8,#f5c46a);color:#2a1640;box-shadow:0 0 26px rgba(255,200,110,.55)}
-.sbtn-ghost{background:rgba(20,14,60,.62);color:#fff;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-.stage-quote{margin:0;padding:22px 22px 18px;border-radius:24px;border:1px solid rgba(255,214,138,.4);background:rgba(28,18,66,.45);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-.stage-quote blockquote{margin:0}.stage-quote p{margin:0;font-family:var(--serif);font-style:italic;font-size:clamp(17px,1.5vw,21px);line-height:1.45;color:var(--cream)}
-.stage-quote p::before{content:"\201C";display:block;font-size:40px;line-height:.6;color:#ffd98a}
-.stage-quote figcaption{margin-top:10px;text-align:right;font-family:"Kaushan Script",cursive;font-size:28px;color:#ffd98a}
-.hub-panel{padding:20px 16px;border-radius:24px;border:1px solid rgba(255,214,138,.4);background:rgba(20,14,60,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
-.hub-panel h2{margin:0 0 10px;text-align:center;font-family:var(--serif);font-size:24px;color:var(--cream)}
-.hub-panel ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}
-.hub-panel a{display:flex;flex-direction:column;gap:2px;min-height:44px;padding:10px 12px;border-radius:14px;border:1px solid rgba(255,214,138,.18);text-decoration:none}
-.hub-panel a:hover{border-color:#ffd98a;background:rgba(245,193,75,.06)}
-.hub-panel b{font-size:15px}.hub-panel span{font-size:13px;color:var(--muted)}
-.fx{padding:22px 14px 16px;border-radius:28px;border:1px solid rgba(245,193,75,.5);background:rgba(20,14,60,.55);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:inset 0 1px 0 rgba(255,217,138,.2),0 0 50px rgba(245,193,75,.22);min-width:0}
-.fx-title{display:flex;align-items:center;gap:16px;margin:0 0 14px}
-.fx-title::before,.fx-title::after{content:"";flex:1 1 auto;height:1px;background:linear-gradient(90deg,transparent,#ffd98a)}.fx-title::after{transform:scaleX(-1)}
-.fx-title h2{margin:0;font-family:var(--serif);font-weight:400;font-size:clamp(26px,3vw,38px);color:var(--cream);white-space:nowrap}
-.fx-row{display:flex;align-items:center;gap:10px;min-width:0}
-.fx-nav{flex:0 0 44px;height:44px;border-radius:999px;border:1px solid rgba(255,214,138,.45);background:rgba(12,10,44,.7);color:#ffd98a;font-size:24px;cursor:pointer}
-.fx-track{list-style:none;margin:0;padding:4px 2px 10px;flex:1 1 auto;min-width:0;display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
-.fx-track::-webkit-scrollbar{display:none}
-.fx-track li{flex:0 0 140px;display:flex;scroll-snap-align:start}
-.fx-tile{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 10px;min-height:178px;border-radius:20px;border:1px solid rgba(190,160,255,.35);background:linear-gradient(180deg,rgba(40,30,110,.75),rgba(10,9,38,.95));text-decoration:none;text-align:center;transition:transform .2s,border-color .2s}
-.fx-tile:hover,.fx-tile:focus-visible{transform:translateY(-4px);border-color:#ffd98a}
-.fx-glyph{position:relative;width:74px;height:74px;border-radius:18px;display:grid;place-items:center;font-size:24px;white-space:nowrap;overflow:hidden}
-.fx-tile strong{font-size:15px}.fx-tile small{margin-top:auto;font-size:12px;color:var(--muted)}
-.stage-ctrl{display:grid;gap:8px;padding:14px;border-radius:20px;border:1px solid rgba(255,214,138,.35);background:rgba(20,14,60,.62);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#fff;font-size:14px}
-.ctrl-row{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:44px}
-.ctrl-switch{position:relative;width:52px;height:44px;padding:0;border:0;background:none;cursor:pointer}
-.ctrl-switch::before{content:"";position:absolute;left:0;right:0;top:12px;height:20px;border-radius:999px;background:rgba(120,110,180,.6)}
-.ctrl-switch::after{content:"";position:absolute;left:3px;top:15px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform .2s}
-.ctrl-switch[aria-checked="true"]::before{background:#7c8cff}.ctrl-switch[aria-checked="true"]::after{transform:translateX(32px)}
-.stage-ctrl input[type=range]{width:100%;min-height:44px;accent-color:#f5c14b}
-.ctrl-atmo{display:flex;align-items:center;gap:12px;width:100%;min-height:52px;padding:6px 10px;border-radius:14px;border:1px solid rgba(255,214,138,.3);background:rgba(10,6,34,.5);color:#fff;font:inherit;text-align:left;cursor:pointer}
-.ctrl-atmo small{display:block;color:var(--muted);font-size:12px}.ctrl-atmo>span:last-child{margin-left:auto;font-size:20px;color:#ffd98a}
-.ctrl-sun{width:22px;height:22px;border-radius:50%;background:radial-gradient(circle,#ffe7a3 40%,#f5a54b 70%,transparent 72%);box-shadow:0 0 14px #f5c14b}
-.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.gstage :focus-visible{outline:3px solid #ffd98a;outline-offset:3px}
-[data-atmo="dawn"] .scene .sunset{opacity:1}
-@media(min-width:1100px){
-  .gstage{grid-template-columns:250px minmax(0,1fr) 300px;grid-template-areas:"quote hero panel" "ctrl fx panel";column-gap:26px;row-gap:24px}
-  .gstage-hero{grid-area:hero}.stage-quote{grid-area:quote;align-self:center}.hub-panel{grid-area:panel}.fx{grid-area:fx;align-self:end}.stage-ctrl{grid-area:ctrl;align-self:end}
-  header .inner{flex-wrap:nowrap}
+/* Game Hub is a Juss & Co doorway, not an override of any individual game. */
+html{background:#0c1935}
+body{position:relative;isolation:isolate;background:transparent;color:#fff9ef;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+#living-world-scene{position:fixed;inset:0;z-index:-2;background:#0e2544 url('/assets/home-scene.webp') center center/cover no-repeat;pointer-events:none}
+#living-world-scene:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,34,.30),transparent 27%,rgba(9,11,32,.30) 57%,rgba(7,9,28,.72)),linear-gradient(90deg,rgba(9,8,28,.24),transparent 54%,rgba(9,8,28,.10))}
+header{position:relative;z-index:30;background:transparent;border:0;box-shadow:none;backdrop-filter:none}
+header .inner{width:min(1540px,calc(100% - 40px));min-height:81px;display:grid;grid-template-columns:auto 1fr auto;gap:28px}
+.brand{font-family:Georgia,serif;font-size:clamp(24px,2.3vw,36px);font-weight:400;text-shadow:0 3px 15px #100c32;letter-spacing:-.045em}.brand em{color:#ffe2a3}.brand .crown{font-size:clamp(27px,2.8vw,43px);vertical-align:middle;margin-right:12px;color:#ffd987;filter:drop-shadow(0 0 9px #ffaa6a)}
+.brand small{display:block;text-align:right;font:600 9px system-ui,sans-serif;letter-spacing:.47em;color:#f9e8e3;margin-top:-9px}
+header nav{justify-self:center;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;max-width:870px;padding:6px 10px;border-radius:50px;border:1px solid #ffe5c58a;background:linear-gradient(100deg,#1c153b91,#383264a8);box-shadow:inset 0 1px #ffffff38,0 10px 35px #03041466;backdrop-filter:blur(18px)}
+header nav a{font-size:12px;color:#fff6ee;padding:10px 16px;line-height:1.2;min-height:40px;text-decoration:none;border-radius:30px;font-weight:500}
+header nav a[aria-current="page"]{color:#271632;background:linear-gradient(90deg,#ffc38f,#ffeec6);box-shadow:0 0 16px #ffc3a7aa}
+.header-tools{display:flex;align-items:center;justify-content:flex-end;gap:8px}
+.utility{min-height:43px;min-width:43px;border-radius:28px;border:1px solid #f4d2c38a;background:linear-gradient(110deg,#171631c7,#483251a1);box-shadow:inset 0 1px #fff4,0 6px 20px #10091a9e;color:#fff8ef;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-size:13px;padding:8px 13px}
+.utility:hover{border-color:#ffe8bb;box-shadow:0 0 20px #ffc79a88}
+#mobile-menu{display:none}
+main{width:min(1480px,calc(100% - 44px));padding-bottom:70px}
+.glass-world{background:linear-gradient(135deg,#30244ecf,#15192dd6 78%);border:1px solid #ffddb68f;box-shadow:inset 0 1px #fff5,0 14px 50px #0906219a,0 0 25px #f1a67530;backdrop-filter:blur(19px);-webkit-backdrop-filter:blur(19px);border-radius:25px}
+.hero{padding:28px 295px 165px 236px;min-height:535px;display:flex;align-items:center;justify-content:flex-start;text-align:center;flex-direction:column;isolation:auto}
+.hero:before{display:none}
+.hero .eyebrow{padding:0;border:0;background:transparent;font-family:Georgia,serif;font-size:12px;color:#fff4da;letter-spacing:.42em;font-weight:400}
+.hero h1{margin:5px 0 3px;font:400 clamp(62px,8.7vw,116px)/1 Georgia,serif;letter-spacing:-.06em;text-shadow:0 6px 18px #11132c}
+.hero h1 span{color:#fff2db;background:none}
+.hero .lead{font-size:12px;font-weight:650;letter-spacing:.23em;text-transform:uppercase;max-width:520px;color:#fff2e4}
+.hero .description{font-size:14px;line-height:1.55;color:#fceadd;text-shadow:0 2px 16px #120b37;max-width:510px;margin:12px 0 0}
+.hero-actions{margin:21px 0 0;display:flex;justify-content:center;gap:13px}
+.hero-actions .action{min-height:45px;border-radius:28px;padding:10px 23px;background:linear-gradient(120deg,#ffbd82,#ffedba);color:#28152e;border:1px solid #ffe2b4;box-shadow:0 0 24px #f5ad75b3;text-decoration:none;font-size:13px}
+.hero-actions .action.outline{color:#fff9ed;background:#1e1c40b8;border:1px solid #ffe1e3a1;box-shadow:0 0 18px #a790d077}
+.hero-quote{position:absolute;left:0;top:128px;width:200px;text-align:left;padding:20px 22px;font:italic 18px/1.4 Georgia,serif;text-shadow:0 3px 16px #07091e;background:linear-gradient(90deg,#16162b8a,#121c3d1e);border-left:1px solid #ffe0a572;border-radius:16px}
+.hero-quote b{display:block;font:italic 22px Georgia,serif;text-align:right;color:#ffdf99;margin-top:14px}
+#game-hub-center{position:absolute;right:0;top:54px;width:269px;padding:18px 18px 13px;text-align:left}
+#game-hub-center h2{font:400 26px/1.1 Georgia,serif;text-align:center;margin:3px 0 12px}
+#game-hub-center a{display:block;border-top:1px solid #e6d1d055;padding:10px 7px;text-decoration:none;font-size:13px;color:#fff8ed}
+#game-hub-center a:hover{background:#ead6ff17}
+#game-hub-center a small{display:block;margin-left:23px;color:#e3d5df;font-size:10px}
+#game-hub-center .nav-ico{display:inline-block;width:25px;text-align:center;color:#ffdb94}
+#ambience{position:absolute;left:0;bottom:40px;padding:13px 15px;width:213px;text-align:left;font-size:12px}
+#ambience .amb-row{display:flex;align-items:center;justify-content:space-between;gap:9px}
+#ambience .amb-row + .amb-row{border-top:1px solid #ddc1e258;padding-top:9px;margin-top:10px}
+#ambient-toggle{border:1px solid #dccce9aa;color:#fff7e4;background:#2b244e;padding:6px 12px;border-radius:20px;min-width:48px}
+#ambient-toggle[aria-pressed="true"]{background:#a9e6f9;color:#122038}
+#featured{position:relative;margin:-98px auto 45px;max-width:1190px;padding:18px 27px 25px;border-radius:40px;border:1px solid #ffe4bba8;background:linear-gradient(180deg,#30203dcf,#181838dd);box-shadow:0 0 37px #fc9b6654,0 24px 50px #080c30a6,inset 0 1px #fffffc44;backdrop-filter:blur(23px)}
+#featured h2{text-align:center;font:400 clamp(29px,3vw,42px)/1.15 Georgia,serif;margin:0 0 19px}
+.featured-track{display:grid;grid-auto-columns:minmax(0,1fr);grid-auto-flow:column;gap:11px;overflow-x:auto;scrollbar-width:thin;scroll-snap-type:x mandatory;padding:5px 2px 9px}
+.featured-tile{min-width:0;scroll-snap-align:start;padding:14px 10px 13px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border-radius:21px;border:1px solid #f9c6be9b;background:linear-gradient(145deg,#292044dd,#151738db);box-shadow:inset 0 1px #ffffff66,0 0 18px #fba46d37;text-align:center;min-height:152px;text-decoration:none}
+.featured-tile:hover,.featured-tile:focus-visible{border-color:#fff2cb;box-shadow:0 0 28px #f3ba74b7}
+.featured-tile .symbol{font:51px/1.1 system-ui;filter:drop-shadow(0 0 13px #a970ff)}
+.featured-tile strong{font:400 20px/1.15 Georgia,serif}
+.featured-tile small{font-size:10px;color:#f5d9dc;line-height:1.3}
+#featured .hint{font:11px system-ui,sans-serif;color:#ffe9c9;text-align:center;margin:11px 0 0}
+.featured-toolbar{display:flex;justify-content:flex-end;gap:8px}
+.featured-toolbar button{min-height:35px;min-width:35px;border-radius:50%;background:#2b2350c9;color:#ffe3bb;border:1px solid #ffd3ab8c}
+#games{scroll-margin-top:20px}
+#games .section-heading{margin:30px 0 20px}
+#games .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+#games .card{background:linear-gradient(153deg,#30244adf,#0a1837ec);border-color:#ffddc496;box-shadow:0 20px 55px #07031b9e,0 0 21px #ffb97c22;backdrop-filter:blur(20px)}
+#games .card .art{min-height:195px}
+#games .card-body{background:#14112eb8}
+#games .card .tag.wait{color:#ffdeb6;border-color:#ffce9677}
+#games .card .tag.live{color:#c2ffd8;border-color:#adf3ce}
+#games .edition{background:#171536d6;border:1px solid #c3adeb8a}
+#games .action{background:linear-gradient(115deg,#a86beb,#7958f0);border:1px solid #bc9ef0}
+#games .action.outline{background:#1c234bc7}
+.notes{scroll-margin-top:55px;background:#0d1832df;border-color:#c7a5c2a6;backdrop-filter:blur(22px)}
+footer{background:#080e27dd;border-color:#e6cebf3b}
+#search-panel{padding:14px 20px;max-width:550px;margin:12px auto;border-radius:20px}
+#search-panel[hidden]{display:none}
+#search-panel label{font-size:12px;color:#ffdfac}
+#search-panel input{width:100%;padding:12px;color:#fff8ed;border-radius:14px;background:#151733;border:1px solid #d8bdc8;font:inherit}
+html[data-season="winter"] #living-world-scene{filter:saturate(.92) brightness(.95)}
+html[data-season="summer"] #living-world-scene{filter:saturate(1.13) brightness(1.03)}
+html[data-season="autumn"] #living-world-scene{filter:saturate(1.08) sepia(.08)}
+.world-atmosphere{position:fixed;inset:0;z-index:5;pointer-events:none}
+@media(max-width:1120px){
+header .inner{grid-template-columns:1fr auto;gap:11px}
+header nav{grid-row:2;grid-column:1/-1;max-width:100%}
+.hero{padding:29px 230px 160px 190px}
+.hero-quote{width:166px;font-size:15px}
+#game-hub-center{width:210px;padding:14px 12px}
+#game-hub-center h2{font-size:23px}
+#ambience{width:170px;font-size:11px}
+.featured-track{grid-auto-columns:minmax(150px,1fr)}
+}
+@media(max-width:800px){
+header .inner{display:flex;flex-wrap:wrap;justify-content:space-between;width:calc(100% - 26px);padding:14px 0}
+#mobile-menu{display:inline-flex}
+header nav{display:none;order:3;width:100%;justify-content:center;flex-wrap:wrap}
+header nav.is-open{display:flex}
+header nav a{font-size:12px}
+.header-tools{margin-left:auto}
+#living-world-scene{background-position:50% center}
+main{width:calc(100% - 22px)}
+.hero{min-height:610px;padding:24px 12px 150px}
+.hero-quote{display:none}
+.hero h1{font-size:clamp(66px,12vw,94px)}
+.hero .lead{font-size:11px;letter-spacing:.12em}
+.hero .description{font-size:13px;max-width:470px}
+#game-hub-center{position:static;width:min(100%,560px);margin:210px auto 0}
+#ambience{position:static;width:min(100%,560px);margin:12px auto 0}
+#featured{margin:16px 0 33px;border-radius:28px;padding:20px 15px}
+.featured-track{grid-auto-columns:clamp(140px,39vw,185px)}
+#games .cards{grid-template-columns:1fr}
+}
+@media(max-width:520px){
+header .brand{font-size:23px}.brand .crown{font-size:27px;margin-right:7px}
+.header-tools .utility{padding:8px;min-width:38px;font-size:12px}
+.hero{min-height:710px;padding-top:29px}
+.hero h1{font-size:69px}
+.hero .description{max-width:360px}
+.hero-actions{flex-wrap:wrap;gap:9px}
+.hero-actions .action{font-size:12px;padding:9px 15px}
+#game-hub-center{margin-top:200px}
+#featured{margin-top:18px}
+#featured h2{font-size:29px}
+.featured-tile{min-height:138px}
+.featured-tile .symbol{font-size:45px}
+.featured-tile strong{font-size:18px}
+}
+@media(prefers-reduced-motion:reduce){
+.featured-track{scroll-behavior:auto}
+#living-world-scene{transition:none}
+.world-atmosphere{display:none}
+.featured-tile,#games .card{transition:none!important;transform:none!important}
 }
 
-/* Mockup proportions (Juss, 2026-11-07): compact side cards, band at the bottom, scene visible in between. */
-@media(min-width:1100px){
-  .gstage{width:min(1500px,calc(100% - 48px));grid-template-columns:200px minmax(0,1fr) 232px;grid-template-rows:auto 1fr auto;grid-template-areas:"quote hero panel" "quote gap panel" "ctrl fx panel";column-gap:clamp(24px,4vw,64px);row-gap:12px}
-  .gstage-hero h1{font-size:clamp(52px,5.4vw,84px)}
-  .stage-kicker{font-size:18px}.stage-verbs{font-size:13px}.stage-sub{font-size:14px}.stage-sign{font-size:30px;margin:0 0 4px}
-  .sbtn{min-height:42px;padding:0 20px;font-size:15px}
-  .stage-quote{padding:14px 14px 10px;border-radius:18px;background:rgba(28,18,66,.32)}
-  .stage-quote p{font-size:16px;line-height:1.4}.stage-quote p::before{font-size:30px}.stage-quote figcaption{font-size:22px;margin-top:6px}
-  .hub-panel{align-self:start;padding:14px 10px;border-radius:18px}
-  .hub-panel h2{font-size:19px;margin:0 0 6px}
-  .hub-panel a{padding:7px 10px;border-radius:10px}.hub-panel b{font-size:13px}.hub-panel span{font-size:11px}
-  .fx{padding:14px 12px 10px;border-radius:22px}
-  .fx-title{margin:0 0 10px}.fx-title h2{font-size:26px}
-  .fx-track{gap:10px;padding:4px 2px 8px}
-  .fx-track li{flex:0 0 108px}.fx-track li:first-child{margin-left:auto}.fx-track li:last-child{margin-right:auto}
-  .fx-tile{min-height:138px;padding:10px 6px 8px;gap:6px;border-radius:14px}
-  .fx-glyph{width:58px;height:58px;border-radius:14px;font-size:20px}
-  .fx-tile strong{font-size:13px}.fx-tile small{font-size:10px}
-  .stage-ctrl{padding:10px;gap:4px;font-size:12px;border-radius:16px}
-  .ctrl-atmo{min-height:44px;font-size:12px}.ctrl-atmo small{font-size:10px}
+
+/* Responsive mobile doorway: cinematic stage stays visible; deep content is progressive. */
+.header-tools .utility{min-width:44px;min-height:44px}
+
+[hidden]{display:none!important}
+#hub-mobile-mount,#all-games-toggle{display:none}
+@media(max-width:800px){
+  #living-world-scene{background-position:50% 54%}
+  .hero{min-height:clamp(465px,65svh,575px);padding:26px 12px 108px}
+  .hero .description{max-width:36ch}
+  #ambience{position:absolute;left:50%;bottom:6px;transform:translateX(-50%);width:min(100%,350px);margin:0;padding:10px 14px}
+  #featured{margin:-8px auto 16px;padding:17px 13px 19px}
+  .featured-track{grid-auto-columns:clamp(150px,58vw,230px);scroll-padding-inline:4px;overscroll-behavior-inline:contain}
+  #hub-mobile-mount{display:block;width:min(100%,580px);margin:6px auto 22px}
+  #game-hub-toggle,#all-games-toggle{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:11px 18px;border-radius:999px;border:1px solid #ffe0a7;background:linear-gradient(130deg,#372044d9,#151836ea);color:#fff3d6;box-shadow:0 0 18px #f4b67777,inset 0 1px #ffffff66;font:600 15px system-ui;cursor:pointer}
+  #game-hub-toggle{width:100%;font:400 24px Georgia,serif}
+  #game-hub-toggle:after{content:"⌄";margin-left:auto;font:25px system-ui}
+  #game-hub-toggle[aria-expanded="true"]:after{content:"⌃"}
+  #game-hub-center{position:static;width:100%;margin:12px auto 0}
+  #games .section-heading{gap:13px}
+  #games[data-collapsed="true"] .cards{display:none}
+  #all-games-toggle{font-size:13px}
+  #games .cards{margin-top:16px}
 }
-@media(max-width:1099px){.gstage-hero{order:1}.fx{order:2}.stage-quote{order:3;max-width:560px;margin-inline:auto}.hub-panel{order:4}.stage-ctrl{order:5;max-width:420px;width:100%;margin-inline:auto}}
-@media(max-width:700px){.gnav{width:100%;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none}.gnav a{padding:0 10px;font-size:13px;white-space:nowrap}}
-@media(prefers-reduced-motion:reduce){.fx-tile{transition:none}.fx-tile:hover{transform:none}}
+@media(max-width:520px){
+  header .inner{min-height:64px}
+  .hero{min-height:clamp(475px,67svh,570px);padding:22px 5px 100px}
+  .hero h1{font-size:clamp(55px,15.5vw,69px)}
+  .hero .lead{font-size:10px;letter-spacing:.1em}
+  .hero .description{font-size:12px;line-height:1.5}
+  .hero-actions{flex-wrap:nowrap;gap:7px;margin-top:17px}
+  .hero-actions .action{font-size:12px;padding:10px 13px;white-space:nowrap}
+  #featured h2{font-size:clamp(24px,7vw,30px)}
+  .featured-tile{min-height:145px}
+  .featured-toolbar button{min-height:44px;min-width:44px}
+  #games .section-heading{align-items:flex-start}
+  #games .section-heading h2{font-size:29px}
+}
+@media(prefers-reduced-motion:reduce){#game-hub-toggle,#all-games-toggle{transition:none}}
 
-/* Load only the active scene (devil pass 2026-11-07: three downloads to show one). */
-[data-atmo="day"] .scene .day{background-image:url(assets/ideas-day.webp)}
-[data-atmo="sunset"] .scene .sunset,[data-atmo="dawn"] .scene .sunset{background-image:url(assets/ideas-sunset.webp)}
-[data-atmo="night"] .scene .night{background-image:url(assets/ideas-night.webp)}
-@media (max-width:700px){[data-atmo="day"] .scene .day{background-image:url(assets/ideas-day-sm.webp)}[data-atmo="sunset"] .scene .sunset,[data-atmo="dawn"] .scene .sunset{background-image:url(assets/ideas-sunset-sm.webp)}[data-atmo="night"] .scene .night{background-image:url(assets/ideas-night-sm.webp)}}
+.skip-link{position:absolute;left:12px;top:-100px;z-index:20;background:#fff4dc;color:#241637;padding:12px 18px;border-radius:10px;font-weight:700}
+.skip-link:focus{top:12px}
+#search-status{margin:8px 0 0;font-size:13px;color:#fff1d2}
+#search-view{display:inline-block;margin-top:8px;color:#9defff;text-underline-offset:3px;font-size:13px}
 
-/* Phone layout from the founder's mobile Game Hub mockup (2026-11-07). Desktop is unchanged. */
-.menu-btn,.hub-mobile,.tabbar,.fx-dots{display:none}
-@media(max-width:700px){
-  header{position:sticky;top:0;z-index:50;background:transparent!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;padding:8px 10px 0}
-  header .inner{width:auto!important;flex-wrap:nowrap!important;justify-content:space-between;align-items:center;min-height:58px;padding:6px 8px 6px 16px!important;border-radius:22px;border:1px solid rgba(255,214,138,.45);background:rgba(20,14,60,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 0 22px rgba(245,193,75,.18)}
-  .brand{font-size:22px!important}
-  .menu-btn{display:inline-grid;place-content:center;gap:5px;width:44px;height:44px;border-radius:14px;border:1px solid rgba(255,214,138,.4);background:rgba(10,6,34,.5);cursor:pointer}
-  .menu-btn span{display:block;width:20px;height:2px;border-radius:2px;background:#f8ecd0}
-  header .gnav{display:none!important;position:absolute;left:10px;right:10px;top:72px;flex-direction:column;gap:2px;padding:8px;border-radius:20px;border:1px solid rgba(255,214,138,.4);background:rgba(16,10,46,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);overflow:visible!important}
-  header.nav-open .gnav{display:flex!important}
-  header .gnav a{min-height:46px!important;font-size:15px!important;padding:0 14px!important;white-space:nowrap}
-  .gstage{width:calc(100% - 28px);padding:10px 0 20px;gap:14px;min-height:0}
-  .gstage-hero h1{font-size:clamp(50px,15vw,64px);background:linear-gradient(180deg,#fff6dc,#f5c46a);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;filter:drop-shadow(0 3px 14px rgba(20,6,50,.85))}
-  .stage-crown{width:42px;height:30px}.stage-kicker{font-size:14px;margin-top:2px}
-  .stage-verbs{font-size:11px;letter-spacing:.22em}.stage-sub{font-size:13px}.stage-sign{font-size:28px;margin:0 0 4px}
-  .stage-cta{flex-wrap:nowrap;gap:10px}
-  .stage-cta .sbtn{flex:1 1 0;min-width:0;justify-content:center;min-height:48px;padding:0 10px;font-size:15px;white-space:nowrap}
-  .gstage-hero{margin-bottom:clamp(90px,17vh,170px)}
-  .stage-quote,.hub-panel{display:none!important}
-  .fx{position:relative;padding:14px 10px 10px;border-radius:24px}
-  .fx-title h2{font-size:24px}.fx-title{margin-bottom:10px}
-  .fx-row{display:block}
-  .fx-nav{position:absolute;top:50%;z-index:2;width:40px;height:40px;flex:none;font-size:20px;background:rgba(10,6,34,.82)}
-  #fxPrev{left:-8px}#fxNext{right:-8px}
-  .fx-track{gap:8px;padding:2px 2px 6px}
-  .fx-track li{flex:0 0 calc((100% - 16px)/3)!important;margin:0!important}
-  .fx-tile{min-height:132px;padding:10px 4px 8px;gap:6px;border-color:rgba(255,214,138,.45)}
-  .fx-glyph{width:56px;height:56px;font-size:20px}
-  .fx-tile strong{font-size:13px}.fx-tile small{font-size:10px}
-  .fx-dots{display:flex;justify-content:center;gap:6px;margin-top:6px}
-  .fx-dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.35)}
-  .fx-dots i.on{background:#ffd98a}
-  .hub-mobile{display:grid;justify-items:center;gap:6px;order:3}
-  .hub-pill{display:inline-flex;align-items:center;gap:12px;min-height:52px;padding:0 26px;border-radius:999px;border:1px solid rgba(255,214,138,.6);background:rgba(20,14,60,.62);color:#f8ecd0;text-decoration:none;font:600 20px/1 "Playfair Display",Georgia,serif;box-shadow:0 0 22px rgba(245,193,75,.28)}
-  .hub-links{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:2px 8px;margin:0;font-size:14px;color:#e6dcff}
-  .hub-links a{display:inline-flex;align-items:center;min-height:44px;padding:0 4px;color:#f3edff;text-decoration:none}
-  .stage-ctrl{order:4;max-width:none!important;display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0;border:0;background:none;backdrop-filter:none;-webkit-backdrop-filter:none}
-  .stage-ctrl input[type=range],.stage-ctrl .sr-only{display:none}
-  .stage-ctrl .ctrl-row,.stage-ctrl .ctrl-atmo{min-height:52px;padding:4px 12px;border-radius:999px;border:1px solid rgba(255,214,138,.4);background:rgba(20,14,60,.62);font-size:13px}
-  .stage-ctrl .ctrl-atmo{padding:4px 10px}
-  .stage-ctrl .ctrl-row span,.stage-ctrl .ctrl-atmo small,.stage-ctrl .ctrl-atmo b{white-space:nowrap;font-size:12px}
-  .stage-ctrl .ctrl-atmo small{font-size:10px}
-  .tabbar{display:flex;position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:60;justify-content:space-around;padding:6px;border-radius:24px;border:1px solid rgba(255,214,138,.45);background:rgba(20,14,60,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 0 26px rgba(245,193,75,.22)}
-  .tabbar a{flex:1 1 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:56px;border-radius:18px;color:#e6dcff;text-decoration:none;font-size:11px;font-weight:600}
-  .tabbar svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-  .tabbar a[aria-current]{color:#ffd98a;background:rgba(245,193,75,.14);box-shadow:inset 0 0 0 1px rgba(255,214,138,.5)}
-  body{padding-bottom:calc(92px + env(safe-area-inset-bottom,0px))}
+/* One-screen phone doorway. Deep game details live in a distinct hash view. */
+#hub-bottom-nav,#ambient-mobile-mount,#details-back{display:none}
+@media(max-width:800px){
+ html[data-hub-view="home"],html[data-hub-view="home"] body{height:100%;overflow:hidden;overscroll-behavior:none}
+ html[data-hub-view="home"] body{height:100dvh;min-height:0}
+ #living-world-scene{background-position:center;background-size:100% 100%;filter:saturate(1.14)}
+ #living-world-scene:after{background:linear-gradient(180deg,#090b2c90,#0a103552 38%,#0d103740 64%,#060b28aa)}
+ header{height:clamp(60px,9dvh,74px)}
+ header .inner{display:flex;flex-wrap:nowrap;align-items:center;width:calc(100% - 16px);height:calc(100% - 8px);min-height:0;margin:4px 8px;padding:3px 11px;gap:8px;border:1px solid #ffdeaad6;border-radius:999px;background:linear-gradient(110deg,#21122ee8,#36305ce8,#281733e6);box-shadow:0 0 19px #ffb17991,inset 0 1px #ffefc5;backdrop-filter:blur(16px)}
+ header .brand{font-size:clamp(20px,5.4vw,25px);max-width:50vw;line-height:1}
+ header .brand .crown{font-size:25px;margin-right:5px}
+ header .brand small{font-size:7px;letter-spacing:.21em;margin-top:3px}
+ header .header-tools .utility{min-width:44px;min-height:44px;padding:7px;font-size:18px}
+ header .header-tools a.utility{display:none}
+ header nav{display:none;position:absolute;top:100%;left:9px;right:9px;width:auto;max-width:none;max-height:55dvh;overflow-y:auto;z-index:35;padding:12px;background:#1b163af4;border:1px solid #ebc294;box-shadow:0 19px 35px #02041bae}
+ header nav.is-open{display:flex}
+ header nav a{min-height:44px;display:inline-flex;align-items:center}
+ #search-panel{position:absolute;top:100%;left:9px;right:9px;max-width:none;margin:0;z-index:36;background:#191734f8;border:1px solid #f0c79e}
+ main{width:min(100%,580px);height:calc(100dvh - clamp(60px,9dvh,74px) - clamp(68px,10dvh,86px) - env(safe-area-inset-bottom,0px));min-height:0;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto auto auto;gap:clamp(6px,1dvh,11px);padding:0 12px 4px}
+ .hero{min-height:0;height:100%;padding:clamp(3px,1dvh,11px) 2px 0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow:hidden}
+ .hero .eyebrow{font-size:11px;letter-spacing:.37em}
+ .hero h1{font-size:clamp(46px,13vw,72px);line-height:1.05;white-space:nowrap;margin:4px 0;text-shadow:0 0 19px #ff9a8e91,0 3px 17px #0c0721}
+ .hero h1 span{color:#ffe3b0}
+ .hero .lead{font-size:clamp(9px,2.35vw,12px);letter-spacing:.12em;margin:3px 0}
+ .hero .description{font-size:clamp(11px,2.7vw,14px);line-height:1.36;max-width:35ch;margin:7px 0 0}
+ .hero .hero-quote{display:none}
+ .hero-actions{flex-wrap:nowrap;gap:8px;margin:clamp(10px,1.7dvh,18px) 0 0}
+ .hero-actions .action{min-height:44px;white-space:nowrap;font-size:clamp(11px,2.75vw,14px);padding:9px clamp(10px,2.9vw,18px)}
+ #featured{height:clamp(151px,22.5dvh,197px);min-height:0;min-width:0;width:100%;max-width:100%;display:flex;flex-direction:column;margin:0 auto;padding:9px 13px 6px;border-radius:30px;background:linear-gradient(156deg,#432846e9,#12192ee9);box-shadow:0 0 24px #ffab8475,0 13px 34px #0a0427aa}
+ #featured h2{font-size:clamp(21px,5.6vw,29px);line-height:1.1;white-space:nowrap;margin:0 0 6px}
+ .featured-track{display:flex;flex:1;flex-wrap:nowrap;width:100%;min-width:0;min-height:0;gap:9px;padding:2px 0 5px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}
+ .featured-tile{flex:0 0 clamp(133px,42vw,190px);height:100%;min-height:0;gap:3px;padding:6px;border-radius:18px;background:radial-gradient(circle at 50% 19%,#6032a38f,transparent 79%),linear-gradient(145deg,#261744,#091f35)}
+ .featured-tile .symbol{font-size:clamp(29px,8vw,42px)}
+ .featured-tile strong{font-size:clamp(15px,4vw,20px)}
+ .featured-tile small{font-size:10px;line-height:1.1}
+ #featured .hint{display:none}
+ .featured-toolbar{height:20px;justify-content:center;align-items:center;gap:12px}
+ .featured-toolbar button{min-height:28px;min-width:32px;font-size:20px;line-height:1}
+ #hub-mobile-mount{display:block;position:relative;min-height:48px;margin:0;width:100%;z-index:10}
+ #game-hub-toggle{height:100%;min-height:48px;width:min(100%,420px);display:flex;margin:auto;align-items:center;justify-content:center;font:400 clamp(19px,5vw,25px) Georgia,serif;border-color:#ffe0ab;background:linear-gradient(110deg,#825144dc,#251c43e9,#7b3858da);box-shadow:0 0 18px #ffb873b3,inset 0 1px #ffe5d5}
+ #game-hub-center{position:absolute;left:0;right:0;top:auto;bottom:calc(100% + 6px);width:100%;max-height:56dvh;overflow:auto;margin:0;padding:12px 16px;z-index:12;background:#241937f6}
+ #game-hub-center h2{font-size:22px}
+ #ambient-mobile-mount{display:block;min-height:47px;margin:0}
+ #ambience{position:static;transform:none;display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;margin:0;padding:0;border:0;background:none;box-shadow:none;backdrop-filter:none;font-size:clamp(10px,2.4vw,12px)}
+ #ambience .amb-row,#ambience .amb-row + .amb-row{min-height:47px;margin:0;padding:5px 8px;gap:3px;border:1px solid #edc0a79e;border-radius:999px;background:linear-gradient(110deg,#3d2242ed,#20254beb);box-shadow:0 0 14px #d98eac69}
+ #ambience .amb-row span{flex:1}
+ #ambience #ambient-toggle{min-height:34px;min-width:44px;padding:4px 6px}
+ #ambience #current-season{font-size:10px;font-weight:500;text-align:right}
+ #hub-bottom-nav{display:grid;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,580px);height:calc(clamp(68px,10dvh,86px) + env(safe-area-inset-bottom,0px));grid-template-columns:repeat(5,minmax(0,1fr));padding:5px 6px calc(5px + env(safe-area-inset-bottom,0px));z-index:20;border:1px solid #ffd6a8bd;border-bottom:0;border-radius:30px 30px 0 0;background:linear-gradient(120deg,#32214ddc,#212d4bdc,#44203adc);box-shadow:0 -4px 21px #ffb47c6b;backdrop-filter:blur(18px)}
+ #hub-bottom-nav a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:18px;font-size:clamp(10px,2.6vw,13px);white-space:nowrap;text-decoration:none}
+ #hub-bottom-nav .hub-nav-symbol{font-size:clamp(22px,5.6vw,29px);line-height:1;color:#ffdbaf}
+ html[data-hub-view="home"] #games,html[data-hub-view="home"] #upcoming,html[data-hub-view="home"] #safety{display:none}
+ body>footer{display:none}
+ html[data-hub-view="details"] body{overflow:auto}
+ html[data-hub-view="details"] main{display:block;height:auto;min-height:calc(100dvh - 140px);overflow:visible;padding:12px 12px 100px}
+ html[data-hub-view="details"] .hero,html[data-hub-view="details"] #featured,html[data-hub-view="details"] #hub-mobile-mount,html[data-hub-view="details"] #ambient-mobile-mount{display:none}
+ html[data-hub-view="details"] #games,html[data-hub-view="details"] #safety{display:block}
+ html[data-hub-view="details"] #details-back{display:inline-flex;align-items:center;min-height:44px;margin-bottom:12px;padding:8px 14px;border:1px solid #ffe0b1;border-radius:25px;background:#281c3fef;text-decoration:none}
+ html[data-hub-view="details"] #games .cards{display:grid;grid-template-columns:1fr}
+}
+@media(max-width:800px) and (max-height:720px){
+ .hero .description{font-size:10px;margin-top:5px}
+ .hero-actions{margin-top:7px}
+ .hero h1{font-size:clamp(43px,12.5vw,56px)}
+ #featured{height:clamp(145px,23dvh,172px)}
+ #featured h2{font-size:21px}
+}
+@media(prefers-reduced-motion:reduce){#hub-bottom-nav *{transition:none!important}}
+
+/* Refined featured experience glass deck: three cards visible, additional cards swipe horizontally. */
+#featured .featured-icon{display:block;width:100%;max-width:94px;height:63px;overflow:visible;filter:drop-shadow(0 0 8px #a963ffab)}
+#featured .featured-tile{border-color:#f3ad819d;box-shadow:inset 0 1px #fff6,0 0 16px #da78d861}
+#featured .featured-tile strong{max-width:100%;text-wrap:balance}
+@media(max-width:800px){
+ #featured{padding:9px 21px 8px}
+ #featured .featured-track{gap:7px}
+ #featured .featured-tile{flex:0 0 calc((100% - 14px)/3);min-width:0;padding:5px 3px}
+ #featured .featured-icon{height:clamp(40px,7dvh,58px);max-width:100%}
+ #featured .featured-tile strong{font-size:clamp(12px,3.6vw,17px);line-height:1.07}
+ #featured .featured-tile small{font-size:clamp(8px,2.1vw,10px);letter-spacing:.06em}
+ #featured .featured-toolbar{position:absolute;left:4px;right:4px;top:54%;transform:translateY(-50%);justify-content:space-between;height:auto;pointer-events:none;z-index:3}
+ #featured .featured-toolbar button{min-width:26px;min-height:34px;width:26px;pointer-events:auto;border-color:#ffcb96ad;border-radius:50%;background:#291b43e8;box-shadow:0 0 12px #ffc58577;color:#ffebd9}
+ #featured .featured-tile:nth-child(2) small,#featured .featured-tile:nth-child(3) small{display:none}
+ #featured .featured-tile:nth-child(2) strong,#featured .featured-tile:nth-child(3) strong{font-family:Georgia,serif;font-weight:500;letter-spacing:-.03em}
 }
 
-/* Illustrated world icons (founder mockups): glowing art on dark glass instead of letters/emoji. */
-.eco-glyph.has-icon,.fx-glyph.has-icon{background:radial-gradient(circle at 50% 35%,rgba(120,90,220,.45),rgba(14,10,44,.92) 70%)!important;border:1px solid rgba(255,214,138,.35);box-shadow:inset 0 0 18px rgba(167,139,250,.35),0 0 22px rgba(167,139,250,.25)!important;font-size:0!important}
-.eco-glyph.has-icon svg,.fx-glyph.has-icon svg{width:76%;height:76%;filter:drop-shadow(0 0 6px rgba(255,214,138,.55)) drop-shadow(0 0 14px rgba(167,139,250,.55))}
-.eco-glyph.has-icon,.stage .eco-glyph.has-icon{width:88px;height:88px;border-radius:18px}
-.fx-glyph.has-icon{width:88px!important;height:88px!important;border-radius:18px}
-@media(max-width:700px){.fx-glyph.has-icon{width:68px!important;height:68px!important}}
-.eco-glyph.has-icon svg,.fx-glyph.has-icon svg{width:82%;height:82%}
-
-html.gviews[data-gview="stage"] #gamesView,html.gviews[data-gview="stage"] footer{display:none}
-html.gviews[data-gview="list"] .gstage{display:none}
-html.gviews[data-gview="stage"],html.gviews[data-gview="stage"] body{height:100%;overflow:hidden}
-html.gviews[data-gview="stage"] .gstage{height:calc(100vh - 77px);height:calc(100dvh - 77px);min-height:0;box-sizing:border-box;align-content:space-between}
-@media(max-width:700px){
-  html.gviews[data-gview="stage"] .gstage{height:calc(100dvh - 74px);padding-bottom:calc(84px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;justify-content:space-between;gap:6px}
-  .gstage-hero{margin-bottom:0!important}
-  .stage-crown{width:32px;height:24px}.stage-kicker{font-size:12px;margin:0}
-  .gstage-hero h1{font-size:clamp(42px,12vw,54px)}
-  .stage-verbs{font-size:10px;margin:2px 0}.stage-sub{font-size:12px;margin:2px auto}.stage-sign{font-size:22px;margin:0 0 4px}
-  .stage-cta .sbtn{min-height:44px;font-size:14px}
-  .fx{padding:8px 8px 6px}.fx-title h2{font-size:21px}.fx-title{margin-bottom:6px}
-  .fx-tile{min-height:112px;padding:6px 4px}.fx-glyph.has-icon{width:56px!important;height:56px!important}
-  .hub-pill{min-height:44px;font-size:17px;padding:0 20px}.hub-links{font-size:13px}.hub-links a{min-height:40px}
-  .gstage>*{min-width:0;max-width:100%}
-  .fx{width:100%;box-sizing:border-box}
+/* Bright glass, gold lettering and centered light sculpture match the cinematic reference. */
+#hub-lotus{display:none}
+@media(max-width:800px){
+ .hero h1,.hero h1 span{color:#ffdfab;text-shadow:0 0 18px #ffcb9ba4,0 5px 18px #140a32}
+ .hero-actions .action{color:#fff9df;border:1.5px solid #ffd29a;background:linear-gradient(120deg,#49304ecc,#251a48e5);box-shadow:0 0 20px #ff9f61a6,inset 0 0 11px #ffbd8860}
+ .hero-actions .action.outline{border-color:#94e1ff;color:#f3fbff;background:linear-gradient(125deg,#23365de3,#241845d9);box-shadow:0 0 18px #5dafff9e,inset 0 0 10px #7a96ec44}
+ #featured h2{color:#ffe6b5;text-shadow:0 0 14px #ffc49b99}
+ #hub-lotus{display:block;position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:min(86vw,344px);height:clamp(105px,19dvh,166px);z-index:0;opacity:.92;pointer-events:none;filter:drop-shadow(0 0 12px #b969ff8c)}
+ .hero .hero-actions{position:relative;z-index:1}
 }
-@media (max-width:700px) and (max-height:760px){
-  .stage-crown,.stage-sign,.stage-caps,.stage-sub{display:none!important}
-  .stage-kicker{margin:0}
-  .eco-item,.stage .eco-item,.fx-tile{min-height:100px!important}
-  .stage .eco-glyph.has-icon,.fx-glyph.has-icon{width:48px!important;height:48px!important}
-}
-
-.fx-chips{display:flex;justify-content:center;gap:6px;margin:-4px 0 8px;overflow-x:auto;scrollbar-width:none}
-.fx-chips .eco-chip{flex:0 0 auto;min-height:40px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,214,138,.35);background:rgba(10,6,34,.5);color:#e6dcff;font:600 12px/1 system-ui,-apple-system,"Segoe UI",sans-serif;cursor:pointer}
-.fx-chips .eco-chip[aria-pressed="true"]{background:linear-gradient(180deg,#ffe3a8,#f3b25a);color:#2a1640;border-color:transparent}
-#fxTrack li[hidden]{display:none!important}
-@media(max-width:700px){.fx-chips{justify-content:flex-start;margin:-2px 0 6px}}
+@media(max-width:800px) and (max-height:720px){#hub-lotus{height:clamp(61px,11.5dvh,85px);bottom:0;opacity:.85}}
+@media(prefers-reduced-motion:reduce){#hub-lotus{animation:none}}
 </style>
-<script src="assets/world-icons.js"></script>
 </head>
 <body>
-<div class="scene" aria-hidden="true"><div class="art day"></div><div class="art night"></div><div class="art sunset"></div><div class="tint"></div></div>
-<script>
-/* One screen (Juss, 2026-11-08): the stage is the landing; the full game list opens as its own view. */
-(function(){
-  var root=document.documentElement; root.classList.add('gviews');
-  function show(){ var h=location.hash.slice(1); var list=h==='games'||h==='care'||/^game-/.test(h); root.setAttribute('data-gview', list?'list':'stage');
-    if(list){ var t=document.getElementById(h); if(t&&h!=='games') setTimeout(function(){t.scrollIntoView({block:'start'});},0); else window.scrollTo(0,0); } else window.scrollTo(0,0); }
-  window.addEventListener('hashchange',show); document.addEventListener('DOMContentLoaded',show); show();
-})();
-</script>
-<script>
-/* Atmosphere follows local time (tap to change); ambient sound is generated and starts only on a tap. */
-(function(){var h=new Date().getHours();document.body.dataset.atmo=h>=5&&h<8?'dawn':h>=8&&h<17?'day':h>=17&&h<20?'sunset':'night';})();
-document.addEventListener('DOMContentLoaded',function(){
-  var body=document.body, order=['dawn','day','sunset','night'], names={dawn:'Dawn',day:'Daylight',sunset:'Sunset',night:'Night'};
-  var h=new Date().getHours(), atmo=h>=5&&h<8?'dawn':h>=8&&h<17?'day':h>=17&&h<20?'sunset':'night';
-  var nameEl=document.getElementById('atmoName'), btn=document.getElementById('atmoBtn');
-  function set(a){ atmo=a; body.dataset.atmo=a; if(nameEl) nameEl.textContent=names[a]; }
-  set(atmo); if(btn) btn.addEventListener('click',function(){ set(order[(order.indexOf(atmo)+1)%order.length]); });
-  var sw=document.getElementById('ambSwitch'), vol=document.getElementById('ambVol'), ctx=null, gain=null;
-  function level(){ return (+vol.value)/100*0.5; }
-  function start(){ var AC=window.AudioContext||window.webkitAudioContext; if(!AC) return false; ctx=new AC(); gain=ctx.createGain(); gain.gain.value=0; gain.connect(ctx.destination);
-    var f=ctx.createBiquadFilter(); f.type='lowpass'; f.frequency.value=900; f.connect(gain);
-    [196,246.94,293.66,392].forEach(function(fr,i){ var o=ctx.createOscillator(); o.type=i%2?'sine':'triangle'; o.frequency.value=fr; var g=ctx.createGain(); g.gain.value=.06; o.connect(g); g.connect(f); o.start(); }); return true; }
-  sw.addEventListener('click',function(){ var on=sw.getAttribute('aria-checked')!=='true'; if(on&&!ctx&&!start()) return; if(ctx){ ctx.resume(); gain.gain.setTargetAtTime(on?level():0,ctx.currentTime,.4); } sw.setAttribute('aria-checked',String(on)); });
-  vol.addEventListener('input',function(){ if(ctx&&sw.getAttribute('aria-checked')==='true') gain.gain.setTargetAtTime(level(),ctx.currentTime,.2); });
-  [].forEach.call(document.querySelectorAll('.fx-tile'),function(t){ var g=t.querySelector('.fx-glyph'), n=t.querySelector('strong'); var ic=window.JCIcon&&g&&n&&window.JCIcon(n.textContent.trim()); if(ic){ g.classList.add('has-icon'); g.appendChild(ic); } });
-  [].forEach.call(document.querySelectorAll('.fx-chips .eco-chip'),function(b,_,all){ b.addEventListener('click',function(){ var f=b.getAttribute('data-f'); [].forEach.call(document.querySelectorAll('.fx-chips .eco-chip'),function(x){ x.setAttribute('aria-pressed',String(x===b)); }); [].forEach.call(document.querySelectorAll('#fxTrack li'),function(li){ var live=/live/i.test(li.textContent); li.hidden = f==='live' ? !live : f==='dev' ? live : false; }); var t=document.getElementById('fxTrack'); t.scrollLeft=0; t.dispatchEvent(new Event('scroll')); }); });
-  var track=document.getElementById('fxTrack');
-  function step(d){ var c=track.querySelector('li'); track.scrollBy({left:d*((c?c.getBoundingClientRect().width:140)+12)*2,behavior:'smooth'}); }
-  document.getElementById('fxPrev').addEventListener('click',function(){step(-1);}); document.getElementById('fxNext').addEventListener('click',function(){step(1);});
-  var hdr=document.querySelector('header'), mb=document.getElementById('menuBtn');
-  if(mb) mb.addEventListener('click',function(){ var open=!hdr.classList.contains('nav-open'); hdr.classList.toggle('nav-open',open); mb.setAttribute('aria-expanded',String(open)); mb.setAttribute('aria-label',open?'Close menu':'Open menu'); });
-  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&hdr.classList.contains('nav-open')){ hdr.classList.remove('nav-open'); mb.setAttribute('aria-expanded','false'); mb.focus(); } });
-  document.querySelectorAll('#gnav a').forEach(function(a){ a.addEventListener('click',function(){ hdr.classList.remove('nav-open'); mb.setAttribute('aria-expanded','false'); }); });
-  var dots=document.getElementById('fxDots');
-  function paintDots(){ if(!dots) return; var pages=Math.max(1,Math.ceil(track.scrollWidth/Math.max(1,track.clientWidth)-0.05)); if(dots.children.length!==pages){ dots.textContent=''; for(var i=0;i<pages;i++) dots.appendChild(document.createElement('i')); } var cur=Math.round(track.scrollLeft/Math.max(1,track.clientWidth)); [].forEach.call(dots.children,function(d,i){ d.classList.toggle('on',i===Math.min(cur,pages-1)); }); }
-  track.addEventListener('scroll',paintDots,{passive:true}); window.addEventListener('resize',paintDots); paintDots();
-
-});
-</script>
-<header><div class="inner"><a class="brand" href="https://jussco.company/">Juss <em>&amp;</em> Co. <span style="color:#ae8fff">GAMES</span></a><button type="button" class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="gnav" aria-label="Open menu"><span></span><span></span><span></span></button><nav class="gnav" id="gnav" aria-label="Main navigation"><a href="https://www.jussco.company/">Home</a><a href="https://www.jussco.company/portfolio.html">Portfolio</a><a href="#games" aria-current="page">Games</a><a href="https://www.jussco.company/services.html">Solutions</a><a href="https://www.jussco.company/work.html">Our Work</a><a href="https://www.jussco.company/#why">Founder</a><a href="https://www.jussco.company/#contact">Contact</a></nav></div></header>
-<main>
-<section class="gstage" aria-labelledby="hero-title">
-  <div class="gstage-hero">
-    <svg class="stage-crown" viewBox="0 0 30 22" aria-hidden="true"><path d="M2 20h26l2-14-8 6-7-10-7 10-8-6z"/></svg>
-    <p class="stage-kicker">Juss &amp; Co</p>
-    <h1 id="hero-title">Game Hub</h1>
-    <p class="stage-verbs">Play · Connect · Create · Compete</p>
-    <p class="stage-sub">A unified home for Juss &amp; Co games, experiences, and interactive worlds.</p>
-    <p class="stage-sign" aria-hidden="true">Juss &amp; Co</p>
-    <div class="stage-cta"><a class="sbtn sbtn-gold" href="#games"><span aria-hidden="true">🎮</span>Explore Games</a><a class="sbtn sbtn-ghost" href="https://sync.jussco.company/">Play SYNC ↗</a></div>
-  </div>
-  <figure class="stage-quote"><blockquote><p>More than games: interactive worlds that bring people, ideas, and experiences together.</p></blockquote><figcaption>Juss</figcaption></figure>
-  <aside class="hub-panel" aria-labelledby="hub-title">
-    <h2 id="hub-title">Game Hub Center</h2>
-    <ul>
-      <li><a href="#games"><b>All Games</b><span>Every Juss &amp; Co world, live and in development.</span></a></li>
-      <li><a href="https://sync.jussco.company/"><b>SYNC Game Center</b><span>Think alike. Beat the clock.</span></a></li>
-      <li><a href="#care"><b>Play with care</b><span>Safety checks before any game opens.</span></a></li>
-      <li><a href="https://www.jussco.company/"><b>Juss &amp; Co home</b><span>The company behind the worlds.</span></a></li>
-    </ul>
-  </aside>
-  <section class="fx" aria-labelledby="fx-title">
-    <div class="fx-title"><h2 id="fx-title">Featured Experiences</h2></div>
-    <div class="fx-chips" role="group" aria-label="Filter featured experiences"><button type="button" class="eco-chip" data-f="" aria-pressed="true">All</button><button type="button" class="eco-chip" data-f="live" aria-pressed="false">Live now</button><button type="button" class="eco-chip" data-f="dev" aria-pressed="false">In development</button></div>
-    <div class="fx-row"><button type="button" class="fx-nav" id="fxPrev" aria-label="Scroll featured experiences back" aria-controls="fxTrack">‹</button><ul class="fx-track" id="fxTrack"><li><a class="fx-tile" href="https://sync.jussco.company/"><span class="fx-glyph sync-art" aria-hidden="true">🎉</span><strong>SYNC</strong><small>Group play · Live</small></a></li><li><a class="fx-tile" href="#game-lumora"><span class="fx-glyph forest-art" aria-hidden="true">🌲✨</span><strong>LUMORA</strong><small>In development</small></a></li><li><a class="fx-tile" href="#game-chatquest"><span class="fx-glyph quest-art" aria-hidden="true">🧭🤖</span><strong>ChatQuest</strong><small>In development</small></a></li><li><a class="fx-tile" href="#game-bip-seek"><span class="fx-glyph bip-art" aria-hidden="true">🌙🪁</span><strong>Bip &amp; Seek</strong><small>In development</small></a></li><li><a class="fx-tile" href="#game-jungle-jinx"><span class="fx-glyph forest-art" aria-hidden="true">🐒🌿</span><strong>Jungle Jinx</strong><small>In development</small></a></li><li><a class="fx-tile" href="#game-last-laugh"><span class="fx-glyph city-art" aria-hidden="true">🎭🌆</span><strong>Last Laugh</strong><small>Private prototype</small></a></li></ul><button type="button" class="fx-nav" id="fxNext" aria-label="Scroll featured experiences forward" aria-controls="fxTrack">›</button></div>
-    <div class="fx-dots" id="fxDots" aria-hidden="true"></div>
-  </section>
-  <div class="hub-mobile">
-    <a class="hub-pill" href="#games"><span aria-hidden="true">🎮</span>Game Hub Center<span aria-hidden="true">›</span></a>
-    <p class="hub-links"><a href="#games">All Games</a><span aria-hidden="true">|</span><a href="https://sync.jussco.company/">SYNC</a><span aria-hidden="true">|</span><a href="#care">Play with care</a></p>
-  </div>
-  <div class="stage-ctrl" role="group" aria-label="Atmosphere controls">
-    <div class="ctrl-row"><span id="ambLabel">Ambient sound</span><button type="button" class="ctrl-switch" id="ambSwitch" role="switch" aria-checked="false" aria-labelledby="ambLabel"></button></div>
-    <label class="sr-only" for="ambVol">Ambient volume</label><input type="range" id="ambVol" min="0" max="100" value="35">
-    <button type="button" class="ctrl-atmo" id="atmoBtn"><span class="ctrl-sun" aria-hidden="true"></span><span><small>Current atmosphere</small><b id="atmoName">Sunset</b></span><span aria-hidden="true">›</span></button>
-  </div>
+<a class="skip-link" href="#main">Skip to Game Hub content</a>
+<div id="living-world-scene" aria-hidden="true"></div>
+<header><div class="inner">
+<a class="brand" href="https://jussco.company/" aria-label="Juss and Co home"><span class="crown" aria-hidden="true">♛</span>Juss <em>&amp;</em> Co<small>COMPANY</small></a>
+<nav id="site-nav" aria-label="Juss and Co sections">
+<a href="https://jussco.company/">Home</a><a href="https://jussco.company/portfolio.html">Portfolio</a>
+<a href="https://jussco.company/products.html">Products</a><a aria-current="page" href="https://games.jussco.company/">Games</a><a href="https://jussco.company/services.html">Solutions</a>
+<a href="https://jussco.company/work.html">Our Work</a><a href="https://jussco.company/founder.html">Founder</a><a href="https://jussco.company/contact.html">Contact</a></nav>
+<div class="header-tools"><button class="utility" id="search-toggle" type="button" aria-label="Search games" aria-controls="search-panel" aria-expanded="false">⌕</button>
+<a class="utility" href="https://jussco.company/" aria-label="Company home">⌂</a>
+<button class="utility" id="mobile-menu" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Open navigation">☰</button></div></div>
+<div id="search-panel" class="glass-world" hidden><label for="game-search">Find a game</label>
+<input type="search" id="game-search" placeholder="Search SYNC and upcoming games" aria-controls="game-cards" autocomplete="off">
+<p id="search-status" role="status" aria-live="polite"></p><a id="search-view" href="#games" hidden>View matching games ↓</a></div>
+</header>
+<main id="main">
+<section class="hero" aria-labelledby="hero-title">
+<div class="eyebrow">♛ &nbsp; J U S S &amp; C O</div>
+<h1 id="hero-title">Game <span>Hub</span></h1>
+<p class="lead">Play · Connect · Create · Compete</p>
+<p class="description">A world for discovering Juss &amp; Co games and experiences. Each game opens with its own established look, rules, and identity.</p>
+<div class="hero-actions"><a class="action" href="#featured">✦ Explore Games</a><a class="action outline" href="#sync-world">Enter SYNC</a></div>
+<blockquote class="hero-quote glass-world">“More than games—interactive worlds that bring people, ideas, and experiences together.”<b>Juss &amp; Co</b></blockquote>
+<aside id="game-hub-center" class="glass-world" aria-labelledby="hub-center-title">
+<h2 id="hub-center-title">Game Hub Center</h2>
+<a href="#games"><span class="nav-ico">◈</span> All Games <small>Explore the existing game collection</small></a>
+<a href="#sync-world"><span class="nav-ico">∞</span> SYNC Game Center <small>Think alike. Beat the clock.</small></a>
+<a href="#lumora-world"><span class="nav-ico">✧</span> Upcoming Worlds <small>In development, not open for play</small></a>
+<a href="#safety"><span class="nav-ico">◇</span> Safety &amp; Availability <small>Verified access and age safeguards</small></a>
+</aside>
+<svg id="hub-lotus" viewBox="0 0 440 212" aria-hidden="true" focusable="false">
+<defs><linearGradient id="hub-petal-gradient" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#68edff"/><stop offset=".45" stop-color="#bc69ff"/><stop offset=".75" stop-color="#ff9de3"/><stop offset="1" stop-color="#ffd680"/></linearGradient><radialGradient id="hub-orb-gradient"><stop stop-color="#5eecff" stop-opacity=".82"/><stop offset=".57" stop-color="#6c6dff" stop-opacity=".31"/><stop offset="1" stop-color="#a157ff" stop-opacity=".08"/></radialGradient><filter id="hub-petal-glow" x="-50%" y="-60%" width="200%" height="220%"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<g filter="url(#hub-petal-glow)" fill="none" stroke="url(#hub-petal-gradient)" stroke-width="2.8" stroke-linejoin="round">
+<ellipse cx="220" cy="192" rx="201" ry="14" stroke="#ffd59b" stroke-width="2"/>
+<ellipse cx="220" cy="188" rx="169" ry="10" stroke="#74d9ff" stroke-width="1.5"/>
+<path d="M220 186 Q136 190 67 104 Q132 111 220 186 Q310 111 373 104 Q306 190 220 186Z"/>
+<path d="M220 182 Q112 177 101 81 Q157 97 220 182 Q283 97 339 81 Q329 177 220 182Z"/>
+<path d="M220 184 Q158 154 159 48 Q194 76 220 184 Q246 76 281 48 Q282 154 220 184Z"/>
+<path d="M220 184 Q188 137 220 23 Q253 137 220 184Z"/>
+<path d="M220 185 Q93 196 35 143 Q125 143 220 185 Q315 143 405 143 Q349 196 220 185Z"/>
+<path d="M220 183 Q154 195 80 172 M220 183 Q287 195 360 172" stroke-width="1.4"/>
+</g>
+<circle cx="220" cy="113" r="62" fill="url(#hub-orb-gradient)" stroke="#78e8ff" stroke-width="2.5" opacity=".94"/>
+<g fill="none" stroke="#d7adff" stroke-width="1.35" opacity=".9"><ellipse cx="220" cy="113" rx="26" ry="62"/><ellipse cx="220" cy="113" rx="52" ry="62"/><ellipse cx="220" cy="113" rx="62" ry="25"/><path d="M158 113h124 M178 72l84 82 M178 154l84-82"/></g>
+<circle cx="220" cy="183" r="11" fill="#fff1ad" filter="url(#hub-petal-glow)"/>
+</svg>
+<div id="ambience" class="glass-world" aria-label="Ambient sound and atmosphere">
+<div class="amb-row"><span>♫ &nbsp; Ambient sound</span><button id="ambient-toggle" type="button" aria-pressed="false" aria-label="Turn on soft water ambience">Off</button></div>
+<div class="amb-row"><span>☀ &nbsp; Current atmosphere</span><strong id="current-season" style="text-transform:capitalize">Automatic</strong></div>
+</div>
 </section>
-<div class="mainwrap" id="gamesView">
-<section id="games" aria-labelledby="games-title"><div class="section-heading"><h2 id="games-title">Our game worlds</h2><p>One home. Different adventures.</p></div><div class="cards">
-<article class="card" id="game-sync"><div class="art sync-art" aria-hidden="true"><span>🎉</span><b class="art-title">SYNC</b></div><div class="card-body"><span class="meta">Game family / three distinct experiences</span><h3>SYNC</h3><p>Think alike. Beat the clock. Read the room. SYNC has three flavors, each with its own personality.</p><span class="tag live">Live Site SYNC</span>
+<section id="featured" aria-labelledby="featured-title"><h2 id="featured-title">✦ &nbsp; Featured Experiences &nbsp; ✦</h2>
+<div class="featured-track" id="featured-track">
+<a class="featured-tile" href="#sync-world">
+<svg class="featured-icon" viewBox="0 0 132 78" aria-hidden="true" focusable="false"><defs><linearGradient id="sync-feature-gradient" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#ff8b73"/><stop offset=".32" stop-color="#ff40dc"/><stop offset=".7" stop-color="#874aff"/><stop offset="1" stop-color="#1ee4ff"/></linearGradient></defs><path d="M 11 40 C 21 12 48 12 66 40 C 82 68 110 68 121 40 C 110 12 82 12 66 40 C 48 68 21 68 11 40" stroke="url(#sync-feature-gradient)" stroke-width="11" fill="none" stroke-linejoin="round" stroke-linecap="round" opacity=".32"/><path d="M 11 40 C 21 12 48 12 66 40 C 82 68 110 68 121 40 C 110 12 82 12 66 40 C 48 68 21 68 11 40" stroke="url(#sync-feature-gradient)" stroke-width="6" fill="none" stroke-linejoin="round" stroke-linecap="round"/></svg>
+<strong>SYNC</strong><small>GROUP PLAY</small></a>
+<a class="featured-tile" href="#games">
+<svg class="featured-icon" viewBox="0 0 132 78" aria-hidden="true" focusable="false"><path d="M30 29Q33 20 47 23L63 27Q66 28 69 27L85 23Q99 20 102 29L115 58Q118 70 107 71Q99 72 88 58L78 50H54L43 58Q32 72 24 70Q13 69 16 58Z" fill="#2c1759" stroke="#bd70ff" stroke-width="3.5"/><path d="M41 34v19M32 43h18" stroke="#f0b8ff" stroke-width="5" stroke-linecap="round"/><circle cx="88" cy="38" r="4" fill="#e891ff"/><circle cx="99" cy="47" r="4" fill="#63dfff"/><circle cx="77" cy="47" r="3.5" fill="#ffcb7c"/><circle cx="87" cy="56" r="3" fill="#9d7aff"/></svg>
+<strong>Juss &amp; Co Games</strong><small>GAME COLLECTION</small></a>
+<a class="featured-tile" href="#lumora-world">
+<svg class="featured-icon" viewBox="0 0 132 78" aria-hidden="true" focusable="false"><defs><linearGradient id="worlds-feature-gradient" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#4ff6ff"/><stop offset=".5" stop-color="#7c5aff"/><stop offset="1" stop-color="#ffc46e"/></linearGradient></defs><circle cx="66" cy="39" r="30" fill="#19376c" stroke="url(#worlds-feature-gradient)" stroke-width="3"/><path d="M39 34l13-13 13 7-4 12-13 5-6-3m28-18 15 7-2 16-10 7-10-5" stroke="#64d8f7" stroke-width="3" fill="none"/><ellipse cx="66" cy="39" rx="58" ry="17" transform="rotate(-12 66 39)" fill="none" stroke="#ffbc79" stroke-width="3.5"/><circle cx="114" cy="28" r="4" fill="#ffd789"/></svg>
+<strong>Worlds &amp; Experiences</strong><small>DISCOVER WORLDS</small></a>
+<a class="featured-tile" href="#lumora-world"><span class="symbol" aria-hidden="true">✧</span><strong>LUMORA</strong><small>Learning adventure · Building</small></a>
+<a class="featured-tile" href="#chatquest-world"><span class="symbol" aria-hidden="true">◇</span><strong>ChatQuest</strong><small>Co-op adventure · Building</small></a>
+<a class="featured-tile" href="#bipseek-world"><span class="symbol" aria-hidden="true">☾</span><strong>Bip &amp; Seek</strong><small>Bip universe · Building</small></a>
+<a class="featured-tile" href="#junglejinx-world"><span class="symbol" aria-hidden="true">❋</span><strong>Jungle Jinx</strong><small>Game concept · Building</small></a>
+<a class="featured-tile" href="#lastlaugh-world"><span class="symbol" aria-hidden="true">✦</span><strong>Last Laugh</strong><small>Private prototype</small></a>
+</div>
+<div class="featured-toolbar"><button type="button" id="featured-back" aria-label="Scroll featured games left">‹</button><button type="button" id="featured-next" aria-label="Scroll featured games right">›</button></div>
+<p class="hint">Explore here. Play on each game’s own domain, with its original look preserved.</p>
+</section>
+<section id="hub-mobile-mount" aria-label="Game Hub Center controls"><button type="button" id="game-hub-toggle" aria-expanded="false" aria-controls="game-hub-center">♧ &nbsp; Game Hub Center</button></section><div id="ambient-mobile-mount" aria-label="Sound and seasonal atmosphere"></div><a id="details-back" href="#home">← Back to Game Hub</a>
+<div id="upcoming" aria-hidden="true"></div>
+<section id="games" aria-labelledby="games-title"><div class="section-heading"><h2 id="games-title">Our game worlds</h2><p>One home. Different adventures.</p><button type="button" id="all-games-toggle" aria-controls="game-cards" aria-expanded="true">Show all game worlds</button></div><div class="cards" id="game-cards">
+<article class="card" id="sync-world"><div class="art sync-art" aria-hidden="true"><span>🎉</span><b class="art-title">SYNC</b></div><div class="card-body"><span class="meta">Game family / three distinct experiences</span><h3>SYNC</h3><p>Think alike. Beat the clock. Read the room. SYNC has three flavors, each with its own personality.</p><span class="tag live">Live Site SYNC</span>
 <div class="edition"><h4>⚡ Live Site SYNC</h4><p>The real-time party arena. Join or create a room, answer privately, and reveal together.</p><a class="action" href="https://sync.jussco.company/">Play Live SYNC ↗</a></div>
 <div class="edition"><h4>💬 Chat SYNC</h4><p>The AI-hosted chat edition. Predict the room with your own local guesses. It shares SYNC's game authority.</p><a class="action outline" href="https://sync.jussco.company/chat/">Explore Chat SYNC ↗</a></div>
 <div class="edition"><h4>💜 Lovable SYNC</h4><p>The social-vibe and playtest side of the SYNC family. Currently available as a playtest signup experience.</p><a class="action outline" href="https://sync-playtest.lovable.app/">Join the SYNC playtest ↗</a></div></div></article>
-<article class="card" id="game-lumora"><div class="art forest-art" aria-hidden="true"><span>🌲✨</span><b class="art-title">LUMORA</b></div><div class="card-body"><span class="meta">Learning adventure / in development</span><h3>LUMORA</h3><p>A magical world to explore, beginning with <strong>The Lost Letters</strong>. Discover letters and numbers, practice tracing, and collect stars.</p><span class="tag wait">In development</span><p class="status">Future realms: Kingdom of Numbers and Starbound. Public gameplay is not open yet.</p></div></article>
-<article class="card" id="game-chatquest"><div class="art quest-art" aria-hidden="true"><span>🧭🤖</span><b class="art-title">ChatQuest</b></div><div class="card-body"><span class="meta">Cooperative adventure / in development</span><h3>ChatQuest</h3><p>Friends and AI characters team up for adventures, with moderated chat and guardian controls planned for safe play.</p><span class="tag wait">In development</span><p class="status">Friend chat and child-safety gates must pass before public play.</p></div></article>
-<article class="card" id="game-bip-seek"><div class="art bip-art" aria-hidden="true"><span>🌙🪁</span><b class="art-title">Bip & Seek</b></div><div class="card-body"><span class="meta">Bip universe / in development</span><h3>Bip &amp; Seek</h3><p>Explore, hide, find, and celebrate in a family-friendly adventure from the Bip universe.</p><span class="tag wait">In development</span><p class="status">Private Roblox build. Public game access is not open yet.</p></div></article>
-<article class="card" id="game-jungle-jinx"><div class="art forest-art" aria-hidden="true"><span>🐒🌿</span><b class="art-title">Jungle Jinx</b></div><div class="card-body"><span class="meta">Game concept / in development</span><h3>Jungle Jinx</h3><p>Another Juss &amp; Co. game world in development. Gameplay details and public availability will be shared after verification.</p><span class="tag wait">In development</span><p class="status">Not open for public play.</p></div></article>
-<article class="card" id="game-last-laugh"><div class="art city-art" aria-hidden="true"><span>🎭🌆</span><b class="art-title">Last Laugh</b></div><div class="card-body"><span class="meta">Story-driven 3D adventure / private prototype</span><h3>Last Laugh: City of Dreams</h3><p>A cinematic comedy-night adventure with exploration, performances, and choices. The original prototype is being tested across desktop and mobile.</p><span class="tag wait">Private prototype</span><p class="status">Public play is held pending release review, rights clearance, and live-device verification.</p></div></article>
+<article class="card" id="lumora-world"><div class="art forest-art" aria-hidden="true"><span>🌲✨</span><b class="art-title">LUMORA</b></div><div class="card-body"><span class="meta">Learning adventure / in development</span><h3>LUMORA</h3><p>A magical world to explore, beginning with <strong>The Lost Letters</strong>. Discover letters and numbers, practice tracing, and collect stars.</p><span class="tag wait">In development</span><p class="status">Future realms: Kingdom of Numbers and Starbound. Public gameplay is not open yet.</p></div></article>
+<article class="card" id="chatquest-world"><div class="art quest-art" aria-hidden="true"><span>🧭🤖</span><b class="art-title">ChatQuest</b></div><div class="card-body"><span class="meta">Cooperative adventure / in development</span><h3>ChatQuest</h3><p>Friends and AI characters team up for adventures, with moderated chat and guardian controls planned for safe play.</p><span class="tag wait">In development</span><p class="status">Friend chat and child-safety gates must pass before public play.</p></div></article>
+<article class="card" id="bipseek-world"><div class="art bip-art" aria-hidden="true"><span>🌙🪁</span><b class="art-title">Bip & Seek</b></div><div class="card-body"><span class="meta">Bip universe / in development</span><h3>Bip &amp; Seek</h3><p>Explore, hide, find, and celebrate in a family-friendly adventure from the Bip universe.</p><span class="tag wait">In development</span><p class="status">Private Roblox build. Public game access is not open yet.</p></div></article>
+<article class="card" id="junglejinx-world"><div class="art forest-art" aria-hidden="true"><span>🐒🌿</span><b class="art-title">Jungle Jinx</b></div><div class="card-body"><span class="meta">Game concept / in development</span><h3>Jungle Jinx</h3><p>Another Juss &amp; Co. game world in development. Gameplay details and public availability will be shared after verification.</p><span class="tag wait">In development</span><p class="status">Not open for public play.</p></div></article>
+<article class="card" id="lastlaugh-world"><div class="art city-art" aria-hidden="true"><span>🎭🌆</span><b class="art-title">Last Laugh</b></div><div class="card-body"><span class="meta">Story-driven 3D adventure / private prototype</span><h3>Last Laugh: City of Dreams</h3><p>A cinematic comedy-night adventure with exploration, performances, and choices. The original prototype is being tested across desktop and mobile.</p><span class="tag wait">Private prototype</span><p class="status">Public play is held pending release review, rights clearance, and live-device verification.</p></div></article>
 </div></section>
-<section class="notes" id="care" aria-label="Safety and availability"><h2>Play with care ✨</h2><p>Games with friend chat or younger-player features are only opened publicly after their age, moderation, privacy, and guardian safeguards are verified. A game listing never means its unfinished experience is live.</p></section>
-</div></main>
-<nav class="tabbar" aria-label="Quick navigation"><a href="https://www.jussco.company/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/></svg><span>Home</span></a><a href="#games" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 11v3M5.5 12.5h3M15.5 12h.01M18 13.5h.01"/></svg><span>Games</span></a><a href="https://www.jussco.company/services.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5 9-5zM3 13l9 5 9-5"/></svg><span>Solutions</span></a><a href="https://www.jussco.company/work.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18h18l1-11-6 4-4-7-4 7-6-4z"/></svg><span>Our Work</span></a><a href="https://www.jussco.company/#why"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg><span>Founder</span></a></nav>
-<footer><div class="inner"><span>© 2026 Juss &amp; Co. · Different worlds. One place to discover them.</span><a href="https://jussco.company/">Back to Juss &amp; Co. ↗</a></div></footer>
+<section class="notes" id="safety" aria-label="Safety and availability"><h2>Play with care ✨</h2><p>Games with friend chat or younger-player features are only opened publicly after their age, moderation, privacy, and guardian safeguards are verified. A game listing never means its unfinished experience is live.</p></section>
+</main><footer><div class="inner"><span>© 2026 Juss &amp; Co. · Different worlds. One place to discover them.</span><a href="https://jussco.company/">Back to Juss &amp; Co. ↗</a></div></footer><nav id="hub-bottom-nav" aria-label="Juss and Co destinations"><a href="https://jussco.company/"><span class="hub-nav-symbol" aria-hidden="true">⌂</span>Home</a><a href="https://jussco.company/products.html"><span class="hub-nav-symbol" aria-hidden="true">▦</span>Products</a><a href="https://jussco.company/services.html"><span class="hub-nav-symbol" aria-hidden="true">◇</span>Solutions</a><a href="https://jussco.company/work.html"><span class="hub-nav-symbol" aria-hidden="true">♛</span>Our Work</a><a href="https://jussco.company/founder.html"><span class="hub-nav-symbol" aria-hidden="true">♙</span>Founder</a></nav>
+<script type="module" src="/assets/atmosphere.mjs"></script>
+<script>
+(() => {
+  const menu=document.getElementById('mobile-menu');
+  const nav=document.getElementById('site-nav');
+  menu.addEventListener('click',()=>{
+    const expanded=menu.getAttribute('aria-expanded')==='true';
+    menu.setAttribute('aria-expanded',String(!expanded));nav.classList.toggle('is-open',!expanded);
+  });
+  const toggle=document.getElementById('search-toggle');
+  const search=document.getElementById('search-panel');
+  const field=document.getElementById('game-search');
+  const searchStatus=document.getElementById('search-status');
+  const searchView=document.getElementById('search-view');
+  const gameCards=[...document.querySelectorAll('#games article.card')];
+  let searchOpenedDetails=false;
+  function clearSearch(){
+    field.value='';
+    gameCards.forEach(card=>card.hidden=false);
+    searchStatus.textContent='';
+    searchView.hidden=true;
+    if(searchOpenedDetails&&mobile.matches){searchOpenedDetails=false;syncHubView();}
+    if(mobile.matches&&games.dataset.searchExpanded==='true'){
+      collapseGames(true);
+      delete games.dataset.searchExpanded;
+    }
+  }
+  function filterGames(){
+    const value=field.value.trim();
+    const q=value.toLocaleLowerCase();
+    let matches=0;
+    for(const card of gameCards){
+      card.hidden=Boolean(q&&!card.textContent.toLocaleLowerCase().includes(q));
+      if(!card.hidden)matches++;
+    }
+    if(q&&mobile.matches&&document.documentElement.dataset.hubView==='home'){
+      searchOpenedDetails=true;
+      document.documentElement.dataset.hubView='details';
+      collapseGames(false);
+    }
+    if(q&&mobile.matches&&games.dataset.collapsed==='true'){
+      games.dataset.searchExpanded='true';
+      collapseGames(false);
+    }
+    if(!q&&mobile.matches&&games.dataset.searchExpanded==='true'){
+      collapseGames(true);
+      delete games.dataset.searchExpanded;
+    }
+    if(!q&&searchOpenedDetails&&mobile.matches){searchOpenedDetails=false;syncHubView();}
+    searchStatus.textContent=!q?'':matches?matches+' game'+(matches===1?'':'s')+' found for "'+value+'".':'No games found for "'+value+'".';
+    searchView.hidden=!q||matches===0;
+  }
+  toggle.addEventListener('click',()=>{
+    search.hidden=!search.hidden;
+    toggle.setAttribute('aria-expanded',String(!search.hidden));
+    if(!search.hidden)field.focus();else clearSearch();
+  });
+  field.addEventListener('input',filterGames);
+  const track=document.getElementById('featured-track');
+  for(const [id,direction] of [['featured-back',-1],['featured-next',1]]){
+    document.getElementById(id).addEventListener('click',()=>{
+      track.scrollBy({left:direction*Math.max(170,track.clientWidth*.6),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+    });
+  }
+  // Keep the desktop sidebar intact; relocate it under one mobile disclosure button.
+  const hub=document.getElementById('game-hub-center');
+  const hubOrigin=hub.parentNode,hubNext=hub.nextSibling;
+  const mount=document.getElementById('hub-mobile-mount');
+  const hubToggle=document.getElementById('game-hub-toggle');
+  const allToggle=document.getElementById('all-games-toggle');
+  const games=document.getElementById('games');
+  const mobile=matchMedia('(max-width:800px)');
+  const ambience=document.getElementById('ambience');
+  const ambienceOrigin=ambience.parentNode,ambienceNext=ambience.nextSibling;
+  const ambienceMount=document.getElementById('ambient-mobile-mount');
+  function syncHubView(){
+    const id=location.hash.slice(1);
+    const details=new Set(['games','upcoming','safety',...gameCards.map(card=>card.id)]);
+    const view=mobile.matches&&details.has(id)?'details':'home';
+    const oldView=document.documentElement.dataset.hubView;
+    document.documentElement.dataset.hubView=view;
+    if(view==='details'){
+      collapseGames(false);
+      if(oldView!==view)requestAnimationFrame(()=>document.getElementById(id)?.scrollIntoView({block:'start',behavior:'auto'}));
+    }else if(mobile.matches){collapseGames(true);closeHub();}
+  }
+  addEventListener('hashchange',syncHubView);
+  function closeHub(){
+    hubToggle.setAttribute('aria-expanded','false');
+    if(mobile.matches)hub.hidden=true;
+  }
+  function collapseGames(collapsed){
+    games.dataset.collapsed=String(collapsed);
+    allToggle.setAttribute('aria-expanded',String(!collapsed));
+    allToggle.textContent=collapsed?'Show all game worlds':'Hide detailed game worlds';
+  }
+  function syncMobile(){
+    if(mobile.matches){
+      mount.appendChild(hub);
+      ambienceMount.appendChild(ambience);
+      hub.hidden=hubToggle.getAttribute('aria-expanded')!=='true';
+      syncHubView();
+    }else{
+      hubOrigin.insertBefore(hub,hubNext);
+      ambienceOrigin.insertBefore(ambience,ambienceNext);
+      hub.hidden=false;
+      collapseGames(false);
+      hubToggle.setAttribute('aria-expanded','false');
+      nav.classList.remove('is-open');
+      menu.setAttribute('aria-expanded','false');
+    }
+  }
+  hubToggle.addEventListener('click',()=>{
+    const expanded=hubToggle.getAttribute('aria-expanded')==='true';
+    hubToggle.setAttribute('aria-expanded',String(!expanded));
+    hub.hidden=expanded;
+  });
+  allToggle.addEventListener('click',()=>collapseGames(games.dataset.collapsed==='false'));
+  document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',()=>{
+    const id=a.getAttribute('href').slice(1);
+    const target=document.getElementById(id);
+    if(id==='games'||id==='upcoming'||target?.closest('#games')){
+      collapseGames(false);
+      if(mobile.matches)closeHub();
+    }
+  }));
+  nav.addEventListener('click',event=>{
+    if(event.target.closest('a')){
+      nav.classList.remove('is-open');
+      menu.setAttribute('aria-expanded','false');
+    }
+  });
+  document.addEventListener('keydown',event=>{
+    if(event.key!=='Escape')return;
+    nav.classList.remove('is-open');
+    menu.setAttribute('aria-expanded','false');
+    if(mobile.matches)closeHub();
+    if(!search.hidden){search.hidden=true;toggle.setAttribute('aria-expanded','false');clearSearch();toggle.focus();}
+    else if(mobile.matches&&document.documentElement.dataset.hubView==='details')location.hash='home';
+  });
+  if(mobile.addEventListener)mobile.addEventListener('change',syncMobile);
+  else mobile.addListener(syncMobile);
+  syncMobile();
+  const season=document.getElementById('current-season');
+  // The parent company's atmosphere module determines seasons automatically.
+  season.textContent=new Intl.DateTimeFormat('en',{month:'long'}).format(new Date())+' · Automatic';
+  const sound=document.getElementById('ambient-toggle');
+  let ctx=null, source=null;
+  async function stop(){
+    try{source?.stop();}catch{}
+    source=null;const prior=ctx;ctx=null;
+    if(prior)await prior.close().catch(()=>{});
+    sound.setAttribute('aria-pressed','false');sound.textContent='Off';
+  }
+  sound.addEventListener('click',async()=>{
+    if(ctx){await stop();return;}
+    const AudioContext=window.AudioContext||window.webkitAudioContext;
+    if(!AudioContext){sound.textContent='Unavailable';return;}
+    const next=new AudioContext();
+    try{
+      const buffer=next.createBuffer(1,next.sampleRate*2,next.sampleRate);
+      const samples=buffer.getChannelData(0);
+      for(let i=0;i<samples.length;i++)samples[i]=Math.random()*2-1;
+      const src=next.createBufferSource();src.buffer=buffer;src.loop=true;
+      const low=next.createBiquadFilter();low.type='lowpass';low.frequency.value=220;
+      const volume=next.createGain();volume.gain.value=.008;
+      src.connect(low);low.connect(volume);volume.connect(next.destination);
+      await next.resume();src.start();ctx=next;source=src;
+      sound.setAttribute('aria-pressed','true');sound.textContent='On';
+    }catch{await next.close().catch(()=>{});sound.textContent='Unavailable';}
+  });
+  document.addEventListener('visibilitychange',()=>{if(document.hidden&&ctx)stop();});
+})();
+</script>
 </body></html>

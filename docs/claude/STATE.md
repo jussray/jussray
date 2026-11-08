@@ -625,3 +625,9 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
 - main `2309b55` is 56 commits ahead: founder-merged #69 replaced the homepage with a 45-line compact landing plus separate destination pages (products, founder, contact, sites) and rebuilt the Game Hub phone view.
 - A trial merge of main conflicts in `site/index.html` (whole file), `site/games/index.html` (2 large hunks) and `scripts/verify-site.mjs` (3 small hunks). The merge was aborted. Nothing was pushed.
 - Gate: Juss must pick the homepage/Game Hub direction (main's separate pages, or #68's views plus card box). Merge stays held.
+
+## 2026-11-08 ~20:00 UTC — Founder chose "Keep main" for PR #68
+- Merged origin/main `2309b55` into the branch. `site/index.html`, `site/games/index.html` and the content pages take main's version (#69 destination pages). The #68 homepage views, card box, Game Hub stage and illustrated icons were dropped.
+- Kept from #68: `site/ideas.html` (Creation Core) with its lake scenes; world shell nav pointed at main's pages (`/products.html`, `/founder.html`, `/contact.html` ...); retired `jussco-signature-world.jpg` (flagship.css now uses `ideas-night`); governance commits; `verify-site.mjs` main's checks plus the Ideas block.
+- Local proof: verify-site exit 0 (419 ok); node tests 101 pass / 2 fail. Both failures are pre-existing on main and not run in CI: `evidence-sync-proof` (vitest) and `sync-party-link` (expects the old long homepage).
+- Open gap: `ideas.html` is reachable only via the sitemap; main's nav has no link to it.
