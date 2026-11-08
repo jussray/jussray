@@ -37,6 +37,13 @@ Founder shorthand `/godmode` means the existing founder-governed workflow, **not
 
 Preserve the chain: **founder intent → system authority → observe/audit → bounded execution → exact-head proof → adaptive decision → continuity receipt**. Adaptive decisions are ACCELERATE / CONTINUE / REPAIR / REFOCUS / HALT, grounded in evidence. Distinguish intent, permission, action, receipt, evidence, and verified state. Keep FCR, Chief, Sol, PromptOS, and all product repos independent; integrate only through approved interfaces. Never repeat work already proved complete. Do not bypass consent, safety, merge, deployment, or founder gates. Apply this standard across relevant work, but this repository document governs only this repository; global cross-chat persistence requires the user's ChatGPT personalization settings or another shared canonical source.
 
+## Mandatory review-before-approval gate
+For every change in this repository, the standing sequence is **live-main/exact-head audit → systematic review → smallest reversible repair → exact-head checks and applicable real-browser Playwright proof → one independent human GitHub approval on that exact head → separate founder-authorized merge/deploy → live readback**.
+- Automated or AI review is additional evidence, never a substitute for the independent human GitHub approval.
+- Keep native GitHub rulesets requiring one human approval, four strict exact-head checks, review-thread resolution, force-push and deletion prevention. Fail closed on missing proof, stale heads, or bypassed gates.
+- Reuse the existing PR and original source of truth; do not open a duplicate carrier. Record rollback and evidence, and never merge/deploy merely because a code patch or test passed.
+- This contract governs this repository. Apply the same sequence to other product repositories in their own authorized code and rulesets, never by claiming one repo's policy changed another repo.
+
 ## Founder-approved proof-led delivery workflow
 1. OBSERVE the canonical repository, current branch/head, provider state, and runtime; distinguish observations from claims.
 2. AUDIT the smallest relevant surface, including privacy, authority, regressions, and rollback.
