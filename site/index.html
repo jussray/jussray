@@ -99,6 +99,7 @@
 }
 </script>
 <script src="/assets/conversion-tracking.js" defer></script>
+<script src="/assets/world-icons.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Playfair+Display:wght@700;800&family=Kaushan+Script&family=Caveat:wght@700&family=Sora:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
@@ -613,6 +614,14 @@ html[data-current-view]:not([data-current-view="home"]) .page-scene .tint{backgr
   .stage-cta{flex-wrap:nowrap;gap:10px}
   .stage-cta .sbtn{flex:1 1 0;min-width:0;justify-content:center;padding:0 10px;font-size:15px;white-space:nowrap}
 }
+
+/* Illustrated world icons (founder mockups): glowing art on dark glass instead of letters/emoji. */
+.eco-glyph.has-icon,.fx-glyph.has-icon{background:radial-gradient(circle at 50% 35%,rgba(120,90,220,.45),rgba(14,10,44,.92) 70%)!important;border:1px solid rgba(255,214,138,.35);box-shadow:inset 0 0 18px rgba(167,139,250,.35),0 0 22px rgba(167,139,250,.25)!important;font-size:0!important}
+.eco-glyph.has-icon svg,.fx-glyph.has-icon svg{width:76%;height:76%;filter:drop-shadow(0 0 6px rgba(255,214,138,.55)) drop-shadow(0 0 14px rgba(167,139,250,.55))}
+.eco-glyph.has-icon,.stage .eco-glyph.has-icon{width:88px;height:88px;border-radius:18px}
+.fx-glyph.has-icon{width:88px!important;height:88px!important;border-radius:18px}
+@media(max-width:700px){.fx-glyph.has-icon{width:68px!important;height:68px!important}}
+.eco-glyph.has-icon svg,.fx-glyph.has-icon svg{width:82%;height:82%}
 @media (prefers-reduced-motion:reduce){.stage-scene .art{transition:none}}
 </style>
 <link rel="stylesheet" href="/assets/signature-world.css">
@@ -1282,7 +1291,7 @@ Promise.all([
     var li=document.createElement('li'); li.className='eco-cell';
     var el=document.createElement(href?'a':'div'); el.className='eco-item';
     if(href) el.href=href;
-    var g=document.createElement('span'); g.className='eco-glyph'; g.setAttribute('aria-hidden','true'); g.textContent=glyph(name);
+    var g=document.createElement('span'); g.className='eco-glyph'; g.setAttribute('aria-hidden','true'); var ic=window.JCIcon&&window.JCIcon(name); if(ic){ g.classList.add('has-icon'); g.appendChild(ic); } else { g.textContent=glyph(name); }
     var n=document.createElement('strong'); n.className='eco-name'; n.textContent=name;
     var s=document.createElement('span'); s.className='eco-status'; s.textContent=status;
     el.appendChild(g); el.appendChild(n); el.appendChild(s); li.appendChild(el);

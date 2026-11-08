@@ -247,6 +247,7 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   say(await page.evaluate(() => { const e = document.querySelector('#ecosystem').getBoundingClientRect(); const h = document.querySelector('.stage-hero').getBoundingClientRect(); return e.top >= h.bottom - 1; }), `${vp.n}: ecosystem band sits below the stage headline`);
   if (vp.n === 'desktop') say((await page.locator('.navpill a').evaluateAll((as) => as.filter((a) => a.getBoundingClientRect().width > 0).length)) === 9, 'desktop: all nine primary nav links visible');
   say((await page.locator('nav[aria-label="Footer"]').locator('a[href="/creative-history.html"], a[href="#live-sites"], a[href="#systems"], a[href="#resources"]').count()) === 4, `${vp.n}: destinations moved out of the nav stay reachable from the footer`);
+  say(await page.evaluate(() => { const g = [...document.querySelectorAll('#ecoTrack .eco-glyph')]; return g.length > 0 && g.every((x) => x.classList.contains('has-icon') && x.querySelector('svg[data-icon]')); }), `${vp.n}: every ecosystem tile shows an illustrated icon, not letters`);
   say((await page.locator('#products .jc-feature').count()) === 3, `${vp.n}: three product pathways render`);
   say((await page.locator('.jc-feature--shop a').getAttribute('href')) === 'https://jussbeautifulhair.com/' &&
       (await page.locator('.jc-feature--play a').getAttribute('href')) === 'https://sync.jussco.company/' &&
@@ -445,6 +446,7 @@ for (const vp of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile
     await page.click('#menuBtn'); say((await page.getAttribute('#menuBtn', 'aria-expanded')) === 'true' && await page.locator('#gnav').isVisible(), 'games hub: mobile menu button opens the real nav');
     await page.click('#menuBtn');
   }
+  say(await page.evaluate(() => [...document.querySelectorAll('.fx-glyph')].every((x) => x.classList.contains('has-icon') && x.querySelector('svg[data-icon]'))), `games hub: ${vp.name} featured tiles show illustrated icons`);
   say(errors.length === 0, `games hub: ${vp.name} no JS errors`);
   await page.screenshot({ path: `proof/site/games-${vp.name}.png`, fullPage: true });
   await ctx.close();

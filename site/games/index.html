@@ -232,7 +232,16 @@ header .inner{width:min(1380px,calc(100% - 36px))}
   .tabbar a[aria-current]{color:#ffd98a;background:rgba(245,193,75,.14);box-shadow:inset 0 0 0 1px rgba(255,214,138,.5)}
   body{padding-bottom:calc(92px + env(safe-area-inset-bottom,0px))}
 }
+
+/* Illustrated world icons (founder mockups): glowing art on dark glass instead of letters/emoji. */
+.eco-glyph.has-icon,.fx-glyph.has-icon{background:radial-gradient(circle at 50% 35%,rgba(120,90,220,.45),rgba(14,10,44,.92) 70%)!important;border:1px solid rgba(255,214,138,.35);box-shadow:inset 0 0 18px rgba(167,139,250,.35),0 0 22px rgba(167,139,250,.25)!important;font-size:0!important}
+.eco-glyph.has-icon svg,.fx-glyph.has-icon svg{width:76%;height:76%;filter:drop-shadow(0 0 6px rgba(255,214,138,.55)) drop-shadow(0 0 14px rgba(167,139,250,.55))}
+.eco-glyph.has-icon,.stage .eco-glyph.has-icon{width:88px;height:88px;border-radius:18px}
+.fx-glyph.has-icon{width:88px!important;height:88px!important;border-radius:18px}
+@media(max-width:700px){.fx-glyph.has-icon{width:68px!important;height:68px!important}}
+.eco-glyph.has-icon svg,.fx-glyph.has-icon svg{width:82%;height:82%}
 </style>
+<script src="assets/world-icons.js"></script>
 </head>
 <body>
 <div class="scene" aria-hidden="true"><div class="art day"></div><div class="art night"></div><div class="art sunset"></div><div class="tint"></div></div>
@@ -252,6 +261,7 @@ document.addEventListener('DOMContentLoaded',function(){
     [196,246.94,293.66,392].forEach(function(fr,i){ var o=ctx.createOscillator(); o.type=i%2?'sine':'triangle'; o.frequency.value=fr; var g=ctx.createGain(); g.gain.value=.06; o.connect(g); g.connect(f); o.start(); }); return true; }
   sw.addEventListener('click',function(){ var on=sw.getAttribute('aria-checked')!=='true'; if(on&&!ctx&&!start()) return; if(ctx){ ctx.resume(); gain.gain.setTargetAtTime(on?level():0,ctx.currentTime,.4); } sw.setAttribute('aria-checked',String(on)); });
   vol.addEventListener('input',function(){ if(ctx&&sw.getAttribute('aria-checked')==='true') gain.gain.setTargetAtTime(level(),ctx.currentTime,.2); });
+  [].forEach.call(document.querySelectorAll('.fx-tile'),function(t){ var g=t.querySelector('.fx-glyph'), n=t.querySelector('strong'); var ic=window.JCIcon&&g&&n&&window.JCIcon(n.textContent.trim()); if(ic){ g.classList.add('has-icon'); g.appendChild(ic); } });
   var track=document.getElementById('fxTrack');
   function step(d){ var c=track.querySelector('li'); track.scrollBy({left:d*((c?c.getBoundingClientRect().width:140)+12)*2,behavior:'smooth'}); }
   document.getElementById('fxPrev').addEventListener('click',function(){step(-1);}); document.getElementById('fxNext').addEventListener('click',function(){step(1);});

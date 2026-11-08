@@ -1,3 +1,13 @@
+## 2026-11-08 — Illustrated icons (Juss: "still doesn't view like the images")
+
+- GAP CLOSED: the ecosystem and featured tiles showed letter badges ("SK", "FC") and emoji. They now show glowing illustrated icons on dark glass at the mockups' scale: 88px art, and 68px on phones.
+  - Source: first-party SVG in `site/assets/world-icons.js`, with a copy at `site/games/assets/` for the games worker.
+  - Each icon is mapped by product name from the JSON data. Unknown names fall back to a crown.
+  - The SVG is parsed as SVG, never as HTML.
+- PROOF (local): verify-site exit 0, 482 ok. New checks: every ecosystem tile and every featured tile renders an icon. `node --test` 86/87 (the known vitest gap). Screenshots at 1672 and 390 reviewed.
+- SIGNED-HISTORY REPLACEMENT: Juss approved it ("Approved"). The guarded force-with-lease push of signed 51cba7a over unsigned 4fb6f02 was DENIED by the session's auto-mode safety classifier (Git Destructive), so it was not pushed. It needs Juss to allow the action, or to do it himself. The branch stays at 4fb6f02 plus this commit.
+- ROLLBACK: revert this commit.
+
 ## 2026-11-07 — One phone pattern across the site
 
 - FIX: the homepage (`site/index.html`) and every shell page (`world-shell.{css,js}`) now use the Game Hub phone pattern. That is a glass header pill with a real menu button (Escape closes it, and a link closes it) and a fixed bottom tab bar with the founder mockup's tabs: Home, Products, Solutions, Our Work, Founder.
