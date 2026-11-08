@@ -1,3 +1,10 @@
+## 2026-11-08 — SUPERSEDING founder governance decision: systematic-first, human-final
+
+- Review live `main` and exact PR head; systematically review and repair; verify exact-head checks and applicable browser proof; then require **one independent human GitHub approval on that exact head**. Only a separate founder-approved action may merge or deploy.
+- Earlier same-day zero-human-approval plans are superseded and not release authority. The Production ruleset remains unmodified until an authorized admin write and live readback.
+- Existing PR #72 carries the source repair. Avoid bypasses. Preserve existing deployment protections unless separately reviewed.
+- Rollback: revert this branch's governance alignment commit, not the live native ruleset.
+
 ## 2026-11-08 — The card box is the page (Juss: "card box should change and show the according projects", "same stuff, different device")
 
 - FIX (homepage):

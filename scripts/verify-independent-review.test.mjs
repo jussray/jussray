@@ -9,15 +9,19 @@ const approval=(login,sha=H,date='2026-10-15T23:00:00Z')=>({
 });
 const decide=(reviews,pull=pr())=>reviewDecision({pull,reviews,expectedHead:H});
 
-test('systematic review accepts zero mandatory human GitHub approvals',()=>{
+test('requires an independent human approval on the exact current head',()=>{
   const result=decide([]);
-  assert.equal(result.ok,true);
+  assert.equal(result.ok,false);
   assert.equal(result.approvedCount,0);
-  assert.equal(result.reviewMode,'systematic-zero-human-approvals');
+  assert.match(result.errors.join(';'),/Missing independent human approval on exact head/);
+  const reviewed=decide([approval('independent')]);
+  assert.equal(reviewed.ok,true);
+  assert.equal(reviewed.approvedCount,1);
+  assert.equal(reviewed.reviewMode,'independent-human-exact-head');
 });
 test('self approval is not treated as independent authority',()=>{
   const result=decide([approval('jussray')]);
-  assert.equal(result.ok,true);
+  assert.equal(result.ok,false);
   assert.equal(result.approvedCount,0);
 });
 test('bot / app approvals are not independent human reviewers',()=>{
@@ -26,7 +30,7 @@ test('bot / app approvals are not independent human reviewers',()=>{
   assert.equal(decide([{...approval('app-account'),user:{login:'app-account',type:'Bot'}}]).approvedCount,0);
 });
 test('approvals for old commits do not count after a new head',()=>{
-  assert.equal(decide([approval('actual-reviewer',OLD)]).ok,true);
+  assert.equal(decide([approval('actual-reviewer',OLD)]).ok,false);
   assert.equal(decide([approval('actual-reviewer',OLD)]).approvedCount,0);
   assert.equal(decide([approval('actual-reviewer')],{...pr(),head:{sha:OLD}}).ok,false);
 });
@@ -42,12 +46,12 @@ test('review dismissal and later approval are respected',()=>{
 });
 test('a later withdrawn approval no longer counts',()=>{
   const r=[approval('one'),{...approval('one',H,'2026-10-15T23:05:00Z'),state:'DISMISSED'}];
-  assert.equal(decide(r).ok,true);
+  assert.equal(decide(r).ok,false);
   assert.equal(decide(r).approvedCount,0);
 });
 test('commented review does not manufacture an approval',()=>{
   const r=[{...approval('one'),state:'COMMENTED'}];
-  assert.equal(decide(r).ok,true);
+  assert.equal(decide(r).ok,false);
   assert.equal(decide(r).approvedCount,0);
 });
 test('draft, closed, wrong base and missing evidence fail closed',()=>{
@@ -70,7 +74,7 @@ test('GitHub API errors and missing token are not treated as empty approvals',as
 });
 const enforcedRule={id:123,target:'branch',enforcement:'active',conditions:{ref_name:{include:['~DEFAULT_BRANCH'],exclude:[]}},
   bypass_actors:[],rules:[
-    {type:'pull_request',parameters:{required_approving_review_count:0,dismiss_stale_reviews_on_push:true,require_last_push_approval:true,required_review_thread_resolution:true}},
+    {type:'pull_request',parameters:{required_approving_review_count:1,dismiss_stale_reviews_on_push:true,require_last_push_approval:true,required_review_thread_resolution:true}},
     {type:'required_status_checks',parameters:{strict_required_status_checks_policy:true,required_status_checks:[{context:'Independent Review Evidence'},{context:'Juss & Co Site Browser Proof'},{context:'Repo Reality / exact-head'},{context:'Review Gate Unit Tests'}]}},
     {type:'deletion'},{type:'non_fast_forward'}
   ]};
@@ -119,9 +123,9 @@ test('concurrent PR head movement invalidates a previously approved exact-head r
   assert.equal(prReads,2);
 });
 
-test('requiring a separate human GitHub approval contradicts systematic policy',()=>{
+test('a native ruleset that allows zero independent human approvals fails closed',()=>{
   const strictReview=enforcedRule.rules.map(r=>r.type==='pull_request'
-    ? {...r,parameters:{...r.parameters,required_approving_review_count:1}}:r);
+    ? {...r,parameters:{...r.parameters,required_approving_review_count:0}}:r);
   assert.equal(rulesetDecision([{...enforcedRule,rules:strictReview}]).ok,false);
 });
 
@@ -136,15 +140,15 @@ test('missing checks and non-strict status configuration block governance',()=>{
   assert.equal(rulesetDecision([{...enforcedRule,rules:lax}]).ok,false);
 });
 
-test('multiple active main rulesets cannot hide a required human approval',()=>{
+test('multiple active main rulesets cannot hide a weaker zero-approval rule',()=>{
   const conflicting={...enforcedRule,id:456,rules:[
-    {type:'pull_request',parameters:{required_approving_review_count:1,required_review_thread_resolution:true}}
+    {type:'pull_request',parameters:{required_approving_review_count:0,required_review_thread_resolution:true}}
   ]};
   assert.equal(rulesetDecision([enforcedRule,conflicting]).ok,false);
 });
 
-test('missing resolved-conversation requirement is blocked even at zero approvals',()=>{
+test('missing resolved-conversation requirement is blocked even with required human approval',()=>{
   const rules=enforcedRule.rules.map(r=>r.type==='pull_request'
-    ? {...r,parameters:{required_approving_review_count:0,required_review_thread_resolution:false}}:r);
+    ? {...r,parameters:{required_approving_review_count:1,required_review_thread_resolution:false}}:r);
   assert.equal(rulesetDecision([{...enforcedRule,rules}]).ok,false);
 });

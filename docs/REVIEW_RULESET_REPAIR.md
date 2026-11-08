@@ -1,5 +1,7 @@
 # Native review ruleset repair — admin-only, manual
 
+Standing order: review live main and exact PR head; perform systematic code and security review; apply a focused reversible repair; verify exact-head tests, CI and browser evidence; obtain one independent human GitHub approval on that exact head; only then consider founder-authorized merge or deployment. Automated review is not an alternative to human GitHub approval.
+
 This is a guarded reconciliation tool, not authority to merge or deploy. It only handles the existing repository ruleset in `jussray/jussray`. It does not grant permissions or install a GitHub token.
 
 ## Preconditions
@@ -7,6 +9,7 @@ This is a guarded reconciliation tool, not authority to merge or deploy. It only
 - Have GitHub repository Administration (write) permission, and a scoped credential held outside source control.
 - Independently review the current ruleset's all-branch `~ALL` scope and bypass actors. Changing the global ruleset affects branches beyond `main`, including `Production`.
 - Review required deployment environments separately. This repair deliberately preserves all of them, including preview environments that may prevent merges.
+- Preserve one independent human GitHub approval in the native ruleset. Never lower the approval count to zero.
 - Use a trusted checkout. Do not execute the write from `pull_request` or untrusted CI.
 
 ## Read-only plan

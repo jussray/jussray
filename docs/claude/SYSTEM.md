@@ -9,7 +9,7 @@ The three tasks that eat the week, confirmed by Juss on 2026-11-08:
 | # | Task | What changes | Hours saved / week (estimate, not measured) |
 |---|------|--------------|---------------------------------------------|
 | 1 | Mockup → live site | One Project holds the mockups, proportions rule and voice; Claude builds, screenshots at 3 widths and lists every mismatch before calling it done | 3–5 |
-| 2 | PR review → merge | Claude review plus 4 required checks replace the missing second human; a daily GitHub digest shows what is blocked and why | 2–4 |
+| 2 | PR review → merge | Systematic review, focused repair, four exact-head checks, then one independent human GitHub approval; the daily digest shows blockers | 2–4 |
 | 3 | "Is it actually live?" | A scheduled live-site readback (once the Browser Rendering token works) replaces manual checking | 1–2 |
 
 These estimates are a target for Juss to correct against real weeks.
@@ -19,7 +19,7 @@ These estimates are a target for Juss to correct against real weeks.
 | Task | Model | Why |
 |------|-------|-----|
 | Mockup → site build, design matching | Opus 5.5 | Long visual reasoning, many files, proportions |
-| Independent PR review (the "Claude review counts" gate) | Opus 5.5 | Has to catch real defects, not style nits |
+| Systematic PR review (before human approval) | Opus 5.5 | Has to catch real defects, not style nits |
 | CI triage, PR babysitting, small fixes | Sonnet 5.5 | Fast and accurate on narrow, well-defined work |
 | Daily digests (GitHub, inbox, calendar, Slack) | Haiku 5.5 | Summarising and sorting; cheap to run daily |
 | Writing in Juss's voice (posts, replies) | Sonnet 5.5 | Good prose at speed; Opus only for launch copy |
@@ -105,7 +105,7 @@ Rules already in `CLAUDE.md` (truth rules, proof-led workflow, standing rules) s
 
 **Argue-with-me: 3 ways this could fail**
 1. The live-site readback depends on a Cloudflare token that currently returns 401. Until it's renewed, task 3 saves nothing.
-2. "Claude review counts" has no cryptographic proof: the gate verifies checks, not that a review happened. If a session skips the review, nothing catches it.
+2. AI review alone is not merge authority. Require exact-head CI, browser evidence and one independent human GitHub approval.
 3. Scheduled digests turn into noise if the quiet rule isn't followed. Judge them on day 7 and cut any that never led to an action.
 
 **Final checks**
