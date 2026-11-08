@@ -182,6 +182,44 @@ header .brand{font-size:23px}.brand .crown{font-size:27px;margin-right:7px}
 .featured-tile,#games .card{transition:none!important;transform:none!important}
 }
 
+
+/* Responsive mobile doorway: cinematic stage stays visible; deep content is progressive. */
+[hidden]{display:none!important}
+#hub-mobile-mount,#all-games-toggle{display:none}
+@media(max-width:800px){
+  #living-world-scene{background-position:50% 54%}
+  .hero{min-height:clamp(465px,65svh,575px);padding:26px 12px 108px}
+  .hero .description{max-width:36ch}
+  #ambience{position:absolute;left:50%;bottom:6px;transform:translateX(-50%);width:min(100%,350px);margin:0;padding:10px 14px}
+  #featured{margin:-8px auto 16px;padding:17px 13px 19px}
+  .featured-track{grid-auto-columns:clamp(150px,58vw,230px);scroll-padding-inline:4px;overscroll-behavior-inline:contain}
+  #hub-mobile-mount{display:block;width:min(100%,580px);margin:6px auto 22px}
+  #game-hub-toggle,#all-games-toggle{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:11px 18px;border-radius:999px;border:1px solid #ffe0a7;background:linear-gradient(130deg,#372044d9,#151836ea);color:#fff3d6;box-shadow:0 0 18px #f4b67777,inset 0 1px #ffffff66;font:600 15px system-ui;cursor:pointer}
+  #game-hub-toggle{width:100%;font:400 24px Georgia,serif}
+  #game-hub-toggle:after{content:"⌄";margin-left:auto;font:25px system-ui}
+  #game-hub-toggle[aria-expanded="true"]:after{content:"⌃"}
+  #game-hub-center{position:static;width:100%;margin:12px auto 0}
+  #games .section-heading{gap:13px}
+  #games[data-collapsed="true"] .cards{display:none}
+  #all-games-toggle{font-size:13px}
+  #games .cards{margin-top:16px}
+}
+@media(max-width:520px){
+  header .inner{min-height:64px}
+  .hero{min-height:clamp(475px,67svh,570px);padding:22px 5px 100px}
+  .hero h1{font-size:clamp(55px,15.5vw,69px)}
+  .hero .lead{font-size:10px;letter-spacing:.1em}
+  .hero .description{font-size:12px;line-height:1.5}
+  .hero-actions{flex-wrap:nowrap;gap:7px;margin-top:17px}
+  .hero-actions .action{font-size:12px;padding:10px 13px;white-space:nowrap}
+  #featured h2{font-size:clamp(24px,7vw,30px)}
+  .featured-tile{min-height:145px}
+  .featured-toolbar button{min-height:44px;min-width:44px}
+  #games .section-heading{align-items:flex-start}
+  #games .section-heading h2{font-size:29px}
+}
+@media(prefers-reduced-motion:reduce){#game-hub-toggle,#all-games-toggle{transition:none}}
+
 </style>
 </head>
 <body>
@@ -230,8 +268,9 @@ header .brand{font-size:23px}.brand .crown{font-size:27px;margin-right:7px}
 <div class="featured-toolbar"><button type="button" id="featured-back" aria-label="Scroll featured games left">‹</button><button type="button" id="featured-next" aria-label="Scroll featured games right">›</button></div>
 <p class="hint">Explore here. Play on each game’s own domain, with its original look preserved.</p>
 </section>
+<section id="hub-mobile-mount" aria-label="Game Hub Center controls"><button type="button" id="game-hub-toggle" aria-expanded="false" aria-controls="game-hub-center">♧ &nbsp; Game Hub Center</button></section>
 <div id="upcoming" aria-hidden="true"></div>
-<section id="games" aria-labelledby="games-title"><div class="section-heading"><h2 id="games-title">Our game worlds</h2><p>One home. Different adventures.</p></div><div class="cards">
+<section id="games" aria-labelledby="games-title"><div class="section-heading"><h2 id="games-title">Our game worlds</h2><p>One home. Different adventures.</p><button type="button" id="all-games-toggle" aria-controls="game-cards" aria-expanded="true">Show all game worlds</button></div><div class="cards" id="game-cards">
 <article class="card" id="sync-world"><div class="art sync-art" aria-hidden="true"><span>🎉</span><b class="art-title">SYNC</b></div><div class="card-body"><span class="meta">Game family / three distinct experiences</span><h3>SYNC</h3><p>Think alike. Beat the clock. Read the room. SYNC has three flavors, each with its own personality.</p><span class="tag live">Live Site SYNC</span>
 <div class="edition"><h4>⚡ Live Site SYNC</h4><p>The real-time party arena. Join or create a room, answer privately, and reveal together.</p><a class="action" href="https://sync.jussco.company/">Play Live SYNC ↗</a></div>
 <div class="edition"><h4>💬 Chat SYNC</h4><p>The AI-hosted chat edition. Predict the room with your own local guesses. It shares SYNC's game authority.</p><a class="action outline" href="https://sync.jussco.company/chat/">Explore Chat SYNC ↗</a></div>
@@ -274,6 +313,67 @@ header .brand{font-size:23px}.brand .crown{font-size:27px;margin-right:7px}
       track.scrollBy({left:direction*Math.max(170,track.clientWidth*.6),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
     });
   }
+  // Keep the desktop sidebar intact; relocate it under one mobile disclosure button.
+  const hub=document.getElementById('game-hub-center');
+  const hubOrigin=hub.parentNode,hubNext=hub.nextSibling;
+  const mount=document.getElementById('hub-mobile-mount');
+  const hubToggle=document.getElementById('game-hub-toggle');
+  const allToggle=document.getElementById('all-games-toggle');
+  const games=document.getElementById('games');
+  const mobile=matchMedia('(max-width:800px)');
+  function closeHub(){
+    hubToggle.setAttribute('aria-expanded','false');
+    if(mobile.matches)hub.hidden=true;
+  }
+  function collapseGames(collapsed){
+    games.dataset.collapsed=String(collapsed);
+    allToggle.setAttribute('aria-expanded',String(!collapsed));
+    allToggle.textContent=collapsed?'Show all game worlds':'Hide detailed game worlds';
+  }
+  function syncMobile(){
+    if(mobile.matches){
+      mount.appendChild(hub);
+      hub.hidden=hubToggle.getAttribute('aria-expanded')!=='true';
+      collapseGames(games.dataset.collapsed!=='false');
+    }else{
+      hubOrigin.insertBefore(hub,hubNext);
+      hub.hidden=false;
+      collapseGames(false);
+      hubToggle.setAttribute('aria-expanded','false');
+      nav.classList.remove('is-open');
+      menu.setAttribute('aria-expanded','false');
+    }
+  }
+  hubToggle.addEventListener('click',()=>{
+    const expanded=hubToggle.getAttribute('aria-expanded')==='true';
+    hubToggle.setAttribute('aria-expanded',String(!expanded));
+    hub.hidden=expanded;
+  });
+  allToggle.addEventListener('click',()=>collapseGames(games.dataset.collapsed==='false'));
+  document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',()=>{
+    const id=a.getAttribute('href').slice(1);
+    const target=document.getElementById(id);
+    if(id==='games'||id==='upcoming'||target?.closest('#games')){
+      collapseGames(false);
+      if(mobile.matches)closeHub();
+    }
+  }));
+  nav.addEventListener('click',event=>{
+    if(event.target.closest('a')){
+      nav.classList.remove('is-open');
+      menu.setAttribute('aria-expanded','false');
+    }
+  });
+  document.addEventListener('keydown',event=>{
+    if(event.key!=='Escape')return;
+    nav.classList.remove('is-open');
+    menu.setAttribute('aria-expanded','false');
+    if(mobile.matches)closeHub();
+    if(!search.hidden){search.hidden=true;toggle.setAttribute('aria-expanded','false');}
+  });
+  if(mobile.addEventListener)mobile.addEventListener('change',syncMobile);
+  else mobile.addListener(syncMobile);
+  syncMobile();
   const season=document.getElementById('current-season');
   // The parent company's atmosphere module determines seasons automatically.
   season.textContent=new Intl.DateTimeFormat('en',{month:'long'}).format(new Date())+' · Automatic';
