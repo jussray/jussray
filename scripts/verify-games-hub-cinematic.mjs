@@ -63,7 +63,9 @@ try {
     await page.keyboard.press('Escape');
     assert.equal(await page.locator('#search-panel').isVisible(),false,'Escape closes search');
     assert.equal(await page.locator('#games article.card[hidden]').count(),0,'Escape restores all game listings');
-    assert.equal(await page.locator('#games .cards').isVisible(),label==='desktop','Escape restores progressive mobile disclosure');
+    assert.equal(await page.locator('#games .cards').isVisible(),false,'Escape returns every width to the one-screen hub');
+    assert.equal(await page.locator('html').getAttribute('data-hub-view'),'home','hub lands on its one-screen view at every width');
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight+1),true,'hub landing has no vertical scrolling at '+label);
     assert.deepEqual(errors,[],'no page script errors');
     if(label!=='desktop'){
       assert.equal(await page.locator('html').getAttribute('data-hub-view'),'home','mobile lands on the one-screen hub');
