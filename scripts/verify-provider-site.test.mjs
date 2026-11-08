@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { gitBlobSha, extractScrapedRegistry, verifyWorldRegistry, verifySiteMarkdown, verifyDestinationMarkdown, verifyBipContent, assertSha, assertReleaseContext, verifyReceiverHealthHtml, runProof, createQuickActionPacer, cfRequest, assertFinalDestination, verifyHtmlSourceMatch, makePartialReadbackWitness } from './verify-provider-site.mjs';
+import { gitBlobSha, extractScrapedRegistry, verifyWorldRegistry, verifySiteMarkdown, verifyDestinationMarkdown, verifyGamesHubMarkdown, verifyBipContent, assertSha, assertReleaseContext, verifyReceiverHealthHtml, runProof, createQuickActionPacer, cfRequest, assertFinalDestination, verifyHtmlSourceMatch, makePartialReadbackWitness } from './verify-provider-site.mjs';
 
 const site = `---\ntitle: "Juss & Co"\n---\nTurn thoughts into living works.\nExplore our products\nEnter the portfolio\nScan to explore www.jussco.company`;
 
@@ -35,6 +35,15 @@ test('standalone destinations reject challenge and unrelated pages',()=>{
   assert.doesNotThrow(()=>verifyDestinationMarkdown(`---\ntitle: "Juss & Co. Games | Choose your adventure"\n---`,'games'));
   assert.throws(()=>verifyDestinationMarkdown('---\ntitle: "Sign in ・ Cloudflare Access"\n---','bip'),/title mismatch/);
   assert.throws(()=>verifyDestinationMarkdown('Origin DNS error','games'),/challenge or DNS/);
+});
+
+test('production Games hub proof requires the actual Game Hub heading, playable SYNC and honest unreleased status',()=>{
+  const valid='---\\ntitle: "Juss & Co. Games | SYNC Party, Chat SYNC & Lovable SYNC"\\n---\\n# Game Hub\\n[Play Live SYNC ↗](https://sync.jussco.company/)\\nLUMORA · In development\\nLast Laugh · Private prototype';
+  assert.doesNotThrow(()=>verifyGamesHubMarkdown(valid));
+  assert.throws(()=>verifyGamesHubMarkdown(valid.replace('# Game Hub','# Choose your next adventure.')),/Game Hub heading/);
+  assert.throws(()=>verifyGamesHubMarkdown(valid.replace('https://sync.jussco.company/','https://other.invalid/')),/live SYNC destination/);
+  assert.throws(()=>verifyGamesHubMarkdown(valid.replace('In development','Available now')),/unreleased/);
+  assert.throws(()=>verifyGamesHubMarkdown(valid.replace('Private prototype','Live now')),/unreleased/);
 });
 
 test('exact head rejects prefixes and invalid identities',()=>{
