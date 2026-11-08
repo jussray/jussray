@@ -39,6 +39,8 @@
     kite: svg('ji-kite', 'violet', '<path d="M40 6a18 18 0 1012 28A14 14 0 0140 6z" fill="URL"/><path d="M14 40l8-8 8 8-8 8z" fill="#FF8FC7"/><path d="M22 48c-2 6 2 8-2 12" stroke="#FFE0F0" stroke-width="2"/>'),
     leaf: svg('ji-leaf', 'green', '<path d="M12 52C10 28 26 10 54 10 54 38 36 54 12 52z" fill="URL"/><path d="M12 52L44 20" stroke="#E2FFE9" stroke-width="2.4"/>'),
     mask: svg('ji-mask', 'pink', '<path d="M10 14h44v14c0 14-10 24-22 24S10 42 10 28z" fill="URL" opacity=".9"/><path d="M20 26c2-3 6-3 8 0M36 26c2-3 6-3 8 0M22 38c6 6 14 6 20 0" stroke="#3B0A24" stroke-width="3"/>'),
+    shield: svg('ji-shield', 'cyan', '<path d="M32 6l22 8v16c0 14-10 24-22 28C20 54 10 44 10 30V14z" fill="URL" opacity=".85"/><path d="M22 32l7 7 14-15" stroke="#FFFFFF" stroke-width="4"/>'),
+    film: svg('ji-film', 'pink', '<rect x="8" y="14" width="40" height="36" rx="6" fill="URL" opacity=".85"/><path d="M48 26l10-6v24l-10-6z" fill="URL"/><circle cx="22" cy="32" r="6" stroke="#FFE0F0" stroke-width="3"/>'),
     controller: svg('ji-controller', 'violet', '<path d="M14 22h36c6 0 10 6 10 14l-2 10c-1 6-8 7-11 2l-4-6H21l-4 6c-3 5-10 4-11-2L4 36c0-8 4-14 10-14z" fill="URL"/><path d="M18 30v8M14 34h8" stroke="#FFF" stroke-width="3"/><circle cx="44" cy="31" r="2.5" fill="#FFF"/><circle cx="49" cy="36" r="2.5" fill="#FFF"/>')
   };
   var BY_NAME = {
@@ -47,7 +49,8 @@
     'SolContinuity': 'sun', 'Solwealth': 'coin', 'Untold Stories': 'scroll', 'SWEATS': 'hoodie',
     'SleepWealth Agent': 'moon', 'Think Tank': 'globe', 'Alexa Commerce Engine': 'cart', 'Ayure': 'home',
     'Truth Weaver': 'feather', 'LUMORA': 'tree', 'ChatQuest': 'compass', 'Bip & Seek': 'kite',
-    'Jungle Jinx': 'leaf', 'Last Laugh': 'mask', 'Juss & Co Games': 'controller'
+    'Jungle Jinx': 'leaf', 'Last Laugh': 'mask', 'Juss & Co Games': 'controller',
+    'SYNC Party': 'infinity', 'Truth Compass': 'compass', 'Exact Match Engine': 'network', 'JUSS Protect · One': 'shield', 'JUSS Protect · Two': 'shield', 'Make Video': 'film', 'Lumora': 'tree'
   };
   var parser = typeof DOMParser !== 'undefined' ? new DOMParser() : null;
   window.JCIcon = function (name) {

@@ -140,6 +140,64 @@ footer a{display:inline-flex;align-items:center;min-height:44px;padding:0 10px}
 [data-atmo="sunset"] .scene .sunset,[data-atmo="dawn"] .scene .sunset{background-image:url(/assets/ideas-sunset.webp)}
 [data-atmo="night"] .scene .night{background-image:url(/assets/ideas-night.webp)}
 @media (max-width:700px){[data-atmo="day"] .scene .day{background-image:url(/assets/ideas-day-sm.webp)}[data-atmo="sunset"] .scene .sunset,[data-atmo="dawn"] .scene .sunset{background-image:url(/assets/ideas-sunset-sm.webp)}[data-atmo="night"] .scene .night{background-image:url(/assets/ideas-night-sm.webp)}}
+/* Founder mockup layout (2026-11-08): one stage, prompt pill, lotus visible, candidates band, signals panel. */
+.orb-stage{display:none!important}
+.engine{background:none!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;padding:0!important;margin:0 auto!important;max-width:760px}
+#engine-title,.engine .lede,label.big{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+textarea#goal{min-height:64px;height:64px;border-radius:999px;padding:18px 26px 18px 52px;background:rgba(20,14,60,.62) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2l2 6 6 2-6 2-2 6-2-6-6-2 6-2z' fill='%23f5c14b'/%3E%3C/svg%3E") no-repeat 18px 50%/22px;border:1.5px solid rgba(255,214,138,.6);box-shadow:0 0 26px rgba(245,193,75,.25);resize:none;font-size:15px;line-height:1.4}
+.pick{margin-top:6px;text-align:center}.pick summary{display:inline-flex;align-items:center;min-height:40px;font-size:13px;color:#ffd98a;cursor:pointer}
+.pick fieldset{margin-top:6px}.engine .actions{margin-top:10px}.engine .note{font-size:12px;margin-top:6px}
+.iquote{margin:0;padding:16px;border-radius:20px;border:1px solid rgba(255,214,138,.35);background:rgba(28,18,66,.35);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.iquote blockquote{margin:0}.iquote p{margin:0;font-family:var(--serif);font-style:italic;font-size:17px;line-height:1.45;color:var(--cream)}
+.iquote p::before{content:"\201C";display:block;font-size:34px;line-height:.6;color:#ffd98a}
+.iquote figcaption{margin-top:8px;text-align:right;font-family:"Kaushan Script",cursive;font-size:22px;color:#ffd98a}
+.board{padding:14px 14px 12px!important;border-radius:24px!important}
+.board .section-title{font-size:clamp(22px,2.4vw,32px)}.board .kicker{margin:2px 0 10px;font-size:12px}
+.card{grid-template-columns:72px 1fr!important;gap:12px!important;padding:12px!important;border-radius:18px!important}
+.card .icon{width:72px!important;height:72px!important;border-radius:16px!important}
+.card h3{font-size:1.05rem!important}.card p{font-size:13px!important;margin:0 0 4px!important}
+.card details{display:none}.card .tag{font-size:11px}.card .built{font-size:11px;margin:0}
+.card .go{min-height:40px;font-size:12px}
+.card .status{display:block;font-size:9px!important;letter-spacing:.1em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card .tags{display:flex!important;flex-direction:row!important;flex-wrap:wrap;gap:4px;margin:4px 0}
+.card .tag{padding:2px 9px!important;white-space:nowrap}
+.card .go{white-space:nowrap}
+.card p{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ictrl .panel h2{display:inline-block}
+.ictrl .row{min-height:40px!important}
+.ictrl{display:grid;gap:8px}.ictrl .panel{padding:10px 12px!important;border-radius:16px!important}
+.ictrl .panel h2{font-size:13px!important;margin:0 0 4px!important}
+.ictrl .atmo-btn{min-height:44px!important;font-size:13px}
+.side .panel{padding:14px!important}.side .panel h2{font-size:1rem}
+@media (min-width:1100px){
+  html,body{height:100%}
+  main#top{display:grid;grid-template-columns:220px minmax(0,1fr) 260px;grid-template-areas:"quote hero side" "quote engine side" "quote gap side" "ctrl board board";column-gap:32px;row-gap:8px;height:calc(100vh - 110px);box-sizing:border-box;padding:6px 0 14px}
+  .layout{display:contents}
+  .iquote{grid-area:quote;align-self:center}
+  .hero{grid-area:hero;padding:4px 0 0!important}
+  .engine{grid-area:engine}
+  .board{grid-area:board;align-self:end}
+  .card{grid-template-columns:56px 1fr!important}.card .icon{width:56px!important;height:56px!important}
+  .ictrl input[type=range]{display:none}
+  .side{grid-area:side;align-self:start}
+  .ictrl{grid-area:ctrl;align-self:end}
+  .hero h1{font-size:clamp(34px,3.6vw,54px)!important;margin:0 0 4px!important}
+  .crown{width:40px;height:30px}.eyebrow{margin:2px 0!important}
+  .cards{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .cards .card:nth-child(n+4){display:none}
+  footer{display:none}
+  .wrap{max-width:1500px}
+}
+@media (max-width:1099px){
+  main#top{display:flex;flex-direction:column;gap:14px}
+  .layout{display:flex;flex-direction:column;gap:14px}
+  .hero{order:1;padding-top:16px!important}.engine{order:2}.layout{order:3}.ictrl{order:4;grid-template-columns:1fr 1fr}.iquote{display:none}
+  .hero h1{font-size:clamp(32px,9vw,44px)!important}
+  textarea#goal{border-radius:28px;height:72px}
+  .engine .actions{flex-wrap:nowrap;gap:8px}.engine .actions .btn{flex:1 1 0;min-width:0;padding:0 8px;font-size:14px;white-space:nowrap}
+  .side .panel{padding:12px!important}.side .empty{font-size:12px;padding:10px}
+  .ictrl .panel{margin:0}
+}
 </style>
 <link rel="stylesheet" href="/assets/world-shell.css">
 <script src="/assets/world-shell.js" defer></script>
@@ -164,6 +222,7 @@ footer a{display:inline-flex;align-items:center;min-height:44px;padding:0 10px}
   </header>
 
   <main id="top">
+    <figure class="iquote"><blockquote><p>Turn what you already have into new, viable business opportunities with the power of AI.</p></blockquote><figcaption>Juss &amp; Co</figcaption></figure>
     <section class="hero">
       <svg class="crown" viewBox="0 0 30 22" aria-hidden="true"><path d="M2 20h26l2-14-8 6-7-10-7 10-8-6z" fill="#f5c14b"/></svg>
       <p class="eyebrow">Juss &amp; Co · Creation Core</p>
@@ -177,10 +236,12 @@ footer a{display:inline-flex;align-items:center;min-height:44px;padding:0 10px}
       <form id="engineForm" novalidate>
         <label class="big" for="goal">Describe your business, systems, audience, or goal</label>
         <textarea id="goal" name="goal" maxlength="600" placeholder="Help me find the top business opportunities I can create using my existing products, systems, and workflows. Look for ideas I can realistically launch and grow."></textarea>
+        <details class="pick"><summary>Choose products to build from</summary>
         <fieldset>
           <legend>Products to build from <span id="pickCount" class="sr"></span></legend>
           <div class="chips" id="products"><span class="note" style="margin:0">Loading the public portfolio…</span></div>
         </fieldset>
+        </details>
         <div class="actions">
           <button class="btn btn-gold" type="submit" id="generate"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 1l11 7-11 7z" fill="#2a1640"/></svg>Generate ideas</button>
           <a class="btn btn-ghost" href="#candidates">Explore opportunities</a>
@@ -206,6 +267,9 @@ footer a{display:inline-flex;align-items:center;min-height:44px;padding:0 10px}
           <h2 id="sig-title"><svg width="20" height="18" viewBox="0 0 20 18" aria-hidden="true"><g fill="#f5c14b"><rect x="0" y="12" width="4" height="6" rx="1"/><rect x="6" y="8" width="4" height="10" rx="1"/><rect x="12" y="4" width="4" height="14" rx="1"/></g></svg>Public research signals</h2>
           <div class="empty" id="signals">No verified signals are connected yet. A signal appears here only with a named public source and a date. Until then, every candidate stays unverified. No demand numbers are shown.</div>
         </section>
+      </aside>
+    </div>
+    <div class="ictrl">
         <section class="panel glass" aria-labelledby="amb-title">
           <h2 id="amb-title">Ambient sound</h2>
           <div class="row"><span id="soundLabel">Off</span><button class="switch" id="sound" role="switch" aria-checked="false" aria-labelledby="amb-title"></button></div>
@@ -216,7 +280,6 @@ footer a{display:inline-flex;align-items:center;min-height:44px;padding:0 10px}
           <h2 id="atmo-title">Current atmosphere</h2>
           <button class="btn btn-ghost atmo-btn" id="atmo" type="button"><span><span id="atmoName">Sunset</span><small id="atmoHint">Matches your local time · tap to change</small></span><span aria-hidden="true">›</span></button>
         </section>
-      </aside>
     </div>
   </main>
 

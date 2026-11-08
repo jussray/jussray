@@ -264,6 +264,12 @@ html.gviews[data-gview="stage"] .gstage{height:calc(100vh - 77px);height:calc(10
   .eco-item,.stage .eco-item,.fx-tile{min-height:100px!important}
   .stage .eco-glyph.has-icon,.fx-glyph.has-icon{width:48px!important;height:48px!important}
 }
+
+.fx-chips{display:flex;justify-content:center;gap:6px;margin:-4px 0 8px;overflow-x:auto;scrollbar-width:none}
+.fx-chips .eco-chip{flex:0 0 auto;min-height:40px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,214,138,.35);background:rgba(10,6,34,.5);color:#e6dcff;font:600 12px/1 system-ui,-apple-system,"Segoe UI",sans-serif;cursor:pointer}
+.fx-chips .eco-chip[aria-pressed="true"]{background:linear-gradient(180deg,#ffe3a8,#f3b25a);color:#2a1640;border-color:transparent}
+#fxTrack li[hidden]{display:none!important}
+@media(max-width:700px){.fx-chips{justify-content:flex-start;margin:-2px 0 6px}}
 </style>
 <script src="assets/world-icons.js"></script>
 </head>
@@ -295,6 +301,7 @@ document.addEventListener('DOMContentLoaded',function(){
   sw.addEventListener('click',function(){ var on=sw.getAttribute('aria-checked')!=='true'; if(on&&!ctx&&!start()) return; if(ctx){ ctx.resume(); gain.gain.setTargetAtTime(on?level():0,ctx.currentTime,.4); } sw.setAttribute('aria-checked',String(on)); });
   vol.addEventListener('input',function(){ if(ctx&&sw.getAttribute('aria-checked')==='true') gain.gain.setTargetAtTime(level(),ctx.currentTime,.2); });
   [].forEach.call(document.querySelectorAll('.fx-tile'),function(t){ var g=t.querySelector('.fx-glyph'), n=t.querySelector('strong'); var ic=window.JCIcon&&g&&n&&window.JCIcon(n.textContent.trim()); if(ic){ g.classList.add('has-icon'); g.appendChild(ic); } });
+  [].forEach.call(document.querySelectorAll('.fx-chips .eco-chip'),function(b,_,all){ b.addEventListener('click',function(){ var f=b.getAttribute('data-f'); [].forEach.call(document.querySelectorAll('.fx-chips .eco-chip'),function(x){ x.setAttribute('aria-pressed',String(x===b)); }); [].forEach.call(document.querySelectorAll('#fxTrack li'),function(li){ var live=/live/i.test(li.textContent); li.hidden = f==='live' ? !live : f==='dev' ? live : false; }); var t=document.getElementById('fxTrack'); t.scrollLeft=0; t.dispatchEvent(new Event('scroll')); }); });
   var track=document.getElementById('fxTrack');
   function step(d){ var c=track.querySelector('li'); track.scrollBy({left:d*((c?c.getBoundingClientRect().width:140)+12)*2,behavior:'smooth'}); }
   document.getElementById('fxPrev').addEventListener('click',function(){step(-1);}); document.getElementById('fxNext').addEventListener('click',function(){step(1);});
@@ -332,6 +339,7 @@ document.addEventListener('DOMContentLoaded',function(){
   </aside>
   <section class="fx" aria-labelledby="fx-title">
     <div class="fx-title"><h2 id="fx-title">Featured Experiences</h2></div>
+    <div class="fx-chips" role="group" aria-label="Filter featured experiences"><button type="button" class="eco-chip" data-f="" aria-pressed="true">All</button><button type="button" class="eco-chip" data-f="live" aria-pressed="false">Live now</button><button type="button" class="eco-chip" data-f="dev" aria-pressed="false">In development</button></div>
     <div class="fx-row"><button type="button" class="fx-nav" id="fxPrev" aria-label="Scroll featured experiences back" aria-controls="fxTrack">‹</button><ul class="fx-track" id="fxTrack"><li><a class="fx-tile" href="https://sync.jussco.company/"><span class="fx-glyph sync-art" aria-hidden="true">🎉</span><strong>SYNC</strong><small>Group play · Live</small></a></li><li><a class="fx-tile" href="#game-lumora"><span class="fx-glyph forest-art" aria-hidden="true">🌲✨</span><strong>LUMORA</strong><small>In development</small></a></li><li><a class="fx-tile" href="#game-chatquest"><span class="fx-glyph quest-art" aria-hidden="true">🧭🤖</span><strong>ChatQuest</strong><small>In development</small></a></li><li><a class="fx-tile" href="#game-bip-seek"><span class="fx-glyph bip-art" aria-hidden="true">🌙🪁</span><strong>Bip &amp; Seek</strong><small>In development</small></a></li><li><a class="fx-tile" href="#game-jungle-jinx"><span class="fx-glyph forest-art" aria-hidden="true">🐒🌿</span><strong>Jungle Jinx</strong><small>In development</small></a></li><li><a class="fx-tile" href="#game-last-laugh"><span class="fx-glyph city-art" aria-hidden="true">🎭🌆</span><strong>Last Laugh</strong><small>Private prototype</small></a></li></ul><button type="button" class="fx-nav" id="fxNext" aria-label="Scroll featured experiences forward" aria-controls="fxTrack">›</button></div>
     <div class="fx-dots" id="fxDots" aria-hidden="true"></div>
   </section>

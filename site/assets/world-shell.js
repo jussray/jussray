@@ -4,8 +4,8 @@
   var root = document.documentElement;
   var NAV = [
     ['Home', '/', 'home'], ['Portfolio', '/portfolio.html', 'portfolio'], ['Products', '/#products', 'products'],
-    ['Worlds', '/#worlds', 'worlds'], ['Solutions', '/services.html', 'services'], ['Our Work', '/work.html', 'work'],
-    ['Proof', '/#proof', 'proof'], ['Founder', '/#why', 'founder'], ['Contact', '/#contact', 'contact']
+    ['Solutions', '/services.html', 'services'], ['Our Work', '/work.html', 'work'],
+    ['Founder', '/#why', 'founder'], ['Contact', '/#contact', 'contact']
   ];
   var path = location.pathname.replace(/\/+$/, '') || '/';
   var current = { '/portfolio.html': 'portfolio', '/services.html': 'services', '/work.html': 'work' }[path] || '';

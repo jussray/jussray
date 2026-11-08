@@ -113,7 +113,7 @@ say(['truth-compass', 'truth-weaver', 'exact-match-engine'].every((slug) => proj
   await page.goto(url, { waitUntil: 'load' });
   await openView(page, '#contact');
   await page.locator('#copyBtn').click();
-  await openView(page, '#worlds');
+  await openView(page, '#world-details');
   await page.locator('.card').nth(3).click();
   const receipt = await page.evaluate(() => window.__jcConversionEvents);
   say(JSON.stringify(receipt.map((x) => x.name)) === JSON.stringify(['contact_click', 'world_detail_open']),
@@ -245,7 +245,7 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   say(await page.evaluate(() => Promise.all(['/assets/ideas-day.webp','/assets/ideas-sunset.webp','/assets/ideas-night.webp'].map((src) => new Promise((ok) => { const i = new Image(); i.onload = () => ok(i.naturalWidth > 0); i.onerror = () => ok(false); i.src = src; }))).then((r) => r.every(Boolean))), `${vp.n}: world stage scene art resolves`);
   say(['dawn','day','sunset','night'].includes(await page.getAttribute('body', 'data-atmo')), `${vp.n}: world stage atmosphere follows local time`);
   say(await page.evaluate(() => { const e = document.querySelector('#ecosystem').getBoundingClientRect(); const h = document.querySelector('.stage-hero').getBoundingClientRect(); return e.top >= h.bottom - 1; }), `${vp.n}: ecosystem band sits below the stage headline`);
-  if (vp.n === 'desktop') say((await page.locator('.navpill a').evaluateAll((as) => as.filter((a) => a.getBoundingClientRect().width > 0).length)) === 9, 'desktop: all nine primary nav links visible');
+  if (vp.n === 'desktop') say((await page.locator('.navpill a').evaluateAll((as) => as.filter((a) => a.getBoundingClientRect().width > 0).length)) === 7, 'desktop: all seven primary nav links visible (founder mockup set)');
   say((await page.locator('nav[aria-label="Footer"]').locator('a[href="/creative-history.html"], a[href="#live-sites"], a[href="#systems"], a[href="#resources"]').count()) === 4, `${vp.n}: destinations moved out of the nav stay reachable from the footer`);
   say(await page.evaluate(() => { const g = [...document.querySelectorAll('#ecoTrack .eco-glyph')]; return g.length > 0 && g.every((x) => x.classList.contains('has-icon') && x.querySelector('svg[data-icon]')); }), `${vp.n}: every ecosystem tile shows an illustrated icon, not letters`);
   say((await page.locator('#products .jc-feature').count()) === 3, `${vp.n}: three product pathways render`);
@@ -256,7 +256,7 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   say(await page.evaluate(() => getComputedStyle(document.querySelector('.hero')).display === 'none' && getComputedStyle(document.querySelector('#contact')).display === 'none'), `${vp.n}: landing is the world stage only (intro lives on Founder, contact on Contact)`);
   say(await page.evaluate(() => getComputedStyle(document.querySelector('.page-scene')).position === 'fixed'), `${vp.n}: one lake world behind every view`);
   await openView(page, '#contact'); say(await page.evaluate(() => getComputedStyle(document.querySelector('.site-foot')).display !== 'none'), `${vp.n}: shared footer shows on content views`); await openView(page, '#top');
-  await openView(page, '#worlds');
+  await openView(page, '#world-details');
   say((await page.$$('.card')).length === EXPECTED_WORLDS.length, `${vp.n}: ${EXPECTED_WORLDS.length} portfolio worlds`);
   say((await page.locator('.os-card').count()) === 5, `${vp.n}: five public standalone OS builds`);
   say(JSON.stringify(await page.evaluate(() => [...document.querySelectorAll('.os-card h3')].map((e) => e.textContent))) === JSON.stringify(expectedOS), `${vp.n}: standalone OS identities preserved`);
@@ -280,7 +280,7 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   say((await page.evaluate(() => [...document.querySelectorAll('a[href^="#"]')].map((a) => a.getAttribute('href')).filter((h) => h.length > 1 && !document.querySelector(h)).length)) === 0, `${vp.n}: no dead anchors`);
   const undersizedTargets = await page.evaluate(() => [...document.querySelectorAll('a,button')].filter((e) => { const b = e.getBoundingClientRect(); return b.width > 0 && b.height < 40; }).map((e) => ({ tag: e.tagName.toLowerCase(), className: String(e.className).slice(0, 100), text: (e.textContent || '').trim().slice(0, 48), height: Math.round(e.getBoundingClientRect().height * 10) / 10 })).slice(0, 16));
   say(undersizedTargets.length === 0, `${vp.n}: tap targets >= 40px${undersizedTargets.length ? ' — ' + JSON.stringify(undersizedTargets) : ''}`);
-  await openView(page, '#worlds');
+  await openView(page, '#world-details');
   await page.click('.card:nth-child(4)'); await page.waitForTimeout(200);
   say((await page.innerText('#dName')) === 'Juss Beautiful Hair', `${vp.n}: drawer opens JBH`);
   say(/jussbeautifulhair\.com/.test((await page.getAttribute('#dCta a', 'href')) || ''), `${vp.n}: JBH link present`);
@@ -302,10 +302,10 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   await openView(page, '#top');
   say(await page.evaluate(() => document.documentElement.scrollHeight <= innerHeight + 1 && getComputedStyle(document.querySelector('.site-foot')).display === 'none'), `${vp.n}: Home is one screen with no scroll (founder mockups)`);
   say(await page.evaluate(() => { const b = document.querySelector('.eco-band').getBoundingClientRect(); return b.width <= innerWidth && b.bottom <= innerHeight; }), `${vp.n}: ecosystem band fully on screen`);
-  for (const [hash, view, mustShow, mustHide] of [['#products','products','#live-sites','#worlds'],['#worlds','worlds','#systems','#proof'],['#proof','proof','#resources','#worlds'],['#why','founder','#why','#world'],['#contact','contact','#contact','#world']]) {
+  for (const [hash, view, mustShow, mustHide] of [['#product-details','products','#live-sites','#worlds'],['#world-details','worlds','#systems','#proof'],['#proof','proof','#resources','#worlds'],['#why','founder','#why','#world'],['#contact','contact','#contact','#world']]) {
     await openView(page, hash);
     const st = await page.evaluate(([v, a, b]) => ({ view: document.documentElement.dataset.currentView, shown: getComputedStyle(document.querySelector(a)).display !== 'none', hidden: getComputedStyle(document.querySelector(b)).display === 'none', nav: document.querySelector('.navpill a[aria-current="page"]')?.getAttribute('data-view-link') }), [view, mustShow, mustHide]);
-    say(st.view === view && st.shown && st.hidden && st.nav === view, `${vp.n}: ${hash} opens only the ${view} view and marks its nav button`);
+    say(st.view === view && st.shown && st.hidden && (st.nav === view || ((view === 'worlds' || view === 'proof') && !st.nav)), `${vp.n}: ${hash} opens only the ${view} view and marks its nav button`);
   }
   if (vp.n === 'mobile') {
     await openView(page, '#top');
@@ -316,6 +316,14 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
     say((await page.evaluate(() => document.documentElement.dataset.currentView)) === 'founder' && !(await page.locator('#primaryNav').isVisible()), 'mobile: menu link opens its view and closes the menu');
     await openView(page, '#proof');
   }
+  for (const [hash, title, nav] of [['#products', 'Our Products', 'products'], ['#worlds', 'Our Ecosystem', 'home'], ['#top', 'Our Ecosystem', 'home']]) {
+    await openView(page, hash); await page.waitForTimeout(60);
+    const cb = await page.evaluate(() => ({ view: document.documentElement.dataset.currentView, title: document.getElementById('eco-title').textContent, tiles: document.querySelectorAll('#ecoTrack .eco-cell').length, sites: document.querySelectorAll('#live-sites .live-site-card').length, nav: document.querySelector('.navpill a[aria-current]')?.getAttribute('data-view-link'), sh: document.documentElement.scrollHeight <= innerHeight + 1 }));
+    say(cb.view === 'home' && cb.title === title && cb.nav === nav && cb.sh && (title !== 'Our Products' || cb.tiles === cb.sites), `${vp.n}: ${hash} swaps the card box to ${title} on the one-screen landing`);
+  }
+  await openView(page, '#top'); await page.click('#ecoChips .eco-chip:nth-child(2)');
+  say(await page.evaluate(() => { const n = document.querySelectorAll('#ecoTrack .eco-cell').length; return n > 0 && n < 17 && document.querySelector('#ecoChips .eco-chip:nth-child(2)').getAttribute('aria-pressed') === 'true'; }), `${vp.n}: card box chips filter the projects`);
+  await openView(page, '#why'); await openView(page, '#contact');
   await page.goBack(); await page.waitForTimeout(80);
   say((await page.evaluate(() => document.documentElement.dataset.currentView)) === 'founder', `${vp.n}: back button returns to the previous view`);
   await openView(page, '#top');
@@ -382,7 +390,7 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'mobile', w: 390, h: 8
       overflow: document.documentElement.scrollWidth - innerWidth,
       small: [...document.querySelectorAll('header.top a')].filter((a) => { const b = a.getBoundingClientRect(); return b.width > 0 && b.height < 40; }).length
     }));
-    say(JSON.stringify(st.links.map((l) => l[0])) === JSON.stringify(['Home','Portfolio','Products','Worlds','Solutions','Our Work','Proof','Founder','Contact']) && st.links.every((l) => /^\/(#[a-z]+|[a-z]+\.html)?$/.test(l[1])), `shell ${vp.n}: ${file} carries the shared nine-button nav`);
+    say(JSON.stringify(st.links.map((l) => l[0])) === JSON.stringify(['Home','Portfolio','Products','Solutions','Our Work','Founder','Contact']) && st.links.every((l) => /^\/(#[a-z]+|[a-z]+\.html)?$/.test(l[1])), `shell ${vp.n}: ${file} carries the shared seven-button nav`);
     say(st.current === current, `shell ${vp.n}: ${file} marks its own nav button`);
     say(st.scene && st.overflow === 0 && st.small === 0, `shell ${vp.n}: ${file} has the lake world, no overflow, 40px+ header targets`);
     if (vp.n === 'mobile') say((await page.locator('.tabbar a').count()) === 5 && (await page.evaluate(() => getComputedStyle(document.querySelector('.tabbar')).position)) === 'fixed', `shell mobile: ${file} carries the shared bottom tab bar`);

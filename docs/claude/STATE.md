@@ -1,3 +1,19 @@
+## 2026-11-08 — The card box is the page (Juss: "card box should change and show the according projects", "same stuff, different device")
+
+- FIX (homepage):
+  - The landing stays one screen. Products swaps the box to "Our Products" (the 11 sites from #live-sites, so it uses the same source). Home and Worlds show "Our Ecosystem" (worlds plus public systems) with group chips: All, People & belonging, Ideas & systems, Stories & play.
+  - The full detail pages sit behind `#product-details` and `#world-details`, linked from the box.
+  - The nav is now the mockup's seven tabs (Home, Portfolio, Products, Solutions, Our Work, Founder, Contact) on the homepage and every shell page. Worlds, Proof and Systems stay reachable from the footer and the box.
+  - Phones show 3 tiles per view with edge arrows and dots. Desktop shows 6 or more across.
+- FIX (Game Hub): Featured Experiences has chips: All, Live now, In development.
+- FIX (Ideas): rebuilt to the founder's desktop and phone mockups.
+  - Desktop is one screen: left quote, center title, prompt pill and buttons, the lotus visible, a bottom band of 3 candidate cards (icon left, tags) and a right signals panel. It keeps the honest empty state, with no invented percentages. Sound and atmosphere sit bottom-left.
+  - The product chips are behind "Choose products to build from".
+  - Phones stack in the mockup's order.
+- PROOF (local): verify-site exit 0, 506 ok. New checks: box modes and the active nav, chip filtering. Nav-count and shell checks updated to seven tabs. `node --test` 86/87 (the known vitest gap). approved-stories passed. Screenshots reviewed: 390×844 (Products, Game Hub, Ideas) and 1440×900 (Home, Ideas).
+- BLOCKERS UNCHANGED: the unsigned 4fb6f02 replacement was denied by the session safety classifier, and the Production ruleset 26428639 needs fixes.
+- ROLLBACK: revert this commit.
+
 ## 2026-11-08 — One screen, no scroll (Juss: "we shouldn't have to scroll")
 
 - FIX: the homepage Home view and the Game Hub landing are now exactly one viewport, with no scroll, at 1440×900, 1672×941, 390×844 and 375×667.

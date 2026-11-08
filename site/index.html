@@ -661,6 +661,27 @@ html[data-current-view="home"] .stage{height:100vh;height:100dvh;min-height:0!im
   .eco-item,.stage .eco-item,.fx-tile{min-height:100px!important}
   .stage .eco-glyph.has-icon,.fx-glyph.has-icon{width:48px!important;height:48px!important}
 }
+
+/* Card box (Juss, 2026-11-08): tabs swap what the box shows; details live behind their own pages. */
+.eco-bar{display:flex;align-items:center;gap:8px;margin:-4px 0 8px;min-width:0}
+.eco-chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;min-width:0;flex:1 1 auto}
+.eco-chips::-webkit-scrollbar{display:none}
+.eco-chip{flex:0 0 auto;min-height:40px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,214,138,.35);background:rgba(10,6,34,.5);color:#e6dcff;font:600 12px/1 var(--f-body);cursor:pointer;white-space:nowrap}
+.eco-chip[aria-pressed="true"]{background:linear-gradient(180deg,#ffe3a8,#f3b25a);color:#2a1640;border-color:transparent}
+.eco-more{flex:0 0 auto;display:inline-flex;align-items:center;min-height:40px;padding:0 4px;color:#ffd98a;font:700 12px/1 var(--f-body);text-decoration:none;white-space:nowrap}
+.eco-dots{display:flex;justify-content:center;gap:6px;min-height:8px;margin-top:2px}
+.eco-dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.35)}.eco-dots i.on{background:#ffd98a}
+@media (min-width:1100px){.stage .eco-item{min-height:128px}}
+@media (max-width:1099px){
+  .stage .eco-row{position:relative;display:block}
+  .stage .eco-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:40px;height:40px;background:rgba(10,6,34,.85)}
+  #ecoPrev{left:-16px}#ecoNext{right:-16px}
+  .stage .eco-nav{width:34px;height:34px;font-size:18px}
+  .stage .eco-row{padding:0 12px}
+  .stage .eco-track{padding:2px 0 4px}
+  .stage .eco-cell{flex:0 0 calc((100% - 16px)/3)!important}
+  .eco-more{font-size:11px}
+}
 @media (prefers-reduced-motion:reduce){.stage-scene .art{transition:none}}
 </style>
 <link rel="stylesheet" href="/assets/signature-world.css">
@@ -677,10 +698,8 @@ html[data-current-view="home"] .stage{height:100vh;height:100dvh;min-height:0!im
       <a class="on" href="#top" data-view-link="home">Home</a>
       <a href="portfolio.html">Portfolio</a>
       <a href="#products" data-view-link="products">Products</a>
-      <a href="#worlds" data-view-link="worlds">Worlds</a>
       <a href="/services.html">Solutions</a>
       <a href="/work.html">Our Work</a>
-      <a href="#proof" data-view-link="proof">Proof</a>
       <a href="#why" data-view-link="founder">Founder</a>
       <a href="#contact" data-view-link="contact">Contact</a>
     </nav>
@@ -711,7 +730,7 @@ html[data-current-view="home"] .stage{height:100vh;height:100dvh;min-height:0!im
     <aside class="eco-panel" aria-labelledby="eco-panel-title">
       <h3 id="eco-panel-title">The Juss &amp; Co Ecosystem</h3>
       <ul>
-        <li><a href="#worlds"><b>Our Products</b><span>Flagship solutions, real impact.</span></a></li>
+        <li><a href="#products"><b>Our Products</b><span>Flagship solutions, real impact.</span></a></li>
         <li><a href="/portfolio.html"><b>Portfolio</b><span>See what we've built.</span></a></li>
         <li><a href="/services.html"><b>Solutions</b><span>Custom for your goals.</span></a></li>
         <li><a href="/work.html"><b>Our Work</b><span>Results, case studies, and proof.</span></a></li>
@@ -722,11 +741,13 @@ html[data-current-view="home"] .stage{height:100vh;height:100dvh;min-height:0!im
     <section class="eco" id="ecosystem" aria-labelledby="eco-title">
     <div class="eco-band">
       <div class="eco-title"><h2 id="eco-title">Our Ecosystem</h2></div>
+      <div class="eco-bar"><div class="eco-chips" id="ecoChips" role="group" aria-label="Filter the card box"></div><a class="eco-more" id="ecoMore" href="#world-details">Explore every world <span aria-hidden="true">→</span></a></div>
       <div class="eco-row">
         <button type="button" class="eco-nav" id="ecoPrev" aria-label="Scroll ecosystem back" aria-controls="ecoTrack">‹</button>
         <ul class="eco-track" id="ecoTrack" aria-label="Juss &amp; Co ecosystem"><li class="eco-cell"><p class="eco-empty" role="status">Loading the ecosystem from the public project data…</p></li></ul>
         <button type="button" class="eco-nav" id="ecoNext" aria-label="Scroll ecosystem forward" aria-controls="ecoTrack">›</button>
       </div>
+      <div class="eco-dots" id="ecoDots" aria-hidden="true"></div>
     </div>
     </section>
     <div class="stage-ctrl" aria-label="Atmosphere controls" role="group">
@@ -770,7 +791,7 @@ html[data-current-view="home"] .stage{height:100vh;height:100dvh;min-height:0!im
 </section>
 
 <!-- Public-facing product pathways. The links are real destinations, not claims of checkout or runtime verification. -->
-<section class="sec wrap jc-showcase" id="products" aria-labelledby="jc-products-title" data-view="products">
+<section class="sec wrap jc-showcase" id="products" aria-labelledby="jc-products-title" data-view="products"><span id="product-details" class="sr-only"></span>
   <div class="in">
     <div class="kicker mono">DISCOVER THE JUSS &amp; CO UNIVERSE</div>
     <div class="jc-showcase__heading">
@@ -838,7 +859,7 @@ html[data-current-view="home"] .stage{height:100vh;height:100dvh;min-height:0!im
 </section>
 
 <!-- ================= WORLDS ================= -->
-<section class="sec universe wrap" id="worlds" aria-labelledby="h-worlds" data-view="worlds">
+<section class="sec universe wrap" id="worlds" aria-labelledby="h-worlds" data-view="worlds"><span id="world-details" class="sr-only"></span>
   <div class="in">
     <div class="sec-head">
       <div>
@@ -1337,18 +1358,27 @@ Promise.all([
     return li;
   }
   function fetchJson(u){ return fetch(u,{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); }
-  Promise.all([fetchJson('data/worlds.json'), fetchJson('data/systems.json')]).then(function(res){
-    var frag=document.createDocumentFragment(), worlds=(res[0]&&res[0].worlds)||[], systems=(res[1]&&res[1].systems)||[];
-    worlds.forEach(function(w){
-      var open=!!(w.link&&w.link.url)&&w.st!=='soon';
-      frag.appendChild(cell(w.name, w.label||'Status pending', open?w.link.url:null));
-    });
-    systems.filter(function(s){return s.public&&s.publicUrl;}).forEach(function(s){
-      frag.appendChild(cell(s.name, s.label||s.status||'Published', s.publicUrl));
-    });
-    track.textContent='';
+  var title=document.getElementById('eco-title'), chipsEl=document.getElementById('ecoChips'), more=document.getElementById('ecoMore'), dots=document.getElementById('ecoDots');
+  var DATA={ecosystem:[],products:[]}, mode=document.documentElement.getAttribute('data-band')||'ecosystem', group='';
+  [].forEach.call(document.querySelectorAll('#live-sites .live-site-card'),function(c){ var h=c.querySelector('h3'), d=c.querySelector('p'), a=c.querySelector('a[href]'); if(h&&a) DATA.products.push({name:h.textContent.trim(), status:d?d.textContent.trim():'Public site', href:a.getAttribute('href')}); });
+  var MODES={ecosystem:{title:'Our Ecosystem',more:['#world-details','Explore every world']},products:{title:'Our Products',more:['#product-details','See every product page']}};
+  function paintDots(){ if(!dots) return; var pages=Math.max(1,Math.ceil(track.scrollWidth/Math.max(1,track.clientWidth)-0.05)); dots.textContent=''; if(pages<2) return; var cur=Math.round(track.scrollLeft/Math.max(1,track.clientWidth)); for(var i=0;i<pages;i++){ var d=document.createElement('i'); if(i===Math.min(cur,pages-1)) d.className='on'; dots.appendChild(d); } }
+  function chips(){ chipsEl.textContent=''; if(mode!=='ecosystem') return; var groups=[]; DATA.ecosystem.forEach(function(x){ if(x.group&&groups.indexOf(x.group)<0) groups.push(x.group); });
+    [''].concat(groups).forEach(function(gname){ var b=document.createElement('button'); b.type='button'; b.className='eco-chip'; b.textContent=gname||'All'; b.setAttribute('aria-pressed',String(gname===group)); b.addEventListener('click',function(){ group=gname; render(); }); chipsEl.appendChild(b); }); }
+  function render(){ var m=MODES[mode]||MODES.ecosystem; title.textContent=m.title; more.setAttribute('href',m.more[0]); more.firstChild.nodeValue=m.more[1]+' ';
+    var items=(DATA[mode]||[]).filter(function(x){ return mode!=='ecosystem'||!group||x.group===group; });
+    var frag=document.createDocumentFragment(); items.forEach(function(x){ frag.appendChild(cell(x.name,x.status,x.href)); });
+    track.textContent=''; track.scrollLeft=0;
     if(frag.childNodes.length) track.appendChild(frag);
-    else { var li=document.createElement('li'); li.className='eco-cell'; var p=document.createElement('p'); p.className='eco-empty'; p.setAttribute('role','status'); p.textContent='The ecosystem list is unavailable right now. See the full portfolio.'; li.appendChild(p); track.appendChild(li); }
+    else { var li=document.createElement('li'); li.className='eco-cell'; var p=document.createElement('p'); p.className='eco-empty'; p.setAttribute('role','status'); p.textContent='This list is unavailable right now. See the full portfolio.'; li.appendChild(p); track.appendChild(li); }
+    chips(); requestAnimationFrame(paintDots); }
+  document.addEventListener('jc:band',function(e){ if(e.detail!==mode){ mode=e.detail; group=''; render(); } });
+  track.addEventListener('scroll',paintDots,{passive:true}); window.addEventListener('resize',paintDots);
+  Promise.all([fetchJson('data/worlds.json'), fetchJson('data/systems.json')]).then(function(res){
+    var worlds=(res[0]&&res[0].worlds)||[], systems=(res[1]&&res[1].systems)||[];
+    worlds.forEach(function(w){ var open=!!(w.link&&w.link.url)&&w.st!=='soon'; DATA.ecosystem.push({name:w.name, status:w.label||'Status pending', href:open?w.link.url:null, group:(w.display&&w.display.group)||''}); });
+    systems.filter(function(x){return x.public&&x.publicUrl;}).forEach(function(x){ DATA.ecosystem.push({name:x.name, status:x.label||x.status||'Published', href:x.publicUrl, group:'Ideas & systems'}); });
+    mode=document.documentElement.getAttribute('data-band')||mode; render();
   });
   function step(dir){ var c=track.querySelector('.eco-cell'); var w=c?c.getBoundingClientRect().width+14:152; track.scrollBy({left:dir*w*2,behavior:'smooth'}); }
   if(prev) prev.addEventListener('click',function(){step(-1);});
@@ -1387,8 +1417,9 @@ wireMenu(document.querySelector('header.top'), document.getElementById('menuBtn'
 (function(){
   var root=document.documentElement; if(!root.classList.contains('views')) return;
   var secs=[].slice.call(document.querySelectorAll('[data-view]')), links=[].slice.call(document.querySelectorAll('[data-view-link]'));
-  var aliases={top:'home',home:'home',founder:'founder'};
-  function viewFor(id){ if(!id) return {view:'home'}; if(aliases[id]) return {view:aliases[id]};
+  var aliases={top:'home',home:'home',founder:'founder',products:'home',worlds:'home','product-details':'products','world-details':'worlds'};
+  var bands={products:'products',worlds:'ecosystem'};
+  function viewFor(id){ if(!id) return {view:'home',band:'ecosystem'}; if(aliases[id]) return {view:aliases[id],band:bands[id]||'ecosystem'};
     var el=document.getElementById(id); if(!el) return {view:'home'};
     var holder=el.closest('[data-view]'); if(!holder) return {view:'home'};
     var vs=holder.getAttribute('data-view').split(' '); var v=vs[vs.length-1];
@@ -1396,7 +1427,8 @@ wireMenu(document.querySelector('header.top'), document.getElementById('menuBtn'
   function show(initial){
     var id=decodeURIComponent(location.hash.slice(1)), r=viewFor(id);
     secs.forEach(function(s){ s.classList.toggle('view-on', s.getAttribute('data-view').split(' ').indexOf(r.view)>=0); });
-    links.forEach(function(a){ var on=a.getAttribute('data-view-link')===r.view; a.classList.toggle('on',on); if(on) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
+    var key=r.view==='home'&&r.band==='products'?'products':r.view; root.setAttribute('data-band', r.band||'ecosystem'); document.dispatchEvent(new CustomEvent('jc:band',{detail:r.band||'ecosystem'}));
+    links.forEach(function(a){ var on=a.getAttribute('data-view-link')===key; a.classList.toggle('on',on); if(on) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
     root.setAttribute('data-current-view', r.view);
     var first=secs.filter(function(s){return s.classList.contains('view-on');})[0];
     if(r.target && first && r.target!==first && !first.contains(r.target)) r.target.scrollIntoView({block:'start'});
