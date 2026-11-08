@@ -7,7 +7,6 @@ This is a guarded reconciliation tool, not authority to merge or deploy. It only
 - Have GitHub repository Administration (write) permission, and a scoped credential held outside source control.
 - Independently review the current ruleset's all-branch `~ALL` scope and bypass actors. Changing the global ruleset affects branches beyond `main`, including `Production`.
 - Review required deployment environments separately. This repair deliberately preserves all of them, including preview environments that may prevent merges.
-- Preserve the native requirement for one independent human approval on the exact current head. The repair refuses zero-approval rulesets and never creates, forges, or bypasses approvals.
 - Use a trusted checkout. Do not execute the write from `pull_request` or untrusted CI.
 
 ## Read-only plan
