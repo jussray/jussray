@@ -3,13 +3,13 @@
 (function () {
   var root = document.documentElement;
   var NAV = [
-    ['Home', '/', 'home'], ['Products', '/products.html', 'products'], ['Portfolio', '/portfolio.html', 'portfolio'],
+    ['Home', '/', 'home'], ['Portfolio', '/portfolio.html', 'portfolio'], ['Products', '/products.html', 'products'],
     ['Games', 'https://games.jussco.company/', 'games'], ['Solutions', '/services.html', 'services'],
-    ['Our Work', '/work.html', 'work'], ['Sites', '/sites.html', 'sites'],
+    ['Our Work', '/work.html', 'work'], ['Ideas', '/ideas.html', 'ideas'],
     ['Founder', '/founder.html', 'founder'], ['Contact', '/contact.html', 'contact']
   ];
   var path = location.pathname.replace(/\/+$/, '') || '/';
-  var current = { '/portfolio.html': 'portfolio', '/services.html': 'services', '/work.html': 'work' }[path] || '';
+  var current = { '/portfolio.html': 'portfolio', '/services.html': 'services', '/work.html': 'work', '/ideas.html': 'ideas' }[path] || '';
 
   function atmo() {
     var h = new Date().getHours();
@@ -45,7 +45,7 @@ function wireMenu(header, btn, nav){
     var nav = document.createElement('nav');
     nav.className = 'ws-nav'; nav.setAttribute('aria-label', 'Primary');
     NAV.forEach(function (n) {
-      var a = document.createElement('a'); a.href = n[1]; a.textContent = n[0];
+      var a = document.createElement('a'); a.href = n[1]; a.textContent = n[0]; if (/^https?:/.test(n[1])) a.rel = 'noopener noreferrer';
       if (n[2] === current) a.setAttribute('aria-current', 'page');
       nav.appendChild(a);
     });
@@ -53,8 +53,8 @@ function wireMenu(header, btn, nav){
     cta.className = 'ws-cta'; cta.href = '/services.html'; cta.textContent = 'Work with Juss →';
     var mb = document.createElement('button');
     mb.type = 'button'; mb.className = 'menu-btn'; mb.setAttribute('aria-expanded', 'false'); mb.setAttribute('aria-label', 'Open menu');
-    nav.id = 'wsNav'; mb.setAttribute('aria-controls', 'wsNav'); mb.innerHTML = '<span></span><span></span><span></span>';
-    header.appendChild(brand); if (current !== 'services') header.appendChild(cta); header.appendChild(mb); header.appendChild(nav);
+    nav.id = 'wsNav'; mb.setAttribute('aria-controls', 'wsNav'); mb.textContent = 'Menu \u2630';
+    header.appendChild(brand); header.appendChild(mb); header.appendChild(nav);
     wireMenu(header, mb, nav);
     var TABS = [['Home', '/', 'home'], ['Products', '/products.html', 'products'], ['Solutions', '/services.html', 'services'], ['Our Work', '/work.html', 'work'], ['Founder', '/founder.html', 'founder']];
     var ICON = {'home': '<path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/>', 'products': '<rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/>', 'solutions': '<path d="M12 3l9 5-9 5-9-5 9-5zM3 13l9 5 9-5"/>', 'work': '<path d="M3 18h18l1-11-6 4-4-7-4 7-6-4z"/>', 'founder': '<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/>'};
@@ -66,7 +66,11 @@ function wireMenu(header, btn, nav){
       if (t[2] === current) a.setAttribute('aria-current', 'page');
       bar.appendChild(a);
     });
-    document.body.appendChild(bar);
+    // Placeholders written [LIKE THIS] render as pending, never as raw brackets.
+    document.querySelectorAll('.ph').forEach(function (el) {
+      var t = el.textContent.trim(); var m = /^\[(.+)\]$/.exec(t);
+      if (m) { el.textContent = 'Pending: ' + m[1].toLowerCase(); el.setAttribute('data-placeholder', t); }
+    });
     var on = nav.querySelector('[aria-current]');
     if (on && on.scrollIntoView && nav.scrollWidth > nav.clientWidth) nav.scrollLeft = on.offsetLeft - 16;
   }

@@ -63,6 +63,23 @@ for (const vp of [{n:'desktop',w:1440,h:900},{n:'mobile',w:390,h:844}]) {
   say(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`${vp.n}: homepage has no horizontal overflow`);
   say(await page.evaluate(()=>document.documentElement.scrollHeight<innerHeight*3.8),`${vp.n}: homepage scroll is bounded`);
   say(await page.evaluate(()=>getComputedStyle(document.querySelector('.cinematic'),'::before').backgroundImage.includes('home-scene.webp')),`${vp.n}: cinematic background retained`);
+  // Founder mockup world stage (2026-11-08): crown, headline, ecosystem band from worlds.json, ambience controls.
+  await page.waitForFunction(()=>document.querySelectorAll('#ecoTrack .eco-tile').length>0,null,{timeout:5000});
+  const worldsData=JSON.parse(readFileSync(join(ROOT,'data/worlds.json'),'utf8')).worlds;
+  say((await page.locator('#ecoTrack .eco-tile').count())===worldsData.length,`${vp.n}: Our Ecosystem band renders every world from worlds.json`);
+  say(JSON.stringify(await page.locator('#ecoTrack .eco-tile small').allTextContents())===JSON.stringify(worldsData.map(w=>w.label)),`${vp.n}: band statuses equal founder-declared labels`);
+  say((await page.locator('#ecoTrack .eco-tile a').evaluateAll(a=>a.map(x=>x.getAttribute('href')))).every(h=>worldsData.some(w=>w.link?.url===h&&w.st!=='soon')),`${vp.n}: band links only real, non-held destinations`);
+  say((await page.locator('#ecoTrack a[href*="sekretbip"], #ecoTrack a[href*="storyengine" i]').count())===0,`${vp.n}: Se'kret Bip and StoryEngine get no product link from the band`);
+  say(/Creative Technology/.test(await page.locator('#landing-title').innerText()),`${vp.n}: mockup headline renders`);
+  const bandBox=await page.locator('.eco-band').boundingBox();
+  say(bandBox&&bandBox.y+bandBox.height<=vp.h+1,`${vp.n}: Our Ecosystem band is fully visible on the first screen`);
+  const perView=await page.evaluate(()=>{const t=document.querySelector('#ecoTrack');const r=t.getBoundingClientRect();return [...t.querySelectorAll('.eco-tile')].filter(e=>{const b=e.getBoundingClientRect();return b.left>=r.left-1&&b.right<=r.right+1}).length});
+  say(vp.n==='mobile'?perView===3:perView>=6,`${vp.n}: ${vp.n==='mobile'?'three':'six or more'} ecosystem tiles per view (${perView})`);
+  await page.click('#sound');
+  say((await page.getAttribute('#sound','aria-checked'))==='true',`${vp.n}: ambient sound toggles on a user gesture`);
+  const atmoBefore=await page.textContent('#atmoName');await page.click('#atmo');
+  say((await page.textContent('#atmoName'))!==atmoBefore,`${vp.n}: atmosphere cycles`);
+  say((await page.locator('.site-header a[href="/ideas.html"]').count())===1,`${vp.n}: Ideas is in the main navigation`);
   if(vp.n==='mobile') {
     const button=page.locator('.menu-toggle');const menu=page.locator('#site-navigation');
     say(!(await menu.isVisible()),'mobile: main navigation starts collapsed');
