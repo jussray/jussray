@@ -102,6 +102,24 @@ try {
       await page.waitForFunction(()=>document.documentElement.dataset.hubView==='home');
       assert.equal(await page.locator('html').getAttribute('data-hub-view'),'home','back opens the no-scroll landing');
       assert.equal(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight+1),true,'landing still fits after return');
+      await page.locator('#featured .featured-tile').nth(1).click();
+      await page.waitForFunction(()=>document.documentElement.dataset.hubView==='details');
+      assert.equal(await page.locator('#games .cards').isVisible(),true,'featured collection enters the existing All Games view');
+      await page.locator('#details-back').click();
+      await page.waitForFunction(()=>document.documentElement.dataset.hubView==='home');
+      await page.locator('#featured .featured-tile').nth(2).click();
+      await page.waitForFunction(()=>document.documentElement.dataset.hubView==='details');
+      assert.equal(await page.evaluate(()=>location.hash),'#lumora-world','featured world shortcut enters an existing upcoming game');
+      assert.equal(await page.locator('#lumora-world').isVisible(),true,'upcoming game details are shown');
+      assert.equal(await page.locator('#lumora-world a').count(),0,'unreleased world never gets a public play link');
+      await page.locator('#details-back').click();
+      await page.waitForFunction(()=>document.documentElement.dataset.hubView==='home');
+      await page.locator('.hero-actions a[href="#sync-world"]').click();
+      await page.waitForFunction(()=>document.documentElement.dataset.hubView==='details');
+      assert.equal(await page.locator('#sync-world .edition a').count(),3,'SYNC detail view retains all three actual destinations');
+      await page.locator('#details-back').click();
+      await page.waitForFunction(()=>document.documentElement.dataset.hubView==='home');
+      assert.equal(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight+1),true,'featured and SYNC navigation preserve no-scroll landing');
     }
     await page.screenshot({path:'proof/site/game-hub-'+label+'.png',fullPage:false});
     await page.close();
