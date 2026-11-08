@@ -73,6 +73,12 @@ try {
       await page.keyboard.press('Escape');
       assert.equal(await menu.getAttribute('aria-expanded'),'false','Escape closes mobile navigation');
       assert.equal(await page.locator('#game-hub-center').isVisible(),false,'Game Hub Center details start closed on mobile');
+      const track=page.locator('#featured-track');
+      const metrics=await track.evaluate(el=>({scrollWidth:el.scrollWidth,clientWidth:el.clientWidth,display:getComputedStyle(el).display,tiles:el.children.length}));
+      assert.equal(metrics.scrollWidth>metrics.clientWidth+5,true,'featured tiles scroll horizontally: '+JSON.stringify(metrics));
+      await page.locator('#featured-next').click();
+      await page.waitForTimeout(200);
+      assert.equal(await track.evaluate(el=>el.scrollLeft>0),true,'next reveals more featured tiles');
       const hubToggle=page.locator('#game-hub-toggle');
       assert.equal(await hubToggle.isVisible(),true,'mobile Game Hub disclosure is visible below the feature deck');
       assert.equal(await hubToggle.getAttribute('aria-expanded'),'false','mobile Game Hub Center exposes closed state');
@@ -80,11 +86,6 @@ try {
       assert.equal(await hubToggle.getAttribute('aria-expanded'),'true','Game Hub Center opens on demand');
       assert.equal(await page.locator('#game-hub-center').isVisible(),true,'Game Hub Center details are accessible after opening');
       assert.equal(await page.locator('#games .cards').isVisible(),false,'long game descriptions remain collapsed initially');
-      const track=page.locator('#featured-track');
-      assert.equal(await track.evaluate(el=>el.scrollWidth>el.clientWidth+5),true,'featured tiles scroll horizontally');
-      await page.locator('#featured-next').click();
-      await page.waitForTimeout(200);
-      assert.equal(await track.evaluate(el=>el.scrollLeft>0),true,'next reveals more featured tiles');
       await page.locator('#game-hub-center a[href="#games"]').click();
       await page.locator('#games .cards').waitFor({state:'visible'});
       assert.equal(await page.locator('html').getAttribute('data-hub-view'),'details','All Games has its own detail view');
