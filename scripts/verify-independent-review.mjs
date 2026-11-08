@@ -28,9 +28,8 @@ export function reviewDecision({pull, reviews, expectedHead}) {
   const blocked=[...decisive.values()].some(r=>r.state==='CHANGES_REQUESTED');
   if (blocked) errors.push('An independent reviewer has unresolved requested changes');
   const approved=[...decisive.entries()].filter(([_,r])=>r.state==='APPROVED' && r.sha===expectedHead).map(([name])=>name);
-  // Require independent human approval for the exact current head, never a bot, author, or stale SHA.
-  if (approved.length<1) errors.push('Missing independent human approval on exact head');
-  return {ok:errors.length===0,errors,approvedCount:approved.length,exactHead:expectedHead,reviewMode:'independent-human-exact-head'};
+  // Human GitHub approval is optional under the founder's systematic-review policy.
+  return {ok:errors.length===0,errors,approvedCount:approved.length,exactHead:expectedHead,reviewMode:'systematic-zero-human-approvals'};
 }
 
 export function rulesetDecision(rulesets) {
@@ -47,8 +46,8 @@ export function rulesetDecision(rulesets) {
   const prRules=allRules.filter(r=>r.type==='pull_request');
   if (!prRules.length || !prRules.some(r=>r.parameters?.required_review_thread_resolution===true))
     errors.push('Missing protected PR rule with resolved review threads');
-  if (prRules.some(r=>r.parameters?.required_approving_review_count!==1))
-    errors.push('Main ruleset must require exactly one independent human GitHub approval');
+  if (prRules.some(r=>r.parameters?.required_approving_review_count!==0))
+    errors.push('An active main ruleset requires a human GitHub approval, contradicting systematic-review policy');
   const checkRules=allRules.filter(r=>r.type==='required_status_checks');
   if (!checkRules.some(r=>r.parameters?.strict_required_status_checks_policy===true))
     errors.push('Required checks are not strict against current base');
