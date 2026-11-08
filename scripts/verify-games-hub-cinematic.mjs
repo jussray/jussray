@@ -29,7 +29,9 @@ try {
     page.on('pageerror',error=>errors.push(String(error)));
     const response=await page.goto('http://127.0.0.1:'+address.port+'/',{waitUntil:'load'});
     assert.equal(response?.status(),200);
-    assert.equal(await page.locator('#featured .featured-tile').count(),6,'six existing game identities in hub carousel');
+    assert.equal(await page.locator('#featured .featured-tile').count(),8,'six game worlds plus two collection shortcuts in featured carousel');
+    assert.deepEqual(await page.locator('#featured .featured-tile').evaluateAll(els=>els.slice(0,3).map(el=>el.querySelector('strong')?.textContent?.trim())),['SYNC','Juss & Co Games','Worlds & Experiences'],'first three cards match approved featured reference');
+    assert.equal(await page.locator('#featured .featured-icon').count(),3,'three prominent neon vector symbols label actual destinations');
     assert.equal(await page.locator('#games article.card').count(),6,'existing game detail cards preserved');
     assert.equal(await page.locator('#games article.card:has(.tag.wait) a').count(),0,'unreleased game cards have no public play links');
     assert.equal(await page.locator('.header-tools .utility').evaluateAll(nodes=>nodes.filter(el=>getComputedStyle(el).display!=='none').every(el=>{const box=el.getBoundingClientRect();return box.width>=44&&box.height>=44;})),true,'header tools meet 44px touch targets');
@@ -61,6 +63,7 @@ try {
     assert.equal(await page.locator('#games article.card[hidden]').count(),0,'Escape restores all game listings');
     assert.equal(await page.locator('#games .cards').isVisible(),label==='desktop','Escape restores progressive mobile disclosure');
     assert.deepEqual(errors,[],'no page script errors');
+    await page.screenshot({path:'proof/site/game-hub-'+label+'-initial.png',fullPage:false});
     if(label!=='desktop'){
       assert.equal(await page.locator('html').getAttribute('data-hub-view'),'home','mobile lands on the one-screen hub');
       assert.equal(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight+1),true,'landing has no vertical scrolling');
@@ -77,6 +80,8 @@ try {
       const metrics=await track.evaluate(el=>({scrollWidth:el.scrollWidth,clientWidth:el.clientWidth,display:getComputedStyle(el).display,tiles:el.children.length}));
       assert.equal(metrics.clientWidth<=width-24,true,'featured viewport stays within the phone screen: '+JSON.stringify(metrics));
       assert.equal(metrics.scrollWidth>metrics.clientWidth+5,true,'featured tiles scroll horizontally: '+JSON.stringify(metrics));
+      assert.equal(await track.evaluate(el=>el.children[2].getBoundingClientRect().right<=el.getBoundingClientRect().right+1),true,'three featured destinations fit on initial phone screen');
+      assert.equal(await track.evaluate(el=>el.children[3].getBoundingClientRect().left>=el.getBoundingClientRect().right-1),true,'fourth featured destination requires horizontal swipe');
       await page.locator('#featured-next').click();
       await page.waitForTimeout(200);
       assert.equal(await track.evaluate(el=>el.scrollLeft>0),true,'next reveals more featured tiles');

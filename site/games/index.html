@@ -295,6 +295,23 @@ header .brand{font-size:23px}.brand .crown{font-size:27px;margin-right:7px}
  #featured h2{font-size:21px}
 }
 @media(prefers-reduced-motion:reduce){#hub-bottom-nav *{transition:none!important}}
+
+/* Refined featured experience glass deck: three cards visible, additional cards swipe horizontally. */
+#featured .featured-icon{display:block;width:100%;max-width:94px;height:63px;overflow:visible;filter:drop-shadow(0 0 8px #a963ffab)}
+#featured .featured-tile{border-color:#f3ad819d;box-shadow:inset 0 1px #fff6,0 0 16px #da78d861}
+#featured .featured-tile strong{max-width:100%;text-wrap:balance}
+@media(max-width:800px){
+ #featured{padding:9px 21px 8px}
+ #featured .featured-track{gap:7px}
+ #featured .featured-tile{flex:0 0 calc((100% - 14px)/3);min-width:0;padding:5px 3px}
+ #featured .featured-icon{height:clamp(40px,7dvh,58px);max-width:100%}
+ #featured .featured-tile strong{font-size:clamp(12px,3.6vw,17px);line-height:1.07}
+ #featured .featured-tile small{font-size:clamp(8px,2.1vw,10px);letter-spacing:.06em}
+ #featured .featured-toolbar{position:absolute;left:4px;right:4px;top:54%;transform:translateY(-50%);justify-content:space-between;height:auto;pointer-events:none;z-index:3}
+ #featured .featured-toolbar button{min-width:26px;min-height:34px;width:26px;pointer-events:auto;border-color:#ffcb96ad;border-radius:50%;background:#291b43e8;box-shadow:0 0 12px #ffc58577;color:#ffebd9}
+ #featured .featured-tile:nth-child(2) small,#featured .featured-tile:nth-child(3) small{display:none}
+ #featured .featured-tile:nth-child(2) strong,#featured .featured-tile:nth-child(3) strong{font-family:Georgia,serif;font-weight:500;letter-spacing:-.03em}
+}
 </style>
 </head>
 <body>
@@ -335,7 +352,15 @@ header .brand{font-size:23px}.brand .crown{font-size:27px;margin-right:7px}
 </section>
 <section id="featured" aria-labelledby="featured-title"><h2 id="featured-title">✦ &nbsp; Featured Experiences &nbsp; ✦</h2>
 <div class="featured-track" id="featured-track">
-<a class="featured-tile" href="#sync-world"><span class="symbol" aria-hidden="true">∞</span><strong>SYNC</strong><small>Group play · Explore editions</small></a>
+<a class="featured-tile" href="#sync-world">
+<svg class="featured-icon" viewBox="0 0 132 78" aria-hidden="true" focusable="false"><defs><linearGradient id="sync-feature-gradient" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#ff8b73"/><stop offset=".32" stop-color="#ff40dc"/><stop offset=".7" stop-color="#874aff"/><stop offset="1" stop-color="#1ee4ff"/></linearGradient></defs><path d="M 11 40 C 21 12 48 12 66 40 C 82 68 110 68 121 40 C 110 12 82 12 66 40 C 48 68 21 68 11 40" stroke="url(#sync-feature-gradient)" stroke-width="11" fill="none" stroke-linejoin="round" stroke-linecap="round" opacity=".32"/><path d="M 11 40 C 21 12 48 12 66 40 C 82 68 110 68 121 40 C 110 12 82 12 66 40 C 48 68 21 68 11 40" stroke="url(#sync-feature-gradient)" stroke-width="6" fill="none" stroke-linejoin="round" stroke-linecap="round"/></svg>
+<strong>SYNC</strong><small>GROUP PLAY</small></a>
+<a class="featured-tile" href="#games">
+<svg class="featured-icon" viewBox="0 0 132 78" aria-hidden="true" focusable="false"><path d="M30 29Q33 20 47 23L63 27Q66 28 69 27L85 23Q99 20 102 29L115 58Q118 70 107 71Q99 72 88 58L78 50H54L43 58Q32 72 24 70Q13 69 16 58Z" fill="#2c1759" stroke="#bd70ff" stroke-width="3.5"/><path d="M41 34v19M32 43h18" stroke="#f0b8ff" stroke-width="5" stroke-linecap="round"/><circle cx="88" cy="38" r="4" fill="#e891ff"/><circle cx="99" cy="47" r="4" fill="#63dfff"/><circle cx="77" cy="47" r="3.5" fill="#ffcb7c"/><circle cx="87" cy="56" r="3" fill="#9d7aff"/></svg>
+<strong>Juss &amp; Co Games</strong><small>GAME COLLECTION</small></a>
+<a class="featured-tile" href="#lumora-world">
+<svg class="featured-icon" viewBox="0 0 132 78" aria-hidden="true" focusable="false"><defs><linearGradient id="worlds-feature-gradient" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#4ff6ff"/><stop offset=".5" stop-color="#7c5aff"/><stop offset="1" stop-color="#ffc46e"/></linearGradient></defs><circle cx="66" cy="39" r="30" fill="#19376c" stroke="url(#worlds-feature-gradient)" stroke-width="3"/><path d="M39 34l13-13 13 7-4 12-13 5-6-3m28-18 15 7-2 16-10 7-10-5" stroke="#64d8f7" stroke-width="3" fill="none"/><ellipse cx="66" cy="39" rx="58" ry="17" transform="rotate(-12 66 39)" fill="none" stroke="#ffbc79" stroke-width="3.5"/><circle cx="114" cy="28" r="4" fill="#ffd789"/></svg>
+<strong>Worlds &amp; Experiences</strong><small>DISCOVER WORLDS</small></a>
 <a class="featured-tile" href="#lumora-world"><span class="symbol" aria-hidden="true">✧</span><strong>LUMORA</strong><small>Learning adventure · Building</small></a>
 <a class="featured-tile" href="#chatquest-world"><span class="symbol" aria-hidden="true">◇</span><strong>ChatQuest</strong><small>Co-op adventure · Building</small></a>
 <a class="featured-tile" href="#bipseek-world"><span class="symbol" aria-hidden="true">☾</span><strong>Bip &amp; Seek</strong><small>Bip universe · Building</small></a>
