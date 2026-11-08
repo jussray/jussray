@@ -646,3 +646,15 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
   - Tests changed to match the founder images, replacing main's earlier reference: verify-games-hub-cinematic (6 tiles, Center rows, phone flow, search on desktop only); verify-site ("Work with Juss" compact rather than absent; subline).
   - Remaining deviations (confess): the Game Hub keeps a search icon on desktop (functional, tested); the homepage nav keeps a "Games" link.
 - 2026-11-08: Juss confirmed the Game Hub worlds belong there ("Yes they belong there remember?"): SYNC, LUMORA, ChatQuest, Bip & Seek, Jungle Jinx, Last Laugh. Recorded as a standing rule in CLAUDE.md. This finding is closed. Still open: whether sekretbip.net is live. Until then the homepage band leaves Se'kret Bip unlinked.
+
+## HANDOFF for a new session (2026-11-08 ~21:00 UTC)
+- **PR #68** `claude/sleepy-mayer-1s8avr`, head `d72dcf8`, 0 commits behind main `2309b55`. GitHub mergeable_state: **blocked**.
+- **Green on the exact head:** Site Browser Proof, verify, Repo Reality, Review Gate Unit Tests, GitGuardian, qr-assets, receipts, and both Cloudflare preview builds.
+- **Red:** Independent Review Evidence. The log says the Production ruleset 26428639 (1) requires a human approval, which contradicts policy; (2) lists none of the 4 required checks; (3) does not block force pushes or deletion. No review exists, and Juss cannot approve his own PR.
+- **Merge authority:** Juss has approved the merge. Do not bypass the gate. Merge only when every check is green on the exact head, then re-observe jussco.company and games.jussco.company.
+- **Founder decisions:**
+  - Done: keep main's architecture and implant the mockups; the Game Hub worlds belong.
+  - Open: is sekretbip.net live? (The homepage band leaves "Opening soon" unlinked.)
+- **Known deviations from the mockups:** "Games" link in the homepage nav; search icon on the Game Hub desktop; icons are redrawn, not the founder's artwork; no homepage phone mockup exists.
+- **Remaining audit items, not done:** universe about 26 phone screens; portfolio about 11; ideas and opportunity-engine share a title and h1; tap targets on creative-history, returns and licensing.
+- **Local proof commands:** see CLAUDE.md "Runtime for Claude". Playwright needs `NODE_PATH=$(npm root -g)` or a `node_modules/playwright` symlink.
