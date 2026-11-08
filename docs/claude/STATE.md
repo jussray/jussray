@@ -619,3 +619,9 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
 - Superseded: the earlier "FCR hosts serve FCR code only" reading and attaching truthcompass/truthweaver.foundercontrolroom.org to founder-control-room Pages (wrong).
 - 2026-10-27: both FCR-branded URLs dropped per Juss: DNS CNAMEs deleted in the FCR zone and both hostnames removed from founder-control-room Pages. Readback: 0 `truth*` records, 0 `truth*` redirect rules in the FCR zone.
 - Open: compass.jussco.company is still a 302 to fcr-truth-compass.lovable.app. Real domain needs Juss to add it in Lovable (yields the `_lovable` TXT). truthweaver.jussco.company is already a real Lovable domain (A 185.158.133.1 DNS-only).
+
+## 2026-11-08 19:40 UTC — PR #68 diverged from main
+- PR #68 head `2f72569` (5 governance commits added by another session after `3586fd5`). mergeable_state: dirty.
+- main `2309b55` is 56 commits ahead: founder-merged #69 replaced the homepage with a 45-line compact landing plus separate destination pages (products, founder, contact, sites) and rebuilt the Game Hub phone view.
+- A trial merge of main conflicts in `site/index.html` (whole file), `site/games/index.html` (2 large hunks) and `scripts/verify-site.mjs` (3 small hunks). The merge was aborted. Nothing was pushed.
+- Gate: Juss must pick the homepage/Game Hub direction (main's separate pages, or #68's views plus card box). Merge stays held.
