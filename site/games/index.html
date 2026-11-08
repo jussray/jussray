@@ -436,6 +436,21 @@ header nav a[aria-current="page"]{background:linear-gradient(180deg,#ffe2a3,#f5b
  .hub-crown{display:block;margin:0 auto 2px}
 }
 @media(max-width:800px){#game-hub-toggle{width:auto;height:auto;margin:0 auto}#game-hub-toggle:after,#game-hub-toggle[aria-expanded="true"]:after{content:none}}
+/* Review fixes 2026-11-08: dawn art, slider target, short laptops, ambience clear of featured. */
+html[data-tod=dawn] #living-world-scene .tod-art{background-image:url('/assets/ideas-sunset.webp');opacity:1}
+#ambient-volume{min-height:44px;margin:8px 0}
+@media(min-width:801px) and (max-width:1500px){#ambience{width:212px}}
+@media(min-width:801px) and (max-height:800px){
+ .hero{padding-top:12px;min-height:480px}.hub-crown{width:40px;height:30px;margin-bottom:2px}
+ .hero h1{font-size:clamp(52px,5.4vw,76px);margin:4px 0}
+ .hero .description{margin-top:4px}.hub-sig{font-size:28px;margin-top:2px}.hero-actions{margin-top:10px}
+ .hero-quote{top:80px;font-size:17px}#game-hub-center{top:20px}#game-hub-center a{padding:8px 12px}
+ #featured{margin-top:-120px;padding:10px 16px 12px}#featured h2{margin-bottom:8px;font-size:30px}
+ .featured-tile{height:150px}
+ #ambience{bottom:16px;padding:12px}
+}
+@media(min-width:801px) and (max-width:1400px){#featured{margin-left:max(250px,calc((100% - 940px)/2));margin-right:auto;max-width:min(940px,calc(100% - 262px))}}
+@media(min-width:801px) and (max-height:800px){#game-hub-center{padding:12px}#game-hub-center h2{font-size:22px;margin-bottom:6px}#game-hub-center a{padding:6px 12px;font-size:14px}#game-hub-center a small{font-size:12px;margin-top:2px}#featured{margin-top:-100px}}
 </style>
 </head>
 <body>

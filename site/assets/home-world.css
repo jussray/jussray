@@ -83,3 +83,7 @@ html[data-tod=night] .tod-art{background-image:url('/assets/ideas-night.webp');o
 .work-cta:hover{border-color:#ffd98a;color:#ffd98a}
 @media(max-width:1100px){.work-cta{display:none}}
 @media(max-width:760px){.subline{font-size:9.5px;letter-spacing:.12em;margin-bottom:4px}.world-stage .sig{font-size:24px;margin-top:2px}.stage-controls .vol{display:none}}
+
+/* Dawn gets its own art; sunset is home-scene. Slider tap target >= 44px. */
+html[data-tod=dawn] .tod-art{background-image:url('/assets/ideas-sunset.webp');opacity:1}
+.vol{min-height:44px}

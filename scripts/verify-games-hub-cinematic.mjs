@@ -23,7 +23,7 @@ if(!address || typeof address==='string')throw Error('test server unavailable');
 const browser=await chromium.launch({headless:true});
 await mkdir('proof/site',{recursive:true});
 try {
-  for(const [label,width,height] of [['desktop',1440,900],['mobile',390,844],['compact',360,667]]) {
+  for(const [label,width,height] of [['desktop',1440,900],['laptop',1280,720],['mobile',390,844],['compact',360,667]]) {
     const page=await browser.newPage({viewport:{width,height},reducedMotion:'reduce'});
     const errors=[];
     page.on('pageerror',error=>errors.push(String(error)));
@@ -53,7 +53,7 @@ try {
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,'no horizontal overflow');
     assert.equal(await page.locator('#ambient-toggle').getAttribute('aria-pressed'),'false','audio off initially');
     await page.screenshot({path:'proof/site/game-hub-'+label+'-initial.png',fullPage:false});
-    if(label==='desktop'){
+    if(width>800){
     await page.locator('#search-toggle').click();
     assert.equal(await page.locator('#search-toggle').getAttribute('aria-expanded'),'true','search exposes expanded state');
     await page.locator('#game-search').fill('LUMORA');
@@ -66,12 +66,14 @@ try {
     await page.keyboard.press('Escape');
     assert.equal(await page.locator('#search-panel').isVisible(),false,'Escape closes search');
     assert.equal(await page.locator('#games article.card[hidden]').count(),0,'Escape restores all game listings');
+    } else {
+      assert.equal(await page.locator('#search-toggle').isVisible(),false,'phone header shows only the menu button, by founder phone mockup (search is a desktop tool)');
     }
     assert.equal(await page.locator('#games .cards').isVisible(),false,'every width lands on the one-screen hub');
     assert.equal(await page.locator('html').getAttribute('data-hub-view'),'home','hub lands on its one-screen view at every width');
     assert.equal(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight+1),true,'hub landing has no vertical scrolling at '+label);
     assert.deepEqual(errors,[],'no page script errors');
-    if(label!=='desktop'){
+    if(width<=800){
       assert.equal(await page.locator('html').getAttribute('data-hub-view'),'home','mobile lands on the one-screen hub');
       assert.equal(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight+1),true,'landing has no vertical scrolling');
       assert.equal(await page.locator('#hub-bottom-nav a').count(),5,'all five company page destinations are available');

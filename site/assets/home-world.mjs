@@ -33,6 +33,7 @@ $('#sound')?.addEventListener('click', async () => {
 });
 
 const BADGE = { "Se'kret Bip": 'SK' }; // founder mockup badge
+document.addEventListener('visibilitychange', () => { if (document.hidden && audio && $('#sound')?.getAttribute('aria-checked') === 'true') { gain.gain.setTargetAtTime(0, audio.currentTime, 0.1); $('#sound').setAttribute('aria-checked', 'false'); } });
 const initials = (name) => BADGE[name] || name.replace(/[’']/g, '').split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
 // CLAUDE.md: no public product link before a front door is live, so "Opening soon" worlds stay unlinked.
 const linkable = (w) => w.link?.url && w.st !== 'soon';

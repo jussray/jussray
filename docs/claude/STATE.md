@@ -658,3 +658,11 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
 - **Known deviations from the mockups:** "Games" link in the homepage nav; search icon on the Game Hub desktop; icons are redrawn, not the founder's artwork; no homepage phone mockup exists.
 - **Remaining audit items, not done:** universe about 26 phone screens; portfolio about 11; ideas and opportunity-engine share a title and h1; tap targets on creative-history, returns and licensing.
 - **Local proof commands:** see CLAUDE.md "Runtime for Claude". Playwright needs `NODE_PATH=$(npm root -g)` or a `node_modules/playwright` symlink.
+- 2026-11-08 ~21:20 UTC, independent review of PR #68 (fresh subagent): nothing blocking. Fixed all six findings:
+  1. Phone search: kept hidden per the founder phone mockup. The test now asserts it is hidden on purpose instead of skipping the check.
+  2. Game Hub now fits 1280x720 (short-height rules), and the ambience box no longer covers the featured panel. The test gained a 1280x720 case.
+  3. Dawn uses `ideas-sunset` art on the homepage and the Game Hub (copied into `games/assets`).
+  4. Removed the dead CTA and tab-bar code from `world-shell.js`.
+  5. Volume sliders are now 44px tap targets.
+  6. Homepage sound stops in background tabs.
+  - All site-proof steps pass locally.
