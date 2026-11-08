@@ -645,3 +645,4 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
   - Homepage: the mockup subline, script signature, volume slider, ecosystem panel copy (6 rows), "SK" badge, a compact "Work with Juss" button; Game Hub moved to the footer.
   - Tests changed to match the founder images, replacing main's earlier reference: verify-games-hub-cinematic (6 tiles, Center rows, phone flow, search on desktop only); verify-site ("Work with Juss" compact rather than absent; subline).
   - Remaining deviations (confess): the Game Hub keeps a search icon on desktop (functional, tested); the homepage nav keeps a "Games" link.
+- 2026-11-08: Juss confirmed the Game Hub worlds belong there ("Yes they belong there remember?"): SYNC, LUMORA, ChatQuest, Bip & Seek, Jungle Jinx, Last Laugh. Recorded as a standing rule in CLAUDE.md. This finding is closed. Still open: whether sekretbip.net is live. Until then the homepage band leaves Se'kret Bip unlinked.
