@@ -76,6 +76,11 @@ try {
     const download=await downloadEvent;
     assert.match(download.suggestedFilename(),/opportunity.*\.md/);
     if(label==='mobile'){
+      const deck=page.locator('#cards');
+      assert.equal(await deck.getAttribute('role'),'region','opportunity candidate deck is a labeled keyboard-accessible region');
+      assert.equal(await deck.getAttribute('tabindex'),'0','candidate deck is keyboard focusable');
+      assert.equal(await deck.evaluate(el=>el.scrollWidth>el.clientWidth+10),true,'mobile candidates swipe horizontally instead of stacking');
+      assert.match(await page.locator('#deck-swipe-hint').innerText(),/swipe/i,'swipe affordance is visible');
       await page.locator('#mobile-menu').click();
       assert.equal(await page.locator('#mobile-menu').getAttribute('aria-expanded'),'true');
     }
