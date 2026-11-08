@@ -38,7 +38,7 @@ test('standalone destinations reject challenge and unrelated pages',()=>{
 });
 
 test('production Games hub proof requires the actual Game Hub heading, playable SYNC and honest unreleased status',()=>{
-  const valid='---\\ntitle: "Juss & Co. Games | SYNC Party, Chat SYNC & Lovable SYNC"\\n---\\n# Game Hub\\n[Play Live SYNC ↗](https://sync.jussco.company/)\\nLUMORA · In development\\nLast Laugh · Private prototype';
+  const valid='---\ntitle: "Juss & Co. Games | SYNC Party, Chat SYNC & Lovable SYNC"\n---\n# Game Hub\n[Play Live SYNC ↗](https://sync.jussco.company/)\nLUMORA · In development\nLast Laugh · Private prototype';
   assert.doesNotThrow(()=>verifyGamesHubMarkdown(valid));
   assert.throws(()=>verifyGamesHubMarkdown(valid.replace('# Game Hub','# Choose your next adventure.')),/Game Hub heading/);
   assert.throws(()=>verifyGamesHubMarkdown(valid.replace('https://sync.jussco.company/','https://other.invalid/')),/live SYNC destination/);
