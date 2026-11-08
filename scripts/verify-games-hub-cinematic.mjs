@@ -44,8 +44,26 @@ try {
     assert.equal(await page.locator('#ambient-toggle').getAttribute('aria-pressed'),'false','audio off initially');
     assert.deepEqual(errors,[],'no page script errors');
     if(label==='mobile'){
-      await page.locator('#mobile-menu').click();
-      assert.equal(await page.locator('#mobile-menu').getAttribute('aria-expanded'),'true','mobile nav opens');
+      const menu=page.locator('#mobile-menu');
+      await menu.click();
+      assert.equal(await menu.getAttribute('aria-expanded'),'true','mobile nav opens');
+      await page.keyboard.press('Escape');
+      assert.equal(await menu.getAttribute('aria-expanded'),'false','Escape closes mobile navigation');
+      assert.equal(await page.locator('#game-hub-center').isVisible(),false,'Game Hub Center details start closed on mobile');
+      const hubToggle=page.locator('#game-hub-toggle');
+      assert.equal(await hubToggle.getAttribute('aria-expanded'),'false','mobile Game Hub Center exposes closed state');
+      await hubToggle.click();
+      assert.equal(await hubToggle.getAttribute('aria-expanded'),'true','Game Hub Center opens on demand');
+      assert.equal(await page.locator('#game-hub-center').isVisible(),true,'Game Hub Center details are accessible after opening');
+      assert.equal(await page.locator('#games .cards').isVisible(),false,'long game descriptions remain collapsed initially');
+      await page.locator('#game-hub-center a[href="#games"]').click();
+      assert.equal(await page.locator('#games .cards').isVisible(),true,'All Games opens the full collection');
+      const track=page.locator('#featured-track');
+      assert.equal(await track.evaluate(el=>el.scrollWidth>el.clientWidth+5),true,'mobile feature cards scroll horizontally');
+      await page.locator('#featured-next').click();
+      await page.waitForTimeout(200);
+      assert.equal(await track.evaluate(el=>el.scrollLeft>0),true,'carousel next control reveals more games');
+      assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,'mobile interactions never create horizontal overflow');
     }
     await page.screenshot({path:'proof/game-hub/'+label+'.png',fullPage:false});
     await page.close();
