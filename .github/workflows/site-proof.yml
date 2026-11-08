@@ -61,6 +61,10 @@ jobs:
         run: node --test scripts/public-resources.test.mjs
       - name: Verify exact-source site and Games locally in Chromium
         run: node scripts/verify-site.mjs
+      - name: Verify Game Hub cinematic mobile controls and existing game boundaries
+        run: node scripts/verify-games-hub-cinematic.mjs
+      - name: Verify Opportunity Engine mobile candidates and honest research status
+        run: node scripts/verify-opportunity-engine.mjs
       - name: Verify licensing page on desktop and mobile in Chromium
         run: node scripts/verify-licensing-page.mjs
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
