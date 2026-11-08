@@ -59,7 +59,7 @@ for (const vp of [{n:'desktop',w:1440,h:900},{n:'mobile',w:390,h:844}]) {
   say((await page.locator('.site-header a[href="/products.html"]').count())===1,`${vp.n}: products has a proper page route`);
   say((await page.locator('.site-header a[href="/portfolio.html"]').count())===1,`${vp.n}: portfolio has a proper page route`);
   say((await page.locator('a[href="https://games.jussco.company/"]').count())>=2,`${vp.n}: game hub remains independent`);
-  say(!(await page.locator('body').innerText()).includes('Work with Juss'),`${vp.n}: oversized work button absent`);
+  { const cta=page.locator('.site-header .work-cta'); const shown=await cta.isVisible(); say(!shown||(await cta.boundingBox()).height<=48,`${vp.n}: Work with Juss stays a compact header button (founder mockup), never oversized`); }
   say(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`${vp.n}: homepage has no horizontal overflow`);
   say(await page.evaluate(()=>document.documentElement.scrollHeight<innerHeight*3.8),`${vp.n}: homepage scroll is bounded`);
   say(await page.evaluate(()=>getComputedStyle(document.querySelector('.cinematic'),'::before').backgroundImage.includes('home-scene.webp')),`${vp.n}: cinematic background retained`);
@@ -70,7 +70,7 @@ for (const vp of [{n:'desktop',w:1440,h:900},{n:'mobile',w:390,h:844}]) {
   say(JSON.stringify(await page.locator('#ecoTrack .eco-tile small').allTextContents())===JSON.stringify(worldsData.map(w=>w.label)),`${vp.n}: band statuses equal founder-declared labels`);
   say((await page.locator('#ecoTrack .eco-tile a').evaluateAll(a=>a.map(x=>x.getAttribute('href')))).every(h=>worldsData.some(w=>w.link?.url===h&&w.st!=='soon')),`${vp.n}: band links only real, non-held destinations`);
   say((await page.locator('#ecoTrack a[href*="sekretbip"], #ecoTrack a[href*="storyengine" i]').count())===0,`${vp.n}: Se'kret Bip and StoryEngine get no product link from the band`);
-  say(/Creative Technology/.test(await page.locator('#landing-title').innerText()),`${vp.n}: mockup headline renders`);
+  say(/Creative Technology/.test(await page.locator('#landing-title').innerText())&&/AI-powered product creation/i.test(await page.locator('.subline').innerText()),`${vp.n}: mockup headline and subline render`);
   const bandBox=await page.locator('.eco-band').boundingBox();
   say(bandBox&&bandBox.y+bandBox.height<=vp.h+1,`${vp.n}: Our Ecosystem band is fully visible on the first screen`);
   const perView=await page.evaluate(()=>{const t=document.querySelector('#ecoTrack');const r=t.getBoundingClientRect();return [...t.querySelectorAll('.eco-tile')].filter(e=>{const b=e.getBoundingClientRect();return b.left>=r.left-1&&b.right<=r.right+1}).length});

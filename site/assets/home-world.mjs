@@ -23,14 +23,17 @@ function startSound() {
   [196, 246.94, 293.66, 392].forEach((f, i) => { const o = audio.createOscillator(); o.type = i % 2 ? 'sine' : 'triangle'; o.frequency.value = f; o.detune.value = (i - 1.5) * 4; const g = audio.createGain(); g.gain.value = 0.06; o.connect(g); g.connect(filter); o.start(); });
   return true;
 }
+const level = () => (+($('#vol')?.value ?? 40) / 100) * 0.5;
+$('#vol')?.addEventListener('input', () => { if (audio && $('#sound').getAttribute('aria-checked') === 'true') gain.gain.setTargetAtTime(level(), audio.currentTime, 0.2); });
 $('#sound')?.addEventListener('click', async () => {
   const btn = $('#sound'); const on = btn.getAttribute('aria-checked') !== 'true';
   if (on && !audio && !startSound()) return;
-  if (audio) { await audio.resume(); gain.gain.setTargetAtTime(on ? 0.22 : 0, audio.currentTime, 0.4); }
+  if (audio) { await audio.resume(); gain.gain.setTargetAtTime(on ? level() : 0, audio.currentTime, 0.4); }
   btn.setAttribute('aria-checked', String(on));
 });
 
-const initials = (name) => name.replace(/[’']/g, '').split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
+const BADGE = { "Se'kret Bip": 'SK' }; // founder mockup badge
+const initials = (name) => BADGE[name] || name.replace(/[’']/g, '').split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
 // CLAUDE.md: no public product link before a front door is live, so "Opening soon" worlds stay unlinked.
 const linkable = (w) => w.link?.url && w.st !== 'soon';
 function tile(w) {

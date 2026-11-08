@@ -73,3 +73,13 @@ html[data-tod=night] .tod-art{background-image:url('/assets/ideas-night.webp');o
   .eco-tile>a,.eco-tile>div{height:132px}
 }
 @media(prefers-reduced-motion:reduce){.tod-art{transition:none}}
+
+/* Founder mockup copy details (2026-11-08) */
+.subline{margin:0 0 8px;font:600 12.5px/1.6 "Sora",system-ui,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#fff1de}
+.world-stage .sig{margin:6px 0 0;font:clamp(28px,2.6vw,38px)/1.1 "Kaushan Script",cursive;color:#f5c97a;text-shadow:0 2px 14px rgba(58,29,74,.7)}
+.world-stage .actions{margin-top:12px}
+.vol{width:100%;accent-color:#f5c14b;min-height:24px;margin:0}
+.work-cta{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 18px;border:1px solid rgba(255,214,138,.6);border-radius:6px;color:#fff1de;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap}
+.work-cta:hover{border-color:#ffd98a;color:#ffd98a}
+@media(max-width:1100px){.work-cta{display:none}}
+@media(max-width:760px){.subline{font-size:9.5px;letter-spacing:.12em;margin-bottom:4px}.world-stage .sig{font-size:24px;margin-top:2px}.stage-controls .vol{display:none}}
