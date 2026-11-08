@@ -31,6 +31,8 @@ try {
     assert.equal(response?.status(),200);
     assert.equal(await page.locator('#featured .featured-tile').count(),6,'six existing game identities in hub carousel');
     assert.equal(await page.locator('#games article.card').count(),6,'existing game detail cards preserved');
+    assert.equal(await page.locator('#games article.card:has(.tag.wait) a').count(),0,'unreleased game cards have no public play links');
+    assert.equal(await page.locator('.header-tools .utility').evaluateAll(nodes=>nodes.every(el=>{const box=el.getBoundingClientRect();return box.width>=44&&box.height>=44;})),true,'header tools meet 44px touch targets');
     assert.equal(await page.locator('#game-hub-center').count(),1,'Game Hub Center visible in hub, not a game runtime');
     assert.equal(await page.locator('#living-world-scene').count(),1,'clean cinematic world is present');
     assert.match(await page.locator('#living-world-scene').evaluate(el=>getComputedStyle(el).backgroundImage),/home-scene\.webp/);
@@ -51,6 +53,7 @@ try {
       assert.equal(await menu.getAttribute('aria-expanded'),'false','Escape closes mobile navigation');
       assert.equal(await page.locator('#game-hub-center').isVisible(),false,'Game Hub Center details start closed on mobile');
       const hubToggle=page.locator('#game-hub-toggle');
+      assert.equal(await hubToggle.isVisible(),true,'mobile Game Hub disclosure is visible below the feature deck');
       assert.equal(await hubToggle.getAttribute('aria-expanded'),'false','mobile Game Hub Center exposes closed state');
       await hubToggle.click();
       assert.equal(await hubToggle.getAttribute('aria-expanded'),'true','Game Hub Center opens on demand');
