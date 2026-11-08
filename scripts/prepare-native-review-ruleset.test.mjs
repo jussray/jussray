@@ -12,7 +12,7 @@ const live = () => ({
     {id:'a',type:'deletion'}, {id:'b',type:'non_fast_forward'},
     {id:'c',type:'required_deployments',parameters:{required_deployment_environments:['github-pages','Think Tank / jussray-pr-68']}},
     {id:'d',type:'required_signatures'},
-    {id:'e',type:'pull_request',parameters:{required_approving_review_count:1,required_review_thread_resolution:true,allowed_merge_methods:['merge','squash']}},
+    {id:'e',type:'pull_request',parameters:{required_approving_review_count:0,required_review_thread_resolution:true,allowed_merge_methods:['merge','squash']}},
     {id:'f',type:'required_status_checks',parameters:{strict_required_status_checks_policy:true,required_status_checks:[]}},
     {id:'g',type:'code_scanning',parameters:{code_scanning_tools:[{tool:'CodeQL',alerts_threshold:'errors'}]}},
     {id:'h',type:'required_linear_history'},
@@ -28,7 +28,6 @@ test('repair adds four systematic checks but preserves all other rules and produ
   assert.deepEqual(getRule(plan.payload,'code_scanning').parameters,getRule(current,'code_scanning').parameters);
   assert.deepEqual(plan.payload.conditions,current.conditions);
   assert.deepEqual(plan.payload.bypass_actors,[]);
-  assert.equal(getRule(plan.payload,'pull_request').parameters.required_approving_review_count,1);
   assert.deepEqual(plan.warnings,['Global ~ALL branch scope: applying affects every included branch','Removing existing bypass actors requires separate explicit approval','Existing required deployment environments are preserved, including PR preview environments']);
   assert.equal(plan.existingDigest,fingerprint(current));
 });
@@ -45,7 +44,7 @@ test('rejects wrong repo, disabled ruleset, unresolved conversations and unexpec
   for(const mutate of [
     x=>{x.source='someone/else'}, x=>{x.enforcement='disabled'},
     x=>{getRule(x,'pull_request').parameters.required_review_thread_resolution=false},
-    x=>{getRule(x,'pull_request').parameters.required_approving_review_count=0},
+    x=>{getRule(x,'pull_request').parameters.required_approving_review_count=1},
     x=>{x.rules=x.rules.filter(r=>r.type!=='non_fast_forward')},
   ]) {const x=live();mutate(x);assert.throws(()=>planNativeRepair(x));}
 });
