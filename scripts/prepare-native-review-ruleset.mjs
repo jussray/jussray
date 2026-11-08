@@ -34,7 +34,7 @@ export function planNativeRepair(live) {
   for(const needed of ['pull_request','required_status_checks','deletion','non_fast_forward'])
     if(!types.includes(needed))throw new Error('Missing mandatory existing rule: '+needed);
   const pull=live.rules.find(x=>x.type==='pull_request').parameters;
-  if(pull?.required_review_thread_resolution!==true || pull.required_approving_review_count!==0)
+  if(pull?.required_review_thread_resolution!==true || pull.required_approving_review_count!==1)
     throw new Error('Review gate cannot be altered or relaxed implicitly');
   const checks=live.rules.find(x=>x.type==='required_status_checks').parameters;
   if(!checks || checks.strict_required_status_checks_policy!==true ||
