@@ -68,8 +68,8 @@ for (const vp of [{n:'desktop',w:1440,h:900},{n:'mobile',w:390,h:844}]) {
   const worldsData=JSON.parse(readFileSync(join(ROOT,'data/worlds.json'),'utf8')).worlds;
   say((await page.locator('#ecoTrack .eco-tile').count())===worldsData.length,`${vp.n}: Our Ecosystem band renders every world from worlds.json`);
   say(JSON.stringify(await page.locator('#ecoTrack .eco-tile small').allTextContents())===JSON.stringify(worldsData.map(w=>w.label)),`${vp.n}: band statuses equal founder-declared labels`);
-  say((await page.locator('#ecoTrack .eco-tile a').evaluateAll(a=>a.map(x=>x.getAttribute('href')))).every(h=>worldsData.some(w=>w.link?.url===h&&w.st!=='soon')),`${vp.n}: band links only real, non-held destinations`);
-  say((await page.locator('#ecoTrack a[href*="sekretbip"], #ecoTrack a[href*="storyengine" i]').count())===0,`${vp.n}: Se'kret Bip and StoryEngine get no product link from the band`);
+  say((await page.locator('#ecoTrack .eco-tile a').evaluateAll(a=>a.map(x=>x.getAttribute('href')))).every(h=>worldsData.some(w=>w.link?.url===h&&(w.st!=='soon'||w.name==="Se'kret Bip"))),`${vp.n}: band links only real destinations with live front doors`);
+  say((await page.locator('#ecoTrack a[href*="storyengine" i]').count())===0 && (await page.locator('#ecoTrack a[href="https://sekretbip.net"]').count())===1,`${vp.n}: StoryEngine stays unlinked; Se'kret Bip links to its founder-confirmed live front door`);
   say(/Creative Technology/.test(await page.locator('#landing-title').innerText())&&/AI-powered product creation/i.test(await page.locator('.subline').innerText()),`${vp.n}: mockup headline and subline render`);
   const bandBox=await page.locator('.eco-band').boundingBox();
   say(bandBox&&bandBox.y+bandBox.height<=vp.h+1,`${vp.n}: Our Ecosystem band is fully visible on the first screen`);

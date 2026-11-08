@@ -666,3 +666,4 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
   5. Volume sliders are now 44px tap targets.
   6. Homepage sound stops in background tabs.
   - All site-proof steps pass locally.
+- 2026-11-08 ~21:10 UTC: Juss confirmed sekretbip.net is live ("Yes"). It could not be observed from the sandbox (the proxy blocks it). The homepage band now links the Se'kret Bip tile to `worlds.json`'s link. Its label stays "Opening soon" until Juss changes it in worlds.json. CLAUDE.md rule updated: StoryEngine stays unlinked. That founder decision is closed.

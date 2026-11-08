@@ -35,8 +35,10 @@ $('#sound')?.addEventListener('click', async () => {
 const BADGE = { "Se'kret Bip": 'SK' }; // founder mockup badge
 document.addEventListener('visibilitychange', () => { if (document.hidden && audio && $('#sound')?.getAttribute('aria-checked') === 'true') { gain.gain.setTargetAtTime(0, audio.currentTime, 0.1); $('#sound').setAttribute('aria-checked', 'false'); } });
 const initials = (name) => BADGE[name] || name.replace(/[’']/g, '').split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
-// CLAUDE.md: no public product link before a front door is live, so "Opening soon" worlds stay unlinked.
-const linkable = (w) => w.link?.url && w.st !== 'soon';
+// CLAUDE.md: a world links only when worlds.json declares a link and its front door is live.
+// "Opening soon" worlds stay unlinked unless the founder confirmed the front door (Se'kret Bip, 2026-11-08).
+const LIVE_FRONT_DOORS = new Set(["Se'kret Bip"]);
+const linkable = (w) => w.link?.url && (w.st !== 'soon' || LIVE_FRONT_DOORS.has(w.name));
 function tile(w) {
   const li = document.createElement('li'); li.className = 'eco-tile'; li.dataset.st = w.st || '';
   const inner = document.createElement(linkable(w) ? 'a' : 'div');

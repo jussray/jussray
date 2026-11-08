@@ -26,7 +26,7 @@ Juss & Co's public runtime is served by Cloudflare Worker `jussray` from `site/`
 - A repository, Lovable/Base44 app, domain, deployment, or other carrier is not automatically a separate company or product. Duplicate, legacy, quarantined, private-operations-only and unresolved carriers stay out of the public product index until their canonical relationship is proven.
 - Technical standalone identity and commercial packaging are separate truth planes. A system may remain independently runnable and publicly represented without automatically becoming a separate company, price, or acquisition funnel.
 - Placeholders are written `[LIKE THIS]` and render as "pending". Never replace one with a guess.
-- Se'kret Bip and StoryEngine get no public product link until their front doors are live.
+- StoryEngine gets no public product link until its front door is live. Se'kret Bip's front door (sekretbip.net) was confirmed live by Juss on 2026-11-08, so its founder-declared link may render; its status label still comes only from `worlds.json`.
 - Never delete or rewrite the existing profile, Juss Digital or picks source pages merely to make a runtime change easier.
 - Do not treat a stale deployment workflow, historical URL, build artifact, or repository file as proof of current runtime state. Re-observe the canonical Cloudflare domains.
 
