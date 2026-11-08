@@ -667,3 +667,11 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
   6. Homepage sound stops in background tabs.
   - All site-proof steps pass locally.
 - 2026-11-08 ~21:10 UTC: Juss confirmed sekretbip.net is live ("Yes"). It could not be observed from the sandbox (the proxy blocks it). The homepage band now links the Se'kret Bip tile to `worlds.json`'s link. Its label stays "Opening soon" until Juss changes it in worlds.json. CLAUDE.md rule updated: StoryEngine stays unlinked. That founder decision is closed.
+
+## 2026-11-08 21:14 UTC: PR #68 MERGED by Juss
+- Merge commit `5c3e1aa` on main, from PR head `aa721c7`. Juss merged while Independent Review Evidence was still red (the Production ruleset blockers were unchanged when it re-ran at 21:14).
+- Checks on main `5c3e1aa`:
+  - Pass: Site Browser Proof, verify (site), Repo Reality, qr-assets, and Workers Builds for both jussray and jussco-games. The Cloudflare production builds succeeded.
+  - Fail: provider public readback. Cause: Cloudflare Browser Rendering returns HTTP 401. It has also failed on main since `2309b55` and earlier, so this merge did not cause it.
+- Live runtime: UNKNOWN. The sandbox proxy blocks www.jussco.company and games.jussco.company, and the provider readback can't verify while its token is rejected.
+- Still open: fix the Browser Rendering credential (provider-site-proof.yml); fix ruleset 26428639; long pages (universe, portfolio); ideas and opportunity-engine share a title.
