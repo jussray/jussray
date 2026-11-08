@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-hub-view="home">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -226,6 +226,75 @@ header .brand{font-size:23px}.brand .crown{font-size:27px;margin-right:7px}
 .skip-link:focus{top:12px}
 #search-status{margin:8px 0 0;font-size:13px;color:#fff1d2}
 #search-view{display:inline-block;margin-top:8px;color:#9defff;text-underline-offset:3px;font-size:13px}
+
+/* One-screen phone doorway. Deep game details live in a distinct hash view. */
+#hub-bottom-nav,#ambient-mobile-mount,#details-back{display:none}
+@media(max-width:800px){
+ html[data-hub-view="home"],html[data-hub-view="home"] body{height:100%;overflow:hidden;overscroll-behavior:none}
+ html[data-hub-view="home"] body{height:100dvh;min-height:0}
+ #living-world-scene{background-position:center;background-size:100% 100%;filter:saturate(1.14)}
+ #living-world-scene:after{background:linear-gradient(180deg,#090b2c90,#0a103552 38%,#0d103740 64%,#060b28aa)}
+ header{height:clamp(60px,9dvh,74px)}
+ header .inner{display:flex;flex-wrap:nowrap;align-items:center;width:calc(100% - 16px);height:calc(100% - 8px);min-height:0;margin:4px 8px;padding:3px 11px;gap:8px;border:1px solid #ffdeaad6;border-radius:999px;background:linear-gradient(110deg,#21122ee8,#36305ce8,#281733e6);box-shadow:0 0 19px #ffb17991,inset 0 1px #ffefc5;backdrop-filter:blur(16px)}
+ header .brand{font-size:clamp(20px,5.4vw,25px);max-width:50vw;line-height:1}
+ header .brand .crown{font-size:25px;margin-right:5px}
+ header .brand small{font-size:7px;letter-spacing:.21em;margin-top:3px}
+ header .header-tools .utility{min-width:44px;min-height:44px;padding:7px;font-size:18px}
+ header .header-tools a.utility{display:none}
+ header nav{display:none;position:absolute;top:100%;left:9px;right:9px;width:auto;max-width:none;max-height:55dvh;overflow-y:auto;z-index:35;padding:12px;background:#1b163af4;border:1px solid #ebc294;box-shadow:0 19px 35px #02041bae}
+ header nav.is-open{display:flex}
+ header nav a{min-height:44px;display:inline-flex;align-items:center}
+ #search-panel{position:absolute;top:100%;left:9px;right:9px;max-width:none;margin:0;z-index:36;background:#191734f8;border:1px solid #f0c79e}
+ main{width:min(100%,580px);height:calc(100dvh - clamp(60px,9dvh,74px) - clamp(68px,10dvh,86px) - env(safe-area-inset-bottom,0px));min-height:0;overflow:hidden;display:grid;grid-template-rows:minmax(0,1fr) auto auto auto;gap:clamp(6px,1dvh,11px);padding:0 12px 4px}
+ .hero{min-height:0;height:100%;padding:clamp(3px,1dvh,11px) 2px 0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow:hidden}
+ .hero .eyebrow{font-size:11px;letter-spacing:.37em}
+ .hero h1{font-size:clamp(46px,13vw,72px);line-height:1.05;white-space:nowrap;margin:4px 0;text-shadow:0 0 19px #ff9a8e91,0 3px 17px #0c0721}
+ .hero h1 span{color:#ffe3b0}
+ .hero .lead{font-size:clamp(9px,2.35vw,12px);letter-spacing:.12em;margin:3px 0}
+ .hero .description{font-size:clamp(11px,2.7vw,14px);line-height:1.36;max-width:35ch;margin:7px 0 0}
+ .hero .hero-quote{display:none}
+ .hero-actions{flex-wrap:nowrap;gap:8px;margin:clamp(10px,1.7dvh,18px) 0 0}
+ .hero-actions .action{min-height:44px;white-space:nowrap;font-size:clamp(11px,2.75vw,14px);padding:9px clamp(10px,2.9vw,18px)}
+ #featured{height:clamp(151px,22.5dvh,197px);min-height:0;width:100%;max-width:none;display:flex;flex-direction:column;margin:0 auto;padding:9px 13px 6px;border-radius:30px;background:linear-gradient(156deg,#432846e9,#12192ee9);box-shadow:0 0 24px #ffab8475,0 13px 34px #0a0427aa}
+ #featured h2{font-size:clamp(21px,5.6vw,29px);line-height:1.1;white-space:nowrap;margin:0 0 6px}
+ .featured-track{flex:1;min-height:0;grid-auto-columns:clamp(114px,36vw,171px);gap:9px;padding:2px 0 5px;scroll-snap-type:x mandatory;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}
+ .featured-tile{height:100%;min-height:0;gap:3px;padding:6px;border-radius:18px;background:radial-gradient(circle at 50% 19%,#6032a38f,transparent 79%),linear-gradient(145deg,#261744,#091f35)}
+ .featured-tile .symbol{font-size:clamp(29px,8vw,42px)}
+ .featured-tile strong{font-size:clamp(15px,4vw,20px)}
+ .featured-tile small{font-size:10px;line-height:1.1}
+ #featured .hint{display:none}
+ .featured-toolbar{height:20px;justify-content:center;align-items:center;gap:12px}
+ .featured-toolbar button{min-height:28px;min-width:32px;font-size:20px;line-height:1}
+ #hub-mobile-mount{display:block;position:relative;min-height:48px;margin:0;width:100%;z-index:10}
+ #game-hub-toggle{height:100%;min-height:48px;width:min(100%,420px);display:flex;margin:auto;align-items:center;justify-content:center;font:400 clamp(19px,5vw,25px) Georgia,serif;border-color:#ffe0ab;background:linear-gradient(110deg,#825144dc,#251c43e9,#7b3858da);box-shadow:0 0 18px #ffb873b3,inset 0 1px #ffe5d5}
+ #game-hub-center{position:absolute;left:0;right:0;top:auto;bottom:calc(100% + 6px);width:100%;max-height:56dvh;overflow:auto;margin:0;padding:12px 16px;z-index:12;background:#241937f6}
+ #game-hub-center h2{font-size:22px}
+ #ambient-mobile-mount{display:block;min-height:47px;margin:0}
+ #ambience{position:static;transform:none;display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;margin:0;padding:0;border:0;background:none;box-shadow:none;backdrop-filter:none;font-size:clamp(10px,2.4vw,12px)}
+ #ambience .amb-row,#ambience .amb-row + .amb-row{min-height:47px;margin:0;padding:5px 8px;gap:3px;border:1px solid #edc0a79e;border-radius:999px;background:linear-gradient(110deg,#3d2242ed,#20254beb);box-shadow:0 0 14px #d98eac69}
+ #ambience .amb-row span{flex:1}
+ #ambience #ambient-toggle{min-height:34px;min-width:44px;padding:4px 6px}
+ #ambience #current-season{font-size:10px;font-weight:500;text-align:right}
+ #hub-bottom-nav{display:grid;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,580px);height:calc(clamp(68px,10dvh,86px) + env(safe-area-inset-bottom,0px));grid-template-columns:repeat(5,minmax(0,1fr));padding:5px 6px calc(5px + env(safe-area-inset-bottom,0px));z-index:20;border:1px solid #ffd6a8bd;border-bottom:0;border-radius:30px 30px 0 0;background:linear-gradient(120deg,#32214ddc,#212d4bdc,#44203adc);box-shadow:0 -4px 21px #ffb47c6b;backdrop-filter:blur(18px)}
+ #hub-bottom-nav a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:18px;font-size:clamp(10px,2.6vw,13px);white-space:nowrap;text-decoration:none}
+ #hub-bottom-nav .hub-nav-symbol{font-size:clamp(22px,5.6vw,29px);line-height:1;color:#ffdbaf}
+ html[data-hub-view="home"] #games,html[data-hub-view="home"] #upcoming,html[data-hub-view="home"] #safety{display:none}
+ body>footer{display:none}
+ html[data-hub-view="details"] body{overflow:auto}
+ html[data-hub-view="details"] main{display:block;height:auto;min-height:calc(100dvh - 140px);overflow:visible;padding:12px 12px 100px}
+ html[data-hub-view="details"] .hero,html[data-hub-view="details"] #featured,html[data-hub-view="details"] #hub-mobile-mount,html[data-hub-view="details"] #ambient-mobile-mount{display:none}
+ html[data-hub-view="details"] #games,html[data-hub-view="details"] #safety{display:block}
+ html[data-hub-view="details"] #details-back{display:inline-flex;align-items:center;min-height:44px;margin-bottom:12px;padding:8px 14px;border:1px solid #ffe0b1;border-radius:25px;background:#281c3fef;text-decoration:none}
+ html[data-hub-view="details"] #games .cards{display:grid;grid-template-columns:1fr}
+}
+@media(max-width:800px) and (max-height:720px){
+ .hero .description{font-size:10px;margin-top:5px}
+ .hero-actions{margin-top:7px}
+ .hero h1{font-size:clamp(43px,12.5vw,56px)}
+ #featured{height:clamp(145px,23dvh,172px)}
+ #featured h2{font-size:21px}
+}
+@media(prefers-reduced-motion:reduce){#hub-bottom-nav *{transition:none!important}}
 </style>
 </head>
 <body>
@@ -276,7 +345,7 @@ header .brand{font-size:23px}.brand .crown{font-size:27px;margin-right:7px}
 <div class="featured-toolbar"><button type="button" id="featured-back" aria-label="Scroll featured games left">‹</button><button type="button" id="featured-next" aria-label="Scroll featured games right">›</button></div>
 <p class="hint">Explore here. Play on each game’s own domain, with its original look preserved.</p>
 </section>
-<section id="hub-mobile-mount" aria-label="Game Hub Center controls"><button type="button" id="game-hub-toggle" aria-expanded="false" aria-controls="game-hub-center">♧ &nbsp; Game Hub Center</button></section>
+<section id="hub-mobile-mount" aria-label="Game Hub Center controls"><button type="button" id="game-hub-toggle" aria-expanded="false" aria-controls="game-hub-center">♧ &nbsp; Game Hub Center</button></section><div id="ambient-mobile-mount" aria-label="Sound and seasonal atmosphere"></div><a id="details-back" href="#home">← Back to Game Hub</a>
 <div id="upcoming" aria-hidden="true"></div>
 <section id="games" aria-labelledby="games-title"><div class="section-heading"><h2 id="games-title">Our game worlds</h2><p>One home. Different adventures.</p><button type="button" id="all-games-toggle" aria-controls="game-cards" aria-expanded="true">Show all game worlds</button></div><div class="cards" id="game-cards">
 <article class="card" id="sync-world"><div class="art sync-art" aria-hidden="true"><span>🎉</span><b class="art-title">SYNC</b></div><div class="card-body"><span class="meta">Game family / three distinct experiences</span><h3>SYNC</h3><p>Think alike. Beat the clock. Read the room. SYNC has three flavors, each with its own personality.</p><span class="tag live">Live Site SYNC</span>
@@ -290,7 +359,7 @@ header .brand{font-size:23px}.brand .crown{font-size:27px;margin-right:7px}
 <article class="card" id="lastlaugh-world"><div class="art city-art" aria-hidden="true"><span>🎭🌆</span><b class="art-title">Last Laugh</b></div><div class="card-body"><span class="meta">Story-driven 3D adventure / private prototype</span><h3>Last Laugh: City of Dreams</h3><p>A cinematic comedy-night adventure with exploration, performances, and choices. The original prototype is being tested across desktop and mobile.</p><span class="tag wait">Private prototype</span><p class="status">Public play is held pending release review, rights clearance, and live-device verification.</p></div></article>
 </div></section>
 <section class="notes" id="safety" aria-label="Safety and availability"><h2>Play with care ✨</h2><p>Games with friend chat or younger-player features are only opened publicly after their age, moderation, privacy, and guardian safeguards are verified. A game listing never means its unfinished experience is live.</p></section>
-</main><footer><div class="inner"><span>© 2026 Juss &amp; Co. · Different worlds. One place to discover them.</span><a href="https://jussco.company/">Back to Juss &amp; Co. ↗</a></div></footer>
+</main><footer><div class="inner"><span>© 2026 Juss &amp; Co. · Different worlds. One place to discover them.</span><a href="https://jussco.company/">Back to Juss &amp; Co. ↗</a></div></footer><nav id="hub-bottom-nav" aria-label="Juss and Co destinations"><a href="https://jussco.company/"><span class="hub-nav-symbol" aria-hidden="true">⌂</span>Home</a><a href="https://jussco.company/products.html"><span class="hub-nav-symbol" aria-hidden="true">▦</span>Products</a><a href="https://jussco.company/services.html"><span class="hub-nav-symbol" aria-hidden="true">◇</span>Solutions</a><a href="https://jussco.company/work.html"><span class="hub-nav-symbol" aria-hidden="true">♛</span>Our Work</a><a href="https://jussco.company/founder.html"><span class="hub-nav-symbol" aria-hidden="true">♙</span>Founder</a></nav>
 <script type="module" src="/assets/atmosphere.mjs"></script>
 <script>
 (() => {
@@ -306,11 +375,13 @@ header .brand{font-size:23px}.brand .crown{font-size:27px;margin-right:7px}
   const searchStatus=document.getElementById('search-status');
   const searchView=document.getElementById('search-view');
   const gameCards=[...document.querySelectorAll('#games article.card')];
+  let searchOpenedDetails=false;
   function clearSearch(){
     field.value='';
     gameCards.forEach(card=>card.hidden=false);
     searchStatus.textContent='';
     searchView.hidden=true;
+    if(searchOpenedDetails&&mobile.matches){searchOpenedDetails=false;syncHubView();}
     if(mobile.matches&&games.dataset.searchExpanded==='true'){
       collapseGames(true);
       delete games.dataset.searchExpanded;
@@ -324,6 +395,11 @@ header .brand{font-size:23px}.brand .crown{font-size:27px;margin-right:7px}
       card.hidden=Boolean(q&&!card.textContent.toLocaleLowerCase().includes(q));
       if(!card.hidden)matches++;
     }
+    if(q&&mobile.matches&&document.documentElement.dataset.hubView==='home'){
+      searchOpenedDetails=true;
+      document.documentElement.dataset.hubView='details';
+      collapseGames(false);
+    }
     if(q&&mobile.matches&&games.dataset.collapsed==='true'){
       games.dataset.searchExpanded='true';
       collapseGames(false);
@@ -332,6 +408,7 @@ header .brand{font-size:23px}.brand .crown{font-size:27px;margin-right:7px}
       collapseGames(true);
       delete games.dataset.searchExpanded;
     }
+    if(!q&&searchOpenedDetails&&mobile.matches){searchOpenedDetails=false;syncHubView();}
     searchStatus.textContent=!q?'':matches?matches+' game'+(matches===1?'':'s')+' found for "'+value+'".':'No games found for "'+value+'".';
     searchView.hidden=!q||matches===0;
   }
@@ -355,6 +432,21 @@ header .brand{font-size:23px}.brand .crown{font-size:27px;margin-right:7px}
   const allToggle=document.getElementById('all-games-toggle');
   const games=document.getElementById('games');
   const mobile=matchMedia('(max-width:800px)');
+  const ambience=document.getElementById('ambience');
+  const ambienceOrigin=ambience.parentNode,ambienceNext=ambience.nextSibling;
+  const ambienceMount=document.getElementById('ambient-mobile-mount');
+  function syncHubView(){
+    const id=location.hash.slice(1);
+    const details=new Set(['games','upcoming','safety',...gameCards.map(card=>card.id)]);
+    const view=mobile.matches&&details.has(id)?'details':'home';
+    const oldView=document.documentElement.dataset.hubView;
+    document.documentElement.dataset.hubView=view;
+    if(view==='details'){
+      collapseGames(false);
+      if(oldView!==view)requestAnimationFrame(()=>document.getElementById(id)?.scrollIntoView({block:'start',behavior:'auto'}));
+    }else if(mobile.matches){collapseGames(true);closeHub();}
+  }
+  addEventListener('hashchange',syncHubView);
   function closeHub(){
     hubToggle.setAttribute('aria-expanded','false');
     if(mobile.matches)hub.hidden=true;
@@ -367,10 +459,12 @@ header .brand{font-size:23px}.brand .crown{font-size:27px;margin-right:7px}
   function syncMobile(){
     if(mobile.matches){
       mount.appendChild(hub);
+      ambienceMount.appendChild(ambience);
       hub.hidden=hubToggle.getAttribute('aria-expanded')!=='true';
-      collapseGames(games.dataset.collapsed!=='false');
+      syncHubView();
     }else{
       hubOrigin.insertBefore(hub,hubNext);
+      ambienceOrigin.insertBefore(ambience,ambienceNext);
       hub.hidden=false;
       collapseGames(false);
       hubToggle.setAttribute('aria-expanded','false');
@@ -404,6 +498,7 @@ header .brand{font-size:23px}.brand .crown{font-size:27px;margin-right:7px}
     menu.setAttribute('aria-expanded','false');
     if(mobile.matches)closeHub();
     if(!search.hidden){search.hidden=true;toggle.setAttribute('aria-expanded','false');clearSearch();toggle.focus();}
+    else if(mobile.matches&&document.documentElement.dataset.hubView==='details')location.hash='home';
   });
   if(mobile.addEventListener)mobile.addEventListener('change',syncMobile);
   else mobile.addListener(syncMobile);

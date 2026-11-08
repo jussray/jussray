@@ -23,7 +23,7 @@ if(!address || typeof address==='string')throw Error('test server unavailable');
 const browser=await chromium.launch({headless:true});
 await mkdir('proof/game-hub',{recursive:true});
 try {
-  for(const [label,width,height] of [['desktop',1440,900],['mobile',390,844]]) {
+  for(const [label,width,height] of [['desktop',1440,900],['mobile',390,844],['compact',360,667]]) {
     const page=await browser.newPage({viewport:{width,height},reducedMotion:'reduce'});
     const errors=[];
     page.on('pageerror',error=>errors.push(String(error)));
@@ -61,7 +61,12 @@ try {
     assert.equal(await page.locator('#games article.card[hidden]').count(),0,'Escape restores all game listings');
     assert.equal(await page.locator('#games .cards').isVisible(),label==='desktop','Escape restores progressive mobile disclosure');
     assert.deepEqual(errors,[],'no page script errors');
-    if(label==='mobile'){
+    if(label!=='desktop'){
+      assert.equal(await page.locator('html').getAttribute('data-hub-view'),'home','mobile lands on the one-screen hub');
+      assert.equal(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight+1),true,'landing has no vertical scrolling');
+      assert.equal(await page.locator('#hub-bottom-nav a').count(),5,'all five company page destinations are available');
+      assert.equal(await page.locator('#ambient-mobile-mount #ambience').count(),1,'ambience stays on screen');
+      assert.equal(await page.locator('#games').isVisible(),false,'game details do not extend the landing');
       const menu=page.locator('#mobile-menu');
       await menu.click();
       assert.equal(await menu.getAttribute('aria-expanded'),'true','mobile nav opens');
@@ -75,17 +80,18 @@ try {
       assert.equal(await hubToggle.getAttribute('aria-expanded'),'true','Game Hub Center opens on demand');
       assert.equal(await page.locator('#game-hub-center').isVisible(),true,'Game Hub Center details are accessible after opening');
       assert.equal(await page.locator('#games .cards').isVisible(),false,'long game descriptions remain collapsed initially');
-      await page.locator('#game-hub-center a[href="#games"]').click();
-      assert.equal(await page.locator('#games .cards').isVisible(),true,'All Games opens the full collection');
       const track=page.locator('#featured-track');
-      assert.equal(await track.evaluate(el=>el.scrollWidth>el.clientWidth+5),true,'mobile feature cards scroll horizontally');
+      assert.equal(await track.evaluate(el=>el.scrollWidth>el.clientWidth+5),true,'featured tiles scroll horizontally');
       await page.locator('#featured-next').click();
       await page.waitForTimeout(200);
-      assert.equal(await track.evaluate(el=>el.scrollLeft>0),true,'carousel next control reveals more games');
-      assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,'mobile interactions never create horizontal overflow');
-      await hubToggle.click();
-      await page.locator('#game-hub-center a[href="#lumora-world"]').click();
-      assert.equal(await page.locator('#lumora-world').isVisible(),true,'Upcoming Worlds reveals an actual in-development card');
+      assert.equal(await track.evaluate(el=>el.scrollLeft>0),true,'next reveals more featured tiles');
+      await page.locator('#game-hub-center a[href="#games"]').click();
+      await page.locator('#games .cards').waitFor({state:'visible'});
+      assert.equal(await page.locator('html').getAttribute('data-hub-view'),'details','All Games has its own detail view');
+      assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,'game details have no horizontal overflow');
+      await page.locator('#details-back').click();
+      assert.equal(await page.locator('html').getAttribute('data-hub-view'),'home','back opens the no-scroll landing');
+      assert.equal(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight+1),true,'landing still fits after return');
     }
     await page.screenshot({path:'proof/game-hub/'+label+'.png',fullPage:false});
     await page.close();
