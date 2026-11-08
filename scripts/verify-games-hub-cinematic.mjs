@@ -21,7 +21,7 @@ await new Promise(done => server.listen(0,'127.0.0.1',done));
 const address=server.address();
 if(!address || typeof address==='string')throw Error('test server unavailable');
 const browser=await chromium.launch({headless:true});
-await mkdir('proof/game-hub',{recursive:true});
+await mkdir('proof/site',{recursive:true});
 try {
   for(const [label,width,height] of [['desktop',1440,900],['mobile',390,844],['compact',360,667]]) {
     const page=await browser.newPage({viewport:{width,height},reducedMotion:'reduce'});
@@ -75,6 +75,7 @@ try {
       assert.equal(await page.locator('#game-hub-center').isVisible(),false,'Game Hub Center details start closed on mobile');
       const track=page.locator('#featured-track');
       const metrics=await track.evaluate(el=>({scrollWidth:el.scrollWidth,clientWidth:el.clientWidth,display:getComputedStyle(el).display,tiles:el.children.length}));
+      assert.equal(metrics.clientWidth<=width-24,true,'featured viewport stays within the phone screen: '+JSON.stringify(metrics));
       assert.equal(metrics.scrollWidth>metrics.clientWidth+5,true,'featured tiles scroll horizontally: '+JSON.stringify(metrics));
       await page.locator('#featured-next').click();
       await page.waitForTimeout(200);
@@ -94,7 +95,7 @@ try {
       assert.equal(await page.locator('html').getAttribute('data-hub-view'),'home','back opens the no-scroll landing');
       assert.equal(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight+1),true,'landing still fits after return');
     }
-    await page.screenshot({path:'proof/game-hub/'+label+'.png',fullPage:false});
+    await page.screenshot({path:'proof/site/game-hub-'+label+'.png',fullPage:false});
     await page.close();
     console.log('PASS Juss & Co Games hub '+label+': site world, game isolation, assets and interactions');
   }
