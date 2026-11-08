@@ -254,7 +254,8 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
       (await page.locator('.jc-feature--coming a').getAttribute('href')) === '/portfolio.html',
       `${vp.n}: shop, public experience, and coming-soon destinations remain distinct`);
   say(await page.evaluate(() => getComputedStyle(document.querySelector('.hero')).display === 'none' && getComputedStyle(document.querySelector('#contact')).display === 'none'), `${vp.n}: landing is the world stage only (intro lives on Founder, contact on Contact)`);
-  say(await page.evaluate(() => getComputedStyle(document.querySelector('.page-scene')).position === 'fixed' && getComputedStyle(document.querySelector('.site-foot')).display !== 'none'), `${vp.n}: one lake world behind every view, shared footer visible`);
+  say(await page.evaluate(() => getComputedStyle(document.querySelector('.page-scene')).position === 'fixed'), `${vp.n}: one lake world behind every view`);
+  await openView(page, '#contact'); say(await page.evaluate(() => getComputedStyle(document.querySelector('.site-foot')).display !== 'none'), `${vp.n}: shared footer shows on content views`); await openView(page, '#top');
   await openView(page, '#worlds');
   say((await page.$$('.card')).length === EXPECTED_WORLDS.length, `${vp.n}: ${EXPECTED_WORLDS.length} portfolio worlds`);
   say((await page.locator('.os-card').count()) === 5, `${vp.n}: five public standalone OS builds`);
@@ -299,7 +300,8 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   say(/@/.test(await page.innerText('#mail')) && !/\[/.test(await page.innerText('#mail')), `${vp.n}: real company email rendered`);
   say(errors.length === 0, `${vp.n}: no console errors${errors.length ? ' — ' + errors.join(' | ') : ''}`);
   await openView(page, '#top');
-  if (vp.n === 'mobile') say(await page.evaluate(() => document.documentElement.scrollHeight) < 7000, 'mobile: landing view is short, not a never-ending scroll');
+  say(await page.evaluate(() => document.documentElement.scrollHeight <= innerHeight + 1 && getComputedStyle(document.querySelector('.site-foot')).display === 'none'), `${vp.n}: Home is one screen with no scroll (founder mockups)`);
+  say(await page.evaluate(() => { const b = document.querySelector('.eco-band').getBoundingClientRect(); return b.width <= innerWidth && b.bottom <= innerHeight; }), `${vp.n}: ecosystem band fully on screen`);
   for (const [hash, view, mustShow, mustHide] of [['#products','products','#live-sites','#worlds'],['#worlds','worlds','#systems','#proof'],['#proof','proof','#resources','#worlds'],['#why','founder','#why','#world'],['#contact','contact','#contact','#world']]) {
     await openView(page, hash);
     const st = await page.evaluate(([v, a, b]) => ({ view: document.documentElement.dataset.currentView, shown: getComputedStyle(document.querySelector(a)).display !== 'none', hidden: getComputedStyle(document.querySelector(b)).display === 'none', nav: document.querySelector('.navpill a[aria-current="page"]')?.getAttribute('data-view-link') }), [view, mustShow, mustHide]);
@@ -439,6 +441,10 @@ for (const vp of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile
   say(!/tournament|rewards|achievement|my library|creator zone|\bearn\b/i.test(stageText), `games hub: ${vp.name} stage shows no unbuilt features`);
   const fx = await page.locator('#fxTrack a').evaluateAll((as) => as.map((a) => a.getAttribute('href')));
   say(fx.length === 6 && fx.filter((h) => /^https?:/.test(h)).join() === 'https://sync.jussco.company/', `games hub: ${vp.name} only live SYNC leaves the page from featured experiences`);
+  say(await page.evaluate(() => document.documentElement.scrollHeight <= innerHeight + 1 && document.querySelector('.fx').getBoundingClientRect().right <= innerWidth + 1), `games hub: ${vp.name} landing is one screen with no scroll`);
+  await page.evaluate(() => { location.hash = 'games'; }); await page.waitForTimeout(80);
+  say(await page.evaluate(() => getComputedStyle(document.querySelector('.gstage')).display === 'none' && document.querySelector('#games').offsetParent !== null), `games hub: ${vp.name} Explore Games opens the full game list view`);
+  await page.evaluate(() => { location.hash = ''; }); await page.waitForTimeout(80);
   if (vp.name === 'mobile') {
     const m = await page.evaluate(() => ({ tabs: [...document.querySelectorAll('.tabbar a')].map((a) => a.textContent.trim()), cur: document.querySelector('.tabbar a[aria-current]')?.textContent.trim(), fixed: getComputedStyle(document.querySelector('.tabbar')).position, perView: Math.round(document.querySelector('#fxTrack').clientWidth / document.querySelector('#fxTrack li').getBoundingClientRect().width), hub: getComputedStyle(document.querySelector('.hub-mobile')).display }));
     say(JSON.stringify(m.tabs) === JSON.stringify(['Home','Games','Solutions','Our Work','Founder']) && m.cur === 'Games' && m.fixed === 'fixed', 'games hub: mobile bottom tab bar with Games current');

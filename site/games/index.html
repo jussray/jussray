@@ -240,11 +240,44 @@ header .inner{width:min(1380px,calc(100% - 36px))}
 .fx-glyph.has-icon{width:88px!important;height:88px!important;border-radius:18px}
 @media(max-width:700px){.fx-glyph.has-icon{width:68px!important;height:68px!important}}
 .eco-glyph.has-icon svg,.fx-glyph.has-icon svg{width:82%;height:82%}
+
+html.gviews[data-gview="stage"] #gamesView,html.gviews[data-gview="stage"] footer{display:none}
+html.gviews[data-gview="list"] .gstage{display:none}
+html.gviews[data-gview="stage"],html.gviews[data-gview="stage"] body{height:100%;overflow:hidden}
+html.gviews[data-gview="stage"] .gstage{height:calc(100vh - 77px);height:calc(100dvh - 77px);min-height:0;box-sizing:border-box;align-content:space-between}
+@media(max-width:700px){
+  html.gviews[data-gview="stage"] .gstage{height:calc(100dvh - 74px);padding-bottom:calc(84px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;justify-content:space-between;gap:6px}
+  .gstage-hero{margin-bottom:0!important}
+  .stage-crown{width:32px;height:24px}.stage-kicker{font-size:12px;margin:0}
+  .gstage-hero h1{font-size:clamp(42px,12vw,54px)}
+  .stage-verbs{font-size:10px;margin:2px 0}.stage-sub{font-size:12px;margin:2px auto}.stage-sign{font-size:22px;margin:0 0 4px}
+  .stage-cta .sbtn{min-height:44px;font-size:14px}
+  .fx{padding:8px 8px 6px}.fx-title h2{font-size:21px}.fx-title{margin-bottom:6px}
+  .fx-tile{min-height:112px;padding:6px 4px}.fx-glyph.has-icon{width:56px!important;height:56px!important}
+  .hub-pill{min-height:44px;font-size:17px;padding:0 20px}.hub-links{font-size:13px}.hub-links a{min-height:40px}
+  .gstage>*{min-width:0;max-width:100%}
+  .fx{width:100%;box-sizing:border-box}
+}
+@media (max-width:700px) and (max-height:760px){
+  .stage-crown,.stage-sign,.stage-caps,.stage-sub{display:none!important}
+  .stage-kicker{margin:0}
+  .eco-item,.stage .eco-item,.fx-tile{min-height:100px!important}
+  .stage .eco-glyph.has-icon,.fx-glyph.has-icon{width:48px!important;height:48px!important}
+}
 </style>
 <script src="assets/world-icons.js"></script>
 </head>
 <body>
 <div class="scene" aria-hidden="true"><div class="art day"></div><div class="art night"></div><div class="art sunset"></div><div class="tint"></div></div>
+<script>
+/* One screen (Juss, 2026-11-08): the stage is the landing; the full game list opens as its own view. */
+(function(){
+  var root=document.documentElement; root.classList.add('gviews');
+  function show(){ var h=location.hash.slice(1); var list=h==='games'||h==='care'||/^game-/.test(h); root.setAttribute('data-gview', list?'list':'stage');
+    if(list){ var t=document.getElementById(h); if(t&&h!=='games') setTimeout(function(){t.scrollIntoView({block:'start'});},0); else window.scrollTo(0,0); } else window.scrollTo(0,0); }
+  window.addEventListener('hashchange',show); document.addEventListener('DOMContentLoaded',show); show();
+})();
+</script>
 <script>
 /* Atmosphere follows local time (tap to change); ambient sound is generated and starts only on a tap. */
 (function(){var h=new Date().getHours();document.body.dataset.atmo=h>=5&&h<8?'dawn':h>=8&&h<17?'day':h>=17&&h<20?'sunset':'night';})();
@@ -312,7 +345,7 @@ document.addEventListener('DOMContentLoaded',function(){
     <button type="button" class="ctrl-atmo" id="atmoBtn"><span class="ctrl-sun" aria-hidden="true"></span><span><small>Current atmosphere</small><b id="atmoName">Sunset</b></span><span aria-hidden="true">›</span></button>
   </div>
 </section>
-<div class="mainwrap">
+<div class="mainwrap" id="gamesView">
 <section id="games" aria-labelledby="games-title"><div class="section-heading"><h2 id="games-title">Our game worlds</h2><p>One home. Different adventures.</p></div><div class="cards">
 <article class="card" id="game-sync"><div class="art sync-art" aria-hidden="true"><span>🎉</span><b class="art-title">SYNC</b></div><div class="card-body"><span class="meta">Game family / three distinct experiences</span><h3>SYNC</h3><p>Think alike. Beat the clock. Read the room. SYNC has three flavors, each with its own personality.</p><span class="tag live">Live Site SYNC</span>
 <div class="edition"><h4>⚡ Live Site SYNC</h4><p>The real-time party arena. Join or create a room, answer privately, and reveal together.</p><a class="action" href="https://sync.jussco.company/">Play Live SYNC ↗</a></div>

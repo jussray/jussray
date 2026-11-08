@@ -1,3 +1,15 @@
+## 2026-11-08 — One screen, no scroll (Juss: "we shouldn't have to scroll")
+
+- FIX: the homepage Home view and the Game Hub landing are now exactly one viewport, with no scroll, at 1440×900, 1672×941, 390×844 and 375×667.
+  - The footer is hidden on Home and shows on the other views.
+  - The Game Hub's long game list is its own view: Explore Games, All Games and the Games tab open `#games`.
+  - On phones the quote card drops out and the controls sit in one row of pills.
+  - On short phones (height ≤760) the crown, signature, caps line and subline are hidden.
+  - Fixed: on phones the homepage ecosystem band was 1,548px wide and the Game Hub band 486px, wider than the screen.
+- Founder's re-sent day/night scenes are byte-identical to the art already on the site, so the assets are unchanged.
+- PROOF (local): verify-site exit 0, 494 ok. New checks: no scroll on Home and the Game Hub, ecosystem band on screen, games list view. `node --test` 86/87 (the known vitest gap).
+- ROLLBACK: revert this commit.
+
 ## 2026-11-08 — Illustrated icons (Juss: "still doesn't view like the images")
 
 - GAP CLOSED: the ecosystem and featured tiles showed letter badges ("SK", "FC") and emoji. They now show glowing illustrated icons on dark glass at the mockups' scale: 88px art, and 68px on phones.
