@@ -164,7 +164,10 @@ h1{font-size:clamp(39px,4.2vw,64px);line-height:1.08;letter-spacing:-.015em;marg
  .opportunity-deck{overflow-wrap:anywhere}
  .opportunity-deck h2{font-size:clamp(25px,6vw,32px);margin:4px 0 13px}
  .opportunity-deck h2::before,.opportunity-deck h2::after{width:13px;margin:0 7px}
- .cards{grid-template-columns:1fr;gap:10px}
+ .opportunity-deck .cards{display:grid;grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:min(82vw,330px);gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:8px;overscroll-behavior-inline:contain;padding:5px 8px 15px;scrollbar-width:thin}
+ .opportunity-deck .card{scroll-snap-align:start}
+ .deck-swipe-hint{display:block;text-align:center;color:#ffe4bd;font-size:12px;margin:3px 0 12px}
+ .tool-link,.menu-button,.top-nav a{min-width:44px;min-height:44px}
  .card{min-height:0;grid-template-columns:75px minmax(0,1fr);padding:14px;gap:10px}
  .op-icon,.op-icon svg{width:70px;height:70px}
  .card h3{font-size:19px}
@@ -189,3 +192,6 @@ h1{font-size:clamp(39px,4.2vw,64px);line-height:1.08;letter-spacing:-.015em;marg
  .world-atmosphere{display:none}
  *,*::before,*::after{animation:none!important;transition:none!important}
 }
+
+.deck-swipe-hint{display:none}
+@media(max-width:720px){.deck-swipe-hint{display:block}}
