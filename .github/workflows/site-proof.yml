@@ -57,6 +57,8 @@ jobs:
         run: node --test tests/atmosphere.test.mjs
       - name: Verify source/provider proof responsibility boundary
         run: node --test scripts/site-proof-boundary.test.mjs
+      - name: Validate future provider readback against new Game Hub and source authority
+        run: node --test scripts/verify-provider-site.test.mjs
       - name: Validate company resource links, public PDFs and status honesty
         run: node --test scripts/public-resources.test.mjs
       - name: Verify exact-source site and Games locally in Chromium
