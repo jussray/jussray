@@ -52,7 +52,7 @@ jobs:
       - name: Test GitHub webhook receiver (HMAC, request bounds, safe acknowledgements)
         run: node --test tests/jussco-github-webhook.test.mjs
       - name: Test systematic review decision and native ruleset contract (read-only)
-        run: node --test scripts/verify-independent-review.test.mjs
+        run: node --test scripts/verify-independent-review.test.mjs scripts/prepare-native-review-ruleset.test.mjs
       - name: Test automatic seasonal atmosphere
         run: node --test tests/atmosphere.test.mjs
       - name: Verify source/provider proof responsibility boundary
