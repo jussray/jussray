@@ -65,6 +65,8 @@ jobs:
         run: node scripts/verify-site.mjs
       - name: Verify Game Hub cinematic mobile controls and existing game boundaries
         run: node scripts/verify-games-hub-cinematic.mjs
+      - name: Verify Steel City preview route and campaign smoke in Chromium
+        run: node scripts/verify-steel-city-preview.mjs
       - name: Verify Opportunity Engine mobile candidates and honest research status
         run: node scripts/verify-opportunity-engine.mjs
       - name: Verify licensing page on desktop and mobile in Chromium
