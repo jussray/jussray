@@ -711,3 +711,23 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
 - 2026-11-09 14:07 UTC: Juss turned on auto-merge for #74 (squash). GitHub recorded it as `auto_squash_enabled`, not `auto_merge_enabled`, so the gate missed it. Fixed on #74: all three method-named enable events now count. The fix only takes effect after #74 merges, because the gate runs from main.
 - 2026-11-09 ~15:35 UTC: commit 0f5a23e (from Juss's account, unsigned, pushed 15:20 UTC) removed the founder-review path from #74. I asked Juss which rule stands; he answered "I'm the reviewer". Reverted 0f5a23e; the code again matches 8be2019.
 - 2026-11-09 ~16:40 UTC: eb112c8 (Juss's account, unsigned, 16:24 UTC) reintroduced the non-author approval requirement. Juss: "The system accordingly is the sec reviewer". Reverted eb112c8; CLAUDE.md records two reviewers (the system's 4 required checks + Juss's UI founder review) as settled.
+
+## RESUME HERE (handover 2026-11-09 ~16:45 UTC)
+- **Review rule (settled; Juss chose it three times on 2026-11-09):**
+  - Two reviewers. (1) The system: the 4 required exact-head checks plus systematic review. (2) Juss: a `/approve <sha>` comment, or turning on auto-merge, done in the GitHub UI.
+  - Never reintroduce a required non-author human approval, and never set native approvals to 1.
+  - Claude never posts `/approve`, never turns on auto-merge, and never merges without Juss's word.
+- **PR #74** (branch `claude/sleepy-mayer-1s8avr`, head `0b9df0a`) holds:
+  - the Cloudflare numeric error-code readback fix;
+  - the fix for squash/rebase auto-merge events in the gate;
+  - the reverts of `0f5a23e` and `eb112c8`, both unsigned commits from Juss's account (likely another agent using his token).
+  - Its CI was green apart from Independent Review Evidence on the earlier heads. CI on `0b9df0a` has not been read back.
+- **Blockers, all Juss's admin actions:**
+  1. Governance ruleset 26857902: approvals 1→0; add `Review Gate Unit Tests`; remove `focused-browser` (nothing reports it) and `Workers Builds: jussco-games`; remove the 17 required deployments; turn on strict checks.
+  2. Delete the Production ruleset 26428639 (~ALL, 4 bypass actors). Pre-change snapshot: `ruleset-before.json` in the old session scratchpad.
+  3. CodeQL default setup is "not-configured", but rulesets require code scanning. Set it up, or remove that rule.
+  4. Alternative to 1–3: import the fixed ruleset JSON. Its generator is `scripts/prepare-native-review-ruleset.mjs` on 8be2019/0b9df0a (main only, approvals 0, 4 checks, non_fast_forward, no deployments, no bypass).
+  5. Stop the tool that pushes reverts as Juss.
+  6. Provider readback: 401 on every main run since 2026-10-20, so the token secret is wrong. #74 makes the next main run print Cloudflare's error code.
+  7. The morning digest routine (trig_01GRi7McgNmbS6vyhuDCPiGN) has no repo attached and gets 403. Fix it in the claude.ai Routines UI.
+- **After the merge:** read back main's checks, the provider readback error code and the live site (the sandbox can't reach jussco.company, so use CI or Juss's browser).
