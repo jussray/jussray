@@ -1,0 +1,29 @@
+name: Founder Review Rerun
+# Juss's "/approve <head sha>" comment on a PR re-runs Independent Review Evidence on that head,
+# so the required check attaches to the PR head (issue_comment runs attach to main).
+# This only re-runs the gate. The gate itself, loaded from main, decides whether the comment counts.
+on:
+  issue_comment:
+    types: [created]
+permissions:
+  actions: write
+  pull-requests: read
+jobs:
+  rerun:
+    if: >-
+      github.event.issue.pull_request &&
+      github.event.comment.user.login == 'jussray' &&
+      startsWith(github.event.comment.body, '/approve')
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Re-run the review gate on the PR head
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.issue.number }}
+        run: |
+          head=$(gh api "repos/$REPO/pulls/$PR" --jq .head.sha)
+          run=$(gh api "repos/$REPO/actions/workflows/independent-review-evidence.yml/runs?event=pull_request&head_sha=$head&per_page=1" --jq '.workflow_runs[0].id // empty')
+          if [[ -z "$run" ]]; then echo "::warning::No review-gate run found for $head"; exit 0; fi
+          gh run rerun "$run" -R "$REPO" || echo "::warning::Re-run of $run not started (it may still be running; it reads the comment when it finishes)"

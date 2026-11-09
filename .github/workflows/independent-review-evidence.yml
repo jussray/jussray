@@ -1,12 +1,15 @@
 name: Independent Review Evidence
 on:
   pull_request:
-    types: [opened, reopened, synchronize, ready_for_review]
+    # auto_merge_enabled/disabled: Juss turning auto-merge on in the GitHub UI is his founder review.
+    types: [opened, reopened, synchronize, ready_for_review, auto_merge_enabled, auto_merge_disabled]
   pull_request_review:
     types: [submitted, dismissed]
 permissions:
   contents: read
   pull-requests: read
+  issues: read
+  actions: read
 concurrency:
   group: independent-review-${{ github.event.pull_request.number }}
   cancel-in-progress: true
@@ -40,7 +43,7 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: '24'
-      - name: Require current-head independent human approval
+      - name: Require current-head founder review or independent human approval
         env:
           GITHUB_TOKEN: ${{ github.token }}
           PR_NUMBER: ${{ github.event.pull_request.number }}

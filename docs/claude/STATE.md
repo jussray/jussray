@@ -1,6 +1,6 @@
 ## 2026-11-08 — SUPERSEDING founder governance decision: systematic-first, human-final
 
-- Review live `main` and exact PR head; systematically review and repair; verify exact-head checks and applicable browser proof; then require **one independent human GitHub approval on that exact head**. Only a separate founder-approved action may merge or deploy.
+- Review live `main` and exact PR head; systematically review and repair; verify exact-head checks and applicable browser proof; then require **Juss's founder review on that exact head** (`/approve <sha>` comment or auto-merge, in the GitHub UI; superseded 2026-11-09, see CLAUDE.md).
 - Earlier same-day zero-human-approval plans are superseded and not release authority. The Production ruleset remains unmodified until an authorized admin write and live readback.
 - Existing PR #72 carries the source repair. Avoid bypasses. Preserve existing deployment protections unless separately reviewed.
 - Rollback: revert this branch's governance alignment commit, not the live native ruleset.
@@ -689,3 +689,14 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
 - 2026-11-09 ~06:30 UTC: the audit found Ideas and Opportunity Engine sharing a title. Fix: `opportunity-engine.html` `<title>` and `og:title` now say "Opportunity Engine", matching its own meta description. Its visible h1 is unchanged (founder copy). Checks: verify-opportunity-engine PASS on desktop and mobile; verify-site 439 ok. The page has had no live check yet.
 - 2026-11-09 13:41 UTC: the first digest run (trig_01GRi7McgNmbS6vyhuDCPiGN, session cse_01KbtbVi1VXVtpa8UEAB7XYq) FAILED to read GitHub. Each fire starts a fresh session with no repository attached, so `gh` returned 403 ("GitHub access to this repository is not enabled for this session"). The run changed nothing and sent a push notification. Fix (Juss, in the claude.ai Routines UI): attach jussray/jussray with read access, or recreate the routine there with the repo selected. An agent-created trigger can't attach a source. Next fire: 2026-11-10 13:40 UTC. Until then, the task fails the same way every weekday.
 - 2026-11-09 PR #72 re-observed at head `69caf84`: 0 reviews; mergeable_state=blocked. Green: GitGuardian, Workers Builds, Site Browser Proof, verify, Review Gate Unit Tests, receipts, Repo Reality. Red: Independent Review Evidence, which needs a non-author human approval on this head. Ruleset 26428639 is unchanged: scope still ~ALL plus 4 branch names, and 0 required status checks.
+
+## 2026-11-09 PR #72 MERGED by Juss; founder-review gate built
+- PR #72 merged by Juss 13:52 UTC as `b7695f9`, without an outside approval. Checks on main `b7695f9`: Workers Builds jussray, Site Browser Proof, site verify and Repo Reality all pass. Provider readback fails (Browser Rendering HTTP 401; it was failing before this merge). Live runtime: UNKNOWN.
+- Juss's decision, 2026-11-09: "I am the independent reviewer; my pressing review and auto merge should sign and/or trigger those approvals." This supersedes the non-author-approval rule.
+- Built on branch `claude/sleepy-mayer-1s8avr` from `b7695f9`:
+  - The gate accepts Juss's `/approve <sha>` PR comment or his enabling auto-merge, made in the GitHub UI after the head push. Actions made through an app are rejected.
+  - Observed on #72's timeline: Claude's comment carries `performed_via_github_app=claude`; Juss's auto_merge_disabled and merge carry `null`.
+  - The gate workflow now also runs on auto_merge_enabled/disabled. New `founder-review-rerun.yml` re-runs the gate when Juss comments `/approve`.
+  - The ruleset repair script now sets native approvals to 0.
+  - Tests 35/35 pass.
+- This needs a bootstrap merge: main's old gate still demands a non-author approval until this lands.
