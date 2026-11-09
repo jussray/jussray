@@ -33,6 +33,12 @@ export function planNativeRepair(live) {
   if (new Set(types).size!==types.length) throw new Error('Duplicate rules; refuse ambiguous update');
   for(const needed of ['pull_request','required_status_checks','deletion'])
     if(!types.includes(needed))throw new Error('Missing mandatory existing rule: '+needed);
+  // A creation rule permits only bypass actors to create matching branches.
+  // This repair removes all bypass actors; when creation is scoped to ~ALL,
+  // that combination can lock everyone out of creating new branches.
+  // Refuse the incompatible plan even if all approval flags were supplied.
+  if(types.includes('creation'))
+    throw new Error('Unsafe branch-creation lockout: creation rule plus zero bypass actors; revise ruleset scope and branch-creation policy first');
   const pull=live.rules.find(x=>x.type==='pull_request').parameters;
   if(pull?.required_review_thread_resolution!==true || pull.required_approving_review_count!==1)
     throw new Error('Review gate cannot be altered or relaxed implicitly');
