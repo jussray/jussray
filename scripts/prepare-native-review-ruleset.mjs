@@ -33,12 +33,18 @@ export function planNativeRepair(live) {
   if (new Set(types).size!==types.length) throw new Error('Duplicate rules; refuse ambiguous update');
   for(const needed of ['pull_request','required_status_checks','deletion'])
     if(!types.includes(needed))throw new Error('Missing mandatory existing rule: '+needed);
-  // A creation rule permits only bypass actors to create matching branches.
-  // This repair removes all bypass actors; when creation is scoped to ~ALL,
-  // that combination can lock everyone out of creating new branches.
-  // Refuse the incompatible plan even if all approval flags were supplied.
-  if(types.includes('creation'))
-    throw new Error('Unsafe branch-creation lockout: creation rule plus zero bypass actors; revise ruleset scope and branch-creation policy first');
+  // Narrow only the founder-approved, explicitly named protected branches.
+  // A global creation rule with zero bypass actors would lock out feature branches.
+  // Refuse unknown branch patterns or exclusions rather than silently weakening them.
+  const permitted=new Set(['refs/heads/main','refs/heads/Production','refs/heads/releases','refs/heads/Deployed']);
+  const scope=live.conditions.ref_name;
+  if(!Array.isArray(scope.exclude) || scope.exclude.length!==0 ||
+     scope.include.some(ref=>ref!=='~ALL' && !permitted.has(ref)) ||
+     !scope.include.includes('refs/heads/main'))
+    throw new Error('Unapproved branch scope: only named release branches may remain after narrowing ~ALL');
+  const protectedRefs=scope.include.filter(ref=>ref!=='~ALL');
+  if(new Set(protectedRefs).size!==protectedRefs.length)
+    throw new Error('Duplicate protected branch in ruleset scope');
   const pull=live.rules.find(x=>x.type==='pull_request').parameters;
   if(pull?.required_review_thread_resolution!==true || pull.required_approving_review_count!==1)
     throw new Error('Review gate cannot be altered or relaxed implicitly');
@@ -51,7 +57,7 @@ export function planNativeRepair(live) {
   const extra=REQUIRED_CONTEXTS.filter(x=>!seen.has(x)).map(context=>({context}));
   const payload={
     name:live.name, target:live.target, enforcement:live.enforcement,
-    conditions:structuredClone(live.conditions),
+    conditions:{...structuredClone(live.conditions),ref_name:{...structuredClone(scope),include:protectedRefs}},
     bypass_actors:[],
     rules:[
       ...stableRules(live.rules).map(rule=>rule.type==='required_status_checks'
@@ -63,8 +69,10 @@ export function planNativeRepair(live) {
   const warnings=[];
   if(!types.includes('non_fast_forward'))
     warnings.push('Missing non-fast-forward protection will be enabled');
-  if(live.conditions.ref_name.include.includes('~ALL'))
-    warnings.push('Global ~ALL branch scope: applying affects every included branch');
+  if(scope.include.includes('~ALL'))
+    warnings.push('Narrowing ~ALL to explicit protected branches; feature branches will no longer inherit this ruleset');
+  if(types.includes('creation'))
+    warnings.push('Creation of the named protected branches requires a separate authorized process when bypass actors are removed');
   if(live.bypass_actors.length)
     warnings.push('Removing existing bypass actors requires separate explicit approval');
   if(live.rules.some(x=>x.type==='required_deployments'))
@@ -85,7 +93,7 @@ async function jsonRequest(url,method,token,request,body) {
 }
 
 export async function applyNativeRepair({token,rulesetId,expectedDigest,confirmGlobal=false,
-  confirmBypassRemoval=false,request=fetch}) {
+  confirmBypassRemoval=false,confirmScopeNarrowing=false,request=fetch}) {
   if(!token || !Number.isSafeInteger(rulesetId) || rulesetId<1 ||
     !/^[0-9a-f]{64}$/.test(expectedDigest||''))throw new Error('Missing admin credential, stable ruleset ID, or snapshot digest');
   const url=API+rulesetId;
@@ -95,12 +103,14 @@ export async function applyNativeRepair({token,rulesetId,expectedDigest,confirmG
   const plan=planNativeRepair(before);
   if(before.conditions.ref_name.include.includes('~ALL') && !confirmGlobal)
     throw new Error('Explicit all-branch scope approval required before global ruleset mutation');
+  if(before.conditions.ref_name.include.includes('~ALL') && !confirmScopeNarrowing)
+    throw new Error('Explicit protected-branch scope narrowing approval required');
   if(before.bypass_actors.length && !confirmBypassRemoval)
     throw new Error('Explicit bypass removal approval required');
   await jsonRequest(url,'PUT',token,request,plan.payload);
   const after=await jsonRequest(url,'GET',token,request);
   if(after.id!==rulesetId || after.enforcement!=='active' ||
-     JSON.stringify(after.conditions)!==JSON.stringify(before.conditions) ||
+     JSON.stringify(after.conditions)!==JSON.stringify(plan.payload.conditions) ||
      after.bypass_actors?.length!==0)throw new Error('Ruleset provider readback mismatch');
   const expected=stableRules(plan.payload.rules),actual=stableRules(after.rules||[]);
   if(JSON.stringify(expected)!==JSON.stringify(actual))
@@ -127,7 +137,8 @@ if(process.argv[1] && import.meta.url===pathToFileURL(process.argv[1]).href){
     const expectedDigest=process.env.JUSS_APPROVED_RULESET_DIGEST;
     const result=await applyNativeRepair({token,rulesetId:id,expectedDigest,
       confirmGlobal:flags.has('--approve-all-branches'),
-      confirmBypassRemoval:flags.has('--approve-bypass-removal')});
+      confirmBypassRemoval:flags.has('--approve-bypass-removal'),
+      confirmScopeNarrowing:flags.has('--approve-branch-scope')});
     console.log(JSON.stringify(result,null,2));
   })().catch(e=>{console.error('RULESET REPAIR BLOCKED:',e.message);process.exitCode=1;});
 }
