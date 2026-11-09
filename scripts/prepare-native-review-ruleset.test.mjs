@@ -63,6 +63,30 @@ test('rejects wrong repo, disabled ruleset, unresolved conversations and unexpec
   ]) {const x=live();mutate(x);assert.throws(()=>planNativeRepair(x));}
 });
 
+test('rejects creation rule when proposed removal of every bypass actor would lock branch creation',()=>{
+  const unsafe=live();
+  unsafe.rules.push({type:'creation'});
+  assert.throws(()=>planNativeRepair(unsafe),/Unsafe branch-creation lockout/);
+  const allAlreadyRemoved=live();
+  allAlreadyRemoved.bypass_actors=[];
+  allAlreadyRemoved.rules.push({type:'creation'});
+  assert.throws(()=>planNativeRepair(allAlreadyRemoved),/Unsafe branch-creation lockout/);
+});
+
+test('even explicit global and bypass approvals cannot bypass creation lockout protection or issue PUT',async()=>{
+  const unsafe=live();
+  unsafe.rules.push({type:'creation'});
+  let putCount=0;
+  const request=async(_url,options)=>{
+    if(options.method==='PUT')putCount++;
+    return {ok:true,json:async()=>unsafe};
+  };
+  await assert.rejects(()=>applyNativeRepair({
+    token:'fake',rulesetId:unsafe.id,expectedDigest:fingerprint(unsafe),request,
+    confirmGlobal:true,confirmBypassRemoval:true,
+  }),/Unsafe branch-creation lockout/);
+  assert.equal(putCount,0);
+});
 test('apply refuses stale snapshot digest, unapproved all-branch changes or bypass removal',async()=>{
   const liveRule=live();let puts=0;
   const request=async(url,opts)=>{
