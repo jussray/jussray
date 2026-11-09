@@ -1,3 +1,200 @@
+## 2026-11-08 — SUPERSEDING founder governance decision: systematic-first, human-final
+
+- Review live `main` and exact PR head; systematically review and repair; verify exact-head checks and applicable browser proof; then require **Juss's founder review on that exact head** (`/approve <sha>` comment or auto-merge, in the GitHub UI; superseded 2026-11-09, see CLAUDE.md).
+- Earlier same-day zero-human-approval plans are superseded and not release authority. The Production ruleset remains unmodified until an authorized admin write and live readback.
+- Existing PR #72 carries the source repair. Avoid bypasses. Preserve existing deployment protections unless separately reviewed.
+- Rollback: revert this branch's governance alignment commit, not the live native ruleset.
+
+## 2026-11-08 — The card box is the page (Juss: "card box should change and show the according projects", "same stuff, different device")
+
+- FIX (homepage):
+  - The landing stays one screen. Products swaps the box to "Our Products" (the 11 sites from #live-sites, so it uses the same source). Home and Worlds show "Our Ecosystem" (worlds plus public systems) with group chips: All, People & belonging, Ideas & systems, Stories & play.
+  - The full detail pages sit behind `#product-details` and `#world-details`, linked from the box.
+  - The nav is now the mockup's seven tabs (Home, Portfolio, Products, Solutions, Our Work, Founder, Contact) on the homepage and every shell page. Worlds, Proof and Systems stay reachable from the footer and the box.
+  - Phones show 3 tiles per view with edge arrows and dots. Desktop shows 6 or more across.
+- FIX (Game Hub): Featured Experiences has chips: All, Live now, In development.
+- FIX (Ideas): rebuilt to the founder's desktop and phone mockups.
+  - Desktop is one screen: left quote, center title, prompt pill and buttons, the lotus visible, a bottom band of 3 candidate cards (icon left, tags) and a right signals panel. It keeps the honest empty state, with no invented percentages. Sound and atmosphere sit bottom-left.
+  - The product chips are behind "Choose products to build from".
+  - Phones stack in the mockup's order.
+- PROOF (local): verify-site exit 0, 506 ok. New checks: box modes and the active nav, chip filtering. Nav-count and shell checks updated to seven tabs. `node --test` 86/87 (the known vitest gap). approved-stories passed. Screenshots reviewed: 390×844 (Products, Game Hub, Ideas) and 1440×900 (Home, Ideas).
+- BLOCKERS UNCHANGED: the unsigned 4fb6f02 replacement was denied by the session safety classifier, and the Production ruleset 26428639 needs fixes.
+- ROLLBACK: revert this commit.
+
+## 2026-11-08 — One screen, no scroll (Juss: "we shouldn't have to scroll")
+
+- FIX: the homepage Home view and the Game Hub landing are now exactly one viewport, with no scroll, at 1440×900, 1672×941, 390×844 and 375×667.
+  - The footer is hidden on Home and shows on the other views.
+  - The Game Hub's long game list is its own view: Explore Games, All Games and the Games tab open `#games`.
+  - On phones the quote card drops out and the controls sit in one row of pills.
+  - On short phones (height ≤760) the crown, signature, caps line and subline are hidden.
+  - Fixed: on phones the homepage ecosystem band was 1,548px wide and the Game Hub band 486px, wider than the screen.
+- Founder's re-sent day/night scenes are byte-identical to the art already on the site, so the assets are unchanged.
+- PROOF (local): verify-site exit 0, 494 ok. New checks: no scroll on Home and the Game Hub, ecosystem band on screen, games list view. `node --test` 86/87 (the known vitest gap).
+- ROLLBACK: revert this commit.
+
+## 2026-11-08 — Illustrated icons (Juss: "still doesn't view like the images")
+
+- GAP CLOSED: the ecosystem and featured tiles showed letter badges ("SK", "FC") and emoji. They now show glowing illustrated icons on dark glass at the mockups' scale: 88px art, and 68px on phones.
+  - Source: first-party SVG in `site/assets/world-icons.js`, with a copy at `site/games/assets/` for the games worker.
+  - Each icon is mapped by product name from the JSON data. Unknown names fall back to a crown.
+  - The SVG is parsed as SVG, never as HTML.
+- PROOF (local): verify-site exit 0, 482 ok. New checks: every ecosystem tile and every featured tile renders an icon. `node --test` 86/87 (the known vitest gap). Screenshots at 1672 and 390 reviewed.
+- SIGNED-HISTORY REPLACEMENT: Juss approved it ("Approved"). The guarded force-with-lease push of signed 51cba7a over unsigned 4fb6f02 was DENIED by the session's auto-mode safety classifier (Git Destructive), so it was not pushed. It needs Juss to allow the action, or to do it himself. The branch stays at 4fb6f02 plus this commit.
+- ROLLBACK: revert this commit.
+
+## 2026-11-07 — One phone pattern across the site
+
+- FIX: the homepage (`site/index.html`) and every shell page (`world-shell.{css,js}`) now use the Game Hub phone pattern. That is a glass header pill with a real menu button (Escape closes it, and a link closes it) and a fixed bottom tab bar with the founder mockup's tabs: Home, Products, Solutions, Our Work, Founder.
+  - The current page is marked: Home and Founder views on the homepage, Solutions on services, Our Work on work.
+  - The sideways-scrolling nav row and the header CTA are gone on phones.
+  - The homepage hero buttons sit side by side.
+- PROOF (local): verify-site exit 0, 477 ok. New checks: homepage tabs and current tab, menu opens the nav, a menu link opens its view and closes the menu, and every shell page has the tab bar. `node --test` 80/81 (the known vitest gap). Phone screenshots reviewed: homepage, menu open, services, portfolio.
+- STILL BLOCKED: PR #68 merge waits on the `main` ruleset (founder-only setting).
+- ROLLBACK: revert this commit.
+
+## 2026-11-07 — Game Hub phone layout (founder mobile mockup)
+
+- FIX (`site/games/index.html`, max-width 700px only):
+  - Single glass header pill with a real menu button: it opens the existing nav, and Escape closes it.
+  - Hero buttons side by side, with the lotus visible between the hero and the band.
+  - Three featured tiles per view, with edge arrows and page dots.
+  - A "Game Hub Center" pill plus a link row: All Games, SYNC, Play with care.
+  - Sound and atmosphere as two pills on one row.
+  - A fixed bottom tab bar: Home, Games (current), Solutions, Our Work, Founder.
+- NOT BUILT (nothing real behind them): search, bell, account, My Library, Tournaments, Events, Creator Zone, "EARN". The tab bar says Games where the mockup says Products, so the current page is marked.
+- PROOF (local): verify-site exit 0, 466 ok; three new phone checks (tab bar, three tiles plus pill, menu). `node --test` 80/81 (the known vitest gap). Phone screenshots reviewed.
+- STILL BLOCKED: PR #68 merge waits on the `main` ruleset listing the four systematic checks (founder-only setting).
+- ROLLBACK: revert this commit.
+
+## 2026-11-07 — Old pages join the world; founder approval recorded
+
+- APPROVAL (Juss, 2026-11-07): "approved" for PR #68. Merge only on an exact head where every required check is green. The independent-review gate is not mine to satisfy or bypass.
+- FIX: the world shell now also covers builds, creative-history, licensing and returns. The shell upgrades `header.top`, falls back to the page's first header, or creates one (licensing had none). All shell pages get Playfair headlines matching the stage, and the brand is no longer uppercased by page CSS.
+- CI note: the .gitignore-only head cc8330d did not trigger Site Browser Proof, which the review gate requires. This push touches `site/` so the full set runs. No further pushes until the gate evaluates, because the gate goes stale when the head moves.
+- PROOF (local): verify-site exit 0, 463 ok (shell checks on 8 pages × 2 widths). `node --test` 80/81 (known vitest gap). approved-stories passed.
+- ROLLBACK: revert this commit.
+
+## 2026-11-07 — Devil pass (/godmode /devil ULTRATHINK, no new target)
+
+- CONFESS: I pushed 9 commits without reading PR #68 CI. Head 3213b53 was red on 3 checks. I also skipped `node --test` after the page-views commit.
+- FOUND AND FIXED:
+  1. `public-resources.test.mjs` failed (CI Site Browser Proof): `data-view` was inserted between `id` and `aria-labelledby`. The attribute now sits at the end of every section tag.
+  2. "Two sites" one tap deeper: Portfolio, Solutions and Our Work each had their own header, nav and look. New `site/assets/world-shell.{css,js}`, linked from portfolio, services, work and ideas, gives every page the same glass header, the same nine-button nav (current page marked) and the same lake world. With no JS, each page keeps its own header.
+  3. The homepage, Ideas and the Game Hub downloaded all three scenes (about 1.1MB on desktop) to show one. Background images are now scoped to the active atmosphere, so each page loads one scene, plus another only on a tap. The Game Hub no longer starts as "day" before its script runs.
+  4. Repo Reality failed: the PR body lacked the five evidence sections. The body was rewritten.
+- NOT MINE TO FIX: Independent Review Evidence needs an independent reviewer on the exact head. Its log said "head changed during evaluation; evidence is stale".
+- CLEARED: only the router writes the URL hash, so there is no hash collision.
+- PROOF (local): verify-site exit 0, 439 ok (26 new shell checks). `node --test` 80/81; the one failure is the known vitest-only `evidence-sync-proof`. approved-stories gate passed; worlds-patch passed. Network trace: one scene per page on load.
+- ROLLBACK: revert this commit.
+
+## 2026-11-07 — One site, not two (Juss: "like two different sites", ULTRATHINK)
+
+- CAUSE: only the home stage had the lake world. Every other section painted its own near-black background, and Home still stacked the old dark hero and contact under the stage, so phones showed two visual languages.
+- FIX:
+  - The lake scene is a fixed page layer behind every view: lighter tint on Home, darker on content pages.
+  - Section backgrounds are now transparent.
+  - Home is the world stage only. The "Juss & Co / Turn thoughts into living works" intro moved to the Founder view, and contact has its own view.
+  - The footer was lifted out of #contact into a shared glass `<footer class="site-foot">` on every view.
+  - On phones: the stage's link panel is hidden (the nav row replaces it), the footer links wrap, and live-site cards use a 2-column grid.
+- NUMBERS (390px phone): Home 1,848px (was 4,269; 22,990 before views). Products 4,067, Worlds 10,177, Proof 4,439, Founder 2,451, Contact 1,428.
+- TESTS: the old check "hero eyebrow below the ecosystem band" encoded the #64 single-page order and was replaced by "landing is the stage only". New check: one fixed world layer and a shared footer. verify-site exit 0, 413 ok.
+- RISK: Worlds (16 cards) is still about 12 phone screens. The next step, if Juss wants it, is a short preview with "See all" linking to the portfolio.
+- ROLLBACK: revert this commit.
+
+## 2026-11-07 — Homepage split into page views (Juss: phone was "a never ending scroll")
+
+- RULE (Juss, 2026-11-07): content belongs behind its own page button. The landing page stays short, and each page scrolls only as far as its own content.
+- FIX: page views inside `site/index.html`, chosen by the URL hash, so the back button and shared links work:
+  - Home: world stage, intro, contact.
+  - Products (`#products`): pathways and live sites.
+  - Worlds (`#worlds`): world cards and systems.
+  - Proof (`#proof`): proof, quotes, outcomes, resources.
+  - Founder (`#why`).
+  - Contact (`#contact`).
+  - Old section anchors open the view that holds them. Without JS, every section shows. The nav gained Worlds and Proof (Ideas moved to the footer) and now shows on phones as a sideways-scrolling row; it was hidden below 640px before. The old scroll-spy highlight was removed because the views now own it.
+- NUMBERS (390px phone): landing 22,990px down to 4,269px. Products 4,330, Worlds 9,668, Proof 3,928, Founder 1,069, Contact 1,541.
+- TESTS: homepage checks now open the view that holds their content first, as a visitor would; no check was removed. New checks: each view shows only its own content and marks its nav button, the back button works, and the phone landing page is under 7,000px.
+- PROOF (local): verify-site exit 0, 408 ok. Phone screenshots reviewed: landing, and Worlds opened from the nav.
+- UNKNOWN: what Juss saw on the live site. It isn't from this branch; PR #68 is not merged or deployed, and the proxy blocks production from here.
+- ROLLBACK: revert this commit.
+
+## 2026-11-07 — Mockup proportions (Juss: "you're making the cards too big, match the images")
+
+- RULES recorded in CLAUDE.md: use all `skills/juss-authored` skills; match mockup proportions, not just parts.
+- FIX (≥1100px, homepage and Game Hub):
+  - Side cards shrink to the mockup's widths: quote 200px, panel 232px, controls 200px.
+  - Tiles go from 138×196 to 104–108×138; panel rows and type are tighter.
+  - The headline is smaller, and the band sits at the bottom, so the lotus and orb show between the headline and the band.
+  - The homepage header is translucent glass with the scene behind it (`flagship.css` `.top`).
+  - The Game Hub tiles are centred.
+- PROOF (local): verify-site exit 0, 389 ok. Screenshots reviewed at 1672×941 (the mockup's size) and 1440.
+- ROLLBACK: revert this commit.
+
+## 2026-11-07 — Game Hub world stage (founder mockup)
+
+- FIX: `site/games/index.html` now opens on a Game Hub stage:
+  - Crown, "Game Hub" (the single h1), PLAY · CONNECT · CREATE · COMPETE, a subline and the script sign.
+  - Explore Games (links to #games) and Play SYNC (links to sync.jussco.company).
+  - Founder quote, "Game Hub Center" panel, "Featured Experiences" band, and ambient sound and atmosphere controls.
+  - The nav mirrors the company nav, with "Games" marked as the current page.
+  - Featured tiles are the six real games. Only live SYNC leaves the page; the others jump to their own card.
+- NOT BUILT: the mockup's Tournaments, Events & Challenges, Creator Zone, Rewards & Achievements and My Library, plus "EARN" in the tagline. None of these exist, and "earn" would imply money or rewards. Play SYNC replaces My Library. Each one needs a real feature, and Juss's word, first.
+- PROOF (local): verify-site exit 0, 389 ok. Four new games checks pass: single headline, no unbuilt features shown, only SYNC links off the page from the featured tiles, and the dawn atmosphere. Screenshots reviewed at 1440 and 390.
+- ROLLBACK: revert this commit.
+
+## 2026-11-07 — Homepage world stage (Juss: "the main page should view like this")
+
+- TARGET: Juss's homepage mockup (crown, centred "Creative Technology for a More Beautiful Life", founder quote, ecosystem side panel, "Our Ecosystem" band, ambient sound and atmosphere controls, all over the lake scene).
+- FIX: a new `#world` stage in `site/index.html`:
+  - The day, sunset or night scene follows local time; tapping cycles Dawn, Daylight, Sunset, Night.
+  - The headline is the page's single h1; the old hero's "Juss & Co" became an h2, and its duplicated tagline lines were removed.
+  - The founder quote comes from Juss's own mockup.
+  - The ecosystem panel gained a Founder row linking to #why.
+  - The ecosystem band is unchanged in data: tiles still come from worlds.json and systems.json.
+  - Ambient sound is a generated tone that starts only on a tap.
+  - The nav is trimmed to the mockup set: Home, Portfolio, Products, Solutions, Our Work, Ideas, Founder, Contact. Live sites, Systems, Resources and Creative history moved to the footer. A `flagship.css` rule that hid nav items by position was removed.
+- NOT BUILT (no real function behind them): search, notifications and the "My Juss" account menu.
+- PROOF (local): verify-site exit 0, 383 ok. Six new homepage checks pass. Screenshots reviewed at 1440 and 390, and no horizontal overflow. `node --test`: 80 pass; one fail is the known vitest-only `evidence-sync-proof`, which also fails on the unchanged tree.
+- RISK: the ecosystem tiles still use letter badges, not the mockup's illustrated icons. Per-product icons need art that each brand owns.
+- ROLLBACK: revert this commit.
+
+## 2026-11-07 — Sunset scene added
+
+- FIX: Juss's sunset scene (`ideas-sunset[-sm].webp`, 108–348 KB) is now the Sunset and Dawn art on `/ideas.html`. On the Games hub it shows 05:00–08:00 and 17:00–20:00; Daylight shows 08:00–17:00 and night otherwise. Both sites carry their own copy of the image.
+- PROOF (local): verify-site exit 0. The image checks now cover all three scenes. Screenshots reviewed: Sunset on the idea generator (desktop) and on the Games hub (phone).
+- ROLLBACK: revert this commit.
+
+## 2026-11-07 — Games hub joins the living world
+
+- FIX: `site/games/index.html` now uses the same founder day/night scene, glass panels, gold edges and Playfair headings as `/ideas.html`. The games Worker serves only `site/games/`, so the scene art is copied into `site/games/assets/`. The scene follows local time: day 06:00–18:00, night otherwise. Game names, links, statuses and safety copy are unchanged.
+- FIX: the phone overflow (392 vs 390px) came from the hero glow at `right:-20px`; it is now `right:0`.
+- PROOF (local): verify-site exit 0 with no FAIL lines. Two new games checks pass: the art loads from the games Worker's own folder, and the atmosphere is set. Screenshots reviewed: desktop day, desktop cards at night, phone at night.
+- ROLLBACK: revert this commit.
+
+## 2026-11-07 — Rejected artwork retired (Juss: "Not this one")
+
+- RULE (Juss, 2026-11-07): the autumn living-room "Creative Technology for a More Beautiful Life" artwork (`jussco-signature-world.jpg`) is rejected. Do not use it again.
+- FIX: removed the asset. The homepage `.jc-scene__art` now uses the approved night scene (`ideas-night[-sm].webp`); that element stays hidden by #64. A new check in `verify-site.mjs` fails if the old file or any reference to it returns.
+- UNKNOWN: whether production still serves it. The cloud proxy blocks www.jussco.company, so re-check after deploy.
+- ROLLBACK: revert this commit; git history restores the file.
+
+## 2026-11-07 — Creation Core: founder scene art
+
+- FIX: Juss's two text-free scenes (day and night) are now the background of `/ideas.html`, as `site/assets/ideas-{day,night}[-sm].webp` at 130–430 KB. Dawn and Daylight use the day art; Sunset and Night use the night art; each has its own tint, and switching crossfades. The CSS gradient stays as a fallback. The third image, the homepage mockup, was used as a reference only. Its ecosystem layout already shipped in #64, and the homepage is unchanged.
+- PROOF (local): 39/39 `ideas-*` checks pass, including the new check that the scene art loads. Day and night screenshots were reviewed at 1440, and Sunset at 390. The only failure is the pre-existing games-hub overflow.
+- ROLLBACK: revert this commit.
+
+## 2026-11-07 — Creation Core idea generator (`site/ideas.html`)
+
+- REALITY: new public page `/ideas.html`, built from Juss's mockups. It is client-side only: no backend, no LLM call, and no data leaves the browser. Product chips come from `site/data/portfolio.json`. Candidates are ranked by keyword and category fit, and every one is labelled "Research candidate · unverified". The page never shows demand numbers. The mockup's "+182% YoY" style signals were invented, so the signals panel shows an honest empty state instead. The search, bell and "My Juss" icons were dropped because they had no working function behind them.
+- FIX (same branch): `scripts/verify-site.mjs` on `main` contained committed merge-conflict markers from #62, so site-proof could not even parse. I kept the `main` side (the ecosystem-first hero from #64, which hides `.hero-notes`). I removed two HEAD-side assertions that describe the hidden hero artwork. HEAD-side checks that still hold were kept: asset resolves, three product pathways, distinct destinations.
+- PROOF (local, `claude/sleepy-mayer-1s8avr`): verify-site 356 ok / 1 FAIL. All 36 `ideas-*` checks pass at three widths. `node --test` 33/33 passing; approved-stories gate passed.
+- OPEN: `games hub: mobile no horizontal overflow` fails (scrollWidth 392 vs 390, no overflowing element found). This predates the branch; it was hidden by the parse error. DEAD END in one probe; needs its own fix.
+- RISK: the fit ranking is a heuristic, not research. Linked from the homepage footer and the sitemap only.
+- ROLLBACK: revert the branch commit.
+- NEXT GATE: exact-head CI on the draft PR. Merge and deploy are held for Juss.
+
 ## 2026-11-04 — Standing rule: never work around a blocker; implement the fix
 
 - RULE (Juss, 2026-11-04): when a blocker stands in the way of a project, do not route around it. Diagnose the cause, implement the needed fix in the project itself, and prove it. A workaround that leaves the blocker in place does not count as done.
@@ -429,3 +626,77 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
 - Superseded: the earlier "FCR hosts serve FCR code only" reading and attaching truthcompass/truthweaver.foundercontrolroom.org to founder-control-room Pages (wrong).
 - 2026-10-27: both FCR-branded URLs dropped per Juss: DNS CNAMEs deleted in the FCR zone and both hostnames removed from founder-control-room Pages. Readback: 0 `truth*` records, 0 `truth*` redirect rules in the FCR zone.
 - Open: compass.jussco.company is still a 302 to fcr-truth-compass.lovable.app. Real domain needs Juss to add it in Lovable (yields the `_lovable` TXT). truthweaver.jussco.company is already a real Lovable domain (A 185.158.133.1 DNS-only).
+
+## 2026-11-08 19:40 UTC — PR #68 diverged from main
+- PR #68 head `2f72569` (5 governance commits added by another session after `3586fd5`). mergeable_state: dirty.
+- main `2309b55` is 56 commits ahead: founder-merged #69 replaced the homepage with a 45-line compact landing plus separate destination pages (products, founder, contact, sites) and rebuilt the Game Hub phone view.
+- A trial merge of main conflicts in `site/index.html` (whole file), `site/games/index.html` (2 large hunks) and `scripts/verify-site.mjs` (3 small hunks). The merge was aborted. Nothing was pushed.
+- Gate: Juss must pick the homepage/Game Hub direction (main's separate pages, or #68's views plus card box). Merge stays held.
+
+## 2026-11-08 ~20:00 UTC — Founder chose "Keep main" for PR #68
+- Merged origin/main `2309b55` into the branch. `site/index.html`, `site/games/index.html` and the content pages take main's version (#69 destination pages). The #68 homepage views, card box, Game Hub stage and illustrated icons were dropped.
+- Kept from #68: `site/ideas.html` (Creation Core) with its lake scenes; world shell nav pointed at main's pages (`/products.html`, `/founder.html`, `/contact.html` ...); retired `jussco-signature-world.jpg` (flagship.css now uses `ideas-night`); governance commits; `verify-site.mjs` main's checks plus the Ideas block.
+- Local proof: verify-site exit 0 (419 ok); node tests 101 pass / 2 fail. Both failures are pre-existing on main and not run in CI: `evidence-sync-proof` (vitest) and `sync-party-link` (expects the old long homepage).
+- Open gap: `ideas.html` is reachable only via the sitemap; main's nav has no link to it.
+
+## 2026-11-08 ~21:00 UTC — Founder: "That was a mistake / IMPLANT the needed fixes to main"
+- Read as: keep main's #69 destination-page architecture and implant the founder's mockup fixes into it. Ran two parallel audits (Game Hub; destination pages).
+- Homepage `site/index.html`: main's 2-section structure, now the mockup world stage. It has the crown, "Creative Technology for a More Beautiful Life", the founder quote, an ecosystem route panel pointing at main's pages, opt-in ambient sound, a time-of-day atmosphere and the "Our Ecosystem" band built from worlds.json. Desktop shows 6+ tiles per view and phone shows 3. New files: `assets/home-world.{css,mjs}`.
+- Same header on every page: a glass pill nav with Home, Portfolio, Products, Games, Solutions, Our Work, Ideas, Founder, Contact. `landing-pages.css` styles main's pages. `world-shell.{css,js}` is now loaded on portfolio, services, work, builds, creative-history, returns and licensing. Its CTA and phone tab bar were removed and the menu button is labelled "Menu ☰".
+- Truth: band tiles with `st:"soon"` stay unlinked (Se'kret Bip). `.ph` placeholders render as "Pending: …".
+- Proof: verify-site exit 0 with 439 ok, including new homepage checks. Node tests: 101 pass, 2 known failures.
+- Open (audit), not done: Game Hub desktop still scrolls (about 3.6 screens; the details view only exists on phones). Game Hub lists games not in data/*.json (LUMORA, ChatQuest, Bip & Seek, Jungle Jinx, Last Laugh); those came from founder commits on main and need Juss's word. `work.html` links sekretbip.net (founder content on main). universe.html runs about 26 screens. ideas and opportunity-engine share a title and h1.
+- 2026-11-08 ~21:30 UTC: Game Hub desktop is now one screen at 1440x900 and 1672x941. The details view (`#games`, `#upcoming`, `#safety`, game ids) now works at every width, and search switches views on desktop too. The featured panel is ~940px, showing 6 tiles, with the lotus and ambience left clear. `verify-games-hub-cinematic.mjs` now expects the one-screen desktop. Every site-proof.yml step passed locally.
+- 2026-11-08 ~22:15 UTC, after Juss asked "does it look EXACTLY like the images": an honest answer was no. Then fixed to the mockups:
+  - Game Hub, desktop and phone (gamehub-desktop, gamehub-v2, gamehub-mobile, gamehub-icons): "Juss & Co. GAMES" brand; 7-item nav without Products; crown; "A unified home…" copy; script signature; Explore Games plus "Play SYNC ↗" to the live domain; quote signed "Juss"; Game Hub Center rows All Games / SYNC Game Center / Play with care / Juss & Co home; six game tiles with app icons and mockup statuses; arrows on both sides; a switch, a slider and an atmosphere control (time of day, with day and night scenes copied into games/assets); phone bottom bar Home / Games (current) / Solutions / Our Work / Founder; phone details view shows featured tiles, Game Hub Center pill, shortcuts and ambience before the worlds.
+  - Homepage: the mockup subline, script signature, volume slider, ecosystem panel copy (6 rows), "SK" badge, a compact "Work with Juss" button; Game Hub moved to the footer.
+  - Tests changed to match the founder images, replacing main's earlier reference: verify-games-hub-cinematic (6 tiles, Center rows, phone flow, search on desktop only); verify-site ("Work with Juss" compact rather than absent; subline).
+  - Remaining deviations (confess): the Game Hub keeps a search icon on desktop (functional, tested); the homepage nav keeps a "Games" link.
+- 2026-11-08: Juss confirmed the Game Hub worlds belong there ("Yes they belong there remember?"): SYNC, LUMORA, ChatQuest, Bip & Seek, Jungle Jinx, Last Laugh. Recorded as a standing rule in CLAUDE.md. This finding is closed. Still open: whether sekretbip.net is live. Until then the homepage band leaves Se'kret Bip unlinked.
+
+## HANDOFF for a new session (2026-11-08 ~21:00 UTC)
+- **PR #68** `claude/sleepy-mayer-1s8avr`, head `d72dcf8`, 0 commits behind main `2309b55`. GitHub mergeable_state: **blocked**.
+- **Green on the exact head:** Site Browser Proof, verify, Repo Reality, Review Gate Unit Tests, GitGuardian, qr-assets, receipts, and both Cloudflare preview builds.
+- **Red:** Independent Review Evidence. The log says the Production ruleset 26428639 (1) requires a human approval, which contradicts policy; (2) lists none of the 4 required checks; (3) does not block force pushes or deletion. No review exists, and Juss cannot approve his own PR.
+- **Merge authority:** Juss has approved the merge. Do not bypass the gate. Merge only when every check is green on the exact head, then re-observe jussco.company and games.jussco.company.
+- **Founder decisions:**
+  - Done: keep main's architecture and implant the mockups; the Game Hub worlds belong.
+  - Open: is sekretbip.net live? (The homepage band leaves "Opening soon" unlinked.)
+- **Known deviations from the mockups:** "Games" link in the homepage nav; search icon on the Game Hub desktop; icons are redrawn, not the founder's artwork; no homepage phone mockup exists.
+- **Remaining audit items, not done:** universe about 26 phone screens; portfolio about 11; ideas and opportunity-engine share a title and h1; tap targets on creative-history, returns and licensing.
+- **Local proof commands:** see CLAUDE.md "Runtime for Claude". Playwright needs `NODE_PATH=$(npm root -g)` or a `node_modules/playwright` symlink.
+- 2026-11-08 ~21:20 UTC, independent review of PR #68 (fresh subagent): nothing blocking. Fixed all six findings:
+  1. Phone search: kept hidden per the founder phone mockup. The test now asserts it is hidden on purpose instead of skipping the check.
+  2. Game Hub now fits 1280x720 (short-height rules), and the ambience box no longer covers the featured panel. The test gained a 1280x720 case.
+  3. Dawn uses `ideas-sunset` art on the homepage and the Game Hub (copied into `games/assets`).
+  4. Removed the dead CTA and tab-bar code from `world-shell.js`.
+  5. Volume sliders are now 44px tap targets.
+  6. Homepage sound stops in background tabs.
+  - All site-proof steps pass locally.
+- 2026-11-08 ~21:10 UTC: Juss confirmed sekretbip.net is live ("Yes"). It could not be observed from the sandbox (the proxy blocks it). The homepage band now links the Se'kret Bip tile to `worlds.json`'s link. Its label stays "Opening soon" until Juss changes it in worlds.json. CLAUDE.md rule updated: StoryEngine stays unlinked. That founder decision is closed.
+
+## 2026-11-08 21:14 UTC: PR #68 MERGED by Juss
+- Merge commit `5c3e1aa` on main, from PR head `aa721c7`. Juss merged while Independent Review Evidence was still red (the Production ruleset blockers were unchanged when it re-ran at 21:14).
+- Checks on main `5c3e1aa`:
+  - Pass: Site Browser Proof, verify (site), Repo Reality, qr-assets, and Workers Builds for both jussray and jussco-games. The Cloudflare production builds succeeded.
+  - Fail: provider public readback. Cause: Cloudflare Browser Rendering returns HTTP 401. It has also failed on main since `2309b55` and earlier, so this merge did not cause it.
+- Live runtime: UNKNOWN. The sandbox proxy blocks www.jussco.company and games.jussco.company, and the provider readback can't verify while its token is rejected.
+- Still open: fix the Browser Rendering credential (provider-site-proof.yml); fix ruleset 26428639; long pages (universe, portfolio); ideas and opportunity-engine share a title.
+- 2026-11-08 ~22:40 UTC, Juss chose "Claude review counts". Reverted the 5 human-approval governance commits (34e8326, c0095b3, 6111638, 6cf62d2, 2f72569), restoring the systematic-review policy: 0 human approvals; the four checks green on the exact head; an independent Claude review on each PR. Ruleset 26428639 change proposed to Juss for exact approval. The bootstrap merge needs Juss's override, because main's gate code still requires a human until this lands.
+- 2026-11-08 ~22:47 UTC: Juss approved the ruleset change ("Both"): approvals 1→0; require the 4 checks; add non_fast_forward; remove all 16 required deployments. DEAD END: applying it via `gh api -X PUT repos/jussray/jussray/rulesets/26428639` from the agent returns proxy HTTP 403 (writes not permitted). Juss applies it in the UI. Pre-change snapshot is in the agent scratchpad (`ruleset-before.json`). PR #72 now carries the governance reverts; it needs a one-time override merge (bootstrap).
+- 2026-11-08 ~23:00 UTC: Juss ran the "Claude as digital employee" setup prompt. His answers: top 3 tasks are mockup→site, PR review→merge, live-site checks; connect all four apps (GitHub, Gmail, Notion, Slack) drafts-only; rules live in both repo files and Claude Projects. Guide written to `docs/claude/SYSTEM.md`. No scheduled tasks created yet: each needs Juss's approval.
+- 2026-11-08 22:43 UTC: created scheduled task "jussray daily GitHub digest" (trig_01GRi7McgNmbS6vyhuDCPiGN). Runs weekdays at 8:40 New York time in a fresh session, read-only, with push notifications. First run 2026-11-09 13:40 UTC. Warning from creation: it stores no connectors, so the run falls back to `gh` read-only calls. Gmail, Notion and Slack automations are not created yet.
+- 2026-11-09 ~06:30 UTC: the audit found Ideas and Opportunity Engine sharing a title. Fix: `opportunity-engine.html` `<title>` and `og:title` now say "Opportunity Engine", matching its own meta description. Its visible h1 is unchanged (founder copy). Checks: verify-opportunity-engine PASS on desktop and mobile; verify-site 439 ok. The page has had no live check yet.
+- 2026-11-09 13:41 UTC: the first digest run (trig_01GRi7McgNmbS6vyhuDCPiGN, session cse_01KbtbVi1VXVtpa8UEAB7XYq) FAILED to read GitHub. Each fire starts a fresh session with no repository attached, so `gh` returned 403 ("GitHub access to this repository is not enabled for this session"). The run changed nothing and sent a push notification. Fix (Juss, in the claude.ai Routines UI): attach jussray/jussray with read access, or recreate the routine there with the repo selected. An agent-created trigger can't attach a source. Next fire: 2026-11-10 13:40 UTC. Until then, the task fails the same way every weekday.
+- 2026-11-09 PR #72 re-observed at head `69caf84`: 0 reviews; mergeable_state=blocked. Green: GitGuardian, Workers Builds, Site Browser Proof, verify, Review Gate Unit Tests, receipts, Repo Reality. Red: Independent Review Evidence, which needs a non-author human approval on this head. Ruleset 26428639 is unchanged: scope still ~ALL plus 4 branch names, and 0 required status checks.
+
+## 2026-11-09 PR #72 MERGED by Juss; founder-review gate built
+- PR #72 merged by Juss 13:52 UTC as `b7695f9`, without an outside approval. Checks on main `b7695f9`: Workers Builds jussray, Site Browser Proof, site verify and Repo Reality all pass. Provider readback fails (Browser Rendering HTTP 401; it was failing before this merge). Live runtime: UNKNOWN.
+- Juss's decision, 2026-11-09: "I am the independent reviewer; my pressing review and auto merge should sign and/or trigger those approvals." This supersedes the non-author-approval rule.
+- Built on branch `claude/sleepy-mayer-1s8avr` from `b7695f9`:
+  - The gate accepts Juss's `/approve <sha>` PR comment or his enabling auto-merge, made in the GitHub UI after the head push. Actions made through an app are rejected.
+  - Observed on #72's timeline: Claude's comment carries `performed_via_github_app=claude`; Juss's auto_merge_disabled and merge carry `null`.
+  - The gate workflow now also runs on auto_merge_enabled/disabled. New `founder-review-rerun.yml` re-runs the gate when Juss comments `/approve`.
+  - The ruleset repair script now sets native approvals to 0.
+  - Tests 35/35 pass.
+- This needs a bootstrap merge: main's old gate still demands a non-author approval until this lands.

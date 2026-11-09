@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {reviewDecision,rulesetDecision,getReviewEvidence,getRulesEvidence,runReviewGate} from './verify-independent-review.mjs';
+import {founderDecision,getFounderEvidence,reviewDecision,rulesetDecision,getReviewEvidence,getRulesEvidence,runReviewGate} from './verify-independent-review.mjs';
 
 const H='a'.repeat(40),OLD='b'.repeat(40);
 const pr=()=>({state:'open',draft:false,user:{login:'jussray'},head:{sha:H},base:{ref:'main'}});
@@ -9,15 +9,19 @@ const approval=(login,sha=H,date='2026-10-15T23:00:00Z')=>({
 });
 const decide=(reviews,pull=pr())=>reviewDecision({pull,reviews,expectedHead:H});
 
-test('systematic review accepts zero mandatory human GitHub approvals',()=>{
+test('requires an independent human approval on the exact current head',()=>{
   const result=decide([]);
-  assert.equal(result.ok,true);
+  assert.equal(result.ok,false);
   assert.equal(result.approvedCount,0);
-  assert.equal(result.reviewMode,'systematic-zero-human-approvals');
+  assert.match(result.errors.join(';'),/Missing independent human approval on exact head/);
+  const reviewed=decide([approval('independent')]);
+  assert.equal(reviewed.ok,true);
+  assert.equal(reviewed.approvedCount,1);
+  assert.equal(reviewed.reviewMode,'independent-human-exact-head');
 });
 test('self approval is not treated as independent authority',()=>{
   const result=decide([approval('jussray')]);
-  assert.equal(result.ok,true);
+  assert.equal(result.ok,false);
   assert.equal(result.approvedCount,0);
 });
 test('bot / app approvals are not independent human reviewers',()=>{
@@ -26,7 +30,7 @@ test('bot / app approvals are not independent human reviewers',()=>{
   assert.equal(decide([{...approval('app-account'),user:{login:'app-account',type:'Bot'}}]).approvedCount,0);
 });
 test('approvals for old commits do not count after a new head',()=>{
-  assert.equal(decide([approval('actual-reviewer',OLD)]).ok,true);
+  assert.equal(decide([approval('actual-reviewer',OLD)]).ok,false);
   assert.equal(decide([approval('actual-reviewer',OLD)]).approvedCount,0);
   assert.equal(decide([approval('actual-reviewer')],{...pr(),head:{sha:OLD}}).ok,false);
 });
@@ -42,12 +46,12 @@ test('review dismissal and later approval are respected',()=>{
 });
 test('a later withdrawn approval no longer counts',()=>{
   const r=[approval('one'),{...approval('one',H,'2026-10-15T23:05:00Z'),state:'DISMISSED'}];
-  assert.equal(decide(r).ok,true);
+  assert.equal(decide(r).ok,false);
   assert.equal(decide(r).approvedCount,0);
 });
 test('commented review does not manufacture an approval',()=>{
   const r=[{...approval('one'),state:'COMMENTED'}];
-  assert.equal(decide(r).ok,true);
+  assert.equal(decide(r).ok,false);
   assert.equal(decide(r).approvedCount,0);
 });
 test('draft, closed, wrong base and missing evidence fail closed',()=>{
@@ -70,7 +74,7 @@ test('GitHub API errors and missing token are not treated as empty approvals',as
 });
 const enforcedRule={id:123,target:'branch',enforcement:'active',conditions:{ref_name:{include:['~DEFAULT_BRANCH'],exclude:[]}},
   bypass_actors:[],rules:[
-    {type:'pull_request',parameters:{required_approving_review_count:0,dismiss_stale_reviews_on_push:true,require_last_push_approval:true,required_review_thread_resolution:true}},
+    {type:'pull_request',parameters:{required_approving_review_count:1,dismiss_stale_reviews_on_push:true,require_last_push_approval:true,required_review_thread_resolution:true}},
     {type:'required_status_checks',parameters:{strict_required_status_checks_policy:true,required_status_checks:[{context:'Independent Review Evidence'},{context:'Juss & Co Site Browser Proof'},{context:'Repo Reality / exact-head'},{context:'Review Gate Unit Tests'}]}},
     {type:'deletion'},{type:'non_fast_forward'}
   ]};
@@ -94,6 +98,8 @@ test('end-to-end systematic review verifies policy but never founder authorizati
     if(url.includes('/rulesets?'))return [{id:123,enforcement:'active',target:'branch'}];
     if(url.endsWith('/rulesets/123'))return enforcedRule;
     if(url.includes('/reviews?'))return [approval('independent')];
+    if(url.includes('/timeline?'))return [];
+    if(url.includes('/actions/runs?'))return {workflow_runs:[]};
     return pr();
   }});
   const env={GITHUB_REPOSITORY:'jussray/jussray',PR_NUMBER:'28',PR_HEAD_SHA:H,GITHUB_TOKEN:'fake'};
@@ -101,7 +107,7 @@ test('end-to-end systematic review verifies policy but never founder authorizati
   assert.equal(result.nativeRulesetEnforced,true);
   assert.equal(result.releaseAuthorized,false);
   await assert.rejects(()=>runReviewGate({...env,PR_HEAD_SHA:OLD},api),/changed during evaluation|head changed/);
-  const noRules=async url=>({ok:true,json:async()=>url.includes('/rulesets?')?[]:url.includes('/reviews?')?[approval('independent')]:pr()});
+  const noRules=async url=>({ok:true,json:async()=>url.includes('/rulesets?')?[]:url.includes('/reviews?')?[approval('independent')]:url.includes('/timeline?')?[]:url.includes('/actions/runs?')?{workflow_runs:[]}:pr()});
   await assert.rejects(()=>runReviewGate(env,noRules),/No active ruleset/);
 });
 
@@ -111,6 +117,8 @@ test('concurrent PR head movement invalidates a previously approved exact-head r
     if(url.includes('/rulesets?')) return [{id:123,enforcement:'active',target:'branch'}];
     if(url.endsWith('/rulesets/123')) return enforcedRule;
     if(url.includes('/reviews?')) return [approval('independent')];
+    if(url.includes('/timeline?')) return [];
+    if(url.includes('/actions/runs?')) return {workflow_runs:[]};
     prReads++;
     return prReads===1?pr():{...pr(),head:{sha:OLD}};
   }});
@@ -119,10 +127,12 @@ test('concurrent PR head movement invalidates a previously approved exact-head r
   assert.equal(prReads,2);
 });
 
-test('requiring a separate human GitHub approval contradicts systematic policy',()=>{
-  const strictReview=enforcedRule.rules.map(r=>r.type==='pull_request'
-    ? {...r,parameters:{...r.parameters,required_approving_review_count:1}}:r);
-  assert.equal(rulesetDecision([{...enforcedRule,rules:strictReview}]).ok,false);
+test('native approval count 0 is allowed (founder review is enforced by the required check); other counts fail',()=>{
+  const withCount=n=>enforcedRule.rules.map(r=>r.type==='pull_request'
+    ? {...r,parameters:{...r.parameters,required_approving_review_count:n}}:r);
+  assert.equal(rulesetDecision([{...enforcedRule,rules:withCount(0)}]).ok,true);
+  assert.equal(rulesetDecision([{...enforcedRule,rules:withCount(2)}]).ok,false);
+  assert.equal(rulesetDecision([{...enforcedRule,rules:withCount(undefined)}]).ok,false);
 });
 
 test('missing checks and non-strict status configuration block governance',()=>{
@@ -136,15 +146,62 @@ test('missing checks and non-strict status configuration block governance',()=>{
   assert.equal(rulesetDecision([{...enforcedRule,rules:lax}]).ok,false);
 });
 
-test('multiple active main rulesets cannot hide a required human approval',()=>{
+test('multiple active main rulesets cannot hide an unsupported approval rule',()=>{
   const conflicting={...enforcedRule,id:456,rules:[
-    {type:'pull_request',parameters:{required_approving_review_count:1,required_review_thread_resolution:true}}
+    {type:'pull_request',parameters:{required_approving_review_count:3,required_review_thread_resolution:true}}
   ]};
   assert.equal(rulesetDecision([enforcedRule,conflicting]).ok,false);
 });
 
-test('missing resolved-conversation requirement is blocked even at zero approvals',()=>{
+test('missing resolved-conversation requirement is blocked even with required human approval',()=>{
   const rules=enforcedRule.rules.map(r=>r.type==='pull_request'
-    ? {...r,parameters:{required_approving_review_count:0,required_review_thread_resolution:false}}:r);
+    ? {...r,parameters:{required_approving_review_count:1,required_review_thread_resolution:false}}:r);
   assert.equal(rulesetDecision([{...enforcedRule,rules}]).ok,false);
+});
+
+// Founder review (Juss, 2026-11-09)
+const PUSH='2026-11-09T12:00:00Z';
+const sig=(kind,at,extra={})=>({kind,login:'jussray',viaApp:null,at,body:'',...extra});
+const founder=(signals)=>({signals,headPushedAt:PUSH});
+test('founder /approve comment in the GitHub UI on the exact head passes the gate',()=>{
+  const r=reviewDecision({pull:pr(),reviews:[],expectedHead:H,founder:founder([sig('comment','2026-11-09T12:05:00Z',{body:'/approve '+H.slice(0,7)})])});
+  assert.equal(r.ok,true);
+  assert.equal(r.founderReview,'founder-approve-comment');
+  assert.equal(r.reviewMode,'founder-review-exact-head');
+});
+test('founder enabling auto-merge after the head push passes; disabling withdraws it',()=>{
+  assert.equal(founderDecision({signals:[sig('auto_merge_enabled','2026-11-09T12:05:00Z')],expectedHead:H,headPushedAt:PUSH}).via,'founder-auto-merge');
+  assert.equal(founderDecision({signals:[sig('auto_merge_enabled','2026-11-09T12:05:00Z'),sig('auto_merge_disabled','2026-11-09T12:06:00Z')],expectedHead:H,headPushedAt:PUSH}).ok,false);
+});
+test('auto-merge or approval given before the head was pushed does not carry to the new head',()=>{
+  assert.equal(founderDecision({signals:[sig('auto_merge_enabled','2026-11-09T11:00:00Z')],expectedHead:H,headPushedAt:PUSH}).ok,false);
+  assert.equal(founderDecision({signals:[sig('comment','2026-11-09T11:00:00Z',{body:'/approve '+H.slice(0,7)})],expectedHead:H,headPushedAt:PUSH}).ok,false);
+});
+test('agent or app actions never count as the founder review, even from the founder account',()=>{
+  for (const viaApp of ['claude','chatgpt-codex-connector',undefined]) {
+    assert.equal(founderDecision({signals:[sig('comment','2026-11-09T12:05:00Z',{viaApp,body:'/approve '+H.slice(0,7)})],expectedHead:H,headPushedAt:PUSH}).ok,false);
+    assert.equal(founderDecision({signals:[sig('auto_merge_enabled','2026-11-09T12:05:00Z',{viaApp})],expectedHead:H,headPushedAt:PUSH}).ok,false);
+  }
+});
+test('wrong sha, wrong person, short sha or missing push time fail closed',()=>{
+  const at='2026-11-09T12:05:00Z';
+  assert.equal(founderDecision({signals:[sig('comment',at,{body:'/approve '+OLD.slice(0,7)})],expectedHead:H,headPushedAt:PUSH}).ok,false);
+  assert.equal(founderDecision({signals:[sig('comment',at,{login:'someone',body:'/approve '+H.slice(0,7)})],expectedHead:H,headPushedAt:PUSH}).ok,false);
+  assert.equal(founderDecision({signals:[sig('comment',at,{body:'/approve '+H.slice(0,6)})],expectedHead:H,headPushedAt:PUSH}).ok,false);
+  assert.equal(founderDecision({signals:[sig('comment',at,{body:'/approve '+H.slice(0,7)})],expectedHead:H,headPushedAt:null}).ok,false);
+});
+test('requested changes from another reviewer still block a founder review',()=>{
+  const r=reviewDecision({pull:pr(),reviews:[{...approval('two'),state:'CHANGES_REQUESTED'}],expectedHead:H,founder:founder([sig('auto_merge_enabled','2026-11-09T12:05:00Z')])});
+  assert.equal(r.ok,false);
+});
+test('timeline reader keeps app attribution and takes the head push time from its first PR run',async()=>{
+  const api=async url=>({ok:true,json:async()=>url.includes('/timeline?')?[
+    {event:'commented',user:{login:'jussray'},performed_via_github_app:null,created_at:'2026-11-09T12:05:00Z',body:'/approve aaaaaaa'},
+    {event:'commented',user:{login:'jussray'},performed_via_github_app:{slug:'claude'},created_at:'2026-11-09T12:06:00Z',body:'/approve aaaaaaa'},
+    {event:'auto_merge_enabled',actor:{login:'jussray'},created_at:'2026-11-09T12:07:00Z'},
+    {event:'labeled',actor:{login:'jussray'},created_at:'2026-11-09T12:08:00Z'},
+  ]:{workflow_runs:[{created_at:'2026-11-09T12:01:00Z'},{created_at:PUSH}]}});
+  const e=await getFounderEvidence({repo:'jussray/jussray',number:9,sha:H,token:'t',request:api});
+  assert.deepEqual(e.signals.map(x=>[x.kind,x.viaApp]),[['comment',null],['comment','claude'],['auto_merge_enabled',undefined]]);
+  assert.equal(e.headPushedAt,'2026-11-09T12:00:00.000Z');
 });

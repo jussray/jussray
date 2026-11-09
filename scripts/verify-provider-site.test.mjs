@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { gitBlobSha, extractScrapedRegistry, verifyWorldRegistry, verifySiteMarkdown, verifyDestinationMarkdown, verifyBipContent, assertSha, assertReleaseContext, verifyReceiverHealthHtml, runProof, createQuickActionPacer, cfRequest, assertFinalDestination, verifyHtmlSourceMatch, makePartialReadbackWitness } from './verify-provider-site.mjs';
+import { gitBlobSha, extractScrapedRegistry, verifyWorldRegistry, verifySiteMarkdown, verifyDestinationMarkdown, verifyGamesHubMarkdown, verifyBipContent, assertSha, assertReleaseContext, verifyReceiverHealthHtml, runProof, createQuickActionPacer, cfRequest, assertFinalDestination, verifyHtmlSourceMatch, makePartialReadbackWitness } from './verify-provider-site.mjs';
 
-const site = `---\ntitle: "Juss & Co"\n---\nTurn thoughts into living works.\n### Se'kret Bip\nOpening soon · no public link yet\nScan to explore www.jussco.company`;
+const site = `---\ntitle: "Juss & Co"\n---\nTurn thoughts into living works.\nExplore our products\nEnter the portfolio\nScan to explore www.jussco.company`;
 
 test('Git blob hash matches known Git SHA-1 format', () => {
   assert.equal(gitBlobSha(Buffer.from('hello\n')), 'ce013625030ba8dba906f756967f9e9ca394464a');
@@ -26,7 +26,7 @@ test('world registry preserves standalone Bip and preview truth', () => {
 test('public company QR and honest upcoming project state must appear in browser markdown', () => {
   assert.doesNotThrow(()=>verifySiteMarkdown(site));
   assert.throws(()=>verifySiteMarkdown(site.replace('Scan to explore','')),/QR destination/);
-  assert.throws(()=>verifySiteMarkdown(site.replace('Opening soon · no public link yet','Public signup live')),/must not claim/);
+  assert.throws(()=>verifySiteMarkdown(site.replace('Explore our products','')),/landing navigation/);
   assert.throws(()=>verifySiteMarkdown('Just a moment... '+site),/Cloudflare challenge/);
 });
 
@@ -35,6 +35,15 @@ test('standalone destinations reject challenge and unrelated pages',()=>{
   assert.doesNotThrow(()=>verifyDestinationMarkdown(`---\ntitle: "Juss & Co. Games | Choose your adventure"\n---`,'games'));
   assert.throws(()=>verifyDestinationMarkdown('---\ntitle: "Sign in ・ Cloudflare Access"\n---','bip'),/title mismatch/);
   assert.throws(()=>verifyDestinationMarkdown('Origin DNS error','games'),/challenge or DNS/);
+});
+
+test('production Games hub proof requires the actual Game Hub heading, playable SYNC and honest unreleased status',()=>{
+  const valid='---\ntitle: "Juss & Co. Games | SYNC Party, Chat SYNC & Lovable SYNC"\n---\n# Game Hub\n[Play Live SYNC ↗](https://sync.jussco.company/)\nLUMORA · In development\nLast Laugh · Private prototype';
+  assert.doesNotThrow(()=>verifyGamesHubMarkdown(valid));
+  assert.throws(()=>verifyGamesHubMarkdown(valid.replace('# Game Hub','# Choose your next adventure.')),/Game Hub heading/);
+  assert.throws(()=>verifyGamesHubMarkdown(valid.replace('https://sync.jussco.company/','https://other.invalid/')),/live SYNC destination/);
+  assert.throws(()=>verifyGamesHubMarkdown(valid.replace('In development','Available now')),/unreleased/);
+  assert.throws(()=>verifyGamesHubMarkdown(valid.replace('Private prototype','Live now')),/unreleased/);
 });
 
 test('exact head rejects prefixes and invalid identities',()=>{

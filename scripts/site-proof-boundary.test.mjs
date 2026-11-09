@@ -12,7 +12,10 @@ test('generic site proof stays deterministic and exact-source only', () => {
   assert.doesNotMatch(sourceWorkflow, /Verify public custom domains in Chromium/);
   assert.doesNotMatch(sourceWorkflow, /Verify deployed portfolio in real browsers/);
   assert.doesNotMatch(sourceWorkflow, /Enforce all browser proof outcomes/);
-  assert.doesNotMatch(sourceProof, /https:\/\/games\.jussco\.company\//);
+  // Source proof may inspect an external destination URL as inert link text,
+  // but must never navigate/fetch that production origin during local checks.
+  assert.match(sourceProof, /page\.goto\(url \+ 'games\/index\.html'/);
+  assert.doesNotMatch(sourceProof, /(?:\.goto|\.get|\.post|fetch)\(\s*['`"]https:\/\/games\.jussco\.company\//);
   assert.doesNotMatch(sourceProof, /games production:/i);
 });
 
@@ -60,13 +63,10 @@ test('browser proof source parses and contains no unresolved merge markers', () 
   assert.equal(syntax.status, 0, syntax.stderr || syntax.stdout);
 });
 
-test('flagship hero remains visible and mobile games decoration does not extend beyond viewport', () => {
-  const homepage = readFileSync('site/index.html', 'utf8');
+test('mobile games decoration does not extend beyond viewport', () => {
+  // The homepage hero assertions were dropped on 2026-11-09: main's world-stage homepage (PR #68/#69)
+  // replaced the .hero-bg/.hero-notes layers they checked.
   const games = readFileSync('site/games/index.html', 'utf8');
-  assert.doesNotMatch(homepage, /\.hero-bg,\.hero-notes,#stars\{display:none!important\}/,
-    'legacy forced hide must not disable cinematic artwork');
-  assert.match(homepage, /\.hero-bg,#stars\{display:none!important\}/,
-    'obsolete background layers remain disabled without hiding the new artwork');
   assert.doesNotMatch(games, /right:-20px;top:6%;opacity:\.20/,
     'mobile decorative element must not extend past viewport');
   assert.match(games, /right:0;top:6%;opacity:\.20/,
