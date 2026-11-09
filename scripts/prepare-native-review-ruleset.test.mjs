@@ -26,10 +26,11 @@ test('repair adds four systematic checks but preserves all other rules and produ
   assert.deepEqual(getRule(plan.payload,'required_status_checks').parameters.required_status_checks.map(c=>c.context),REQUIRED_CONTEXTS);
   assert.deepEqual(getRule(plan.payload,'required_deployments').parameters,getRule(current,'required_deployments').parameters);
   assert.deepEqual(getRule(plan.payload,'code_scanning').parameters,getRule(current,'code_scanning').parameters);
-  assert.deepEqual(plan.payload.conditions,current.conditions);
+  assert.deepEqual(plan.payload.conditions,{ref_name:{include:['refs/heads/Production','refs/heads/main'],exclude:[]}});
   assert.deepEqual(plan.payload.bypass_actors,[]);
+  assert.deepEqual(plan.payload.conditions.ref_name.include,['refs/heads/Production','refs/heads/main']);
   assert.equal(getRule(plan.payload,'pull_request').parameters.required_approving_review_count,1);
-  assert.deepEqual(plan.warnings,['Global ~ALL branch scope: applying affects every included branch','Removing existing bypass actors requires separate explicit approval','Existing required deployment environments are preserved, including PR preview environments']);
+  assert.deepEqual(plan.warnings,['Narrowing ~ALL to explicit protected branches; feature branches will no longer inherit this ruleset','Removing existing bypass actors requires separate explicit approval','Existing required deployment environments are preserved, including PR preview environments']);
   assert.equal(plan.existingDigest,fingerprint(current));
 });
 
@@ -63,19 +64,22 @@ test('rejects wrong repo, disabled ruleset, unresolved conversations and unexpec
   ]) {const x=live();mutate(x);assert.throws(()=>planNativeRepair(x));}
 });
 
-test('rejects creation rule when proposed removal of every bypass actor would lock branch creation',()=>{
-  const unsafe=live();
-  unsafe.rules.push({type:'creation'});
-  assert.throws(()=>planNativeRepair(unsafe),/Unsafe branch-creation lockout/);
-  const allAlreadyRemoved=live();
-  allAlreadyRemoved.bypass_actors=[];
-  allAlreadyRemoved.rules.push({type:'creation'});
-  assert.throws(()=>planNativeRepair(allAlreadyRemoved),/Unsafe branch-creation lockout/);
+test('narrows global creation rule to named protected branches before bypass removal',()=>{
+  const current=live();
+  current.rules.push({type:'creation'});
+  const plan=planNativeRepair(current);
+  assert.deepEqual(plan.payload.conditions.ref_name.include,['refs/heads/Production','refs/heads/main']);
+  assert.equal(plan.payload.rules.filter(x=>x.type==='creation').length,1);
+  assert.equal(plan.payload.bypass_actors.length,0);
+  assert.equal(getRule(plan.payload,'pull_request').parameters.required_approving_review_count,1);
+  assert.equal(plan.payload.conditions.ref_name.include.includes('~ALL'),false);
+  assert.ok(plan.warnings.some(x=>/named protected branches/.test(x)));
 });
 
-test('even explicit global and bypass approvals cannot bypass creation lockout protection or issue PUT',async()=>{
+test('unreviewed branch patterns or exclusions fail closed before any PUT',async()=>{
   const unsafe=live();
   unsafe.rules.push({type:'creation'});
+  unsafe.conditions.ref_name.include.push('refs/heads/feature/*');
   let putCount=0;
   const request=async(_url,options)=>{
     if(options.method==='PUT')putCount++;
@@ -83,9 +87,12 @@ test('even explicit global and bypass approvals cannot bypass creation lockout p
   };
   await assert.rejects(()=>applyNativeRepair({
     token:'fake',rulesetId:unsafe.id,expectedDigest:fingerprint(unsafe),request,
-    confirmGlobal:true,confirmBypassRemoval:true,
-  }),/Unsafe branch-creation lockout/);
+    confirmGlobal:true,confirmBypassRemoval:true,confirmScopeNarrowing:true,
+  }),/Unapproved branch scope/);
   assert.equal(putCount,0);
+  const excluded=live();
+  excluded.conditions.ref_name.exclude.push('refs/heads/main');
+  assert.throws(()=>planNativeRepair(excluded),/Unapproved branch scope/);
 });
 test('apply refuses stale snapshot digest, unapproved all-branch changes or bypass removal',async()=>{
   const liveRule=live();let puts=0;
@@ -95,8 +102,9 @@ test('apply refuses stale snapshot digest, unapproved all-branch changes or bypa
   };
   const args={token:'test-secret',rulesetId:26428639,request,expectedDigest:fingerprint(liveRule)};
   await assert.rejects(()=>applyNativeRepair({...args,expectedDigest:'f'.repeat(64),confirmGlobal:true,confirmBypassRemoval:true}),/snapshot digest changed/);
-  await assert.rejects(()=>applyNativeRepair({...args,confirmGlobal:false,confirmBypassRemoval:true}),/all-branch/);
-  await assert.rejects(()=>applyNativeRepair({...args,confirmGlobal:true,confirmBypassRemoval:false}),/bypass removal/);
+  await assert.rejects(()=>applyNativeRepair({...args,confirmGlobal:false,confirmBypassRemoval:true,confirmScopeNarrowing:true}),/all-branch/);
+  await assert.rejects(()=>applyNativeRepair({...args,confirmGlobal:true,confirmBypassRemoval:true,confirmScopeNarrowing:false}),/scope narrowing/);
+  await assert.rejects(()=>applyNativeRepair({...args,confirmGlobal:true,confirmBypassRemoval:false,confirmScopeNarrowing:true}),/bypass removal/);
   assert.equal(puts,0);
 });
 
@@ -107,15 +115,16 @@ test('apply sends one scoped PUT only after approvals, then verifies exact provi
     if(opts.method==='PUT') {remote={...remote,...JSON.parse(opts.body),rules:JSON.parse(opts.body).rules};return {ok:true,json:async()=>remote};}
     return {ok:true,json:async()=>remote};
   };
-  const result=await applyNativeRepair({token:'test',rulesetId:26428639,request,expectedDigest:fingerprint(remote),confirmGlobal:true,confirmBypassRemoval:true});
+  const result=await applyNativeRepair({token:'test',rulesetId:26428639,request,expectedDigest:fingerprint(remote),confirmGlobal:true,confirmBypassRemoval:true,confirmScopeNarrowing:true});
   assert.equal(result.verified,true);
   assert.deepEqual(observed.map(x=>x[1]),['GET','PUT','GET']);
   assert.deepEqual(remote.bypass_actors,[]);
+  assert.deepEqual(remote.conditions.ref_name.include,['refs/heads/Production','refs/heads/main']);
   assert.deepEqual(getRule(remote,'required_deployments').parameters.required_deployment_environments,['github-pages','Think Tank / jussray-pr-68']);
 });
 
 test('403 and rejected post-write readback fail closed; no success claim',async()=>{
-  await assert.rejects(()=>applyNativeRepair({token:'test',rulesetId:26428639,expectedDigest:fingerprint(live()),confirmGlobal:true,confirmBypassRemoval:true,request:async()=>({ok:false,status:403})}),/HTTP 403/);
+  await assert.rejects(()=>applyNativeRepair({token:'test',rulesetId:26428639,expectedDigest:fingerprint(live()),confirmGlobal:true,confirmBypassRemoval:true,confirmScopeNarrowing:true,request:async()=>({ok:false,status:403})}),/HTTP 403/);
   const request=async(_url,opts)=>({ok:true,json:async()=>opts.method==='PUT'?{...live(),bypass_actors:[]}:live()});
-  await assert.rejects(()=>applyNativeRepair({token:'test',rulesetId:26428639,expectedDigest:fingerprint(live()),confirmGlobal:true,confirmBypassRemoval:true,request}),/readback/);
+  await assert.rejects(()=>applyNativeRepair({token:'test',rulesetId:26428639,expectedDigest:fingerprint(live()),confirmGlobal:true,confirmBypassRemoval:true,confirmScopeNarrowing:true,request}),/readback/);
 });
