@@ -125,7 +125,8 @@ export async function getFounderEvidence({repo,number,sha,token,request=fetch}){
     const batch=await apiGet(root+'/issues/'+number+'/timeline?per_page=100&page='+page,token,request);
     if (!Array.isArray(batch)) throw new Error('Timeline API returned non-list result');
     for (const e of batch) {
-      const kind=e?.event==='commented'?'comment':e?.event;
+      // GitHub names the enable event by merge method: auto_merge_enabled, auto_squash_enabled, auto_rebase_enabled.
+      const kind=e?.event==='commented'?'comment':/^auto_(merge|squash|rebase)_enabled$/.test(e?.event||'')?'auto_merge_enabled':e?.event;
       if (!['comment','auto_merge_enabled','auto_merge_disabled'].includes(kind)) continue;
       signals.push({kind,login:(e.user||e.actor)?.login,viaApp:'performed_via_github_app' in e ? (e.performed_via_github_app?.slug ?? null) : undefined,
         at:e.created_at,body:kind==='comment'?e.body:''});
