@@ -731,3 +731,8 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
   6. Provider readback: 401 on every main run since 2026-10-20, so the token secret is wrong. #74 makes the next main run print Cloudflare's error code.
   7. The morning digest routine (trig_01GRi7McgNmbS6vyhuDCPiGN) has no repo attached and gets 403. Fix it in the claude.ai Routines UI.
 - **After the merge:** read back main's checks, the provider readback error code and the live site (the sandbox can't reach jussco.company, so use CI or Juss's browser).
+- 2026-11-09 ~17:30 UTC, Juss: "the other PRs too fix merge deploy".
+  - #70 and #71 closed as superseded: their unique assets are byte-identical on main, and the rest of their diffs would roll back the #68/#69 redesign. Reopen either one to undo.
+  - #67 (Codex skills export) is now `9389b99`: main merged in, conflicts resolved to main's versions (site/index.html, verify-site.mjs), and the obsolete homepage asserts dropped from site-proof-boundary.test.mjs. Local results: node tests 57/57, verify-codex-release PASS, codex release unittest OK, juss-os test_modes OK, Game Hub cinematic PASS at all widths.
+  - #67 and #74 both wait on Juss's `/approve <sha>` (or auto-merge) and on the ruleset/CodeQL fixes.
+  - #74's title, rewritten by another tool to say "one independent human approval", is restored.
