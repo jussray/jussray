@@ -3,12 +3,13 @@
 // Runs from trusted main checkout, never from an unreviewed PR branch.
 import { pathToFileURL } from 'node:url';
 
-// Founder review (Juss, 2026-11-09): Juss is the independent reviewer. GitHub forbids a PR
+// Founder signals are audit evidence only, not independent approval. GitHub forbids a PR
 // author approving his own PR, and every PR here is opened from his account, so his signal is
 // read from actions only a person in the GitHub UI can make on the exact head:
 //   - a PR comment "/approve <head sha, 7+ chars>", or
 //   - enabling auto-merge after the head was pushed (disabling it later withdraws that).
 // Actions made through an app (Claude, Codex, bots) carry performed_via_github_app and never count.
+// Neither these signals nor founder UI actions satisfy the separate native human review gate.
 export const FOUNDER='jussray';
 const APPROVE=/^\s*\/approve\s+([0-9a-f]{7,40})\b/i;
 export function founderDecision({signals, expectedHead, headPushedAt, owner=FOUNDER}) {
@@ -54,9 +55,9 @@ export function reviewDecision({pull, reviews, expectedHead, founder}) {
   const approved=[...decisive.entries()].filter(([_,r])=>r.state==='APPROVED' && r.sha===expectedHead).map(([name])=>name);
   // Systematic review and repair happen first; one independent human approval remains the final review gate.
   const fd=founder ? founderDecision({...founder,expectedHead:expectedHead||''}) : {ok:false};
-  if (approved.length<1 && !fd.ok) errors.push('Missing independent human approval on exact head'+(fd.reason?': '+fd.reason:''));
+  if (approved.length<1) errors.push('Missing independent human approval on exact head');
   return {ok:errors.length===0,errors,approvedCount:approved.length,founderReview:fd.ok?fd.via:null,exactHead:expectedHead,
-    reviewMode:fd.ok&&approved.length<1?'founder-review-exact-head':'independent-human-exact-head'};
+    reviewMode:'independent-human-exact-head'};
 }
 
 export function rulesetDecision(rulesets) {
@@ -73,10 +74,9 @@ export function rulesetDecision(rulesets) {
   const prRules=allRules.filter(r=>r.type==='pull_request');
   if (!prRules.length || !prRules.some(r=>r.parameters?.required_review_thread_resolution===true))
     errors.push('Missing protected PR rule with resolved review threads');
-  // Native approvals may be 0: the author cannot approve his own PR, so the founder review is
-  // enforced by the required Independent Review Evidence check instead.
-  if (prRules.some(r=>![0,1].includes(r.parameters?.required_approving_review_count)))
-    errors.push('Main ruleset approval count must be 0 or 1');
+  // Founder intent or auto-merge is not an independent GitHub review.
+  if (prRules.some(r=>r.parameters?.required_approving_review_count!==1))
+    errors.push('Main ruleset must require one independent human GitHub approval');
   const checkRules=allRules.filter(r=>r.type==='required_status_checks');
   if (!checkRules.some(r=>r.parameters?.strict_required_status_checks_policy===true))
     errors.push('Required checks are not strict against current base');

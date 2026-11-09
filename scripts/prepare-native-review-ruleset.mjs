@@ -46,10 +46,9 @@ export function planNativeRepair(live) {
   if(new Set(protectedRefs).size!==protectedRefs.length)
     throw new Error('Duplicate protected branch in ruleset scope');
   const pull=live.rules.find(x=>x.type==='pull_request').parameters;
-  if(pull?.required_review_thread_resolution!==true || ![0,1].includes(pull.required_approving_review_count))
+  if(pull?.required_review_thread_resolution!==true || pull.required_approving_review_count!==1)
     throw new Error('Review gate cannot be altered or relaxed implicitly');
-  // Founder review (Juss, 2026-11-09): the PR author cannot approve his own PR, so native approvals
-  // go to 0 and the required Independent Review Evidence check enforces the founder review.
+  // Preserve the independent GitHub approval; founder auto-merge or comments are not substitutes.
   const checks=live.rules.find(x=>x.type==='required_status_checks').parameters;
   if(!checks || checks.strict_required_status_checks_policy!==true ||
      !Array.isArray(checks.required_status_checks))throw new Error('Strict checks must pre-exist');
@@ -64,14 +63,11 @@ export function planNativeRepair(live) {
     rules:[
       ...stableRules(live.rules).map(rule=>rule.type==='required_status_checks'
         ? {type:rule.type,parameters:{...rule.parameters,required_status_checks:[...rule.parameters.required_status_checks,...extra]}}
-        : rule.type==='pull_request' ? {type:rule.type,parameters:{...rule.parameters,required_approving_review_count:0}}
         : rule),
       ...(!types.includes('non_fast_forward') ? [{type:'non_fast_forward'}] : []),
     ],
   };
   const warnings=[];
-  if(pull.required_approving_review_count!==0)
-    warnings.push('Native approvals set to 0; the required Independent Review Evidence check enforces the founder review');
   if(!types.includes('non_fast_forward'))
     warnings.push('Missing non-fast-forward protection will be enabled');
   if(scope.include.includes('~ALL'))
