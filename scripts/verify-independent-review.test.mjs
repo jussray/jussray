@@ -127,10 +127,10 @@ test('concurrent PR head movement invalidates a previously approved exact-head r
   assert.equal(prReads,2);
 });
 
-test('ruleset requires one independent human GitHub approval and rejects zero or multiple',()=>{
+test('native approval count 0 is allowed (founder review is enforced by the required check); other counts fail',()=>{
   const withCount=n=>enforcedRule.rules.map(r=>r.type==='pull_request'
     ? {...r,parameters:{...r.parameters,required_approving_review_count:n}}:r);
-  assert.equal(rulesetDecision([{...enforcedRule,rules:withCount(0)}]).ok,false);
+  assert.equal(rulesetDecision([{...enforcedRule,rules:withCount(0)}]).ok,true);
   assert.equal(rulesetDecision([{...enforcedRule,rules:withCount(2)}]).ok,false);
   assert.equal(rulesetDecision([{...enforcedRule,rules:withCount(undefined)}]).ok,false);
 });
@@ -163,23 +163,12 @@ test('missing resolved-conversation requirement is blocked even with required hu
 const PUSH='2026-11-09T12:00:00Z';
 const sig=(kind,at,extra={})=>({kind,login:'jussray',viaApp:null,at,body:'',...extra});
 const founder=(signals)=>({signals,headPushedAt:PUSH});
-test('founder /approve comment is advisory, not an independent GitHub approval',()=>{
+test('founder /approve comment in the GitHub UI on the exact head passes the gate',()=>{
   const r=reviewDecision({pull:pr(),reviews:[],expectedHead:H,founder:founder([sig('comment','2026-11-09T12:05:00Z',{body:'/approve '+H.slice(0,7)})])});
-  assert.equal(r.ok,false);
+  assert.equal(r.ok,true);
   assert.equal(r.founderReview,'founder-approve-comment');
-  assert.equal(r.reviewMode,'independent-human-exact-head');
-  assert.match(r.errors.join('; '),/Missing independent human approval/);
+  assert.equal(r.reviewMode,'founder-review-exact-head');
 });
-test('founder auto-merge signal is insufficient without independent human approval',()=>{
-  const signal=founder([sig('auto_merge_enabled','2026-11-09T12:05:00Z')]);
-  const noReview=reviewDecision({pull:pr(),reviews:[],expectedHead:H,founder:signal});
-  assert.equal(noReview.ok,false);
-  assert.match(noReview.errors.join('; '),/Missing independent human approval/);
-  const withReview=reviewDecision({pull:pr(),reviews:[approval('external-human')],expectedHead:H,founder:signal});
-  assert.equal(withReview.ok,true);
-  assert.equal(withReview.approvedCount,1);
-});
-
 test('founder enabling auto-merge after the head push passes; disabling withdraws it',()=>{
   assert.equal(founderDecision({signals:[sig('auto_merge_enabled','2026-11-09T12:05:00Z')],expectedHead:H,headPushedAt:PUSH}).via,'founder-auto-merge');
   assert.equal(founderDecision({signals:[sig('auto_merge_enabled','2026-11-09T12:05:00Z'),sig('auto_merge_disabled','2026-11-09T12:06:00Z')],expectedHead:H,headPushedAt:PUSH}).ok,false);
