@@ -700,3 +700,11 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
   - The ruleset repair script now sets native approvals to 0.
   - Tests 35/35 pass.
 - This needs a bootstrap merge: main's old gate still demands a non-author approval until this lands.
+
+## 2026-11-09 PR #73 merged (`0caf4d1`); provider readback 401 traced
+- Juss merged #73 at 14:00 UTC. Main's gate now includes `founderDecision`, so his `/approve <sha>` comment or turning on auto-merge counts as the founder review.
+- Juss says the Browser Rendering token was renewed days ago. Observed:
+  - Both `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_BROWSER_RENDERING_TOKEN` reach the job: they show masked as `***`, so they came from secrets.
+  - Every push and dispatch run of `provider-site-proof.yml` since 2026-10-20 has failed or been cancelled. None passed. The runs whose logs are still readable say `HTTP 401` (11-06, 11-08, 11-09). PR runs pass only because they skip the live step.
+  - So the token that is set is rejected. Possible causes: wrong token type (a Global API Key instead of an API Token), missing "Browser Rendering: Edit" permission, the token scoped to a different account, an expired token, or stray whitespace when it was pasted.
+- Fix on this branch: on failure, the readback prints only Cloudflare's numeric error codes, never text. The next main run will then name the cause.

@@ -167,3 +167,11 @@ test('provider Actions ID secret fallback does not weaken dedicated rendering to
   assert.doesNotMatch(yaml, /CLOUDFLARE_BROWSER_RENDERING_TOKEN: \$\{\{ secrets\.CLOUDFLARE_API_TOKEN/);
   assert.match(yaml, /push:\n    branches: \[main\]/);
 });
+
+test('auth failures surface only numeric Cloudflare error codes, never message text',async()=>{
+  const fetchImpl=async()=>({ok:false,status:401,json:async()=>({errors:[{code:10000,message:'Authentication error secret-ish text'},{code:'x'}]})});
+  await assert.rejects(()=>cfRequest({accountId:'a',token:'t',endpoint:'scrape',body:{url:'https://www.jussco.company/'},fetchImpl}),
+    e=>/HTTP 401 \(Cloudflare error code 10000\)$/.test(e.message) && !/secret|Authentication/.test(e.message));
+  const noBody=async()=>({ok:false,status:401,json:async()=>{throw new Error('not json')}});
+  await assert.rejects(()=>cfRequest({accountId:'a',token:'t',endpoint:'scrape',body:{url:'https://www.jussco.company/'},fetchImpl:noBody}),/HTTP 401$/);
+});
