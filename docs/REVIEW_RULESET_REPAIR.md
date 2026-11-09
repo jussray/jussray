@@ -1,6 +1,6 @@
 # Native review ruleset repair — admin-only, manual
 
-Standing order: review live main and exact PR head; perform systematic code and security review; apply a focused reversible repair; verify exact-head tests, CI and browser evidence; obtain one independent human GitHub approval on that exact head; only then consider founder-authorized merge or deployment. Automated review is not an alternative to human GitHub approval.
+Standing order: review live main and exact PR head; perform systematic code and security review; apply a focused reversible repair; verify exact-head tests, CI and browser evidence; obtain Juss's founder review on that exact head (`/approve <sha>` comment or auto-merge, made in the GitHub UI; see CLAUDE.md); only then merge. Automated review is not an alternative to the founder review.
 
 This is a guarded reconciliation tool, not authority to merge or deploy. It only handles the existing repository ruleset in `jussray/jussray`. It does not grant permissions or install a GitHub token.
 
@@ -10,7 +10,7 @@ This is a guarded reconciliation tool, not authority to merge or deploy. It only
 - Independently review the current ruleset's all-branch `~ALL` scope and bypass actors. Changing the global ruleset affects branches beyond `main`, including `Production`.
 - **APPROVED SAFE-SCOPE PLAN:** Live ruleset `26428639` has a `creation` rule covering `~ALL`. The guarded repair now narrows the target to the existing explicitly named protected refs (`main`, `Production`, `releases`, `Deployed`) before removing bypass actors. Normal development/feature branches no longer match this ruleset. The creation/deletion restrictions remain on those protected names. Initial creation of a reserved protected branch after bypass removal requires a separately approved administrative process. Unexpected ref patterns or exclusions block the repair.
 - Review required deployment environments separately. This repair deliberately preserves all of them, including preview environments that may prevent merges.
-- Preserve one independent human GitHub approval in the native ruleset. Never lower the approval count to zero.
+- Native approvals go to 0 (Juss, 2026-11-09): the PR author cannot approve his own PR, so the required Independent Review Evidence check enforces the founder review. Never remove that check from the required set.
 - Use a trusted checkout. Do not execute the write from `pull_request` or untrusted CI.
 
 ## Read-only plan

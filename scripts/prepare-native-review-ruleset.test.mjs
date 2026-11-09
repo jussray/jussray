@@ -29,8 +29,8 @@ test('repair adds four systematic checks but preserves all other rules and produ
   assert.deepEqual(plan.payload.conditions,{ref_name:{include:['refs/heads/Production','refs/heads/main'],exclude:[]}});
   assert.deepEqual(plan.payload.bypass_actors,[]);
   assert.deepEqual(plan.payload.conditions.ref_name.include,['refs/heads/Production','refs/heads/main']);
-  assert.equal(getRule(plan.payload,'pull_request').parameters.required_approving_review_count,1);
-  assert.deepEqual(plan.warnings,['Narrowing ~ALL to explicit protected branches; feature branches will no longer inherit this ruleset','Removing existing bypass actors requires separate explicit approval','Existing required deployment environments are preserved, including PR preview environments']);
+  assert.equal(getRule(plan.payload,'pull_request').parameters.required_approving_review_count,0);
+  assert.deepEqual(plan.warnings,['Native approvals set to 0; the required Independent Review Evidence check enforces the founder review','Narrowing ~ALL to explicit protected branches; feature branches will no longer inherit this ruleset','Removing existing bypass actors requires separate explicit approval','Existing required deployment environments are preserved, including PR preview environments']);
   assert.equal(plan.existingDigest,fingerprint(current));
 });
 
@@ -42,7 +42,7 @@ test('repair adds missing non-fast-forward protection, without duplication or we
   missing.rules=missing.rules.filter(r=>r.type!=='non_fast_forward');
   const result=planNativeRepair(missing);
   assert.equal(result.payload.rules.filter(r=>r.type==='non_fast_forward').length,1);
-  assert.equal(getRule(result.payload,'pull_request').parameters.required_approving_review_count,1);
+  assert.equal(getRule(result.payload,'pull_request').parameters.required_approving_review_count,0);
   assert.equal(getRule(result.payload,'required_status_checks').parameters.strict_required_status_checks_policy,true);
   assert.ok(result.warnings.includes('Missing non-fast-forward protection will be enabled'));
   assert.equal(result.existingDigest,fingerprint(missing));
@@ -60,7 +60,7 @@ test('rejects wrong repo, disabled ruleset, unresolved conversations and unexpec
   for(const mutate of [
     x=>{x.source='someone/else'}, x=>{x.enforcement='disabled'},
     x=>{getRule(x,'pull_request').parameters.required_review_thread_resolution=false},
-    x=>{getRule(x,'pull_request').parameters.required_approving_review_count=0},
+    x=>{getRule(x,'pull_request').parameters.required_approving_review_count=2},
   ]) {const x=live();mutate(x);assert.throws(()=>planNativeRepair(x));}
 });
 
@@ -71,7 +71,7 @@ test('narrows global creation rule to named protected branches before bypass rem
   assert.deepEqual(plan.payload.conditions.ref_name.include,['refs/heads/Production','refs/heads/main']);
   assert.equal(plan.payload.rules.filter(x=>x.type==='creation').length,1);
   assert.equal(plan.payload.bypass_actors.length,0);
-  assert.equal(getRule(plan.payload,'pull_request').parameters.required_approving_review_count,1);
+  assert.equal(getRule(plan.payload,'pull_request').parameters.required_approving_review_count,0);
   assert.equal(plan.payload.conditions.ref_name.include.includes('~ALL'),false);
   assert.ok(plan.warnings.some(x=>/named protected branches/.test(x)));
 });
