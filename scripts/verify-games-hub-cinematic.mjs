@@ -53,21 +53,12 @@ try {
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,'no horizontal overflow');
     assert.equal(await page.locator('#ambient-toggle').getAttribute('aria-pressed'),'false','audio off initially');
     await page.screenshot({path:'proof/site/game-hub-'+label+'-initial.png',fullPage:false});
-    if(width>800){
-    await page.locator('#search-toggle').click();
-    assert.equal(await page.locator('#search-toggle').getAttribute('aria-expanded'),'true','search exposes expanded state');
-    await page.locator('#game-search').fill('LUMORA');
-    assert.equal(await page.locator('#games article.card:visible').count(),1,'search reveals matching game even on a collapsed mobile collection');
-    assert.match(await page.locator('#search-status').innerText(),/1 game found/,'search announces the match count accessibly');
-    assert.equal(await page.locator('#search-view').isVisible(),true,'search provides a jump to visible matches');
-    await page.locator('#game-search').fill('game-title-that-does-not-exist');
-    assert.equal(await page.locator('#games article.card:visible').count(),0,'unknown games have no false matches');
-    assert.match(await page.locator('#search-status').innerText(),/No games found/,'empty results are announced');
-    await page.keyboard.press('Escape');
-    assert.equal(await page.locator('#search-panel').isVisible(),false,'Escape closes search');
-    assert.equal(await page.locator('#games article.card[hidden]').count(),0,'Escape restores all game listings');
-    } else {
-      assert.equal(await page.locator('#search-toggle').isVisible(),false,'phone header shows only the menu button, by founder phone mockup (search is a desktop tool)');
+    assert.equal(await page.locator('#search-toggle, #search-panel').count(),0,'no search button or panel (founder mockup gamehub-desktop)');
+    assert.equal(await page.locator('#current-season').textContent(),'Sunset','hub opens on the mockup Sunset atmosphere');
+    assert.equal(await page.locator('#featured .featured-icon svg > rect[width="64"]').count(),6,'every featured icon is full-colour app art');
+    if(width>=1121){
+      const fit=await page.locator('#featured-track').evaluate(el=>el.clientWidth/el.firstElementChild.getBoundingClientRect().width);
+      assert.ok(fit>4&&fit<5,'desktop shows about 4.5 featured tiles per view, got '+fit.toFixed(2));
     }
     assert.equal(await page.locator('#games .cards').isVisible(),false,'every width lands on the one-screen hub');
     assert.equal(await page.locator('html').getAttribute('data-hub-view'),'home','hub lands on its one-screen view at every width');

@@ -125,10 +125,6 @@ main{width:min(1480px,calc(100% - 44px));padding-bottom:70px}
 #games .action.outline{background:#1c234bc7}
 .notes{scroll-margin-top:55px;background:#0d1832df;border-color:#c7a5c2a6;backdrop-filter:blur(22px)}
 footer{background:#080e27dd;border-color:#e6cebf3b}
-#search-panel{padding:14px 20px;max-width:550px;margin:12px auto;border-radius:20px}
-#search-panel[hidden]{display:none}
-#search-panel label{font-size:12px;color:#ffdfac}
-#search-panel input{width:100%;padding:12px;color:#fff8ed;border-radius:14px;background:#151733;border:1px solid #d8bdc8;font:inherit}
 html[data-season="winter"] #living-world-scene{filter:saturate(.92) brightness(.95)}
 html[data-season="summer"] #living-world-scene{filter:saturate(1.13) brightness(1.03)}
 html[data-season="autumn"] #living-world-scene{filter:saturate(1.08) sepia(.08)}
@@ -227,8 +223,6 @@ header .brand{font-size:23px}.brand .crown{font-size:27px;margin-right:7px}
 
 .skip-link{position:absolute;left:12px;top:-100px;z-index:20;background:#fff4dc;color:#241637;padding:12px 18px;border-radius:10px;font-weight:700}
 .skip-link:focus{top:12px}
-#search-status{margin:8px 0 0;font-size:13px;color:#fff1d2}
-#search-view{display:inline-block;margin-top:8px;color:#9defff;text-underline-offset:3px;font-size:13px}
 
 /* One-screen phone doorway. Deep game details live in a distinct hash view. */
 #hub-bottom-nav,#ambient-mobile-mount,#details-back{display:none}
@@ -247,7 +241,6 @@ header .brand{font-size:23px}.brand .crown{font-size:27px;margin-right:7px}
  header nav{display:none;position:absolute;top:100%;left:9px;right:9px;width:auto;max-width:none;max-height:55dvh;overflow-y:auto;z-index:35;padding:12px;background:#1b163af4;border:1px solid #ebc294;box-shadow:0 19px 35px #02041bae}
  header nav.is-open{display:flex}
  header nav a{min-height:44px;display:inline-flex;align-items:center}
- #search-panel{position:absolute;top:100%;left:9px;right:9px;max-width:none;margin:0;z-index:36;background:#191734f8;border:1px solid #f0c79e}
  main{width:min(100%,580px);height:calc(100dvh - clamp(60px,9dvh,74px) - clamp(68px,10dvh,86px) - env(safe-area-inset-bottom,0px));min-height:0;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto auto auto;gap:clamp(6px,1dvh,11px);padding:0 12px 4px}
  .hero{min-height:0;height:100%;padding:clamp(3px,1dvh,11px) 2px 0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow:hidden}
  .hero .eyebrow{font-size:11px;letter-spacing:.37em}
@@ -396,7 +389,6 @@ header nav a[aria-current="page"]{background:linear-gradient(180deg,#ffe2a3,#f5b
  header{background:none;border:0;backdrop-filter:none;padding:8px 10px 0}
  header .inner{width:100%;min-height:58px;padding:0 6px 0 16px;border-radius:20px;border:1px solid #ffdcae66;background:linear-gradient(180deg,#24194acc,#1a1438b8);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
  .brand{font-size:24px}
- #search-toggle{display:none}
  #mobile-menu{display:inline-flex;width:44px;height:44px;border-radius:14px;font-size:22px}
  .hub-crown{width:42px;height:30px;margin:0}
  .hero .eyebrow{font-size:13px}
@@ -451,6 +443,12 @@ html[data-tod=dawn] #living-world-scene .tod-art{background-image:url('/assets/i
 }
 @media(min-width:801px) and (max-width:1400px){#featured{margin-left:max(250px,calc((100% - 940px)/2));margin-right:auto;max-width:min(940px,calc(100% - 262px))}}
 @media(min-width:801px) and (max-height:800px){#game-hub-center{padding:12px}#game-hub-center h2{font-size:22px;margin-bottom:6px}#game-hub-center a{padding:6px 12px;font-size:14px}#game-hub-center a small{font-size:12px;margin-top:2px}#featured{margin-top:-100px}}
+/* Founder mockup gamehub-desktop, 2026-11-10: full-colour app icons, larger tiles (~4.5 per view), Sunset default, no search. */
+#featured .featured-icon{display:block;width:74px;max-width:100%;height:74px;border:0;border-radius:18px;background:none;overflow:hidden;box-shadow:0 6px 18px #0a0620a6,inset 0 1px #ffffff40;filter:none}
+#featured .featured-icon svg{display:block;width:100%;height:100%}
+@media(min-width:1121px){#featured{max-width:780px}#featured .featured-track{grid-auto-columns:140px;gap:12px}#featured .featured-tile{height:176px;justify-content:space-between;padding:14px 8px 16px}#featured .featured-tile strong{font-size:16px}}
+@media(min-width:801px) and (max-width:1400px){#featured{margin-left:max(250px,calc((100% - 780px)/2));max-width:min(780px,calc(100% - 262px))}}
+@media(max-width:800px){#featured .featured-icon{width:auto;height:clamp(40px,7dvh,58px);aspect-ratio:1;border-radius:14px}}
 </style>
 </head>
 <body>
@@ -462,11 +460,7 @@ html[data-tod=dawn] #living-world-scene .tod-art{background-image:url('/assets/i
 <a href="https://jussco.company/">Home</a><a href="https://jussco.company/portfolio.html">Portfolio</a>
 <a aria-current="page" href="https://games.jussco.company/">Games</a><a href="https://jussco.company/services.html">Solutions</a>
 <a href="https://jussco.company/work.html">Our Work</a><a href="https://jussco.company/founder.html">Founder</a><a href="https://jussco.company/contact.html">Contact</a></nav>
-<div class="header-tools"><button class="utility" id="search-toggle" type="button" aria-label="Search games" aria-controls="search-panel" aria-expanded="false">⌕</button>
-<button class="utility" id="mobile-menu" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Open navigation">☰</button></div></div>
-<div id="search-panel" class="glass-world" hidden><label for="game-search">Find a game</label>
-<input type="search" id="game-search" placeholder="Search SYNC and upcoming games" aria-controls="game-cards" autocomplete="off">
-<p id="search-status" role="status" aria-live="polite"></p><a id="search-view" href="#games" hidden>View matching games ↓</a></div>
+<div class="header-tools"><button class="utility" id="mobile-menu" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Open navigation">☰</button></div></div>
 </header>
 <main id="main">
 <section class="hero" aria-labelledby="hero-title">
@@ -508,12 +502,12 @@ html[data-tod=dawn] #living-world-scene .tod-art{background-image:url('/assets/i
 </section>
 <section id="featured" aria-labelledby="featured-title"><h2 id="featured-title">Featured Experiences</h2>
 <div class="featured-track" id="featured-track">
-<a class="featured-tile" href="#sync-world"><span class="featured-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><defs><linearGradient id="gi-sync" x1="0" x2="1"><stop stop-color="#ff9ad5"/><stop offset="1" stop-color="#ff5fb4"/></linearGradient></defs><path d="M10 32c4-12 16-12 22 0s18 12 22 0-16-12-22 0-18 12-22 0" fill="none" stroke="url(#gi-sync)" stroke-width="7" stroke-linecap="round"/></svg></span><strong>SYNC</strong><small>Group play · Live</small></a>
-<a class="featured-tile" href="#lumora-world"><span class="featured-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 8l13 18h-6l10 13h-7l10 12H12l10-12h-7l10-13h-6z" fill="#3ddc84"/><rect x="29" y="51" width="6" height="8" rx="1" fill="#c98a4a"/><path d="M50 8l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="#ffd36b"/></svg></span><strong>LUMORA</strong><small>In development</small></a>
-<a class="featured-tile" href="#chatquest-world"><span class="featured-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="21" fill="none" stroke="#6fd3ff" stroke-width="4"/><path d="M40 24l-5 12-11 4 5-12z" fill="#e8f7ff"/><path d="M40 24l-11 4 6 8z" fill="#3fa7ff"/></svg></span><strong>ChatQuest</strong><small>In development</small></a>
-<a class="featured-tile" href="#bipseek-world"><span class="featured-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M38 10a20 20 0 1 0 14 30 16 16 0 0 1-14-30z" fill="#b48cff"/><path d="M20 44l6 6-6 6-6-6z" fill="#ff7fbf"/><path d="M20 56v6" stroke="#ffd36b" stroke-width="2"/></svg></span><strong>Bip &amp; Seek</strong><small>In development</small></a>
-<a class="featured-tile" href="#junglejinx-world"><span class="featured-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M14 50C14 26 32 12 52 12c0 22-14 38-38 38z" fill="#4fdc8a"/><path d="M14 50L44 22" stroke="#1d7a48" stroke-width="3" stroke-linecap="round"/></svg></span><strong>Jungle Jinx</strong><small>In development</small></a>
-<a class="featured-tile" href="#lastlaugh-world"><span class="featured-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M12 14h40v18c0 12-9 20-20 20s-20-8-20-20z" fill="#ff8fc8"/><circle cx="24" cy="27" r="3" fill="#5a1440"/><circle cx="40" cy="27" r="3" fill="#5a1440"/><path d="M22 37q10 9 20 0" fill="none" stroke="#5a1440" stroke-width="3" stroke-linecap="round"/></svg></span><strong>Last Laugh</strong><small>Private prototype</small></a>
+<a class="featured-tile" href="#sync-world"><span class="featured-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><defs><linearGradient id="ib-sync" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#5a2a8f"/><stop offset="1" stop-color="#2a1550"/></linearGradient><linearGradient id="ic-sync" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#ffb02e"/><stop offset="1" stop-color="#ff5f8f"/></linearGradient></defs><rect width="64" height="64" rx="15" fill="url(#ib-sync)"/><path d="M14 52l9-27 18 18z" fill="url(#ic-sync)"/><path d="M18 40l6 6M21 31l12 12" stroke="#fff3c4" stroke-width="2.4" stroke-linecap="round"/><path d="M33 22c2-5 7-6 9-3M40 30c5-3 10-1 10 3M30 17c-1-4 1-7 4-7" fill="none" stroke-width="2.6" stroke-linecap="round" stroke="#5ee7ff"/><circle cx="47" cy="14" r="2.6" fill="#ffd84a"/><circle cx="52" cy="24" r="2.2" fill="#ff6fb5"/><rect x="38" y="9" width="4" height="4" rx="1" transform="rotate(25 40 11)" fill="#7dff9b"/><rect x="50" y="38" width="4" height="4" rx="1" transform="rotate(-20 52 40)" fill="#ffd84a"/><circle cx="26" cy="13" r="2" fill="#b98cff"/></svg></span><strong>SYNC</strong><small>Group play · Live</small></a>
+<a class="featured-tile" href="#lumora-world"><span class="featured-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><defs><linearGradient id="ib-lum" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#1f6f5e"/><stop offset="1" stop-color="#0b2b33"/></linearGradient><linearGradient id="it-lum" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#7dff9b"/><stop offset="1" stop-color="#1fae5b"/></linearGradient></defs><rect width="64" height="64" rx="15" fill="url(#ib-lum)"/><path d="M32 7l11 15h-5l9 12h-6l9 12H17l9-12h-6l9-12h-5z" fill="url(#it-lum)"/><rect x="29" y="46" width="6" height="8" rx="1.5" fill="#b9773d"/><path d="M48 44l1.8 4.4 4.4 1.8-4.4 1.8L48 56.4l-1.8-4.4-4.4-1.8 4.4-1.8z" fill="#ffe27a"/><path d="M16 48l1.2 3 3 1.2-3 1.2-1.2 3-1.2-3-3-1.2 3-1.2z" fill="#fff6c4"/><circle cx="38" cy="27" r="1.6" fill="#fff6c4"/><circle cx="27" cy="37" r="1.6" fill="#ffe27a"/></svg></span><strong>LUMORA</strong><small>In development</small></a>
+<a class="featured-tile" href="#chatquest-world"><span class="featured-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><defs><linearGradient id="ib-cq" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#3f7bff"/><stop offset="1" stop-color="#1b2f7a"/></linearGradient></defs><rect width="64" height="64" rx="15" fill="url(#ib-cq)"/><circle cx="32" cy="25" r="16" fill="#fff5dc" stroke="#ffb02e" stroke-width="3.5"/><path d="M39 17l-4.5 11L24 33l4.5-11z" fill="#ff4f5e"/><path d="M39 17L28.5 22 34.5 28z" fill="#ff8f6b"/><circle cx="32" cy="25" r="2" fill="#2a2a4a"/><rect x="22" y="45" width="20" height="13" rx="4" fill="#cfd8ea"/><circle cx="28" cy="51" r="2.2" fill="#3fa7ff"/><circle cx="36" cy="51" r="2.2" fill="#3fa7ff"/><path d="M32 41v4" stroke="#cfd8ea" stroke-width="2"/><circle cx="32" cy="40.5" r="1.8" fill="#ff4f5e"/></svg></span><strong>ChatQuest</strong><small>In development</small></a>
+<a class="featured-tile" href="#bipseek-world"><span class="featured-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><defs><linearGradient id="ib-bip" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#6b46d8"/><stop offset="1" stop-color="#2c1a6e"/></linearGradient><linearGradient id="im-bip" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff1a0"/><stop offset="1" stop-color="#ffbf3f"/></linearGradient></defs><rect width="64" height="64" rx="15" fill="url(#ib-bip)"/><path d="M40 8a19 19 0 1 0 15 29 15 15 0 0 1-15-29z" fill="url(#im-bip)"/><path d="M20 38l9 6-6 10-9-6z" fill="#ff5fa2"/><path d="M20 38l3 16M14 48l15-4" stroke="#ffd1e6" stroke-width="1.4"/><path d="M23 54c1 3-2 4 0 7" fill="none" stroke="#5ee7ff" stroke-width="1.8" stroke-linecap="round"/><circle cx="14" cy="14" r="1.6" fill="#fff6c4"/><circle cx="52" cy="50" r="1.4" fill="#fff6c4"/></svg></span><strong>Bip &amp; Seek</strong><small>In development</small></a>
+<a class="featured-tile" href="#junglejinx-world"><span class="featured-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><defs><linearGradient id="ib-jj" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#2f9a4f"/><stop offset="1" stop-color="#0f4a2a"/></linearGradient><linearGradient id="il-jj" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#3fd06a"/><stop offset="1" stop-color="#c8ff6a"/></linearGradient></defs><rect width="64" height="64" rx="15" fill="url(#ib-jj)"/><path d="M12 52C12 28 30 12 54 10c0 24-16 42-42 42z" fill="url(#il-jj)"/><path d="M12 52L44 20M24 40l-3-9M31 33l-2-9M24 40l9 1M31 33l9 1" stroke="#17703c" stroke-width="2.4" stroke-linecap="round"/><circle cx="48" cy="46" r="7" fill="#ff7a3d"/><circle cx="48" cy="46" r="2.6" fill="#ffd84a"/></svg></span><strong>Jungle Jinx</strong><small>In development</small></a>
+<a class="featured-tile" href="#lastlaugh-world"><span class="featured-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><defs><linearGradient id="ib-ll" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#d4407f"/><stop offset="1" stop-color="#6a1748"/></linearGradient><linearGradient id="im-ll" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff6dc"/><stop offset="1" stop-color="#ffc98a"/></linearGradient></defs><rect width="64" height="64" rx="15" fill="url(#ib-ll)"/><path d="M12 13h40v19c0 13-9 21-20 21s-20-8-20-21z" fill="url(#im-ll)" stroke="#ffd84a" stroke-width="2.5"/><path d="M19 26q5-5 10 0M35 26q5-5 10 0" fill="none" stroke="#5a1440" stroke-width="3" stroke-linecap="round"/><path d="M21 35q11 12 22 0z" fill="#5a1440"/><path d="M25 38q7 5 14 0" fill="#ff6f9f"/><circle cx="18" cy="33" r="3" fill="#ff9fc2" opacity=".8"/><circle cx="46" cy="33" r="3" fill="#ff9fc2" opacity=".8"/></svg></span><strong>Last Laugh</strong><small>Private prototype</small></a>
 </div>
 <div class="featured-toolbar"><button type="button" id="featured-back" aria-label="Scroll featured games left">‹</button><button type="button" id="featured-next" aria-label="Scroll featured games right">›</button></div>
 <p class="hint">Explore here. Play on each game’s own domain, with its original look preserved.</p>
@@ -542,55 +536,6 @@ html[data-tod=dawn] #living-world-scene .tod-art{background-image:url('/assets/i
     const expanded=menu.getAttribute('aria-expanded')==='true';
     menu.setAttribute('aria-expanded',String(!expanded));nav.classList.toggle('is-open',!expanded);
   });
-  const toggle=document.getElementById('search-toggle');
-  const search=document.getElementById('search-panel');
-  const field=document.getElementById('game-search');
-  const searchStatus=document.getElementById('search-status');
-  const searchView=document.getElementById('search-view');
-  const gameCards=[...document.querySelectorAll('#games article.card')];
-  let searchOpenedDetails=false;
-  function clearSearch(){
-    field.value='';
-    gameCards.forEach(card=>card.hidden=false);
-    searchStatus.textContent='';
-    searchView.hidden=true;
-    if(searchOpenedDetails){searchOpenedDetails=false;syncHubView();}
-    if(mobile.matches&&games.dataset.searchExpanded==='true'){
-      collapseGames(true);
-      delete games.dataset.searchExpanded;
-    }
-  }
-  function filterGames(){
-    const value=field.value.trim();
-    const q=value.toLocaleLowerCase();
-    let matches=0;
-    for(const card of gameCards){
-      card.hidden=Boolean(q&&!card.textContent.toLocaleLowerCase().includes(q));
-      if(!card.hidden)matches++;
-    }
-    if(q&&document.documentElement.dataset.hubView==='home'){
-      searchOpenedDetails=true;
-      document.documentElement.dataset.hubView='details';
-      collapseGames(false);
-    }
-    if(q&&mobile.matches&&games.dataset.collapsed==='true'){
-      games.dataset.searchExpanded='true';
-      collapseGames(false);
-    }
-    if(!q&&mobile.matches&&games.dataset.searchExpanded==='true'){
-      collapseGames(true);
-      delete games.dataset.searchExpanded;
-    }
-    if(!q&&searchOpenedDetails){searchOpenedDetails=false;syncHubView();}
-    searchStatus.textContent=!q?'':matches?matches+' game'+(matches===1?'':'s')+' found for "'+value+'".':'No games found for "'+value+'".';
-    searchView.hidden=!q||matches===0;
-  }
-  toggle.addEventListener('click',()=>{
-    search.hidden=!search.hidden;
-    toggle.setAttribute('aria-expanded',String(!search.hidden));
-    if(!search.hidden)field.focus();else clearSearch();
-  });
-  field.addEventListener('input',filterGames);
   const track=document.getElementById('featured-track');
   for(const [id,direction] of [['featured-back',-1],['featured-next',1]]){
     document.getElementById(id).addEventListener('click',()=>{
@@ -610,7 +555,7 @@ html[data-tod=dawn] #living-world-scene .tod-art{background-image:url('/assets/i
   const ambienceMount=document.getElementById('ambient-mobile-mount');
   function syncHubView(){
     const id=location.hash.slice(1);
-    const details=new Set(['games','upcoming','safety',...gameCards.map(card=>card.id)]);
+    const details=new Set(['games','upcoming','safety',...[...document.querySelectorAll('#games article.card')].map(card=>card.id)]);
     const view=details.has(id)?'details':'home';
     const oldView=document.documentElement.dataset.hubView;
     document.documentElement.dataset.hubView=view;
@@ -673,18 +618,16 @@ html[data-tod=dawn] #living-world-scene .tod-art{background-image:url('/assets/i
     nav.classList.remove('is-open');
     menu.setAttribute('aria-expanded','false');
     if(mobile.matches)closeHub();
-    if(!search.hidden){search.hidden=true;toggle.setAttribute('aria-expanded','false');clearSearch();toggle.focus();}
-    else if(document.documentElement.dataset.hubView==='details')location.hash='home';
+    if(document.documentElement.dataset.hubView==='details')location.hash='home';
   });
   if(mobile.addEventListener)mobile.addEventListener('change',syncMobile);
   else mobile.addListener(syncMobile);
   syncMobile();
   const season=document.getElementById('current-season');
   // The parent company's atmosphere module determines seasons automatically.
-  // Atmosphere follows local time (day / sunset / night scene) and cycles on tap.
+  // Opens on Sunset, the founder mockup's atmosphere (gamehub-desktop); tapping cycles dawn / day / sunset / night.
   const ATMOS=['dawn','day','sunset','night'],NAMES={dawn:'Dawn',day:'Daylight',sunset:'Sunset',night:'Night'};
-  const hr=new Date().getHours();
-  let atmo=hr>=5&&hr<8?'dawn':hr>=8&&hr<17?'day':hr>=17&&hr<20?'sunset':'night';
+  let atmo='sunset';
   const setAtmo=a=>{atmo=a;document.documentElement.dataset.tod=a;season.textContent=NAMES[a];};
   setAtmo(atmo);
   document.getElementById('atmo-cycle').addEventListener('click',()=>setAtmo(ATMOS[(ATMOS.indexOf(atmo)+1)%ATMOS.length]));
