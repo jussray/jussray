@@ -326,7 +326,7 @@ If the founder clicks GitHub **Enable auto-merge** for an exact PR, leave the PR
 
 ## Merge gate
 
-Standing founder intent allows a merge only when all repository merge-authority conditions are satisfied. It does not waive them.
+Standing founder intent alone never authorizes a merge. A merge needs current, explicit founder approval for the exact PR and head SHA, and every repository merge-authority condition must be satisfied. Standing intent does not waive any of them.
 
 Merge only when:
 

@@ -6,6 +6,8 @@ metadata:
   version: v1
   owner: Juss
   parent: juss-os
+triggers:
+- /truthmode
 ---
 
 # /truthmode
@@ -57,7 +59,7 @@ DECISION
 ## Executable path
 
 ```bash
-python3 .claude/skills/juss-os/scripts/ultrathink.py truthmode --input truth.json
+python3 skills/juss-authored/juss-os/scripts/ultrathink.py truthmode --input truth.json
 ```
 
-Input is JSON with `claims`, optional `contradictions`, and optional `runtime`. See tests in `scripts/test_modes.py` for the binding schema.
+Input is JSON with `claims`, optional `contradictions`, and optional `runtime`. See tests in `skills/juss-authored/juss-os/scripts/test_modes.py` for the binding schema.

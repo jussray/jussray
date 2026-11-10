@@ -9,6 +9,8 @@ metadata:
   canonical-writer: Claude (phase-scoped lane)
   body-sha256: '9467e3f53c166e7d847340ed24893bef7626bb6e9213571ca602c2e451010f78'
   lineage: v1 → v2 → v2.1 → v3 + Muse 5 + Court C0–C4 → v3.1 truth/confess/runtime implementation → v3.1.1 public technical reply evidence gate
+triggers:
+- /juss-os
 ---
 
 # Juss OS — kernel

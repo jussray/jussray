@@ -13,7 +13,7 @@ kind: core
 - The task crosses Gmail, GitHub, HubSpot, Buffer, Zapier, Cloudflare Email Routing, or saved Zapier skills.
 - Claude must distinguish repository implementation, conversational execution, and an always-on event path.
 
-Read [`CLAUDE.md`](../../../CLAUDE.md), [`docs/founder-signal-engine/claude-zapier-operator.md`](../../../docs/founder-signal-engine/claude-zapier-operator.md), [`docs/founder-signal-engine/auto-distribution-grant-v1.md`](../../../docs/founder-signal-engine/auto-distribution-grant-v1.md), and [`docs/founder-signal-engine/day3-buffer-content-boundary.md`](../../../docs/founder-signal-engine/day3-buffer-content-boundary.md) before acting.
+Read `CLAUDE.md` (in the founder-control-room repo; not exported here), `docs/founder-signal-engine/claude-zapier-operator.md` (in the founder-control-room repo; not exported here), `docs/founder-signal-engine/auto-distribution-grant-v1.md` (in the founder-control-room repo; not exported here), and `docs/founder-signal-engine/day3-buffer-content-boundary.md` (in the founder-control-room repo; not exported here) before acting.
 
 When older review-only wording conflicts with the current executable provider contract, the machine-readable contract, exact-head tests, and Day 3 boundary govern.
 

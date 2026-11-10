@@ -32,3 +32,6 @@ First-party export of Juss-authored skills, originally prepared 2026-11-03. The 
 - `/goalfix`, `/fixfast` and `/repair-verify-merge` belong to `goalfix`. `l99-v21-transactional-authority` keeps `/l99`.
 - Merging always needs Juss's explicit approval for the exact PR and head SHA. Green checks alone never authorize a merge (see the repository `CLAUDE.md`).
 - `fcr-set/` stays an unreviewed FCR export. Its trigger claims and merge wording govern FCR, not this repository.
+- `/confess`, `/truthmode`, `/juss-os` and `/truth-decay` are declared by their skills. In `fcr-set/`, the `ultrathink-devil` copies claim only `/ultrathink-devil`, the FCR goalfix claims `/goalfix-fcr`, and `truth-decay-audit` claims `/truth-decay-audit`. Bare ULTRATHINK is kernel-owned (`juss-os`).
+- `fcr-set/ai-skills/ultrathink-devil` was byte-identical to `fcr-set/skills/ultrathink-devil`. It is now an entry point that routes to that canonical file, the same pattern as `fact-check-every-claim`. Nothing was deleted.
+- `fcr-set/` links to FCR files that were not exported now name the source repo instead of pointing at a missing path.

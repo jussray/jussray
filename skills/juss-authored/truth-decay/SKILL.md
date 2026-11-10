@@ -1,6 +1,8 @@
 ---
 name: truth-decay
 description: "Audit any claim, memory, PR narrative, status file, product-progress statement, or AI conclusion that may have been true when recorded but is now false, stale, superseded, or unknown. Classifies every load-bearing claim as CURRENT, HISTORICAL, STALE, SUPERSEDED, or UNKNOWN. Finds the causal invalidation boundary. Repairs the smallest authoritative control — not just prose. Use whenever Juss invokes /TRUTHMODE, questions whether something is \"still true,\" audits a status doc, reviews a PR narrative, checks memory accuracy, or says \"verify this.\" Also triggers on any present-tense operational claim that could be stale. Never green without fresh proof.\n"
+triggers:
+- /truth-decay
 ---
 
 # Truth Decay Audit

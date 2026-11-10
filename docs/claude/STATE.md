@@ -1,3 +1,22 @@
+## 2026-11-10 — Remaining skills findings fixed (Juss: "fix the remaining skills findings cont")
+
+- FIX (all in `skills/juss-authored/` plus two docs):
+  - fcr-set `ultrathink-devil` no longer claims ULTRATHINK, `/devil`, `/truthmode` or `/confess`. It owns only `/ultrathink-devil`, and its `ai-skills` copy now routes to the canonical file (nothing deleted). The FCR goalfix uses `/goalfix-fcr`, and `truth-decay-audit` uses `/truth-decay-audit`.
+  - `/confess`, `/truthmode`, `/juss-os` and `/truth-decay` are declared by their own skills. A YAML-checked scan finds no trigger collisions.
+  - The `juss-flow-launch-loop` merge gate says standing intent alone never authorizes a merge.
+  - `confess` and `truthmode` use the real script path `skills/juss-authored/juss-os/scripts/`.
+  - Frontmatter:
+    - The bridge skill gets frontmatter.
+    - 11 fcr-set skills get descriptions written from their own opening text.
+    - `reasoning-stack` had invalid YAML (an unquoted colon); it is now quoted.
+    - Every SKILL.md parses with a name and a description.
+  - Dead relative links to unexported FCR files now name the source repo. The fact-check canonical path is fixed.
+  - `.claude/CLAUDE.md` no longer claims a `requirements` field, and documents one owner per trigger.
+  - CI (`juss-authored-skills-conformance.yml`) now runs the juss-os `test_evidence_ledger` and `test_modes` suites.
+  - SHA256SUMS regenerated (no `__pycache__`).
+- PROOF: INVENTORY_OK; unittest OK; juss-os tests OK; frontmatter 0 bad; trigger collisions none; workflow YAML parses.
+- ROLLBACK: revert this commit.
+
 ## 2026-11-10 — Draft PR #75 opened for `claude/tender-allen-cvkpqa` (ambience and skills). It waits on exact-head CI and Juss's `/approve <sha>` or his auto-merge.
 
 ## 2026-11-10 — Skills fixes 1–3 applied (Juss: "Approved cont")

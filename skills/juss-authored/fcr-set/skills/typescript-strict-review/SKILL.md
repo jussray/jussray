@@ -1,5 +1,6 @@
 ---
 name: typescript-strict-review
+description: "Strict senior review of TypeScript, Node, Worker or test changes before merge or ready-for-review claims: correctness first, then regression risk and blast radius."
 version: 1.0.0
 status: active
 scope: founder-control-room
