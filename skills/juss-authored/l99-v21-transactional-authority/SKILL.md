@@ -1,15 +1,11 @@
 ---
 name: l99-v21-transactional-authority
-description: "Build and review AI-agent systems using L99 V2.1 transactional authority. Use this skill whenever designing, reviewing, or implementing any AI workflow that can: recommend or acquire paid tools/APIs/vendors/cloud resources; read from or invoke MCP resources/prompts/tools; create drafts, branches, deployments, messages, purchases, or other external actions; consume customer/financial/product/internal data; or make decisions requiring founder/operator authority. Also triggers for: /goalfix, /fixfast, /repair-verify-merge, ULTRATHINK, /l99, procurement reviews, agent governance, MCP integration design, spend policy enforcement, and any Juss-owned project requiring authority chain verification before merge. Model proposals have zero execution authority — deterministic policy, atomic budget controls, bound founder approvals, and execution-time verification control all external commitments.\n"
+description: "Build and review AI-agent systems using L99 V2.1 transactional authority. Use this skill whenever designing, reviewing, or implementing any AI workflow that can: recommend or acquire paid tools/APIs/vendors/cloud resources; read from or invoke MCP resources/prompts/tools; create drafts, branches, deployments, messages, purchases, or other external actions; consume customer/financial/product/internal data; or make decisions requiring founder/operator authority. Also triggers for: /l99, procurement reviews, agent governance, MCP integration design, spend policy enforcement, and any Juss-owned project requiring authority chain verification before merge. Model proposals have zero execution authority — deterministic policy, atomic budget controls, bound founder approvals, and execution-time verification control all external commitments.\n"
 version: "2.1.0"
 owner: "@juss"
 status: frozen
 triggers:
-- /goalfix
-- /fixfast
-- /repair-verify-merge
 - /l99
-- ULTRATHINK
 - procurement review
 - agent authority
 - MCP integration
@@ -303,6 +299,6 @@ Use claim→evidence binding chain instead.
 - MCP tool design, review, or integration
 - Procurement decisions for Juss-owned projects
 - Agent governance and authority chain design
-- `/goalfix`, `/fixfast`, `ULTRATHINK`, `/l99` invocations
+- `/l99` invocations (`/goalfix` and `/fixfast` belong to the `goalfix` skill; bare ULTRATHINK is kernel-owned)
 - Pre-merge review for Founder Control Room, Chief AI, L99, Se'kret Bip, JBH, trading-agent
 - Any system where "founder approves" needs to be more than a boolean flag

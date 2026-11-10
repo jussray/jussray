@@ -25,3 +25,10 @@ First-party export of Juss-authored skills, originally prepared 2026-11-03. The 
 - The `juss-authored-skills-conformance` GitHub workflow compiles and executes local receipt tests and checks the manifest integrity against the tracked inventory when changes touch this directory.
 - A passing checksum proves file-byte consistency against this committed manifest, **not provenance, authenticity, or the safety of the file**. A passing unit test does not prove external runtime behavior.
 - Exact-commit workflow conclusions must be observed before any CI claim; no deployment, merge, or live integration is implied by this export.
+
+## Trigger ownership (2026-11-10, Juss-approved audit fix)
+
+- `/godmode` belongs to `godmode-devil-ultrathink`. `godmode/` claims no trigger and is kept as reference.
+- `/goalfix`, `/fixfast` and `/repair-verify-merge` belong to `goalfix`. `l99-v21-transactional-authority` keeps `/l99`.
+- Merging always needs Juss's explicit approval for the exact PR and head SHA. Green checks alone never authorize a merge (see the repository `CLAUDE.md`).
+- `fcr-set/` stays an unreviewed FCR export. Its trigger claims and merge wording govern FCR, not this repository.

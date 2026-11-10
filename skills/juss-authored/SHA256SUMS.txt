@@ -1,4 +1,4 @@
-1141d5b0242d33d69db7aa7fcced04b9ed06bec756061ccc69127d0c4745e2e2  ./README.md
+d86a3b5f269119d6076273b0320e39a15c912de3b0b02305f6e0cb88e99a019a  ./README.md
 170c840176fd62a43b88a5eb6fcd39cbbb7c07f7b8ae7fd111fffb5067e22116  ./confess/SKILL.md
 1806dc748ee8a024a5141a26c26f9a02af0cf40eadf34e46fa4564fda21f27d7  ./fcr-set/ai-skills/chatgpt-openai-developers-zapier-bridge/SKILL.md
 777531386a4f26f95fbfef50d9e1784f2824b460af2bf31aedc4f0155a6734b3  ./fcr-set/ai-skills/claude-zapier-founder-operator/SKILL.md
@@ -24,9 +24,9 @@ dfed78e3cabc53ef8edf66d65b663b330b2bdb7d3962a84d09d57682fc156643  ./fcr-set/skil
 800d6be2525c8ccef2e2ba7e323d6f7418dacd20e1407c97ed486d45db983832  ./fcr-set/skills/ultrathink-devil/SKILL.md
 9ca22e2b56d7559d825cf175a19388ba70e113360980dafcd77d2ada8ac2feb7  ./founder-action-implant-verify/SKILL.md
 21fab8246a4ccfcc3caf923ef119c3dbadaa390fa9c919a8be6454849c0c551b  ./futureyou-me-v10/SKILL.md
-d60bd7e9cbd8c141aa43897b40eeaedab189fcbc3d25b5e47f46986475314b9c  ./goalfix/SKILL.md
+983599ca1347cf629cec13bf96b49ff4860cf00a6c13828e54ebe9c6e45c9a38  ./goalfix/SKILL.md
 0e284786fa2671ac3a7088a8e7c9f851686c6084ecdb96b35ec5946f8df777e8  ./godmode-devil-ultrathink/SKILL.md
-1c1080fb2f77fdee7afedbb5a1fe88addd72df6e4e4d9f829614ece34f4d7a4d  ./godmode/SKILL.md
+e4abe6d0108f37a4dd9276f0aa2d72845b0b94f2046fe164fd61119bc84af04b  ./godmode/SKILL.md
 2226a7965fdcb5812021877f55a815e2f1e06ba388c0f427f1b0e30041d8a12e  ./juss-af-skills-pack/SKILL.md
 8f1b5917c8aa25494d453a68c9573c503231ded10c60a6c2635243f0027b0f0d  ./juss-command-codex/SKILL.md
 10534f9c3a1b41fb21a60fa0791100ca4432d20e4f2004d8df412ef64a10eb3f  ./juss-os/SKILL.md
@@ -42,7 +42,7 @@ b8aea158807cc99dd018828796558b80a22a60ad18b934b18a5f2739836db527  ./juss-os/scri
 3a01323343f6b9606b10432c9d33297211e6f34c945c4a2f329773a6b7b542d5  ./juss-os/scripts/test_modes.py
 721823852acd163af844c8cfd07d0304cdbc5ec05be0ab0416259678396105d2  ./juss-os/scripts/truthmode.py
 921636e377296749ee43519f9d04811afdf010c774d0ae49d02af5d84908a18e  ./juss-os/scripts/ultrathink.py
-c21646d49aca6d8e24f578a2a09f98495ef17ab2e137bb4cd6113757a0150eb0  ./l99-v21-transactional-authority/SKILL.md
+79531020bf0bfb9b42edc23f07f2592d28536db16a4b942c1ca1c22b08e74c2a  ./l99-v21-transactional-authority/SKILL.md
 0e98c18f410e7929956c69a2ba4746a41fecff1ad2a9fb8ef1c71dbea4321215  ./patch-implant-verify/SKILL.md
 8c97933519ac5049d46b343e0c8a13efc3fce3b1505819e9c247869823ca4d98  ./reasoning-stack/SKILL.md
 9737dc28c1a6e82a52f8f737fb4680d80cd7f4eed4b81194da16dcd864cd3103  ./runtime-kernel/SKILL.md

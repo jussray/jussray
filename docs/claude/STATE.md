@@ -1,3 +1,17 @@
+## 2026-11-10 — Skills fixes 1–3 applied (Juss: "Approved cont")
+
+- FIX:
+  - `/godmode` is owned only by `godmode-devil-ultrathink`. `godmode/` now claims no trigger and is kept as reference.
+  - `/goalfix`, `/fixfast` and `/repair-verify-merge` are owned only by `goalfix`, which now declares them in its frontmatter. They were removed from `l99-v21` (frozen), which keeps `/l99`.
+  - `goalfix` merge rule: merge only with Juss's explicit approval for the exact PR and head SHA, after green checks. Green checks alone never authorize a merge.
+  - The README trigger-ownership section and the MANIFEST note are updated, and SHA256SUMS is regenerated.
+- PROOF: `sha256sum -c` OK, `verify_inventory` INVENTORY_OK, unittest OK, juss-os script tests OK. `node --test` over all repo tests gives 111 pass and 2 fail. Both failures predate this branch: `evidence-sync-proof` is the known vitest gap, and `sync-party-link` fails on the base too and is not in CI.
+- OPEN (not done):
+  - fcr-set trigger collisions (goalfix, ultrathink-devil) and its merge wording. These are an FCR export, so they are noted in the README as FCR-scoped.
+  - Broken script path in confess and truthmode.
+  - Frontmatter consistency.
+  - The juss-os tests are not in CI.
+
 ## 2026-11-10 — Parallel audits: red-team of the ambience commit, and the skills pack (Juss: "audit in parallel too @skills")
 
 - RED-TEAM FIXES (ambience follow-up commit on `claude/tender-allen-cvkpqa`):
