@@ -736,3 +736,4 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
   - #67 (Codex skills export) is now `9389b99`: main merged in, conflicts resolved to main's versions (site/index.html, verify-site.mjs), and the obsolete homepage asserts dropped from site-proof-boundary.test.mjs. Local results: node tests 57/57, verify-codex-release PASS, codex release unittest OK, juss-os test_modes OK, Game Hub cinematic PASS at all widths.
   - #67 and #74 both wait on Juss's `/approve <sha>` (or auto-merge) and on the ruleset/CodeQL fixes.
   - #74's title, rewritten by another tool to say "one independent human approval", is restored.
+- 2026-11-10: 8e64961 (Juss's account, unsigned, 2026-11-09 19:58 UTC) reintroduced the non-author approval requirement for the third time. Juss answered "Revert (I'm reviewer)". Reverted; the code again matches e020e65. The tool pushing as Juss is still unidentified.
