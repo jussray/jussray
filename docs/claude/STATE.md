@@ -1,3 +1,5 @@
+## 2026-11-10 — Draft PR #75 opened for `claude/tender-allen-cvkpqa` (ambience and skills). It waits on exact-head CI and Juss's `/approve <sha>` or his auto-merge.
+
 ## 2026-11-10 — Skills fixes 1–3 applied (Juss: "Approved cont")
 
 - FIX:
