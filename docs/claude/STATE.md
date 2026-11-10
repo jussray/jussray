@@ -708,3 +708,4 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
 - Founder decision: the **main page (www.jussco.company) gets the same look and fixes** accordingly.
 - Carrier: PR #76 branch `claude/gamehub-mockup-fixes`.
 - 2026-11-10: Game Hub v3 built on PR #76 (supersedes fix 1–4 except colour art + Sunset default; search restored). Real content only: 6 games + Se'kret Bip (own domain) + StoryEngine (no link). Tournaments / Events & Challenges / Creator Zone / Rewards, bell, My Juss, My Library render as drawn and say "coming soon". Nav highlights Products (Game Hub sits under Products). Atmosphere shows the live season window. Next: homepage (site/index.html) gets the same v3 look.
+- 2026-11-10: Founder: "use PromptOS and FCR too" — Founder Control Room (foundercontrolroom.org) and PromptOS (github.com/jussray/promptos) added as featured tiles with worlds.json links/labels. Include them wherever real apps show (homepage too).

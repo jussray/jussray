@@ -29,10 +29,10 @@ try {
     page.on('pageerror',error=>errors.push(String(error)));
     const response=await page.goto('http://127.0.0.1:'+address.port+'/',{waitUntil:'load'});
     assert.equal(response?.status(),200);
-    assert.equal(await page.locator('#featured .featured-tile').count(),8,'six game worlds plus Se’kret Bip and StoryEngine in the featured carousel (founder v3 mockups: actual games and apps)');
+    assert.equal(await page.locator('#featured .featured-tile').count(),10,'six game worlds plus Se’kret Bip, StoryEngine, Founder Control Room and PromptOS (founder: actual games and apps)');
     assert.deepEqual(await page.locator('#featured .featured-tile').evaluateAll(els=>els.slice(0,3).map(el=>el.querySelector('strong')?.textContent?.trim())),['SYNC','LUMORA','ChatQuest'],'first three cards match the founder Game Hub mockups');
-    assert.equal(await page.locator('#featured .featured-icon svg').count(),8,'every featured world has its glowing art (founder v3 mockups)');
-    assert.deepEqual(await page.locator('#featured .featured-tile small').allTextContents(),['Group play · Live','In development','In development','In development','In development','Private prototype','Opening soon','Building'],'featured statuses match the founder mockups');
+    assert.equal(await page.locator('#featured .featured-icon svg').count(),10,'every featured world has its glowing art (founder v3 mockups)');
+    assert.deepEqual(await page.locator('#featured .featured-tile small').allTextContents(),['Group play · Live','In development','In development','In development','In development','Private prototype','Opening soon','Building','Building','Building'],'featured statuses match the founder mockups');
     assert.equal(await page.locator('#games article.card').count(),6,'existing game detail cards preserved');
     assert.equal(await page.locator('#games article.card:has(.tag.wait) a').count(),0,'unreleased game cards have no public play links');
     assert.equal(await page.locator('.header-tools .utility').evaluateAll(nodes=>nodes.filter(el=>getComputedStyle(el).display!=='none').every(el=>{const box=el.getBoundingClientRect();return box.width>=44&&box.height>=44;})),true,'header tools meet 44px touch targets');
@@ -44,6 +44,7 @@ try {
     assert.deepEqual(await page.locator('#game-hub-center a').evaluateAll(a=>a.map(x=>x.getAttribute('href'))),['#games','#sync-world'],'Game Hub Center links only to real destinations');
     assert.equal(await page.locator('#game-hub-center button.soon').count(),4,'Tournaments, Events, Creator Zone and Rewards are shown as coming soon, not as live features');
     assert.equal(await page.locator('#featured .tile-storyengine a, a.tile-storyengine').count(),0,'StoryEngine has no public product link until its front door is live');
+    assert.deepEqual(await page.locator('a.tile-fcr, a.tile-promptos').evaluateAll(a=>a.map(x=>x.getAttribute('href'))),['https://foundercontrolroom.org','https://github.com/jussray/promptos'],'FCR and PromptOS use their founder-declared links from worlds.json');
     assert.equal(await page.locator('#current-season').textContent(),'Sunset','hub opens on the mockup Sunset atmosphere');
     await page.locator('#library-btn').click();
     assert.match(await page.locator('#hub-toast').innerText(),/coming soon/i,'My Library honestly reports coming soon');
