@@ -1,3 +1,20 @@
+## 2026-11-10 — Atmosphere-matched ambient sound and motion (Juss: "add the according ambient sounds and animations")
+
+- BRANCH: `claude/tender-allen-cvkpqa`, from `main` 0caf4d1.
+- FIX:
+  - New `site/assets/ambience.mjs`: one generated soundscape per atmosphere, all made in the browser with Web Audio (no audio files, no third-party assets). Every scene has a lake-water bed and a pad chord.
+    - Dawn: birds and a chime.
+    - Day: brighter birds and a breeze.
+    - Sunset: warm chimes and wind.
+    - Night: crickets and low chimes.
+  - The sound crossfades when the atmosphere changes. It is off by default and starts only on a user gesture. The on/off choice and volume are remembered on the device and resume on the visitor's next gesture, never by autoplay. It fades out in a hidden tab.
+  - `atmosphere.mjs` has a new time-of-day motion layer on top of the season particles: stars and fireflies at night, rising embers at sunset, sun glints on the water by day, and mist at dawn. Reduced motion still hides it.
+  - The homepage `#sound` and `#vol` controls now drive the shared engine, so cycling the atmosphere changes the sound.
+  - Every other world page gets a floating "Ambient sound" pill at the bottom left. On phones it is an icon, lifted above a tab bar when one exists. `world-shell.js` adds the atmosphere layer to shell pages that did not load it (builds, licensing, returns). The Ideas page keeps its own panel.
+- PROOF (local): verify-site exit 0, 469 ok, including 30 new ambience checks at desktop and mobile: one control per page, off by default, on and off by gesture, clear of the tab bar, no duplicate control on Home or Ideas, sound stays on while the atmosphere cycles, no console errors. `node --test` 31/31 on the CI set plus the atmosphere test. approved-stories passed. Screenshots reviewed (home dawn and night at 1440, services at 390 night). A headless check confirmed the engine is on and following the scene.
+- NOT YET: exact-head CI, Juss's founder review, merge, and live readback.
+- ROLLBACK: revert this commit.
+
 ## 2026-11-08 — SUPERSEDING founder governance decision: systematic-first, human-final
 
 - Review live `main` and exact PR head; systematically review and repair; verify exact-head checks and applicable browser proof; then require **Juss's founder review on that exact head** (`/approve <sha>` comment or auto-merge, in the GitHub UI; superseded 2026-11-09, see CLAUDE.md).

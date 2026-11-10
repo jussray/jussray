@@ -476,5 +476,33 @@ for (const vp of [{ n: 'ideas-desktop', w: 1440, h: 900 }, { n: 'ideas-tablet', 
   await page.screenshot({ path: `proof/site/${vp.n}.png`, fullPage: true }); await ctx.close();
 }
 
+// Ambience (2026-11-10): one generated soundscape per atmosphere and a matching motion layer on every world page.
+for (const vp of [{ n: 'ambience-desktop', w: 1440, h: 900 }, { n: 'ambience-mobile', w: 390, h: 844 }]) {
+  const ctx = await browser.newContext({ viewport: { width: vp.w, height: vp.h } }); const page = await ctx.newPage();
+  const errors = []; page.on('pageerror', (e) => errors.push(String(e))); page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
+  for (const route of ['services.html', 'builds.html', 'contact.html']) {
+    await page.goto(url + route, { waitUntil: 'load' });
+    const ctl = page.locator('.amb-float'); await ctl.waitFor({ timeout: 5000 });
+    say((await ctl.count()) === 1 && (await ctl.getAttribute('aria-pressed')) === 'false', `${vp.n}: ${route} has one ambient control, off by default`);
+    say((await page.locator('canvas.world-atmosphere').count()) === 1, `${vp.n}: ${route} has the atmosphere motion layer`);
+    const box = await ctl.boundingBox(); const tabs = await page.locator('.tabbar').boundingBox().catch(() => null);
+    say(box && box.y + box.height <= vp.h && (!tabs || box.y + box.height <= tabs.y), `${vp.n}: ${route} ambient control on screen and clear of the tab bar`);
+  }
+  await page.click('.amb-float');
+  await page.waitForFunction(() => document.querySelector('.amb-float').getAttribute('aria-pressed') === 'true', null, { timeout: 5000 }).catch(() => {});
+  say((await page.getAttribute('.amb-float', 'aria-pressed')) === 'true', `${vp.n}: ambient control turns on with a user gesture`);
+  await page.evaluate(() => document.body.setAttribute('data-atmo', 'night')); await page.waitForTimeout(300);
+  await page.click('.amb-float');
+  say((await page.getAttribute('.amb-float', 'aria-pressed')) === 'false', `${vp.n}: ambient control turns off`);
+  await page.goto(url + 'ideas.html', { waitUntil: 'load' }); await page.waitForTimeout(300);
+  say((await page.locator('.amb-float').count()) === 0, `${vp.n}: Ideas keeps its own ambience panel, no duplicate control`);
+  await page.goto(url, { waitUntil: 'load' }); await page.waitForTimeout(300);
+  say((await page.locator('.amb-float').count()) === 0, `${vp.n}: homepage keeps its own ambience panel, no duplicate control`);
+  await page.click('#sound'); await page.click('#atmo'); await page.click('#atmo'); await page.waitForTimeout(300);
+  say((await page.getAttribute('#sound', 'aria-checked')) === 'true', `${vp.n}: homepage sound stays on while the atmosphere cycles`);
+  say(errors.length === 0, `${vp.n}: no console errors${errors.length ? ' — ' + errors.join(' | ') : ''}`);
+  await ctx.close();
+}
+
 await browser.close(); srv.close();
 console.log(failed ? `\n${failed} check(s) FAILED` : '\nall checks passed'); process.exit(failed ? 1 : 0);
