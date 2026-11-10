@@ -1,3 +1,28 @@
+## 2026-11-10 — Parallel audits: red-team of the ambience commit, and the skills pack (Juss: "audit in parallel too @skills")
+
+- RED-TEAM FIXES (ambience follow-up commit on `claude/tender-allen-cvkpqa`):
+  - A remembered "on" no longer turns sound back on after the visitor switches it off. Any explicit toggle cancels the pending resume.
+  - The resume listener is only set up on pages that show a switch wired to the shared engine. The Game Hub served by this worker no longer gets a hidden second engine.
+  - Resume listens for pointerup, touchend and keydown, the events browsers treat as a user gesture.
+  - The audio context is suspended after it fades out (when turned off or in a hidden tab), so it no longer drains the battery.
+  - The control injects its own stylesheet, which fixes the unstyled button on opportunity-engine.
+  - Removed the dead `.tabbar` lift rule. No `.tabbar` element exists, and its check cost about 3 minutes of CI time per run.
+  - Rapid double-clicks are ignored while a toggle is still in progress.
+  - Firefly glow is drawn once as a sprite instead of a new gradient every frame.
+  - Tests now read the real engine state: whether it is on, the audio context state and the playing scene. New cases: no autoplay on load, off stays off, resume on the next tap, the Game Hub never starts the shared engine, and opportunity-engine is styled.
+- PROOF (local): verify-site exit 0, 481 ok. atmosphere and site-proof-boundary tests 8/8.
+- SKILLS AUDIT (`skills/juss-authored`, read-only, NOT FIXED, needs Juss's word because these are founder-authored operating rules):
+  - Integrity is green. SHA256SUMS: 57 entries OK. `verify_inventory.py`: INVENTORY_OK. Unit tests: 37 OK. juss-os script tests: 27 OK, but CI does not run them.
+  - HIGH: `/godmode` is claimed by both `godmode` and `godmode-devil-ultrathink`, and their merge rules conflict.
+  - HIGH: `/goalfix`, `/fixfast` and `/repair-verify-merge` are each claimed by three skills: goalfix, l99-v21 (a payments spec) and the fcr-set goalfix.
+  - HIGH: `goalfix/SKILL.md:73` says "no merge unless checks … green", which implies green alone is enough to merge. The CLAUDE.md contract requires Juss's word on the exact head.
+  - MED: the fcr-set ultrathink-devil skill takes over `/truthmode`, `/confess` and `/devil`.
+  - MED: the fcr-set juss-flow-launch-loop says standing intent allows a merge, which contradicts godmode.
+  - MED: `confess:64` and `truthmode:60` point at a missing `.claude/skills/juss-os/scripts/ultrathink.py`. The real path is under `skills/juss-authored/juss-os/scripts/`.
+  - MED: frontmatter is inconsistent. One skill has none, eight have no description, `trigger:` and `triggers:` are both used, and no skill has the `requirements:` field that `.claude/CLAUDE.md` describes.
+  - LOW: broken relative links in fcr-set, two byte-identical ultrathink-devil copies, and the juss-os tests are absent from CI. No secrets were found.
+  - Any skill edit requires regenerating SHA256SUMS.
+
 ## 2026-11-10 — Atmosphere-matched ambient sound and motion (Juss: "add the according ambient sounds and animations")
 
 - BRANCH: `claude/tender-allen-cvkpqa`, from `main` 0caf4d1.

@@ -23,6 +23,7 @@ if (soundBtn) soundBtn.dataset.ambienceSwitch = '';
 amb.then((m) => {
   if (vol) vol.value = Math.round(m.storedVolume() * 100);
   m.onAmbience((v) => soundBtn?.setAttribute('aria-checked', String(v)));
+  if (soundBtn) m.armRemembered();
 }).catch(() => {});
 vol?.addEventListener('input', () => amb.then((m) => m.setVolume(+vol.value / 100)));
 soundBtn?.addEventListener('click', async () => {

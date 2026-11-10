@@ -40,6 +40,14 @@ export function startAtmosphere() {
     const h = new Date().getHours();
     return h >= 5 && h < 8 ? 'dawn' : h >= 8 && h < 17 ? 'day' : h >= 17 && h < 20 ? 'sunset' : 'night';
   }
+  let sprite = null; // firefly glow, drawn once and reused every frame
+  function glow() {
+    if (sprite) return sprite;
+    sprite = document.createElement('canvas'); sprite.width = sprite.height = 14;
+    const c = sprite.getContext('2d'), g = c.createRadialGradient(7,7,0,7,7,7);
+    g.addColorStop(0,'rgba(232,255,150,1)'); g.addColorStop(1,'rgba(232,255,150,0)');
+    c.fillStyle = g; c.fillRect(0,0,14,14); return sprite;
+  }
   function drawLights(time) {
     const scene = tod();
     lights.forEach((p, i) => {
@@ -51,9 +59,7 @@ export function startAtmosphere() {
         } else { // fireflies wander above the water
           p.x += Math.sin(time/2100+p.phase)*.45; p.y += Math.cos(time/2600+p.phase)*.3;
           if (p.y < height*.35) p.y = height*.9; if (p.y > height) p.y = height*.4;
-          const g = context.createRadialGradient(p.x,p.y,0,p.x,p.y,7);
-          g.addColorStop(0,`rgba(232,255,150,${.85*pulse})`); g.addColorStop(1,'rgba(232,255,150,0)');
-          context.fillStyle = g; context.beginPath(); context.arc(p.x,p.y,7,0,Math.PI*2); context.fill();
+          context.globalAlpha = .85*pulse; context.drawImage(glow(), p.x-7, p.y-7); context.globalAlpha = 1;
         }
       } else if (scene === 'sunset') { // warm embers rise slowly
         p.y -= .25+p.u*.35; p.x += Math.sin(time/1900+p.phase)*.3;

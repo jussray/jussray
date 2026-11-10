@@ -23,7 +23,7 @@ export function currentScene() {
   return h >= 5 && h < 8 ? 'dawn' : h >= 8 && h < 17 ? 'day' : h >= 17 && h < 20 ? 'sunset' : 'night';
 }
 
-let ctx = null, master = null, noise = null, layer = null, timer = 0, on = false, scene = '';
+let ctx = null, master = null, noise = null, layer = null, timer = 0, on = false, scene = '', busy = false, sleepTimer = 0;
 const listeners = new Set();
 const emit = () => listeners.forEach((fn) => fn(on));
 const rand = (a, b) => a + Math.random() * (b - a);
@@ -107,7 +107,16 @@ function crossfade(name) {
   if (old) { old.out.gain.setTargetAtTime(0, now, 0.6); setTimeout(() => { old.nodes.forEach((n) => { try { n.stop(); } catch {} }); old.out.disconnect(); }, 4000); }
 }
 
+// Off or hidden: fade, then suspend the context so nothing renders in the background.
+function sleep() { clearTimeout(sleepTimer); sleepTimer = setTimeout(() => { if (ctx && (!on || document.hidden)) ctx.suspend().catch(() => {}); }, 1500); }
+
 export async function setAmbience(next) {
+  disarm(); // any explicit choice cancels a remembered-on resume
+  if (busy) return on === !!next;
+  busy = true;
+  try { return await apply(next); } finally { busy = false; }
+}
+async function apply(next) {
   if (next && !ctx) {
     const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return false;
     ctx = new AC(); master = ctx.createGain(); master.gain.value = 0; master.connect(ctx.destination); noise = noiseBuffer();
@@ -117,6 +126,7 @@ export async function setAmbience(next) {
   on = !!next;
   if (on) crossfade(currentScene());
   master.gain.setTargetAtTime(on ? level() : 0, ctx.currentTime, 0.5);
+  if (on) clearTimeout(sleepTimer); else sleep();
   write({ on }); schedule(); emit();
   return true;
 }
@@ -126,6 +136,8 @@ export function setVolume(v) {
 }
 export const storedVolume = () => { const v = read().vol; return Number.isFinite(v) ? v : 0.4; };
 export const isOn = () => on;
+/* Read-only state for browser checks: whether sound is on, the context state, and the playing scene. */
+export const ambienceState = () => ({ on, context: ctx?.state || 'none', scene: on ? layer?.name || '' : '' });
 export function onAmbience(fn) { listeners.add(fn); return () => listeners.delete(fn); }
 
 // Follow the page's atmosphere: crossfade when the homepage cycles it or time moves on.
@@ -138,21 +150,26 @@ setInterval(follow, 60000);
 document.addEventListener('visibilitychange', () => {
   if (!ctx || !on) return;
   master.gain.setTargetAtTime(document.hidden ? 0 : level(), ctx.currentTime, 0.2);
-  if (document.hidden) clearTimeout(timer); else schedule();
+  if (document.hidden) { clearTimeout(timer); sleep(); } else { clearTimeout(sleepTimer); ctx.resume().catch(() => {}); schedule(); }
 });
-// Remembered "on": resume on the visitor's next gesture anywhere except an ambience switch itself.
-if (read().on) {
-  const arm = (e) => {
-    if (e.target?.closest?.('[data-ambience-switch]')) return;
-    ['pointerdown', 'keydown'].forEach((t) => removeEventListener(t, arm, true));
-    if (!on) setAmbience(true);
-  };
-  ['pointerdown', 'keydown'].forEach((t) => addEventListener(t, arm, true));
+// Remembered "on": resume on the visitor's next gesture, but only on a page that shows an ambience
+// switch wired to this engine (armRemembered is called by that switch's owner), and never through
+// the switch itself. Gestures that browsers treat as activation: pointerup, touchend, keydown.
+const GESTURES = ['pointerup', 'touchend', 'keydown'];
+let arm = null;
+function disarm() { if (arm) { GESTURES.forEach((t) => removeEventListener(t, arm, true)); arm = null; } }
+export function armRemembered() {
+  if (arm || on || !read().on) return;
+  arm = (e) => { if (e.target?.closest?.('[data-ambience-switch]')) return; disarm(); setAmbience(true); };
+  GESTURES.forEach((t) => addEventListener(t, arm, true));
 }
 
 /* Floating control for pages without their own ambience panel. */
 export function mountAmbienceControl() {
   if (document.querySelector('#sound, #ambient-toggle, .amb-float')) return null;
+  if (!document.querySelector('link[href$="/assets/atmosphere.css"]')) {
+    const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = '/assets/atmosphere.css'; document.head.append(css);
+  }
   const btn = document.createElement('button');
   btn.type = 'button'; btn.className = 'amb-float'; btn.dataset.ambienceSwitch = '';
   btn.setAttribute('aria-pressed', 'false');
@@ -162,5 +179,6 @@ export function mountAmbienceControl() {
   btn.addEventListener('click', async () => { if (!(await setAmbience(!on))) render(false); });
   onAmbience(render);
   document.body.append(btn);
+  armRemembered();
   return btn;
 }
