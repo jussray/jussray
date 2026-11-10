@@ -700,3 +700,11 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
   - The ruleset repair script now sets native approvals to 0.
   - Tests 35/35 pass.
 - This needs a bootstrap merge: main's old gate still demands a non-author approval until this lands.
+
+## 2026-11-10 — Game Hub v3 mockups (founder, binding)
+- Founder sent `gamehub-v3-desktop` / `gamehub-v3-mobile` mockups: crown "Juss & Co COMPANY" logo header, search + bell + "My Juss" account, tagline PLAY · CONNECT · CREATE · COMPETE · EARN, Explore Games + My Library, crystal-globe lotus, gold-glow Featured carousel with dots, Hub Center rows (All Games, SYNC Game Center, Tournaments, Events & Challenges, Creator Zone, Rewards & Achievements), ambient + "Current Atmosphere: Sunset · Apr 12 – May 31", phone: Game Hub Center pill + All Games | Tournaments | Events | Creator Zone, bottom nav Home/Products/Solutions/Our Work/Founder.
+- Founder decision: build **exactly as drawn**, but the tiles/content must be his **actual games and apps from the repo** (worlds.json / portfolio.json). Unbuilt features render as drawn and are honestly marked "Coming soon" (no fake links/claims).
+- Founder decision: **search comes back** (reverses fix-4 of PR #76).
+- Founder decision: the **main page (www.jussco.company) gets the same look and fixes** accordingly.
+- Carrier: PR #76 branch `claude/gamehub-mockup-fixes`.
+- 2026-11-10: Game Hub v3 built on PR #76 (supersedes fix 1–4 except colour art + Sunset default; search restored). Real content only: 6 games + Se'kret Bip (own domain) + StoryEngine (no link). Tournaments / Events & Challenges / Creator Zone / Rewards, bell, My Juss, My Library render as drawn and say "coming soon". Nav highlights Products (Game Hub sits under Products). Atmosphere shows the live season window. Next: homepage (site/index.html) gets the same v3 look.
