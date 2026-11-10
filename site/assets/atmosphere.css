@@ -1,2 +1,15 @@
 .world-atmosphere{position:fixed;inset:0;z-index:45;pointer-events:none;opacity:.58}
 @media (prefers-reduced-motion:reduce){.world-atmosphere{display:none}}
+/* Ambient sound control on pages without their own ambience panel (ambience.mjs). */
+.amb-float{position:fixed;left:max(14px,env(safe-area-inset-left,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:65;display:inline-flex;align-items:center;gap:9px;min-height:44px;padding:0 15px;border-radius:999px;border:1px solid rgba(255,214,138,.42);background:rgba(22,16,40,.72);color:#f8ecd0;font:600 12.5px/1 Sora,system-ui,sans-serif;letter-spacing:.01em;cursor:pointer;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 8px 24px rgba(0,0,0,.28)}
+.amb-float b{color:#ffd98a;font-weight:700}
+.amb-float:hover{border-color:rgba(255,214,138,.75)}
+.amb-float:focus-visible{outline:2px solid #ffd98a;outline-offset:3px}
+.amb-bars{display:inline-flex;align-items:flex-end;gap:2px;height:14px}
+.amb-bars i{display:block;width:3px;height:5px;border-radius:2px;background:currentColor;opacity:.7}
+.amb-float[aria-pressed="true"] .amb-bars i{background:#ffd98a;opacity:1;animation:amb-eq 1.1s ease-in-out infinite}
+.amb-float[aria-pressed="true"] .amb-bars i:nth-child(2){animation-delay:-.35s}
+.amb-float[aria-pressed="true"] .amb-bars i:nth-child(3){animation-delay:-.7s}
+@keyframes amb-eq{0%,100%{height:4px}50%{height:14px}}
+@media (max-width:640px){.amb-float{padding:0 12px}.amb-text{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}}
+@media (prefers-reduced-motion:reduce){.amb-float[aria-pressed="true"] .amb-bars i{animation:none;height:10px}}

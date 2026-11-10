@@ -476,5 +476,52 @@ for (const vp of [{ n: 'ideas-desktop', w: 1440, h: 900 }, { n: 'ideas-tablet', 
   await page.screenshot({ path: `proof/site/${vp.n}.png`, fullPage: true }); await ctx.close();
 }
 
+// Ambience (2026-11-10): one generated soundscape per atmosphere and a matching motion layer on every world page.
+for (const vp of [{ n: 'ambience-desktop', w: 1440, h: 900 }, { n: 'ambience-mobile', w: 390, h: 844 }]) {
+  const ctx = await browser.newContext({ viewport: { width: vp.w, height: vp.h } }); const page = await ctx.newPage();
+  const errors = []; page.on('pageerror', (e) => errors.push(String(e))); page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
+  for (const route of ['services.html', 'builds.html', 'contact.html']) {
+    await page.goto(url + route, { waitUntil: 'load' });
+    const ctl = page.locator('.amb-float'); await ctl.waitFor({ timeout: 5000 });
+    say((await ctl.count()) === 1 && (await ctl.getAttribute('aria-pressed')) === 'false', `${vp.n}: ${route} has one ambient control, off by default`);
+    say((await page.locator('canvas.world-atmosphere').count()) === 1, `${vp.n}: ${route} has the atmosphere motion layer`);
+    const box = await ctl.boundingBox();
+    say(box && box.y + box.height <= vp.h && box.x >= 0 && (await ctl.evaluate((e) => getComputedStyle(e).position)) === 'fixed', `${vp.n}: ${route} ambient control is styled, fixed and on screen`);
+  }
+  await page.click('.amb-float');
+  await page.waitForFunction(() => document.querySelector('.amb-float').getAttribute('aria-pressed') === 'true', null, { timeout: 5000 }).catch(() => {});
+  const engine = () => page.evaluate(() => import('/assets/ambience.mjs').then((m) => m.ambienceState()));
+  let st = await engine();
+  say((await page.getAttribute('.amb-float', 'aria-pressed')) === 'true' && st.on && st.context === 'running', `${vp.n}: ambient control turns on with a user gesture and the audio context runs (${st.context})`);
+  await page.evaluate(() => document.body.setAttribute('data-atmo', 'night')); await page.waitForTimeout(300);
+  st = await engine(); say(st.scene === 'night', `${vp.n}: soundscape follows the atmosphere to night (${st.scene})`);
+  await page.click('.amb-float');
+  st = await engine(); say((await page.getAttribute('.amb-float', 'aria-pressed')) === 'false' && !st.on, `${vp.n}: ambient control turns off`);
+  // Remembered "on": a returning visitor whose first gesture is the switch itself turns sound off; it must stay off.
+  await page.evaluate(() => localStorage.setItem('jc-ambience', JSON.stringify({ on: true, vol: 0.4 })));
+  await page.goto(url + 'services.html', { waitUntil: 'load' }); await page.locator('.amb-float').waitFor();
+  await page.click('.amb-float'); await page.click('.amb-float'); await page.click('h1'); await page.keyboard.press('Tab'); await page.waitForTimeout(200);
+  st = await engine(); say(!st.on && (await page.getAttribute('.amb-float', 'aria-pressed')) === 'false', `${vp.n}: sound turned off stays off after later taps`);
+  await page.evaluate(() => localStorage.setItem('jc-ambience', JSON.stringify({ on: true, vol: 0.4 })));
+  await page.goto(url + 'services.html', { waitUntil: 'load' }); await page.locator('.amb-float').waitFor();
+  st = await engine(); say(!st.on && (await page.getAttribute('.amb-float', 'aria-pressed')) === 'false', `${vp.n}: remembered sound never autoplays on load`);
+  await page.click('h1'); await page.waitForFunction(() => document.querySelector('.amb-float').getAttribute('aria-pressed') === 'true', null, { timeout: 3000 }).catch(() => {});
+  st = await engine(); say(st.on && (await page.getAttribute('.amb-float', 'aria-pressed')) === 'true', `${vp.n}: remembered sound resumes on the next tap, not before`);
+  await page.goto(url + 'games/index.html', { waitUntil: 'load' }); await page.waitForTimeout(300); await page.click('body', { position: { x: 5, y: 5 } }); await page.waitForTimeout(200);
+  st = await engine(); say(!st.on && (await page.locator('.amb-float').count()) === 0, `${vp.n}: Game Hub keeps its own sound; the shared engine never starts there`);
+  await page.goto(url + 'opportunity-engine.html', { waitUntil: 'load' }); await page.locator('.amb-float').waitFor();
+  say((await page.locator('.amb-float').evaluate((e) => getComputedStyle(e).position)) === 'fixed', `${vp.n}: opportunity engine ambient control is styled`);
+  await page.evaluate(() => localStorage.removeItem('jc-ambience'));
+  await page.goto(url + 'ideas.html', { waitUntil: 'load' }); await page.waitForTimeout(300);
+  say((await page.locator('.amb-float').count()) === 0, `${vp.n}: Ideas keeps its own ambience panel, no duplicate control`);
+  await page.goto(url, { waitUntil: 'load' }); await page.waitForTimeout(300);
+  say((await page.locator('.amb-float').count()) === 0, `${vp.n}: homepage keeps its own ambience panel, no duplicate control`);
+  await page.click('#sound'); await page.click('#atmo'); await page.click('#atmo'); await page.waitForTimeout(300);
+  st = await engine(); const tod = await page.evaluate(() => document.documentElement.dataset.tod);
+  say((await page.getAttribute('#sound', 'aria-checked')) === 'true' && st.on && st.scene === tod, `${vp.n}: homepage sound stays on and crossfades as the atmosphere cycles (${st.scene}/${tod})`);
+  say(errors.length === 0, `${vp.n}: no console errors${errors.length ? ' — ' + errors.join(' | ') : ''}`);
+  await ctx.close();
+}
+
 await browser.close(); srv.close();
 console.log(failed ? `\n${failed} check(s) FAILED` : '\nall checks passed'); process.exit(failed ? 1 : 0);

@@ -1,5 +1,6 @@
 ---
 name: typescript-audit
+description: "Audit TypeScript, JavaScript, Node, Worker and React code before edits: find root issues and propose one surgical next step with evidence."
 version: 1.0.0
 status: active
 scope: founder-control-room

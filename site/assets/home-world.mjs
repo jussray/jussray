@@ -15,25 +15,23 @@ function setAtmo(next) {
 setAtmo(atmo);
 $('#atmo')?.addEventListener('click', () => setAtmo(ATMOS[(ATMOS.indexOf(atmo) + 1) % ATMOS.length]));
 
-let audio, gain;
-function startSound() {
-  const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return false;
-  audio = new AC(); gain = audio.createGain(); gain.gain.value = 0; gain.connect(audio.destination);
-  const filter = audio.createBiquadFilter(); filter.type = 'lowpass'; filter.frequency.value = 900; filter.connect(gain);
-  [196, 246.94, 293.66, 392].forEach((f, i) => { const o = audio.createOscillator(); o.type = i % 2 ? 'sine' : 'triangle'; o.frequency.value = f; o.detune.value = (i - 1.5) * 4; const g = audio.createGain(); g.gain.value = 0.06; o.connect(g); g.connect(filter); o.start(); });
-  return true;
-}
-const level = () => (+($('#vol')?.value ?? 40) / 100) * 0.5;
-$('#vol')?.addEventListener('input', () => { if (audio && $('#sound').getAttribute('aria-checked') === 'true') gain.gain.setTargetAtTime(level(), audio.currentTime, 0.2); });
-$('#sound')?.addEventListener('click', async () => {
-  const btn = $('#sound'); const on = btn.getAttribute('aria-checked') !== 'true';
-  if (on && !audio && !startSound()) return;
-  if (audio) { await audio.resume(); gain.gain.setTargetAtTime(on ? level() : 0, audio.currentTime, 0.4); }
-  btn.setAttribute('aria-checked', String(on));
+// Ambient sound: the shared engine plays a soundscape matched to the current atmosphere
+// and crossfades when the atmosphere cycles (site/assets/ambience.mjs).
+const amb = import('./ambience.mjs');
+const soundBtn = $('#sound'), vol = $('#vol');
+if (soundBtn) soundBtn.dataset.ambienceSwitch = '';
+amb.then((m) => {
+  if (vol) vol.value = Math.round(m.storedVolume() * 100);
+  m.onAmbience((v) => soundBtn?.setAttribute('aria-checked', String(v)));
+  if (soundBtn) m.armRemembered();
+}).catch(() => {});
+vol?.addEventListener('input', () => amb.then((m) => m.setVolume(+vol.value / 100)));
+soundBtn?.addEventListener('click', async () => {
+  const m = await amb; const next = soundBtn.getAttribute('aria-checked') !== 'true';
+  if (!(await m.setAmbience(next))) soundBtn.setAttribute('aria-checked', 'false');
 });
 
 const BADGE = { "Se'kret Bip": 'SK' }; // founder mockup badge
-document.addEventListener('visibilitychange', () => { if (document.hidden && audio && $('#sound')?.getAttribute('aria-checked') === 'true') { gain.gain.setTargetAtTime(0, audio.currentTime, 0.1); $('#sound').setAttribute('aria-checked', 'false'); } });
 const initials = (name) => BADGE[name] || name.replace(/[’']/g, '').split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
 // CLAUDE.md: a world links only when worlds.json declares a link and its front door is live.
 // "Opening soon" worlds stay unlinked unless the founder confirmed the front door (Se'kret Bip, 2026-11-08).

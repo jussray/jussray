@@ -1,6 +1,6 @@
 ---
 name: reasoning-stack
-description: Decision stack behind ULTRATHINK: OODA, Socratic falsification, MoSCoW, 80/20, Lindy twin, Redteam twin, L99, 5W1H, and language/tool discipline.
+description: "Decision stack behind ULTRATHINK: OODA, Socratic falsification, MoSCoW, 80/20, Lindy twin, Redteam twin, L99, 5W1H, and language/tool discipline."
 license: Proprietary — Juss / jussray
 metadata:
   version: v1

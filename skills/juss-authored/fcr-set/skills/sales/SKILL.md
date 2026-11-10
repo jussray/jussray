@@ -1,5 +1,6 @@
 ---
 name: sales
+description: "Truthful path from a verified need to a useful exchange: positioning, offers, pricing, outreach, conversion and commercialization, optimized for trust and founder control."
 version: 1.2.0
 status: active
 scope: founder-control-room
@@ -19,7 +20,7 @@ Create the strongest truthful path from a verified need to a mutually useful exc
 
 Use for positioning, offers, pricing analysis, qualification, outreach planning, conversion, retention, partnerships, economic opportunities, revenue operations, productization, product packaging, product launch, and commercialization.
 
-For any productization or commercialization task, also read and apply [`docs/COMMERCIAL_PRODUCT_GRADUATION_RULE.md`](../../docs/COMMERCIAL_PRODUCT_GRADUATION_RULE.md).
+For any productization or commercialization task, also read and apply `docs/COMMERCIAL_PRODUCT_GRADUATION_RULE.md` (in the founder-control-room repo; not exported here).
 
 ## Required sequence
 
