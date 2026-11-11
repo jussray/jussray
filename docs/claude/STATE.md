@@ -719,8 +719,8 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
   - Verdict job VERIFIED working on real runs: #66–#68 green with job "Production verdict: NOT VERIFIED (no qualifying signal)" (verify skipped). #69–#75 red with "Production verdict: FAILED (authorization)".
   - #69–#75 root cause (job log run 42945654095): `production signal is stale at authorization time`. Signal max age is 15 min; GitHub runner backlog started authorize ~16 min after the signal (02:23 → 02:39). Pre-existing control in authorize-signal, not caused by #153. No runtime was verified on any run.
   - Not changed: widening the 15-min freshness window weakens a security control → founder decision. Options: (a) leave it (runs re-fire on next deploy), (b) wider window, (c) re-run on owner trigger.
-- 2026-11-11 ~07:50Z Juss: "1-3 cont 2 b-c then merge 154".
+- 2026-11-11 ~16:40Z Juss: "1-3 cont 2 b-c then merge 154".
   - (b) StoryEngine PR #155 (branch claude/storyengine-signal-window-30m, head ef3dc3d = code f039571 + truth receipt): maxSignalAgeMs 15→30 min; contract test pins 30. Local: truth gate 5/5, npm test 488/488. Awaiting CI + founder merge (not authorized for merge yet).
-  - #154 merged by Claude on Juss's word (squash) → StoryEngine main 1a4a581. All 14 checks green on ddb861c at merge.
-  - (c) Literal re-run of #69–#75 cannot pass (signals hours old). Path: the #154 merge triggers a fresh Railway deploy signal; check-in at ~08:15Z reads the proof run. Fallback: owner-only manual workflow_dispatch of story-engine-production-signal.yml with the deployed release_sha.
+  - #154 merged by Claude on Juss's word (squash, ~16:41Z) → StoryEngine main 1a4a581. All 14 checks green on ddb861c at merge.
+  - (c) Literal re-run of #69–#75 cannot pass (signals hours old). Path: the #154 merge triggers a fresh Railway deploy signal; check-in at 17:08Z reads the proof run. Fallback: owner-only manual workflow_dispatch of story-engine-production-signal.yml with the deployed release_sha.
   - Item 3 (CLEARED monitor) still blocked: location unknown.
