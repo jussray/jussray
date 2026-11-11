@@ -708,3 +708,6 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
 - Meaning: workflow-level green ≠ production verified. No exact-runtime proof exists for this head from these runs.
 - jussray action: none. `worlds.json` StoryEngine stays `building` / no public link (founder fields; front door not proven live).
 - Next gate (StoryEngine repo, not here): a run where `verify-production` actually executes and passes; consider failing or labelling the workflow when verify is skipped so alerts can't read a skip as CLEARED.
+- 2026-11-11 ~02:10Z follow-up (Juss: "do both, monitor first"):
+  - Monitor: DEAD END. The "N:NN cycle — full read / ✅ CLEARED" monitor is not in this account's scheduled-task list and no jussray repo contains its code (code search for its phrasing: none). Likely a local Cowork/Slack task. Its rule must become: CLEARED only when a job named `Production verdict: VERIFIED` exists on the run.
+  - StoryEngine: draft PR jussray/StoryEngine#153, branch `claude/storyengine-production-verdict`, head d78f957. Adds an always() `production-verdict` job whose name is the verdict (VERIFIED / NOT VERIFIED / FAILED). No-op stays green per the existing contract. Contract test 25/25 local. Not provable before merge (workflow_run runs from main only). Founder review + merge pending.
