@@ -724,3 +724,8 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
   - #154 merged by Claude on Juss's word (squash, ~16:41Z) → StoryEngine main 1a4a581. All 14 checks green on ddb861c at merge.
   - (c) Literal re-run of #69–#75 cannot pass (signals hours old). Path: the #154 merge triggers a fresh Railway deploy signal; check-in at 17:08Z reads the proof run. Fallback: owner-only manual workflow_dispatch of story-engine-production-signal.yml with the deployed release_sha.
   - Item 3 (CLEARED monitor) still blocked: location unknown.
+- 2026-11-11 ~16:50Z results:
+  - (c) Manual owner signal (Production Signal run 43061215075, release_sha 1730f31, actor jussray) → Production Proof #78: authorize PASS; "Verify deployed Railway release and persistence witness" PASS (production VERIFIED on 1730f31, witness 55c1f977…); "Validate production browser credentials" FAIL: both STORYENGINE_PRODUCTION_PLAYWRIGHT_API_KEY and STORYENGINE_PRODUCTION_SCOPED_API_KEY are empty in the GitHub `production` environment. Verdict job: "Production verdict: FAILED (runtime proof)". Browser Story→MP4 proof never ran. Next gate: Juss adds both secrets.
+  - #76/#77 on main 1a4a581: NOT VERIFIED (no qualifying signal) — non-success/non-main Railway statuses; #154 (JSON only) likely did not redeploy production.
+  - #155 CI: Node tests / verify-guardrails / verify-story-video-engine exit 124 in scripts/ensure-ffmpeg.sh (apt timeout on azure.archive.ubuntu.com), twice incl. one re-run. Not #155's change; main green on 1730f31 at 02:44Z. Comment posted on #155.
+  - Root cause: ensure-ffmpeg.sh rewrites the Azure mirror only in sources files; Ubuntu 26.04 runners use /etc/apt/apt-mirrors.txt. Fix PR opened: StoryEngine #156 (branch claude/ensure-ffmpeg-mirrorlist, 5297c9c).
