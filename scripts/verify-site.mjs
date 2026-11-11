@@ -77,6 +77,13 @@ for (const vp of [{n:'desktop',w:1440,h:900},{n:'mobile',w:390,h:844}]) {
   say(vp.n==='mobile'?perView===3:perView>=6,`${vp.n}: ${vp.n==='mobile'?'three':'six or more'} ecosystem tiles per view (${perView})`);
   await page.click('#sound');
   say((await page.getAttribute('#sound','aria-checked'))==='true',`${vp.n}: ambient sound toggles on a user gesture`);
+  say((await page.textContent('#atmoName'))==='Sunset'&&/\w{3} \d+ – \w{3} \d+/.test(await page.textContent('#seasonWindow')),`${vp.n}: opens on Sunset with the live season window (founder v3)`);
+  await page.click('#home-search-toggle');await page.fill('#home-search-input','PromptOS');
+  say((await page.locator('#ecoTrack .eco-tile:not([hidden])').count())===1&&/1 match/.test(await page.textContent('#home-search-status')),`${vp.n}: header search filters Our Ecosystem`);
+  await page.keyboard.press('Escape');
+  say((await page.locator('#ecoTrack .eco-tile[hidden]').count())===0,`${vp.n}: Escape clears the ecosystem search`);
+  await page.locator('.hdr-btn.soon').first().click();
+  say(/coming soon/i.test(await page.textContent('#home-toast')),`${vp.n}: unbuilt header features say coming soon`);
   const atmoBefore=await page.textContent('#atmoName');await page.click('#atmo');
   say((await page.textContent('#atmoName'))!==atmoBefore,`${vp.n}: atmosphere cycles`);
   say((await page.locator('.site-header a[href="/ideas.html"]').count())===1,`${vp.n}: Ideas is in the main navigation`);

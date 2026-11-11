@@ -5,8 +5,8 @@ const root = document.documentElement;
 
 const ATMOS = ['dawn', 'day', 'sunset', 'night'];
 const NAMES = { dawn: 'Dawn', day: 'Daylight', sunset: 'Sunset', night: 'Night' };
-const hour = new Date().getHours();
-let atmo = hour >= 5 && hour < 8 ? 'dawn' : hour >= 8 && hour < 17 ? 'day' : hour >= 17 && hour < 20 ? 'sunset' : 'night';
+// Opens on Sunset (founder v3 mockups, 2026-11-10); tapping cycles dawn / day / sunset / night.
+let atmo = 'sunset';
 function setAtmo(next) {
   atmo = next;
   root.dataset.tod = next;
@@ -14,6 +14,18 @@ function setAtmo(next) {
 }
 setAtmo(atmo);
 $('#atmo')?.addEventListener('click', () => setAtmo(ATMOS[(ATMOS.indexOf(atmo) + 1) % ATMOS.length]));
+// The date window under the atmosphere is the live meteorological season (Dec–Feb, Mar–May, Jun–Aug, Sep–Nov).
+{ const d = new Date(), m = d.getMonth();
+  const sm = m === 11 ? 11 : m < 2 ? 11 : m - (m + 1) % 3;
+  const start = new Date(d.getFullYear() - (m < 2 ? 1 : 0), sm, 1);
+  const end = new Date(start.getFullYear(), start.getMonth() + 3, 0);
+  const fmt = (x) => x.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  const el = $('#seasonWindow'); if (el) el.textContent = `${fmt(start)} – ${fmt(end)}`; }
+// Features that are drawn but not built yet say so instead of pretending.
+{ const toast = $('#home-toast'); let t = 0;
+  document.addEventListener('click', (e) => { const b = e.target.closest('.soon'); if (!b || !toast) return;
+    toast.textContent = b.dataset.soon || 'Coming soon.'; toast.hidden = false; clearTimeout(t); t = setTimeout(() => { toast.hidden = true; }, 2600); }); }
+
 
 let audio, gain;
 function startSound() {
@@ -59,5 +71,20 @@ async function ecosystem() {
   const page = (dir) => track.scrollBy({ left: dir * track.clientWidth, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   $('#ecoPrev')?.addEventListener('click', () => page(-1));
   $('#ecoNext')?.addEventListener('click', () => page(1));
+  const dots = $('#ecoDots');
+  if (dots) { dots.replaceChildren(...Array.from({ length: 4 }, () => document.createElement('i')));
+    const upd = () => { const max = track.scrollWidth - track.clientWidth, k = max > 0 ? Math.round(track.scrollLeft / max * 3) : 0; [...dots.children].forEach((d, j) => d.classList.toggle('on', j === k)); };
+    track.addEventListener('scroll', upd, { passive: true }); upd(); }
 }
+// Header search filters the ecosystem band (worlds.json names and labels only).
+{ const toggle = $('#home-search-toggle'), panel = $('#home-search'), field = $('#home-search-input'), status = $('#home-search-status');
+  const close = () => { panel.hidden = true; toggle.setAttribute('aria-expanded', 'false'); field.value = ''; filter(); };
+  function filter() { const q = field.value.trim().toLowerCase(); let n = 0;
+    document.querySelectorAll('#ecoTrack .eco-tile').forEach((li) => { const hit = !q || li.textContent.toLowerCase().includes(q); li.hidden = !hit; if (hit) n++; });
+    status.textContent = q ? (n ? `${n} match${n === 1 ? '' : 'es'} in Our Ecosystem.` : `Nothing in Our Ecosystem matches "${field.value.trim()}".`) : ''; }
+  if (toggle && panel && field) {
+    toggle.addEventListener('click', () => { if (panel.hidden) { panel.hidden = false; toggle.setAttribute('aria-expanded', 'true'); field.focus(); } else close(); });
+    field.addEventListener('input', filter);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !panel.hidden) { close(); toggle.focus(); } });
+  } }
 ecosystem();
