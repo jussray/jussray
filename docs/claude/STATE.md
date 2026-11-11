@@ -700,3 +700,11 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
   - The ruleset repair script now sets native approvals to 0.
   - Tests 35/35 pass.
 - This needs a bootstrap merge: main's old gate still demands a non-author approval until this lands.
+
+## 2026-11-11 — StoryEngine "Production Proof CLEARED" alert re-observed: green is a skip, not runtime proof
+- Alert claimed: StoryEngine Production Proof green on `main` b2397272a37e after failing since Oct 29.
+- VERIFIED: `main` = `b2397272a37ed5d987f0b71b2a37dc31c9c84cf5` (Oct 30 merge of PR #152, not a new head). Runs #58–#65 (2026-11-10 23:53–23:58Z) all `success`, all triggered by `railway-app[bot]` via `workflow_run`.
+- VERIFIED (runs #60, #65 job lists): `Authorize production signal` = success; `Verify exact StoryEngine production runtime` = **skipped**. The authorize job wrote `authorized=false` (non-qualifying or unauthorized signal), so no runtime check ran.
+- Meaning: workflow-level green ≠ production verified. No exact-runtime proof exists for this head from these runs.
+- jussray action: none. `worlds.json` StoryEngine stays `building` / no public link (founder fields; front door not proven live).
+- Next gate (StoryEngine repo, not here): a run where `verify-production` actually executes and passes; consider failing or labelling the workflow when verify is skipped so alerts can't read a skip as CLEARED.
