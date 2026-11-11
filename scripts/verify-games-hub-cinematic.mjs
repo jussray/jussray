@@ -65,6 +65,11 @@ try {
     assert.equal(await page.locator('#games article.card:visible').count(),1,'search reveals matching game even on a collapsed mobile collection');
     assert.match(await page.locator('#search-status').innerText(),/1 game found/,'search announces the match count accessibly');
     assert.equal(await page.locator('#search-view').isVisible(),true,'search provides a jump to visible matches');
+    await page.locator('#game-search').fill('promptos');
+    assert.equal(await page.locator('#search-apps a[href="https://github.com/jussray/promptos"]').count(),1,'search also finds Juss & Co apps on the featured row');
+    await page.locator('#game-search').fill('storyengine');
+    assert.equal(await page.locator('#search-apps a').count(),0,'StoryEngine shows in search without a link');
+    assert.equal(await page.locator('#search-apps span').count(),1,'StoryEngine is listed as text only');
     await page.locator('#game-search').fill('game-title-that-does-not-exist');
     assert.equal(await page.locator('#games article.card:visible').count(),0,'unknown games have no false matches');
     assert.match(await page.locator('#search-status').innerText(),/No games found/,'empty results are announced');

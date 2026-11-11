@@ -79,7 +79,16 @@ for (const vp of [{n:'desktop',w:1440,h:900},{n:'mobile',w:390,h:844}]) {
   say((await page.getAttribute('#sound','aria-checked'))==='true',`${vp.n}: ambient sound toggles on a user gesture`);
   say((await page.textContent('#atmoName'))==='Sunset'&&/\w{3} \d+ – \w{3} \d+/.test(await page.textContent('#seasonWindow')),`${vp.n}: opens on Sunset with the live season window (founder v3)`);
   await page.click('#home-search-toggle');await page.fill('#home-search-input','PromptOS');
-  say((await page.locator('#ecoTrack .eco-tile:not([hidden])').count())===1&&/1 match/.test(await page.textContent('#home-search-status')),`${vp.n}: header search filters Our Ecosystem`);
+  await page.waitForFunction(()=>document.querySelectorAll('#home-search-results a').length>0,null,{timeout:5000});
+  say((await page.locator('#ecoTrack .eco-tile:not([hidden])').count())===1&&/1 in Our Ecosystem/.test(await page.textContent('#home-search-status')),`${vp.n}: header search filters Our Ecosystem`);
+  say((await page.locator('#home-search-results a',{hasText:'PromptOS'}).getAttribute('href'))==='https://github.com/jussray/promptos',`${vp.n}: search result uses the worlds.json link`);
+  const hrefFor=async(q,name)=>{await page.fill('#home-search-input',q);await page.waitForFunction(n=>[...document.querySelectorAll('#home-search-results a strong')].some(s=>s.textContent===n),name,{timeout:5000});return page.locator('#home-search-results a',{has:page.locator('strong',{hasText:new RegExp('^'+name+'$')})}).first().getAttribute('href');};
+  say((await hrefFor('truth compass','Truth Compass'))==='/portfolio.html',`${vp.n}: portfolio-only projects open the portfolio, never a guessed link`);
+  say((await hrefFor('lumora','LUMORA'))==='https://games.jussco.company/#lumora-world',`${vp.n}: search reaches Game Hub worlds`);
+  say((await hrefFor('storyengine','StoryEngine'))==='/portfolio.html',`${vp.n}: StoryEngine stays unlinked in search`);
+  say((await hrefFor('contact','Contact'))==='/contact.html',`${vp.n}: search reaches site pages`);
+  await page.fill('#home-search-input','zzqx-nothing');await page.waitForFunction(()=>/Nothing matches/.test(document.querySelector('#home-search-status').textContent),null,{timeout:5000});
+  say((await page.locator('#home-search-results li').count())===0,`${vp.n}: no false search results`);
   await page.keyboard.press('Escape');
   say((await page.locator('#ecoTrack .eco-tile[hidden]').count())===0,`${vp.n}: Escape clears the ecosystem search`);
   await page.locator('.hdr-btn.soon').first().click();

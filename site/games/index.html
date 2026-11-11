@@ -589,6 +589,7 @@ header nav a[aria-current="page"]{background:linear-gradient(180deg,#ffe2a3,#f5b
 @media(max-width:800px){.header-tools{gap:2px}.header-tools .utility,.header-tools .account-btn,#mobile-menu{width:44px;height:44px;min-width:44px}.brand-crown{width:30px;height:21px}.brand-name{font-size:22px}header .inner{padding:0 4px 0 10px}}
 #featured .tile-fcr strong{font-size:15px}
 @media(max-width:800px){#featured .tile-fcr strong{font-size:12px}}
+#search-apps{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:4px}#search-apps a,#search-apps span{display:flex;align-items:center;min-height:40px;padding:4px 10px;border:1px solid #ffdcae40;border-radius:12px;color:#fff1de;text-decoration:none;font-size:13px}#search-apps a:hover{border-color:#ffd98a}
 </style>
 </head>
 <body>
@@ -606,7 +607,7 @@ header nav a[aria-current="page"]{background:linear-gradient(180deg,#ffe2a3,#f5b
 <button class="utility" id="mobile-menu" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Open navigation">☰</button></div></div>
 <div id="search-panel" class="glass-world" hidden><label for="game-search">Find a game</label>
 <input type="search" id="game-search" placeholder="Search SYNC and upcoming games" aria-controls="game-cards" autocomplete="off">
-<p id="search-status" role="status" aria-live="polite"></p><a id="search-view" href="#games" hidden>View matching games ↓</a></div>
+<p id="search-status" role="status" aria-live="polite"></p><a id="search-view" href="#games" hidden>View matching games ↓</a><ul id="search-apps" aria-label="Other Juss &amp; Co apps that match"></ul></div>
 </header>
 <main id="main">
 <section class="hero" aria-labelledby="hero-title">
@@ -699,6 +700,7 @@ header nav a[aria-current="page"]{background:linear-gradient(180deg,#ffe2a3,#f5b
     field.value='';
     gameCards.forEach(card=>card.hidden=false);
     searchStatus.textContent='';
+    document.getElementById('search-apps').replaceChildren();
     searchView.hidden=true;
     if(searchOpenedDetails){searchOpenedDetails=false;syncHubView();}
     if(mobile.matches&&games.dataset.searchExpanded==='true'){
@@ -728,7 +730,13 @@ header nav a[aria-current="page"]{background:linear-gradient(180deg,#ffe2a3,#f5b
       delete games.dataset.searchExpanded;
     }
     if(!q&&searchOpenedDetails){searchOpenedDetails=false;syncHubView();}
-    searchStatus.textContent=!q?'':matches?matches+' game'+(matches===1?'':'s')+' found for "'+value+'".':'No games found for "'+value+'".';
+    // Also match Juss & Co apps on the featured row that have no game card (Se'kret Bip, StoryEngine, FCR, PromptOS).
+    const apps=q?[...document.querySelectorAll('#featured .featured-tile')].filter(t=>!(t.getAttribute('href')||'').endsWith('-world')&&t.textContent.toLocaleLowerCase().includes(q)):[];
+    document.getElementById('search-apps').replaceChildren(...apps.map(t=>{const li=document.createElement('li');const name=t.querySelector('strong').textContent,st=t.querySelector('small').textContent;
+      const el=document.createElement(t.tagName==='A'?'a':'span');if(t.tagName==='A'){el.href=t.getAttribute('href');el.rel='noopener noreferrer';}
+      el.textContent=name+' · '+st;li.append(el);return li;}));
+    const parts=[];if(matches)parts.push(matches+' game'+(matches===1?'':'s'));if(apps.length)parts.push(apps.length+' app'+(apps.length===1?'':'s'));
+    searchStatus.textContent=!q?'':parts.length?parts.join(' and ')+' found for "'+value+'".':'No games found for "'+value+'".';
     searchView.hidden=!q||matches===0;
   }
   toggle.addEventListener('click',()=>{

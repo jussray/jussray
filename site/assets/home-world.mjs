@@ -76,14 +76,58 @@ async function ecosystem() {
     const upd = () => { const max = track.scrollWidth - track.clientWidth, k = max > 0 ? Math.round(track.scrollLeft / max * 3) : 0; [...dots.children].forEach((d, j) => d.classList.toggle('on', j === k)); };
     track.addEventListener('scroll', upd, { passive: true }); upd(); }
 }
-// Header search filters the ecosystem band (worlds.json names and labels only).
-{ const toggle = $('#home-search-toggle'), panel = $('#home-search'), field = $('#home-search-input'), status = $('#home-search-status');
+// Header search: the whole public company map, not just the band.
+// Sources are the site's own truth only: its pages, the Game Hub worlds, worlds.json and
+// the public portfolio projection. Projects without a founder-declared live link open the portfolio.
+const PAGES = [
+  ['Our Products', '/products.html', 'Page'], ['Portfolio', '/portfolio.html', 'Page'], ['Solutions', '/services.html', 'Page'],
+  ['Our Work', '/work.html', 'Page'], ['Ideas', '/ideas.html', 'Page'], ['Founder', '/founder.html', 'Page'],
+  ['Contact', '/contact.html', 'Page'], ['Game Hub', 'https://games.jussco.company/', 'Page'],
+  ['Public destinations', '/sites.html', 'Page'], ['Licensing', '/licensing.html', 'Page'],
+];
+const GAMES = [
+  ['SYNC', 'https://sync.jussco.company/', 'Game · Live'], ['LUMORA', 'https://games.jussco.company/#lumora-world', 'Game · In development'],
+  ['ChatQuest', 'https://games.jussco.company/#chatquest-world', 'Game · In development'], ['Bip & Seek', 'https://games.jussco.company/#bipseek-world', 'Game · In development'],
+  ['Jungle Jinx', 'https://games.jussco.company/#junglejinx-world', 'Game · In development'], ['Last Laugh', 'https://games.jussco.company/#lastlaugh-world', 'Game · Private prototype'],
+];
+const norm = (t) => t.toLowerCase().replace(/[’']/g, '').replace(/\s+/g, ' ').trim();
+let index = null;
+async function buildIndex() {
+  if (index) return index;
+  const items = [...PAGES.map(([n, u, k]) => ({ name: n, url: u, kind: k })), ...GAMES.map(([n, u, k]) => ({ name: n, url: u, kind: k }))];
+  const seen = new Set(items.map((i) => norm(i.name)));
+  try {
+    const worlds = (await (await fetch('/data/worlds.json', { cache: 'no-cache' })).json()).worlds || [];
+    for (const w of worlds) { if (seen.has(norm(w.name))) continue; seen.add(norm(w.name));
+      items.push({ name: w.name, url: linkable(w) ? w.link.url : '/portfolio.html', kind: (w.display?.group || 'Project') + ' · ' + (w.label || 'Status pending') }); }
+  } catch {}
+  try {
+    const projects = (await (await fetch('/data/portfolio.json', { cache: 'no-cache' })).json()).projects || [];
+    for (const p of projects) { if (seen.has(norm(p.name))) continue; seen.add(norm(p.name));
+      items.push({ name: p.name, url: '/portfolio.html', kind: (p.category || 'Project') + ' · ' + (p.publicLabel || 'Status pending'), text: p.description || '' }); }
+  } catch {}
+  return (index = items);
+}
+{ const toggle = $('#home-search-toggle'), panel = $('#home-search'), field = $('#home-search-input'), status = $('#home-search-status'), list = $('#home-search-results');
   const close = () => { panel.hidden = true; toggle.setAttribute('aria-expanded', 'false'); field.value = ''; filter(); };
-  function filter() { const q = field.value.trim().toLowerCase(); let n = 0;
-    document.querySelectorAll('#ecoTrack .eco-tile').forEach((li) => { const hit = !q || li.textContent.toLowerCase().includes(q); li.hidden = !hit; if (hit) n++; });
-    status.textContent = q ? (n ? `${n} match${n === 1 ? '' : 'es'} in Our Ecosystem.` : `Nothing in Our Ecosystem matches "${field.value.trim()}".`) : ''; }
+  async function filter() {
+    const raw = field.value.trim(), q = norm(raw); let n = 0;
+    const tiles = [...document.querySelectorAll('#ecoTrack .eco-tile')];
+    const hits = q ? tiles.filter((li) => norm(li.textContent).includes(q)) : tiles;
+    n = q ? hits.length : 0;
+    // Narrow the band only when something in it matches; never leave it empty.
+    tiles.forEach((li) => { li.hidden = q && hits.length > 0 && !hits.includes(li); });
+    if (!q) { status.textContent = ''; list.replaceChildren(); return; }
+    const items = (await buildIndex()).filter((i) => norm(`${i.name} ${i.kind} ${i.text || ''}`).includes(q));
+    if (norm(field.value.trim()) !== q) return; // a newer keystroke owns the list
+    list.replaceChildren(...items.slice(0, 8).map((i) => { const li = document.createElement('li'), a = document.createElement('a');
+      a.href = i.url; if (/^https?:/.test(i.url)) a.rel = 'noopener noreferrer';
+      const b = document.createElement('strong'); b.textContent = i.name; const s = document.createElement('small'); s.textContent = i.kind;
+      a.append(b, s); li.append(a); return li; }));
+    status.textContent = items.length ? `${items.length} result${items.length === 1 ? '' : 's'}${n ? `, ${n} in Our Ecosystem` : ''}.` : `Nothing matches "${raw}".`;
+  }
   if (toggle && panel && field) {
-    toggle.addEventListener('click', () => { if (panel.hidden) { panel.hidden = false; toggle.setAttribute('aria-expanded', 'true'); field.focus(); } else close(); });
+    toggle.addEventListener('click', () => { if (panel.hidden) { panel.hidden = false; toggle.setAttribute('aria-expanded', 'true'); field.focus(); buildIndex(); } else close(); });
     field.addEventListener('input', filter);
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !panel.hidden) { close(); toggle.focus(); } });
   } }
