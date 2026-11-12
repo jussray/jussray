@@ -1,6 +1,6 @@
 # Juss & Co Founder Studio Skills
 
-Curated Juss-authored skills for Codex runtime. Updated 2026-11-07.
+Curated Juss-authored skills for Codex runtime. Updated 2026-11-12.
 
 ## Core Frameworks
 
@@ -23,6 +23,7 @@ Curated Juss-authored skills for Codex runtime. Updated 2026-11-07.
 
 ## Operations & Scale
 
+- **medusa** — Offline security assessment validator: evidence-native findings, redacted export, immutable ledger
 - **juss-os** — Juss Operating System (v3.1.1): full command tree and workflows
 - **runtime-kernel** — Runtime execution layer
 - **juss-command-codex** — Codex runtime commands for founder workflow

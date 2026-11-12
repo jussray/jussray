@@ -41,6 +41,7 @@ When using Codex for jussray-owned work:
 ## Skill Subset
 
 From `skills/juss-authored/`, Codex can assist with:
+- **medusa** (security assessment validation — analysis only, no authorization)
 - **reasoning-stack** patterns (multi-step code analysis)
 - **runtime-kernel** (runtime behavior modeling)
 - **sauce-guard** (security boundary patterns)

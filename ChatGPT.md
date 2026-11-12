@@ -55,7 +55,17 @@ When ChatGPT contributes to jussray-owned projects:
 - `/confess` (requires founder authority)
 - `/goalfix` (requires git access and code execution)
 - `/truthmode` (requires exact-head repo verification)
+- `/medusa protect/snapshot` (requires local file access and ledger writes)
 - `juss-os` command tree (requires terminal access)
+
+## ChatGPT + Medusa: Evidence Analysis
+
+ChatGPT can analyze Medusa `gate` output and help structure findings for assessment:
+- Read and interpret `medusa gate` diagnostic output
+- Help draft assessment JSON with proper evidence citations
+- Suggest attack-class coverage and adversary modeling
+- Flag missing rebuttal for High/Critical findings
+- **Cannot**: run Medusa commands, write ledgers, authorize releases
 
 ## Recommended Workflows
 

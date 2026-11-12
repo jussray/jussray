@@ -35,6 +35,7 @@ Codex discovers skills from `skills/juss-authored/*/SKILL.md`. Each skill declar
 ## Codex-Specific Shortcuts
 
 - `/goalfix` — enter repair mode (auto-loads /godmode-devil-ultrathink)
+- `/medusa` — security assessment validation (gate/protect/snapshot/verify-ledger)
 - `/confess` — declare real state and real risks
 - `/truthmode` — enter proof-only mode (exact-head gates)
 - `/juss-os` — access full command tree
