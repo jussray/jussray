@@ -2,6 +2,8 @@
 
 Founder-studio configuration for Claude Code. Sets operating stack, skill discovery, and authority routing.
 
+**Platform-specific configs:** `Codex.md` (code generation, Claude Code), `ChatGPT.md` (reasoning partner), `Gemini.md` (analysis partner), `Muse.md` (design partner).
+
 ## Runtime Identity
 
 **Project**: jussray/jussray — Juss & Co public profile and founder studio runtime
