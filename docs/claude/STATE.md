@@ -1,3 +1,18 @@
+## 2026-11-13 — Standing preference and blockers (Juss: "you do it for me always", "use fcr remember")
+
+- PREFERENCE (Juss): Claude does GitHub and admin work for Juss whenever a tool and credential allow it. Claude posts needed PR comments itself. The founder approval (`/approve <sha>` or Juss-made auto-merge) stays Juss's.
+- BLOCKED (this session):
+  - There is no tool or admin credential to edit rulesets.
+  - Attaching `jussray/founder-control-room` to record this in FCR was denied by the session classifier.
+  - Every push is rejected with GH013 because both rulesets target `~ALL`.
+- PR #75: head `f0806d0`, all CI green except Independent Review Evidence.
+  - The gate does not see auto-merge: it is recorded as `auto_squash_enabled` in issue events.
+  - Neither ruleset has `non_fast_forward`.
+  - Local commits `cf4af71` (auto-merge detection, recommended to replace with a comment-only gate) and `31897be` (comment rule) are unpushed.
+- RULESET DRIFT from the CLAUDE.md contract:
+  - "Governance" 26857902 and "Production" 26428639: `~ALL` target; 1 required approval; 16 impossible deployments; signed commits required; CodeQL required; 4 required checks that never run (`Workers Builds: jussco-games`, `focused-browser`, `Think Tank - jussray`, `qr-assets`); integration 4047066 has `always` bypass.
+  - Contract: `main` only, 0 approvals, the 4 strict checks, review threads resolved, force pushes and deletion blocked.
+
 ## 2026-11-10 — Remaining skills findings fixed (Juss: "fix the remaining skills findings cont")
 
 - FIX (all in `skills/juss-authored/` plus two docs):
