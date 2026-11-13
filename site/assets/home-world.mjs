@@ -44,7 +44,8 @@ $('#sound')?.addEventListener('click', async () => {
   btn.setAttribute('aria-checked', String(on));
 });
 
-const BADGE = { "Se'kret Bip": 'SK' }; // founder mockup badge
+const BADGE = { "Se'kret Bip": 'SK' };
+const BADGE_ART = { "Se'kret Bip": "bip", "Founder Control Room": "fcr", "Chief AI": "chief", "Juss Beautiful Hair": "jbh", "StoryEngine": "story", "Sync Party": "sync" };
 document.addEventListener('visibilitychange', () => { if (document.hidden && audio && $('#sound')?.getAttribute('aria-checked') === 'true') { gain.gain.setTargetAtTime(0, audio.currentTime, 0.1); $('#sound').setAttribute('aria-checked', 'false'); } });
 const initials = (name) => BADGE[name] || name.replace(/[’']/g, '').split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
 // CLAUDE.md: a world links only when worlds.json declares a link and its front door is live.
@@ -56,6 +57,7 @@ function tile(w) {
   const inner = document.createElement(linkable(w) ? 'a' : 'div');
   if (linkable(w)) { inner.href = w.link.url; if (/^https?:/.test(w.link.url)) inner.rel = 'noopener noreferrer'; inner.setAttribute('aria-label', `${w.name}: ${w.label || ''}. ${w.link.text || 'Visit'}`); }
   const badge = document.createElement('span'); badge.className = 'eco-badge'; badge.setAttribute('aria-hidden', 'true'); badge.textContent = initials(w.name);
+  if (BADGE_ART[w.name]) { const img = document.createElement("img"); img.src = `/assets/w-${BADGE_ART[w.name]}.jpg`; img.alt = ""; img.loading = "lazy"; badge.replaceChildren(img); }
   const name = document.createElement('strong'); name.textContent = w.name;
   const status = document.createElement('small'); status.textContent = w.label || 'Status pending';
   inner.append(badge, name, status); li.append(inner); return li;
