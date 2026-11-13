@@ -700,3 +700,42 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
   - The ruleset repair script now sets native approvals to 0.
   - Tests 35/35 pass.
 - This needs a bootstrap merge: main's old gate still demands a non-author approval until this lands.
+
+## 2026-11-09 PR #73 merged (`0caf4d1`); provider readback 401 traced
+- Juss merged #73 at 14:00 UTC. Main's gate now includes `founderDecision`, so his `/approve <sha>` comment or turning on auto-merge counts as the founder review.
+- Juss says the Browser Rendering token was renewed days ago. Observed:
+  - Both `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_BROWSER_RENDERING_TOKEN` reach the job: they show masked as `***`, so they came from secrets.
+  - Every push and dispatch run of `provider-site-proof.yml` since 2026-10-20 has failed or been cancelled. None passed. The runs whose logs are still readable say `HTTP 401` (11-06, 11-08, 11-09). PR runs pass only because they skip the live step.
+  - So the token that is set is rejected. Possible causes: wrong token type (a Global API Key instead of an API Token), missing "Browser Rendering: Edit" permission, the token scoped to a different account, an expired token, or stray whitespace when it was pasted.
+- Fix on this branch: on failure, the readback prints only Cloudflare's numeric error codes, never text. The next main run will then name the cause.
+- 2026-11-09 14:07 UTC: Juss turned on auto-merge for #74 (squash). GitHub recorded it as `auto_squash_enabled`, not `auto_merge_enabled`, so the gate missed it. Fixed on #74: all three method-named enable events now count. The fix only takes effect after #74 merges, because the gate runs from main.
+- 2026-11-09 ~15:35 UTC: commit 0f5a23e (from Juss's account, unsigned, pushed 15:20 UTC) removed the founder-review path from #74. I asked Juss which rule stands; he answered "I'm the reviewer". Reverted 0f5a23e; the code again matches 8be2019.
+- 2026-11-09 ~16:40 UTC: eb112c8 (Juss's account, unsigned, 16:24 UTC) reintroduced the non-author approval requirement. Juss: "The system accordingly is the sec reviewer". Reverted eb112c8; CLAUDE.md records two reviewers (the system's 4 required checks + Juss's UI founder review) as settled.
+
+## RESUME HERE (handover 2026-11-09 ~16:45 UTC)
+- **Review rule (settled; Juss chose it three times on 2026-11-09):**
+  - Two reviewers. (1) The system: the 4 required exact-head checks plus systematic review. (2) Juss: a `/approve <sha>` comment, or turning on auto-merge, done in the GitHub UI.
+  - Never reintroduce a required non-author human approval, and never set native approvals to 1.
+  - Claude never posts `/approve`, never turns on auto-merge, and never merges without Juss's word.
+- **PR #74** (branch `claude/sleepy-mayer-1s8avr`, head `0b9df0a`) holds:
+  - the Cloudflare numeric error-code readback fix;
+  - the fix for squash/rebase auto-merge events in the gate;
+  - the reverts of `0f5a23e` and `eb112c8`, both unsigned commits from Juss's account (likely another agent using his token).
+  - Its CI was green apart from Independent Review Evidence on the earlier heads. CI on `0b9df0a` has not been read back.
+- **Blockers, all Juss's admin actions:**
+  1. Governance ruleset 26857902: approvals 1→0; add `Review Gate Unit Tests`; remove `focused-browser` (nothing reports it) and `Workers Builds: jussco-games`; remove the 17 required deployments; turn on strict checks.
+  2. Delete the Production ruleset 26428639 (~ALL, 4 bypass actors). Pre-change snapshot: `ruleset-before.json` in the old session scratchpad.
+  3. CodeQL default setup is "not-configured", but rulesets require code scanning. Set it up, or remove that rule.
+  4. Alternative to 1–3: import the fixed ruleset JSON. Its generator is `scripts/prepare-native-review-ruleset.mjs` on 8be2019/0b9df0a (main only, approvals 0, 4 checks, non_fast_forward, no deployments, no bypass).
+  5. Stop the tool that pushes reverts as Juss.
+  6. Provider readback: 401 on every main run since 2026-10-20, so the token secret is wrong. #74 makes the next main run print Cloudflare's error code.
+  7. The morning digest routine (trig_01GRi7McgNmbS6vyhuDCPiGN) has no repo attached and gets 403. Fix it in the claude.ai Routines UI.
+- **After the merge:** read back main's checks, the provider readback error code and the live site (the sandbox can't reach jussco.company, so use CI or Juss's browser).
+- 2026-11-09 ~17:30 UTC, Juss: "the other PRs too fix merge deploy".
+  - #70 and #71 closed as superseded: their unique assets are byte-identical on main, and the rest of their diffs would roll back the #68/#69 redesign. Reopen either one to undo.
+  - #67 (Codex skills export) is now `9389b99`: main merged in, conflicts resolved to main's versions (site/index.html, verify-site.mjs), and the obsolete homepage asserts dropped from site-proof-boundary.test.mjs. Local results: node tests 57/57, verify-codex-release PASS, codex release unittest OK, juss-os test_modes OK, Game Hub cinematic PASS at all widths.
+  - #67 and #74 both wait on Juss's `/approve <sha>` (or auto-merge) and on the ruleset/CodeQL fixes.
+  - #74's title, rewritten by another tool to say "one independent human approval", is restored.
+- 2026-11-10: 8e64961 (Juss's account, unsigned, 2026-11-09 19:58 UTC) reintroduced the non-author approval requirement for the third time. Juss answered "Revert (I'm reviewer)". Reverted; the code again matches e020e65. The tool pushing as Juss is still unidentified.
+- 2026-11-10 04:17 UTC: games.jussco.company was still serving the 2026-10-14 version. The Cloudflare Workers Builds trigger for `jussco-games` ran `wrangler versions upload`, so v3 and v4 (main 5c3e1aa, the #68 Game Hub) were uploaded but never deployed. Promoted v4 (351b7483) to 100%, and changed the trigger deploy command to `npx wrangler deploy --config wrangler.games.jsonc`. Rollback: deploy version 77ba0d02. The `jussray` worker was already current (v153, main 0caf4d1). The live read-back is blocked: Bot Fight Mode challenges Browser Rendering, and the sandbox can't reach the domain.
+- 2026-11-13: Founder enabled squash auto-merge on #76 at d04ebb0. Gate on main still red: (1) main's checker ignores auto_squash_enabled (fix lives in #74) → founder needs /approve d04ebb0; (2) Production ruleset 26428639 lacks required check 'Review Gate Unit Tests'; (3) Governance 26857902 still active.
