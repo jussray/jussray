@@ -193,7 +193,7 @@ html[data-tod=dawn] .tod-art{background-image:url('/assets/ideas-sunset.webp');o
 .home-world .site-header{z-index:45}
 .home-world .home-search{background:linear-gradient(160deg,#2a1d55,#17123c);z-index:46}
 
-.home-world .work-cta, .home-world .atmo-btn { display: none; }
+.home-world .work-cta { display: none; }
 .home-world .eco-badge { overflow: hidden; }
 .home-world .eco-badge img { width: 100%; height: 100%; display: block; object-fit: cover; }
 @media (prefers-reduced-motion: no-preference) {
@@ -201,3 +201,6 @@ html[data-tod=dawn] .tod-art{background-image:url('/assets/ideas-sunset.webp');o
   .home-world .glass::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; border-radius: inherit; background: linear-gradient(115deg, transparent 24%, rgba(255,225,191,.13) 43%, transparent 58%); background-size: 220% 100%; animation: glass-reflection 14s ease-in-out infinite alternate; }
   @keyframes glass-reflection { from { background-position: 100% 0; } to { background-position: 0 0; } }
 }
+
+/* Keep the glass shine inside cards that are not themselves positioned. */
+.home-world .ctl-card, .home-world .atmo-btn { position: relative; }
