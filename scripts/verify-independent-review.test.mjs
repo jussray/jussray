@@ -98,7 +98,7 @@ test('end-to-end systematic review verifies policy but never founder authorizati
     if(url.includes('/rulesets?'))return [{id:123,enforcement:'active',target:'branch'}];
     if(url.endsWith('/rulesets/123'))return enforcedRule;
     if(url.includes('/reviews?'))return [approval('independent')];
-    if(url.includes('/timeline?'))return [];
+    if(url.includes('/timeline?')||url.includes('/events?'))return [];
     if(url.includes('/actions/runs?'))return {workflow_runs:[]};
     return pr();
   }});
@@ -107,7 +107,7 @@ test('end-to-end systematic review verifies policy but never founder authorizati
   assert.equal(result.nativeRulesetEnforced,true);
   assert.equal(result.releaseAuthorized,false);
   await assert.rejects(()=>runReviewGate({...env,PR_HEAD_SHA:OLD},api),/changed during evaluation|head changed/);
-  const noRules=async url=>({ok:true,json:async()=>url.includes('/rulesets?')?[]:url.includes('/reviews?')?[approval('independent')]:url.includes('/timeline?')?[]:url.includes('/actions/runs?')?{workflow_runs:[]}:pr()});
+  const noRules=async url=>({ok:true,json:async()=>url.includes('/rulesets?')?[]:url.includes('/reviews?')?[approval('independent')]:url.includes('/timeline?')||url.includes('/events?')?[]:url.includes('/actions/runs?')?{workflow_runs:[]}:pr()});
   await assert.rejects(()=>runReviewGate(env,noRules),/No active ruleset/);
 });
 
@@ -117,7 +117,7 @@ test('concurrent PR head movement invalidates a previously approved exact-head r
     if(url.includes('/rulesets?')) return [{id:123,enforcement:'active',target:'branch'}];
     if(url.endsWith('/rulesets/123')) return enforcedRule;
     if(url.includes('/reviews?')) return [approval('independent')];
-    if(url.includes('/timeline?')) return [];
+    if(url.includes('/timeline?')||url.includes('/events?')) return [];
     if(url.includes('/actions/runs?')) return {workflow_runs:[]};
     prReads++;
     return prReads===1?pr():{...pr(),head:{sha:OLD}};
@@ -200,8 +200,27 @@ test('timeline reader keeps app attribution and takes the head push time from it
     {event:'commented',user:{login:'jussray'},performed_via_github_app:{slug:'claude'},created_at:'2026-11-09T12:06:00Z',body:'/approve aaaaaaa'},
     {event:'auto_merge_enabled',actor:{login:'jussray'},created_at:'2026-11-09T12:07:00Z'},
     {event:'labeled',actor:{login:'jussray'},created_at:'2026-11-09T12:08:00Z'},
-  ]:{workflow_runs:[{created_at:'2026-11-09T12:01:00Z'},{created_at:PUSH}]}});
+  ]:url.includes('/events?')?[]:{workflow_runs:[{created_at:'2026-11-09T12:01:00Z'},{created_at:PUSH}]}});
   const e=await getFounderEvidence({repo:'jussray/jussray',number:9,sha:H,token:'t',request:api});
   assert.deepEqual(e.signals.map(x=>[x.kind,x.viaApp]),[['comment',null],['comment','claude'],['auto_merge_enabled',undefined]]);
   assert.equal(e.headPushedAt,'2026-11-09T12:00:00.000Z');
+});
+test('auto-merge recorded by merge method in issue events counts as the founder review (PR #75, 2026-11-13)',async()=>{
+  const api=async url=>({ok:true,json:async()=>url.includes('/timeline?')?[]:url.includes('/events?')?[
+    {event:'ready_for_review',actor:{login:'jussray'},performed_via_github_app:null,created_at:'2026-11-09T12:03:00Z'},
+    {event:'auto_squash_enabled',actor:{login:'jussray'},performed_via_github_app:null,created_at:'2026-11-09T12:05:00Z'},
+  ]:{workflow_runs:[{created_at:PUSH}]}});
+  const e=await getFounderEvidence({repo:'jussray/jussray',number:75,sha:H,token:'t',request:api});
+  assert.deepEqual(e.signals.map(x=>[x.kind,x.viaApp]),[['auto_merge_enabled',null]]);
+  assert.equal(founderDecision({signals:e.signals,expectedHead:H,headPushedAt:e.headPushedAt}).via,'founder-auto-merge');
+});
+test('auto-merge disabled by any merge method withdraws it; app-made or other-user events never count',async()=>{
+  const mk=events=>async url=>({ok:true,json:async()=>url.includes('/timeline?')?[]:url.includes('/events?')?events:{workflow_runs:[{created_at:PUSH}]}});
+  const on={event:'auto_rebase_enabled',actor:{login:'jussray'},performed_via_github_app:null,created_at:'2026-11-09T12:05:00Z'};
+  const off={event:'auto_squash_disabled',actor:{login:'jussray'},performed_via_github_app:null,created_at:'2026-11-09T12:06:00Z'};
+  for (const events of [[on,off],[{...on,performed_via_github_app:{slug:'claude'}}],[{...on,actor:{login:'someone'}}],[{...on,performed_via_github_app:undefined}]]) {
+    const ev=events.map(x=>{const y={...x}; if (y.performed_via_github_app===undefined) delete y.performed_via_github_app; return y;});
+    const e=await getFounderEvidence({repo:'jussray/jussray',number:75,sha:H,token:'t',request:mk(ev)});
+    assert.equal(founderDecision({signals:e.signals,expectedHead:H,headPushedAt:e.headPushedAt}).ok,false);
+  }
 });
