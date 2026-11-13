@@ -20,6 +20,8 @@ assert.match(game, /id="moveJoystick"/);
 assert.match(game, /graphicsRevision:'cinematic-geometry-v2'/);
 assert.match(game, /STEEL CITY VISUAL RUNTIME/);
 assert.match(game, /function vehicle\(x,z,color\)/);
+assert.match(game, /function renderArmorFinish\(m\)/);
+assert.match(game, /ellipsoid\(x,y,z,rx,ry,rz,col/);
 assert.match(game, /assets\/pittsburgh-night-skyline\.jpg/);
 assert.doesNotMatch(game, /id="(?:up|down|left|right)"/);
 const artFile = resolve(assetRoot, 'steel-city/assets/pittsburgh-night-skyline.jpg');
