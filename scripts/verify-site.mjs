@@ -93,8 +93,9 @@ for (const vp of [{n:'desktop',w:1440,h:900},{n:'mobile',w:390,h:844}]) {
   say((await page.locator('#ecoTrack .eco-tile[hidden]').count())===0,`${vp.n}: Escape clears the ecosystem search`);
   await page.locator('.hdr-btn.soon').first().click();
   say(/coming soon/i.test(await page.textContent('#home-toast')),`${vp.n}: unbuilt header features say coming soon`);
-  say(!(await page.locator('#atmo').isVisible()),`${vp.n}: public atmosphere selector stays hidden`);
   say(!!(await page.locator('html').getAttribute('data-tod')),`${vp.n}: automatic atmosphere is set`);
+  const atmoBefore=await page.textContent('#atmoName');await page.click('#atmo');
+  say((await page.textContent('#atmoName'))!==atmoBefore,`${vp.n}: atmosphere card is visible and cycles (founder, 2026-11-13: keep the card)`);
   say((await page.locator('.site-header a[href="/ideas.html"]').count())===1,`${vp.n}: Ideas is in the main navigation`);
   if(vp.n==='mobile') {
     const button=page.locator('.menu-toggle');const menu=page.locator('#site-navigation');
