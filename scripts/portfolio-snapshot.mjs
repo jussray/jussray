@@ -19,6 +19,7 @@ const stateColor = (label) => /live/i.test(label) ? '#3cf0a0'
   : /progress|active/i.test(label) ? '#5ea8ff'
   : /emerging|candidate/i.test(label) ? '#c98bff' : '#b6aed8';
 const esc = (s) => String(s ?? '').replace(/[&<>'"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[c]));
+const repoOk = (r) => typeof r === 'string' && /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(r) && !r.split('/').some(x => x === '.' || x === '..');
 
 export function renderProjects(projects) {
   return projects.map((p, i) => {
@@ -34,7 +35,7 @@ export function renderProjects(projects) {
 export function renderOverlays(overlays) {
   if (!overlays.length) return '';
   return '<div style="margin:32px 0 18px"><div class="kicker">Featured experiments outside the canonical company map</div><p class="map-copy">These independent homepage worlds are visible without inventing additional canonical company identities.</p></div><div class="projects">'
-    + overlays.map((p, i) => `<article class="project" data-slug="${esc(p.slug)}" data-featured="true" data-noncanonical="true" style="--accent:${palette[(i + 3) % palette.length]};--state:${stateColor(p.publicLabel)}"><div class="p-top"><span class="cat">Noncanonical featured world</span><span class="state">${esc(p.publicLabel)}</span></div><h3>${esc(p.name)}</h3><div class="role">${esc(p.role)}</div><p class="desc">${esc(p.description)}</p><div class="p-foot"><span class="featuredmark">◆ Featured experiment</span><a class="open" href="https://github.com/${esc(encodeURI(p.repository))}" rel="noopener">Source ↗</a></div></article>`).join('')
+    + overlays.map((p, i) => `<article class="project" data-slug="${esc(p.slug)}" data-featured="true" data-noncanonical="true" style="--accent:${palette[(i + 3) % palette.length]};--state:${stateColor(p.publicLabel)}"><div class="p-top"><span class="cat">Noncanonical featured world</span><span class="state">${esc(p.publicLabel)}</span></div><h3>${esc(p.name)}</h3><div class="role">${esc(p.role)}</div><p class="desc">${esc(p.description)}</p><div class="p-foot"><span class="featuredmark">◆ Featured experiment</span>${repoOk(p.repository) ? `<a class="open" href="https://github.com/${esc(encodeURI(p.repository))}" rel="noopener">Source ↗</a>` : ''}</div></article>`).join('')
     + '</div>';
 }
 

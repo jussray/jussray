@@ -123,6 +123,7 @@
   const palette=['#3be3ff','#8b5cf6','#f5c14b','#ff4fb8','#3cf0a0','#5ea8ff'];
   const stateColor=(label)=>/live/i.test(label)?'#3cf0a0':/opening|prelaunch|building/i.test(label)?'#f5c14b':/progress|active/i.test(label)?'#5ea8ff':/emerging|candidate/i.test(label)?'#c98bff':'#b6aed8';
   const esc=(s)=>String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+  const repoOk=(r)=>typeof r==='string'&&/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(r)&&!r.split('/').some(x=>x==='.'||x==='..');
   let data=null, active='All';
   const projects=document.getElementById('projects'), filters=document.getElementById('filters'), countLine=document.getElementById('countLine'), empty=document.getElementById('empty'), worldOverlays=document.getElementById('worldOverlays');
   function render(){
@@ -138,11 +139,13 @@
     }).join('');
     empty.classList.toggle('show',list.length===0);
     const extraWorlds=active==='All'?(data.featuredWorldOverlays||[]):[];
-    worldOverlays.innerHTML=extraWorlds.length?`<div style="margin:32px 0 18px"><div class="kicker">Featured experiments outside the canonical company map</div><p class="map-copy">These independent homepage worlds are visible without inventing additional canonical company identities.</p></div><div class="projects">${extraWorlds.map((p,i)=>`<article class="project" data-slug="${esc(p.slug)}" data-featured="true" data-noncanonical="true" style="--accent:${palette[(i+3)%palette.length]};--state:${stateColor(p.publicLabel)}"><div class="p-top"><span class="cat">Noncanonical featured world</span><span class="state">${esc(p.publicLabel)}</span></div><h3>${esc(p.name)}</h3><div class="role">${esc(p.role)}</div><p class="desc">${esc(p.description)}</p><div class="p-foot"><span class="featuredmark">◆ Featured experiment</span><a class="open" href="https://github.com/${encodeURI(p.repository)}" rel="noopener">Source ↗</a></div></article>`).join('')}</div>`:'';
+    worldOverlays.innerHTML=extraWorlds.length?`<div style="margin:32px 0 18px"><div class="kicker">Featured experiments outside the canonical company map</div><p class="map-copy">These independent homepage worlds are visible without inventing additional canonical company identities.</p></div><div class="projects">${extraWorlds.map((p,i)=>`<article class="project" data-slug="${esc(p.slug)}" data-featured="true" data-noncanonical="true" style="--accent:${palette[(i+3)%palette.length]};--state:${stateColor(p.publicLabel)}"><div class="p-top"><span class="cat">Noncanonical featured world</span><span class="state">${esc(p.publicLabel)}</span></div><h3>${esc(p.name)}</h3><div class="role">${esc(p.role)}</div><p class="desc">${esc(p.description)}</p><div class="p-foot"><span class="featuredmark">◆ Featured experiment</span>${repoOk(p.repository)?`<a class="open" href="https://github.com/${esc(encodeURI(p.repository))}" rel="noopener">Source ↗</a>`:''}</div></article>`).join('')}</div>`:'';
     countLine.textContent=`${list.length} of ${data.projects.length} canonical public identities · ${data.featuredWorlds.length} featured worlds`;
   }
   function setFilter(category){active=category;[...filters.children].forEach(b=>{const on=b.dataset.category===category;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));});render();}
   fetch('data/portfolio.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error(`portfolio ${r.status}`);return r.json()}).then(json=>{
+    // Validate before touching the page, so a malformed payload keeps the published snapshot intact.
+    if(!json||!Array.isArray(json.projects)||!Array.isArray(json.featuredWorlds))throw new Error('portfolio shape');
     data=json;
     const cats=['All',...new Set(json.projects.map(p=>p.category))];
     filters.innerHTML=cats.map(c=>`<button class="filter${c==='All'?' on':''}" type="button" data-category="${esc(c)}" aria-pressed="${c==='All'?'true':'false'}">${esc(c)}</button>`).join('');
