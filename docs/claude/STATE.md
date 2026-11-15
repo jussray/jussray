@@ -2,7 +2,21 @@
 
 - RULE: written into CLAUDE.md "Working with Juss". It changes no merge gate.
 - OBSERVED: the Codex usage limit hit #74 (2026-11-09) and #76 (2026-11-10). Search also matches #67 and #77. Codex never ran on #75 or #79 (#79 is a draft). Codex's last finished review was #78 @37f9251 (2026-11-12).
-- ACTION: Claude review of #67, #74, #75, #76, #77 and #79 started. Findings and fixes are recorded below as they land.
+- RESULTS (local proof; provider CI on the new heads not yet read back):
+  - #67 → `6419bc7`: the release proof now fails when a `.agents/skills` export drifts from `skills/juss-authored`. Codex-only files are allowed. Tests 6/6; the real repo passes; a deliberate edit fails. Not fixed (low): the config check is self-referential, the dependency check is existence-only, a regex CSS test, and `.claude/CLAUDE.md` is not in the push paths.
+  - #74: no defects; gate and provider tests 48/48. #74 and #77 both append to the end of STATE.md, so whichever merges second needs a one-file conflict fix.
+  - #75 → `ac8c125` (rebased on `f7d63c8`): pages with `#ambience-toggle` (the Opportunity Engine) no longer get a second floating soundscape. The test that locked the duplicate in now asserts against it. truth-decay no longer claims `/TRUTHMODE`; SHA256SUMS updated. verify-site all pass; INVENTORY_OK. Open (PLAUSIBLE): iOS `ctx.resume()` hang or `busy` latch in `ambience.mjs:113-123`.
+  - #76: NOT pushed. Head `a696ac4` carries Juss's `/approve`, and a push would void it. Findings for Juss:
+    - CONFIRMED: Game Hub nav marks Products as `aria-current` and has no Games self-link (`site/games/index.html:603,682`).
+    - Truth copy: "Earn" in the lead with nothing earnable live (`:616`); an always-on unread dot on Notifications, which is "coming soon".
+    - Cosmetic: 3 featured tiles lack `noreferrer`.
+  - #77: docs only; StoryEngine is public, so the content is allowed. Clean merge into main.
+  - #79 → `48e2b64`:
+    - JSON shape is validated before cards are replaced, so a malformed payload keeps the snapshot.
+    - The overlay Source link renders only for an `owner/repo` slug.
+    - site-proof push paths now include `portfolio-snapshot.mjs`.
+    - Snapshot check passes; verify-site 446 ok, including no-JS and outage.
+  - CONFLICT FOR JUSS: #75 `f7d63c8` (another Claude session, citing Juss "Begin") makes the founder review a `/approve` comment only, with auto-merge removed. #74 still adds squash/rebase auto-merge counting and the CLAUDE.md "auto-merge is review and merge authority, always" rule. Both cannot merge as they are. Also: a `/approve` comment posted through an agent's user token is just as unattributed as an auto-merge event, so comment-only does not close the hole it cites.
 
 ## 2026-11-08 — SUPERSEDING founder governance decision: systematic-first, human-final
 
