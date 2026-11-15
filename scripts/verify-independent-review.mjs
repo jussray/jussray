@@ -7,7 +7,8 @@ import { pathToFileURL } from 'node:url';
 // author approving his own PR, and every PR here is opened from his account, so his signal is
 // read from actions only a person in the GitHub UI can make on the exact head:
 //   - a PR comment "/approve <head sha, 7+ chars>", or
-//   - enabling auto-merge after the head was pushed (disabling it later withdraws that).
+// Auto-merge does NOT count (Juss, 2026-11-15): issue events made through an agent's user token can carry
+// performed_via_github_app: null, the same as a UI action, so auto-merge cannot prove a human did it.
 // Actions made through an app (Claude, Codex, bots) carry performed_via_github_app and never count.
 export const FOUNDER='jussray';
 const APPROVE=/^\s*\/approve\s+([0-9a-f]{7,40})\b/i;
@@ -18,13 +19,7 @@ export function founderDecision({signals, expectedHead, headPushedAt, owner=FOUN
     .sort((a,b)=>Date.parse(a.at)-Date.parse(b.at));
   const comment=human.find(x=>x.kind==='comment' && Date.parse(x.at)>=pushed && (()=>{const m=APPROVE.exec(String(x.body||''));return m && expectedHead.startsWith(m[1].toLowerCase());})());
   if (comment) return {ok:true,via:'founder-approve-comment',at:comment.at};
-  let auto=null;
-  for (const x of human) {
-    if (x.kind==='auto_merge_enabled') auto=Date.parse(x.at)>=pushed ? x : null;
-    if (x.kind==='auto_merge_disabled') auto=null;
-  }
-  if (auto) return {ok:true,via:'founder-auto-merge',at:auto.at};
-  return {ok:false,via:null,reason:'Missing founder review on exact head (comment /approve '+expectedHead.slice(0,7)+' or enable auto-merge in GitHub)'};
+  return {ok:false,via:null,reason:'Missing founder review on exact head (comment /approve '+expectedHead.slice(0,7)+' in the GitHub UI)'};
 }
 
 export function reviewDecision({pull, reviews, expectedHead, founder}) {
@@ -126,7 +121,7 @@ export async function getFounderEvidence({repo,number,sha,token,request=fetch}){
     if (!Array.isArray(batch)) throw new Error('Timeline API returned non-list result');
     for (const e of batch) {
       const kind=e?.event==='commented'?'comment':e?.event;
-      if (!['comment','auto_merge_enabled','auto_merge_disabled'].includes(kind)) continue;
+      if (kind!=='comment') continue;
       signals.push({kind,login:(e.user||e.actor)?.login,viaApp:'performed_via_github_app' in e ? (e.performed_via_github_app?.slug ?? null) : undefined,
         at:e.created_at,body:kind==='comment'?e.body:''});
     }

@@ -1,3 +1,11 @@
+## 2026-11-15 — Founder review is comment-only (Juss: "Begin", after Claude recommended comment-only)
+
+- `cf4af71` (auto-merge from issue events) is reverted.
+- The gate (`scripts/verify-independent-review.mjs`) now accepts only a `/approve <sha>` comment made in the GitHub UI. Auto-merge never counts. The workflow no longer triggers on auto-merge events, and `CLAUDE.md` is updated to match.
+- Why: issue events made through an agent's user token can show `performed_via_github_app: null`, the same as a UI action.
+- Pushes to `claude/*` currently pass only because GitHub applies the "Production" bypass (integration 4047066). This is disclosed on PR #75.
+- PROOF (local): gate tests 26/26. `node --test` 111 pass, with the 2 known failures that also fail on `main`.
+
 ## 2026-11-13 — Standing preference and blockers (Juss: "you do it for me always", "use fcr remember")
 
 - PREFERENCE (Juss): Claude does GitHub and admin work for Juss whenever a tool and credential allow it. Claude posts needed PR comments itself. The founder approval (`/approve <sha>` or Juss-made auto-merge) stays Juss's.
