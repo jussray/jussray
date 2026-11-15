@@ -1,3 +1,9 @@
+## 2026-11-15 — Standing rule: Claude reviews when Codex stops (Juss: "When ever codex reviews run out you begin reviewing where it left out automatically implement")
+
+- RULE: written into CLAUDE.md "Working with Juss". It changes no merge gate.
+- OBSERVED: the Codex usage limit hit #74 (2026-11-09) and #76 (2026-11-10). Search also matches #67 and #77. Codex never ran on #75 or #79 (#79 is a draft). Codex's last finished review was #78 @37f9251 (2026-11-12).
+- ACTION: Claude review of #67, #74, #75, #76, #77 and #79 started. Findings and fixes are recorded below as they land.
+
 ## 2026-11-08 — SUPERSEDING founder governance decision: systematic-first, human-final
 
 - Review live `main` and exact PR head; systematically review and repair; verify exact-head checks and applicable browser proof; then require **Juss's founder review on that exact head** (`/approve <sha>` comment or auto-merge, in the GitHub UI; superseded 2026-11-09, see CLAUDE.md).
