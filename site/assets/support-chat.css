@@ -1,0 +1,33 @@
+/* Scoped public chat. No change to the cinematic world, header or page routes. */
+.jc-chat{position:fixed;right:clamp(12px,2vw,26px);bottom:max(16px,env(safe-area-inset-bottom));z-index:2100;color:#f7efe9;font-family:"Sora",system-ui,sans-serif;isolation:isolate}
+.jc-chat *, .jc-chat *::before, .jc-chat *::after{box-sizing:border-box}
+.jc-chat button,.jc-chat textarea{font:inherit}
+.jc-chat button:focus-visible,.jc-chat textarea:focus-visible,.jc-chat a:focus-visible{outline:3px solid #f3d19c;outline-offset:3px}
+.jc-chat__launch{display:flex;align-items:center;gap:10px;border:1px solid rgba(248,210,143,.72);border-radius:999px;padding:13px 18px;color:#1b0d29;background:linear-gradient(120deg,#f0d6a7,#d5b0fa);font-weight:700;font-size:13px;box-shadow:0 12px 45px #09051499;cursor:pointer;min-height:48px}
+.jc-chat__launch:hover{filter:brightness(1.08)}
+.jc-chat__spark{font-size:19px}
+.jc-chat__panel{position:absolute;bottom:calc(100% + 12px);right:0;width:min(388px,calc(100vw - 24px));max-height:min(660px,calc(100dvh - 112px));display:flex;flex-direction:column;overflow:hidden;border-radius:22px;border:1px solid #dbb99179;background:linear-gradient(155deg,#231334,#100d1c 75%);box-shadow:0 22px 70px #07030cc9,0 0 60px #b27de02a;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.jc-chat__panel[hidden]{display:none!important}
+.jc-chat__top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:19px 18px 14px;border-bottom:1px solid #e1c7a62c;background:linear-gradient(120deg,#432455,#29152e)}
+.jc-chat__eyebrow{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#e6c28c}
+.jc-chat__title{margin:3px 0 0;font-family:Georgia,"Playfair Display",serif;font-size:22px;font-weight:700;line-height:1.2;color:#fff4e3}
+.jc-chat__close{flex:none;background:transparent;color:#fff0e4;border:1px solid #efcea75c;border-radius:50%;width:34px;height:34px;cursor:pointer}
+.jc-chat__notice{margin:0;padding:11px 17px;font-size:11px;line-height:1.55;color:#e6d3d8;background:#321b3b66;border-bottom:1px solid #d8bda529}
+.jc-chat__history{padding:16px;display:flex;flex-direction:column;gap:12px;overflow-y:auto;min-height:125px;max-height:320px;scrollbar-color:#c19cbe #20142e}
+.jc-chat__bubble{max-width:92%;padding:12px 14px;border-radius:17px;font-size:13px;line-height:1.6;overflow-wrap:anywhere;white-space:pre-wrap}
+.jc-chat__bubble--assistant{align-self:flex-start;border:1px solid #bb99bf45;background:#4832559e;color:#f9ecfa;border-bottom-left-radius:5px}
+.jc-chat__bubble--user{align-self:flex-end;background:#e9cda7;color:#241329;border-bottom-right-radius:5px}
+.jc-chat__links{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.jc-chat__links a{padding:6px 9px;border-radius:999px;border:1px solid #edd2a68c;font-size:11px;color:#f8ddb4;text-decoration:none}
+.jc-chat__links a:hover{text-decoration:underline}
+.jc-chat__quick{display:flex;gap:7px;flex-wrap:wrap;padding:0 16px 13px}
+.jc-chat__quick button{background:#422551;border:1px solid #ceafd368;border-radius:999px;color:#f8eaf4;font-size:11px;padding:8px 10px;cursor:pointer}
+.jc-chat__form{display:flex;align-items:flex-end;gap:8px;padding:12px 13px;border-top:1px solid #d3b6aa44;background:#160f21}
+.jc-chat__input{flex:1;min-width:0;max-height:110px;resize:vertical;min-height:42px;border-radius:12px;border:1px solid #b99aab71;background:#281a33;color:#fff2e9;padding:11px;font-size:13px;line-height:1.5}
+.jc-chat__input::placeholder{color:#c8b4ca}
+.jc-chat__send{flex:none;min-height:42px;padding:9px 13px;border:0;border-radius:12px;background:#e7c28c;color:#261127;font-weight:700;font-size:12px;cursor:pointer}
+.jc-chat__send:disabled{opacity:.45;cursor:wait}
+.jc-chat__footer{padding:0 15px 12px;background:#160f21;font-size:11px;color:#d5bed6}
+.jc-chat__footer a{color:#f4d8a8}
+@media(max-width:480px){.jc-chat{right:12px;bottom:max(12px,env(safe-area-inset-bottom))}.jc-chat__panel{max-height:calc(100dvh - 88px);width:calc(100vw - 24px)}.jc-chat__launch{padding:12px 15px}.jc-chat__history{max-height:32dvh}}
+@media(prefers-reduced-motion:reduce){.jc-chat *{scroll-behavior:auto!important;transition:none!important}}

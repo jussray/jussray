@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
-      - name: Wrangler runtime-truth guard (static-assets baseline, no Worker script)
+      - name: Wrangler runtime-truth guard (public AI endpoint, static route preserved)
         run: node --test scripts/wrangler-runtime-truth.test.mjs
       - name: Verify Games Worker preview config without changing production route
         run: node --test scripts/wrangler-games-preview.test.mjs
@@ -47,6 +47,8 @@ jobs:
         run: node -e "const s=require('fs').readFileSync('site/index.html','utf8'); const good='<link rel=\\\"canonical\\\" href=\\\"https://www.jussco.company/\\\">'; const stale='https://jussray.github.io/jussray/'; if(!s.includes(good)||s.includes(stale)) process.exit(1); console.log('canonical Juss & Co URL valid')"
       - name: Validate public outcome approval gate
         run: node scripts/verify-approved-stories.mjs
+      - name: Verify public AI support request privacy and scoped runtime
+        run: node --test scripts/support-chat.test.mjs
       - name: Test conversion tracking event and privacy contract
         run: node --test scripts/conversion-tracking.test.mjs
       - name: Test first-party aggregation, abuse limits and privacy
@@ -65,6 +67,8 @@ jobs:
         run: node --test scripts/public-resources.test.mjs
       - name: Verify exact-source site and Games locally in Chromium
         run: node scripts/verify-site.mjs
+      - name: Verify public support chat in desktop and mobile Chromium (stubbed API)
+        run: node scripts/verify-support-chat-ui.mjs
       - name: Verify Game Hub cinematic mobile controls and existing game boundaries
         run: node scripts/verify-games-hub-cinematic.mjs
       - name: Verify Steel City preview route and campaign smoke in Chromium

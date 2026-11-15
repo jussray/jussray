@@ -70,3 +70,6 @@ export function startAtmosphere() {
 if (typeof document !== 'undefined') {
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded',startAtmosphere,{once:true}); else startAtmosphere();
 }
+
+// Public support chat uses the existing shared page bootstrap.
+import './support-chat.mjs';
