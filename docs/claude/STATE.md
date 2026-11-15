@@ -1,3 +1,10 @@
+## 2026-11-15 — Importable contract ruleset; PR #75 at ac8c125 (Juss: "Implement")
+
+- Another Claude session pushed `ac8c125` to this branch: the Opportunity Engine no longer gets a second soundscape. Verified locally: verify-site exit 0, 481 ok, sums OK. Two sessions are working on one branch, and the risk is flagged to Juss.
+- NEW `docs/rulesets/main-contract.json` with README: the Native ruleset as one importable file. Target is the default branch only, with 0 approvals, the 4 strict checks, threads resolved, no force push or deletion, and no bypass actors. A gate test checks it passes `rulesetDecision`.
+- `CLAUDE.md`: rules on ruleset drift and bypass disclosure, and on UI-only steps.
+- NEXT (Juss): import the ruleset, disable Governance and Production, then `/approve <head>` on PR #75.
+
 ## 2026-11-15 — Founder review is comment-only (Juss: "Begin", after Claude recommended comment-only)
 
 - `cf4af71` (auto-merge from issue events) is reverted.
