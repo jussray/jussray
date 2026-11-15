@@ -131,32 +131,12 @@ export async function getFounderEvidence({repo,number,sha,token,request=fetch}){
         at:e.created_at,body:kind==='comment'?e.body:''});
     }
     if (batch.length<100) {
-      await addAutoMergeEvents({root,number,token,request,signals});
       const runs=await apiGet(root+'/actions/runs?event=pull_request&head_sha='+sha+'&per_page=100',token,request);
       const times=(runs?.workflow_runs||[]).map(r=>Date.parse(r.created_at)).filter(Number.isFinite);
       return {signals,headPushedAt:times.length?new Date(Math.min(...times)).toISOString():null};
     }
   }
   throw new Error('Timeline pagination exceeded safe limit; refusing incomplete evidence');
-}
-
-// GitHub records auto-merge by merge method (auto_squash_enabled, auto_rebase_enabled, auto_merge_enabled)
-// and only in the issue events API, not the timeline. Read them there and normalize the kind.
-const AUTO_ON=new Set(['auto_merge_enabled','auto_squash_enabled','auto_rebase_enabled']);
-const AUTO_OFF=new Set(['auto_merge_disabled','auto_squash_disabled','auto_rebase_disabled']);
-async function addAutoMergeEvents({root,number,token,request,signals}){
-  for(let page=1;page<=10;page++){
-    const batch=await apiGet(root+'/issues/'+number+'/events?per_page=100&page='+page,token,request);
-    if (!Array.isArray(batch)) throw new Error('Issue events API returned non-list result');
-    for (const e of batch) {
-      const kind=AUTO_ON.has(e?.event)?'auto_merge_enabled':AUTO_OFF.has(e?.event)?'auto_merge_disabled':null;
-      if (!kind) continue;
-      if (signals.some(x=>x.kind===kind && x.at===e.created_at && x.login===e.actor?.login)) continue;
-      signals.push({kind,login:e.actor?.login,viaApp:'performed_via_github_app' in e ? (e.performed_via_github_app?.slug ?? null) : undefined,at:e.created_at,body:''});
-    }
-    if (batch.length<100) return;
-  }
-  throw new Error('Issue events pagination exceeded safe limit; refusing incomplete evidence');
 }
 
 export async function getRulesEvidence({repo,token,request=fetch}) {
