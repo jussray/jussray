@@ -78,4 +78,4 @@ jobs:
         with:
           name: site-proof-${{ github.sha }}
           path: proof/site/
-          retention-days: 30
+          retention-days: 7
