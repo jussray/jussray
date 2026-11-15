@@ -363,7 +363,7 @@ for (const vp of [{ n: 'portfolio-desktop', w: 1440, h: 900 }, { n: 'portfolio-m
   const ctx = await browser.newContext({ viewport: { width: vp.w, height: vp.h }, isMobile: !!vp.m, hasTouch: !!vp.m }); const page = await ctx.newPage();
   const errors = []; page.on('pageerror', (e) => errors.push(String(e))); page.on('requestfailed', (r) => { if (!/fonts\.(googleapis|gstatic)\.com/.test(r.url())) errors.push(`${r.failure()?.errorText} ${r.url()}`); }); page.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) errors.push(m.text()); });
   await page.goto(`${url}portfolio.html`, { waitUntil: 'load' });
-  await page.waitForFunction(() => document.querySelectorAll('#projects .project').length === 20);
+  await page.waitForFunction(() => document.querySelectorAll('#filters button').length > 1 && document.querySelectorAll('#projects .project').length === 20);
   say((await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)) === 0, `${vp.n}: no horizontal overflow`);
   say((await page.locator('#projects .project').count()) === 20, `${vp.n}: renders all 20 public-safe identities`);
   say((await page.locator('#worldOverlays .project[data-noncanonical="true"]').count()) === worldOverlays.length &&
@@ -384,6 +384,32 @@ for (const vp of [{ n: 'portfolio-desktop', w: 1440, h: 900 }, { n: 'portfolio-m
   say((await page.evaluate(() => [...document.querySelectorAll('a,button')].filter((e) => { const b = e.getBoundingClientRect(); return b.width > 0 && b.height < 40; }).length)) === 0, `${vp.n}: tap targets >= 40px`);
   say(errors.length === 0, `${vp.n}: no console errors${errors.length ? ' — ' + errors.join(' | ') : ''}`);
   await page.screenshot({ path: `proof/site/${vp.n}.png`, fullPage: true }); await ctx.close();
+}
+// Portfolio without JavaScript: the published snapshot must carry every canonical identity
+// exactly as site/data/portfolio.json declares it (names, labels, descriptions, link decisions).
+{
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, javaScriptEnabled: false }); const page = await ctx.newPage();
+  await page.goto(`${url}portfolio.html`, { waitUntil: 'load' });
+  const cards = await page.$$eval('#projects .project', (els) => els.map((el) => ({
+    slug: el.dataset.slug, name: el.querySelector('h3')?.textContent, label: el.querySelector('.state')?.textContent,
+    desc: el.querySelector('.desc')?.textContent, link: el.querySelector('a.open')?.getAttribute('href') || null })));
+  say(cards.length === portfolio.projects.length, `portfolio no-JS: all ${portfolio.projects.length} identities in the initial HTML`);
+  say(portfolio.projects.every((p, i) => cards[i] && cards[i].slug === p.slug && cards[i].name === p.name && cards[i].label === p.publicLabel &&
+    cards[i].desc === p.description && cards[i].link === (p.link || null)), 'portfolio no-JS: names, labels, descriptions and links match portfolio.json exactly');
+  say(cards.every((c) => c.link === null || portfolio.projects.some((p) => p.link === c.link)), 'portfolio no-JS: no invented links');
+  say((await page.locator('#worldOverlays .project[data-noncanonical="true"]').count()) === worldOverlays.length, 'portfolio no-JS: noncanonical overlay published separately');
+  say(((await page.textContent('#countLine')) || '').startsWith(`${portfolio.projects.length} of ${portfolio.projects.length}`), 'portfolio no-JS: count line published');
+  say((await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)) === 0, 'portfolio no-JS: no horizontal overflow');
+  await ctx.close();
+}
+// Portfolio data outage: the truthful published snapshot stays; nothing is removed or invented.
+{
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } }); const page = await ctx.newPage();
+  await page.route('**/data/portfolio.json', (r) => r.abort());
+  await page.goto(`${url}portfolio.html`, { waitUntil: 'load' });
+  await page.waitForFunction(() => /live data unavailable/.test(document.getElementById('countLine').textContent), null, { timeout: 5000 });
+  say((await page.locator('#projects .project').count()) === portfolio.projects.length, 'portfolio outage: published snapshot kept when JSON fetch fails');
+  await ctx.close();
 }
 /* ---------- Games hub: code-level Playwright proof at exact source ---------- */
 for (const vp of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile', width: 390, height: 844 }]) {
