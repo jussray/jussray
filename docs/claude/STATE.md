@@ -16,6 +16,10 @@
     - The overlay Source link renders only for an `owner/repo` slug.
     - site-proof push paths now include `portfolio-snapshot.mjs`.
     - Snapshot check passes; verify-site 446 ok, including no-JS and outage.
+  - "Cont" round:
+    - #67 → `1abedad`: the release proof now parses imports. A non-stdlib import that doesn't resolve to a shipped sibling fails it, and so does a relative import. The conformance push also triggers on `.claude/CLAUDE.md`. Tests 7/7; a deliberate `import nope` fails.
+    - #75 head is now `05e1739` (another Claude session, on top of my `ac8c125`). It adds `docs/rulesets/main-contract.json`. Reviewed: it matches the CLAUDE.md native contract (main only, 0 approvals, 4 strict checks with Actions integration 15368, thread resolution, no force push or deletion, no bypass). No defects.
+    - Live Production ruleset 26428639 still has bypass actors and covers main, so `rulesetDecision` fails until Juss deletes it or imports the contract.
   - CONFLICT FOR JUSS: #75 `f7d63c8` (another Claude session, citing Juss "Begin") makes the founder review a `/approve` comment only, with auto-merge removed. #74 still adds squash/rebase auto-merge counting and the CLAUDE.md "auto-merge is review and merge authority, always" rule. Both cannot merge as they are. Also: a `/approve` comment posted through an agent's user token is just as unattributed as an auto-merge event, so comment-only does not close the hole it cites.
 
 ## 2026-11-08 — SUPERSEDING founder governance decision: systematic-first, human-final
