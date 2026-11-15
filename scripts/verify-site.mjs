@@ -509,8 +509,8 @@ for (const vp of [{ n: 'ambience-desktop', w: 1440, h: 900 }, { n: 'ambience-mob
   st = await engine(); say(st.on && (await page.getAttribute('.amb-float', 'aria-pressed')) === 'true', `${vp.n}: remembered sound resumes on the next tap, not before`);
   await page.goto(url + 'games/index.html', { waitUntil: 'load' }); await page.waitForTimeout(300); await page.click('body', { position: { x: 5, y: 5 } }); await page.waitForTimeout(200);
   st = await engine(); say(!st.on && (await page.locator('.amb-float').count()) === 0, `${vp.n}: Game Hub keeps its own sound; the shared engine never starts there`);
-  await page.goto(url + 'opportunity-engine.html', { waitUntil: 'load' }); await page.locator('.amb-float').waitFor();
-  say((await page.locator('.amb-float').evaluate((e) => getComputedStyle(e).position)) === 'fixed', `${vp.n}: opportunity engine ambient control is styled`);
+  await page.goto(url + 'opportunity-engine.html', { waitUntil: 'load' }); await page.waitForTimeout(300); await page.click('#ambience-toggle'); await page.waitForTimeout(200);
+  st = await engine(); say(!st.on && (await page.locator('.amb-float').count()) === 0, `${vp.n}: Opportunity Engine keeps its own ambience; no second soundscape`);
   await page.evaluate(() => localStorage.removeItem('jc-ambience'));
   await page.goto(url + 'ideas.html', { waitUntil: 'load' }); await page.waitForTimeout(300);
   say((await page.locator('.amb-float').count()) === 0, `${vp.n}: Ideas keeps its own ambience panel, no duplicate control`);

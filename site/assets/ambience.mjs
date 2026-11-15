@@ -166,7 +166,7 @@ export function armRemembered() {
 
 /* Floating control for pages without their own ambience panel. */
 export function mountAmbienceControl() {
-  if (document.querySelector('#sound, #ambient-toggle, .amb-float')) return null;
+  if (document.querySelector('#sound, #ambient-toggle, #ambience-toggle, .amb-float')) return null;
   if (!document.querySelector('link[href$="/assets/atmosphere.css"]')) {
     const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = '/assets/atmosphere.css'; document.head.append(css);
   }

@@ -53,5 +53,5 @@ b8aea158807cc99dd018828796558b80a22a60ad18b934b18a5f2739836db527  ./juss-os/scri
 f33feb9902c7a4ae934f50d7eb70237cd149ff11ccc80d36e00d7cb02ae6dd82  ./tests/test_inventory.py
 a71b7a0994229ef397671ebaa387e66111b441ebed3e86d0e57ae91ccc203bf0  ./tests/test_receipts_check.py
 9affd3bd010687ca1f8fbe0b7d06bd0131d5388e4c238e62443a92926143a427  ./tests/test_runtime_receipt.py
-45489fb192e1a9f50f8b3908b457b9f20da3967364ac9ba8a0699afd65bfce78  ./truth-decay/SKILL.md
+131cb0d84765c49cc82e20d67a63481c929ce503486eb3fafbf82cbfce2e0eba  ./truth-decay/SKILL.md
 db273d4bdf292871c364692dcefa190ce24ab7fb77532745bd93de20de4943ad  ./truthmode/SKILL.md
