@@ -5,6 +5,7 @@ This checks files and manifests only. It is not Codex runtime or provider proof.
 """
 from __future__ import annotations
 import argparse
+import ast
 from pathlib import Path
 import re
 import sys
@@ -68,8 +69,30 @@ def verify(root: Path) -> list[str]:
             errors.append(f"INVALID NAME {rel}")
         if not DESCRIPTION.search(fm):
             errors.append(f"MISSING DESCRIPTION {rel}")
+    # Dependency closure: every non-stdlib import in the six modules must resolve to a shipped sibling.
+    scripts = ".agents/skills/juss-os/scripts"
     for mod in MODULES:
-        read(f".agents/skills/juss-os/scripts/{mod}")
+        src = read(f"{scripts}/{mod}")
+        if src is None:
+            continue
+        try:
+            tree = ast.parse(src, filename=mod)
+        except SyntaxError:
+            errors.append(f"SYNTAX {scripts}/{mod}")
+            continue
+        names: set[str] = set()
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                names.update(a.name.split(".")[0] for a in node.names)
+            elif isinstance(node, ast.ImportFrom):
+                if node.level:
+                    errors.append(f"RELATIVE IMPORT {scripts}/{mod}")
+                elif node.module:
+                    names.add(node.module.split(".")[0])
+        for name in sorted(names - set(sys.stdlib_module_names) - {"__future__"}):
+            dep = root / scripts / f"{name}.py"
+            if not dep.is_file() or dep.is_symlink():
+                errors.append(f"UNRESOLVED IMPORT {name} in {scripts}/{mod}")
     # The .agents copies are exports of skills/juss-authored. Every exported file that still has a
     # source counterpart must match it byte for byte, so an edit to either side cannot silently
     # leave Codex loading a stale copy. Codex-only files (no source counterpart) are allowed.

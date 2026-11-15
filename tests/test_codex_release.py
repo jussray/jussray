@@ -70,6 +70,17 @@ class ReleaseTests(unittest.TestCase):
             self.assertNotEqual(p.returncode, 0)
             self.assertIn("AGENTS.md", p.stderr)
 
+    def test_unresolved_import_fails_and_sibling_import_passes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); fixture(root)
+            f = root / ".agents/skills/juss-os/scripts/confess.py"
+            f.write_text("import json\nfrom evidence_core import x\n")
+            self.assertEqual(check(root).returncode, 0)
+            f.write_text("import json\nimport not_shipped_module\n")
+            p = check(root)
+            self.assertNotEqual(p.returncode, 0)
+            self.assertIn("UNRESOLVED IMPORT not_shipped_module", p.stderr)
+
     def test_export_out_of_sync_with_source_fails(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp); fixture(root)
