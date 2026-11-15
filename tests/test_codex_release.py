@@ -70,6 +70,19 @@ class ReleaseTests(unittest.TestCase):
             self.assertNotEqual(p.returncode, 0)
             self.assertIn("AGENTS.md", p.stderr)
 
+    def test_export_out_of_sync_with_source_fails(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); fixture(root)
+            src = root / "skills/juss-authored/goalfix"
+            src.mkdir(parents=True)
+            exported = (root / ".agents/skills/goalfix/SKILL.md").read_text()
+            (src / "SKILL.md").write_text(exported)
+            self.assertEqual(check(root).returncode, 0)
+            (src / "SKILL.md").write_text(exported + "edited at source\n")
+            p = check(root)
+            self.assertNotEqual(p.returncode, 0)
+            self.assertIn("OUT OF SYNC .agents/skills/goalfix/SKILL.md", p.stderr)
+
 
 if __name__ == "__main__":
     unittest.main()

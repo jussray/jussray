@@ -70,6 +70,21 @@ def verify(root: Path) -> list[str]:
             errors.append(f"MISSING DESCRIPTION {rel}")
     for mod in MODULES:
         read(f".agents/skills/juss-os/scripts/{mod}")
+    # The .agents copies are exports of skills/juss-authored. Every exported file that still has a
+    # source counterpart must match it byte for byte, so an edit to either side cannot silently
+    # leave Codex loading a stale copy. Codex-only files (no source counterpart) are allowed.
+    for skill in SKILLS:
+        export_dir = root / ".agents/skills" / skill
+        source_dir = root / "skills/juss-authored" / skill
+        if not export_dir.is_dir() or not source_dir.is_dir():
+            continue
+        for exported in sorted(export_dir.rglob("*")):
+            if not exported.is_file() or exported.is_symlink() or "__pycache__" in exported.parts:
+                continue
+            rel = exported.relative_to(export_dir)
+            source = source_dir / rel
+            if source.is_file() and not source.is_symlink() and source.read_bytes() != exported.read_bytes():
+                errors.append(f"OUT OF SYNC .agents/skills/{skill}/{rel.as_posix()} != skills/juss-authored/{skill}/{rel.as_posix()}")
     return errors
 
 
@@ -82,7 +97,7 @@ def main() -> int:
         print(f"FAIL {error}", file=sys.stderr)
     if errors:
         return 1
-    print("PASS static Codex config, five skill manifests, six Juss OS scripts and AGENTS.md; runtime unverified")
+    print("PASS static Codex config, five skill manifests, six Juss OS scripts, export sync and AGENTS.md; runtime unverified")
     return 0
 
 
