@@ -1,3 +1,10 @@
+## 2026-11-16 — Auto-merge is Juss's sign-off again (Juss: "I am the human sign off if I press auto merge it should count as human review")
+
+- Gate: Juss turning auto-merge on after the head push counts as founder review. GitHub's real event names are `auto_squash_enabled` / `auto_merge_enabled` / `auto_rebase_enabled` (PR #75 timeline shows `auto_squash_enabled`, actor jussray, no app). `main`'s gate only matched `auto_merge_enabled`, which is why Juss's toggles never counted. Turning it off withdraws it; it must be on after each new head push. App-attributed, unknown-attribution or other-user events never count.
+- Workflow re-runs the gate on `auto_merge_enabled` / `auto_merge_disabled`. Tests 33/33.
+- Claude `/approve`: GitHub stores Claude's comment as `·/·a·pprove`, so it is not an approval. Not worked around.
+- PR #75 still needs one founder action (bypass merge or UI `/approve`), because the gate runs `main`'s copy until this merges.
+
 ## 2026-11-16 — Claude may post /approve after green checks (Juss: "Fix rule so that the approval comments to merge come from you after they pass tests and checks")
 
 - Gate `scripts/verify-independent-review.mjs`: a `/approve <head>` comment made through the Claude app now counts, but only if Repo Reality / exact-head, Review Gate Unit Tests and Juss & Co Site Browser Proof are all completed green on that exact head and finished before the comment. A founder comment in the UI still counts any time. Other apps and auto-merge never count.

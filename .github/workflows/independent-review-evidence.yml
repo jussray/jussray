@@ -1,8 +1,8 @@
 name: Independent Review Evidence
 on:
   pull_request:
-    # Founder review is a /approve <sha> comment (re-run via founder-review-rerun.yml). Auto-merge does not count (2026-11-15).
-    types: [opened, reopened, synchronize, ready_for_review]
+    # Founder review: Juss turning auto-merge on (2026-11-16), or a /approve <sha> comment (re-run via founder-review-rerun.yml).
+    types: [opened, reopened, synchronize, ready_for_review, auto_merge_enabled, auto_merge_disabled]
   pull_request_review:
     types: [submitted, dismissed]
 permissions:

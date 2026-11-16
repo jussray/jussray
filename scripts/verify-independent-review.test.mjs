@@ -170,18 +170,27 @@ test('founder /approve comment in the GitHub UI on the exact head passes the gat
   assert.equal(r.founderReview,'founder-approve-comment');
   assert.equal(r.reviewMode,'founder-review-exact-head');
 });
-test('auto-merge never counts as founder review, even from the founder after the head push (2026-11-15)',()=>{
-  assert.equal(founderDecision({signals:[sig('auto_merge_enabled','2026-11-09T12:05:00Z')],expectedHead:H,headPushedAt:PUSH}).ok,false);
+test('founder turning auto-merge on after the head push is the founder review (2026-11-16), under every GitHub event name',()=>{
+  for (const kind of ['auto_merge_enabled','auto_squash_enabled','auto_rebase_enabled']) {
+    const d=founderDecision({signals:[sig(kind,'2026-11-09T12:05:00Z')],expectedHead:H,headPushedAt:PUSH});
+    assert.equal(d.ok,true); assert.equal(d.via,'founder-auto-merge');
+  }
+});
+test('turning auto-merge off withdraws it; turning it back on after the push restores it',()=>{
+  assert.equal(founderDecision({signals:[sig('auto_squash_enabled','2026-11-09T12:05:00Z'),sig('auto_merge_disabled','2026-11-09T12:06:00Z')],expectedHead:H,headPushedAt:PUSH}).ok,false);
+  assert.equal(founderDecision({signals:[sig('auto_merge_disabled','2026-11-09T12:06:00Z'),sig('auto_squash_enabled','2026-11-09T12:07:00Z')],expectedHead:H,headPushedAt:PUSH}).ok,true);
 });
 test('auto-merge or approval given before the head was pushed does not carry to the new head',()=>{
   assert.equal(founderDecision({signals:[sig('auto_merge_enabled','2026-11-09T11:00:00Z')],expectedHead:H,headPushedAt:PUSH}).ok,false);
   assert.equal(founderDecision({signals:[sig('comment','2026-11-09T11:00:00Z',{body:'/approve '+H.slice(0,7)})],expectedHead:H,headPushedAt:PUSH}).ok,false);
 });
-test('other apps, unknown attribution and auto-merge never count, even from the founder account',()=>{
+test('comments or auto-merge through any app, or with unknown attribution, never count, even from the founder account',()=>{
   for (const viaApp of ['chatgpt-codex-connector','dependabot',undefined]) {
     assert.equal(founderDecision({signals:[sig('comment','2026-11-09T12:05:00Z',{viaApp,body:'/approve '+H.slice(0,7)})],expectedHead:H,headPushedAt:PUSH,checks:GREEN}).ok,false);
     assert.equal(founderDecision({signals:[sig('auto_merge_enabled','2026-11-09T12:05:00Z',{viaApp})],expectedHead:H,headPushedAt:PUSH,checks:GREEN}).ok,false);
   }
+  assert.equal(founderDecision({signals:[sig('auto_squash_enabled','2026-11-09T12:05:00Z',{viaApp:'claude'})],expectedHead:H,headPushedAt:PUSH,checks:GREEN}).ok,false);
+  assert.equal(founderDecision({signals:[sig('auto_squash_enabled','2026-11-09T12:05:00Z',{login:'someone'})],expectedHead:H,headPushedAt:PUSH}).ok,false);
 });
 // Agent approval (Juss, 2026-11-16): Claude's /approve counts only after the required checks are green on the head.
 const done=(name,at,conclusion='success',status='completed')=>({name,status,conclusion,completed_at:at});
@@ -233,7 +242,7 @@ test('timeline reader keeps app attribution and takes the head push time from it
     {event:'labeled',actor:{login:'jussray'},created_at:'2026-11-09T12:08:00Z'},
   ]:{workflow_runs:[{created_at:'2026-11-09T12:01:00Z'},{created_at:PUSH}]}});
   const e=await getFounderEvidence({repo:'jussray/jussray',number:9,sha:H,token:'t',request:api});
-  assert.deepEqual(e.signals.map(x=>[x.kind,x.viaApp]),[['comment',null],['comment','claude']]);
+  assert.deepEqual(e.signals.map(x=>[x.kind,x.viaApp]),[['comment',null],['comment','claude'],['auto_merge_enabled',undefined]]);
   assert.equal(e.headPushedAt,'2026-11-09T12:00:00.000Z');
   assert.deepEqual(e.checks,[]);
 });
