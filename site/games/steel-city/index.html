@@ -83,7 +83,7 @@ canvas#game{z-index:1;background:transparent;}
   asset.onload=()=>sky.dataset.graphicsAsset='loaded';
   asset.onerror=()=>{const menu=getComputedStyle(document.getElementById('titlecover')).backgroundImage;const match=menu.match(/data:image\/jpeg;base64,[A-Za-z0-9+\/=]+/);if(match){sky.style.backgroundImage=`linear-gradient(180deg,#0a0c2195 0%,#121b2b3d 43%,#0a172d 100%),url("${match[0]}")`;sky.dataset.graphicsAsset='embedded-fallback'}else sky.dataset.graphicsAsset='unavailable'};
   // Games Hub ships Steel City as one self-contained page: reuse the original approved JPEG bytes from the title artwork.
-  const inlineSky=(getComputedStyle(document.getElementById('titlecover')).backgroundImage.match(/data:image\\/jpeg;base64,[A-Za-z0-9+\\/=]+/)||[])[0];
+  const inlineSky=(getComputedStyle(document.getElementById('titlecover')).backgroundImage.match(/data:image\/jpeg;base64,[A-Za-z0-9+\/=]+/)||[])[0];
   if(inlineSky){sky.style.backgroundImage=`linear-gradient(180deg,#0c071c42 0%,#1c10383a 43%,#09091bdf 100%),url("${inlineSky}")`;asset.src=inlineSky}
   else sky.dataset.graphicsAsset='unavailable';
   window.__steelJoystickReset=reset;
@@ -488,7 +488,7 @@ function resetSky(){sky.active=false;sky.hp=100;sky.kills=0;sky.shots.length=0;s
 $('skyToggle').addEventListener('click',toggleFlight);$('skyMobile').addEventListener('pointerdown',e=>{e.preventDefault();toggleFlight()});$('fireMobile').addEventListener('pointerdown',e=>{e.preventDefault();shoot()});
 const descent=$('descendMobile');descent.addEventListener('pointerdown',e=>{e.preventDefault();touch.add('KeyC');try{descent.setPointerCapture(e.pointerId)}catch(_){}});for(const event of ['pointerup','pointercancel','lostpointercapture'])descent.addEventListener(event,()=>touch.delete('KeyC'));
 
-const skyline=new Image();let skylineReady=false;skyline.onload=()=>skylineReady=true;skyline.onerror=()=>{try{const css=getComputedStyle($('titlecover')).backgroundImage;const m=css.match(/data:image\/jpeg;base64,[A-Za-z0-9+\/=]+/);if(m)skyline.src=m[0]}catch(_){}};const inlineSceneSky=(getComputedStyle($('titlecover')).backgroundImage.match(/data:image\\/jpeg;base64,[A-Za-z0-9+\\/=]+/)||[])[0];if(inlineSceneSky)skyline.src=inlineSceneSky;
+const skyline=new Image();let skylineReady=false;skyline.onload=()=>skylineReady=true;skyline.onerror=()=>{try{const css=getComputedStyle($('titlecover')).backgroundImage;const m=css.match(/data:image\/jpeg;base64,[A-Za-z0-9+\/=]+/);if(m)skyline.src=m[0]}catch(_){}};const inlineSceneSky=(getComputedStyle($('titlecover')).backgroundImage.match(/data:image\/jpeg;base64,[A-Za-z0-9+\/=]+/)||[])[0];if(inlineSceneSky)skyline.src=inlineSceneSky;
 const stars=[{x:0,z:15,y:1.4},{x:-4,z:2,y:1.4},{x:4,z:-14,y:1.4},{x:1,z:-29,y:1.4},{x:17,z:3,y:6.6},{x:-3,z:36,y:1.4},{x:11,z:11,y:3.6}].map(x=>({...x,taken:false}));
 const STEEL_HILL=window.__steelHillsideContract,HOME=STEEL_HILL.HOME;
 const buildings=[[19,-24,11,12,40],[33,-22,12,13,47],[-17,-28,9,9,24],[-30,-20,10,9,32],[19,-6,11,13,29],[-17,-7,9,11,16],[-34,-52,11,11,37],[3,-78,15,11,46],[-21,-76,13,10,34],[27,-80,12,11,52],[-39,-74,10,10,27],[49,-77,14,12,32]];for(let zz of [-32,-9,16,39])for(let xx of [-47,-35,-23,23,35,47]){if(zz===-9&&xx===23)continue;let f=Math.abs(xx+zz)%8;buildings.push([xx,zz,7+f/3,7+f/4,6+f*1.5])}
