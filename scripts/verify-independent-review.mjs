@@ -11,6 +11,9 @@ import { pathToFileURL } from 'node:url';
 // Actions made through an app (Claude, Codex, bots) carry performed_via_github_app and never count.
 export const FOUNDER='jussray';
 const APPROVE=/^\s*\/approve\s+([0-9a-f]{7,40})\b/i;
+// GitHub names the timeline event after the merge method: auto_merge_enabled (merge commit),
+// auto_squash_enabled or auto_rebase_enabled. Each is the same founder action; auto_merge_disabled withdraws any.
+const AUTO_ON=new Set(['auto_merge_enabled','auto_squash_enabled','auto_rebase_enabled']);
 export function founderDecision({signals, expectedHead, headPushedAt, owner=FOUNDER}) {
   const pushed=Date.parse(headPushedAt||'');
   if (!Array.isArray(signals) || !Number.isFinite(pushed)) return {ok:false,via:null,reason:'Missing founder review evidence or head push time'};
@@ -20,7 +23,7 @@ export function founderDecision({signals, expectedHead, headPushedAt, owner=FOUN
   if (comment) return {ok:true,via:'founder-approve-comment',at:comment.at};
   let auto=null;
   for (const x of human) {
-    if (x.kind==='auto_merge_enabled') auto=Date.parse(x.at)>=pushed ? x : null;
+    if (AUTO_ON.has(x.kind)) auto=Date.parse(x.at)>=pushed ? x : null;
     if (x.kind==='auto_merge_disabled') auto=null;
   }
   if (auto) return {ok:true,via:'founder-auto-merge',at:auto.at};
@@ -126,7 +129,7 @@ export async function getFounderEvidence({repo,number,sha,token,request=fetch}){
     if (!Array.isArray(batch)) throw new Error('Timeline API returned non-list result');
     for (const e of batch) {
       const kind=e?.event==='commented'?'comment':e?.event;
-      if (!['comment','auto_merge_enabled','auto_merge_disabled'].includes(kind)) continue;
+      if (kind!=='comment' && kind!=='auto_merge_disabled' && !AUTO_ON.has(kind)) continue;
       signals.push({kind,login:(e.user||e.actor)?.login,viaApp:'performed_via_github_app' in e ? (e.performed_via_github_app?.slug ?? null) : undefined,
         at:e.created_at,body:kind==='comment'?e.body:''});
     }
