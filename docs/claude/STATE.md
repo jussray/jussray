@@ -1,3 +1,10 @@
+## 2026-11-16 — Claude may post /approve after green checks (Juss: "Fix rule so that the approval comments to merge come from you after they pass tests and checks")
+
+- Gate `scripts/verify-independent-review.mjs`: a `/approve <head>` comment made through the Claude app now counts, but only if Repo Reality / exact-head, Review Gate Unit Tests and Juss & Co Site Browser Proof are all completed green on that exact head and finished before the comment. A founder comment in the UI still counts any time. Other apps and auto-merge never count.
+- Tests: 32/32 pass (new tests cover missing, red, pending and late checks, old head, and the evidence reader).
+- `CLAUDE.md` rule updated. Known limit: the gate runs from `main`, so this rule takes effect only once it is merged. PR #75 still needs one founder action, either `/approve` in the UI or a bypass merge.
+- Risk accepted by Juss: a Claude approval proves green checks, not that a human reviewed the change.
+
 ## 2026-11-15 — Importable contract ruleset; PR #75 at ac8c125 (Juss: "Implement")
 
 - Another Claude session pushed `ac8c125` to this branch: the Opportunity Engine no longer gets a second soundscape. Verified locally: verify-site exit 0, 481 ok, sums OK. Two sessions are working on one branch, and the risk is flagged to Juss.

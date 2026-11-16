@@ -1,5 +1,6 @@
 name: Founder Review Rerun
-# Juss's "/approve <head sha>" comment on a PR re-runs Independent Review Evidence on that head,
+# A "/approve <head sha>" comment on a PR from the jussray account (Juss in the UI, or Claude through the
+# Claude app after green checks, 2026-11-16) re-runs Independent Review Evidence on that head,
 # so the required check attaches to the PR head (issue_comment runs attach to main).
 # This only re-runs the gate. The gate itself, loaded from main, decides whether the comment counts.
 on:

@@ -119,6 +119,7 @@ test('concurrent PR head movement invalidates a previously approved exact-head r
     if(url.includes('/reviews?')) return [approval('independent')];
     if(url.includes('/timeline?')) return [];
     if(url.includes('/actions/runs?')) return {workflow_runs:[]};
+    if(url.includes('/check-runs')) return {check_runs:[]};
     prReads++;
     return prReads===1?pr():{...pr(),head:{sha:OLD}};
   }});
@@ -176,11 +177,42 @@ test('auto-merge or approval given before the head was pushed does not carry to 
   assert.equal(founderDecision({signals:[sig('auto_merge_enabled','2026-11-09T11:00:00Z')],expectedHead:H,headPushedAt:PUSH}).ok,false);
   assert.equal(founderDecision({signals:[sig('comment','2026-11-09T11:00:00Z',{body:'/approve '+H.slice(0,7)})],expectedHead:H,headPushedAt:PUSH}).ok,false);
 });
-test('agent or app actions never count as the founder review, even from the founder account',()=>{
-  for (const viaApp of ['claude','chatgpt-codex-connector',undefined]) {
-    assert.equal(founderDecision({signals:[sig('comment','2026-11-09T12:05:00Z',{viaApp,body:'/approve '+H.slice(0,7)})],expectedHead:H,headPushedAt:PUSH}).ok,false);
-    assert.equal(founderDecision({signals:[sig('auto_merge_enabled','2026-11-09T12:05:00Z',{viaApp})],expectedHead:H,headPushedAt:PUSH}).ok,false);
+test('other apps, unknown attribution and auto-merge never count, even from the founder account',()=>{
+  for (const viaApp of ['chatgpt-codex-connector','dependabot',undefined]) {
+    assert.equal(founderDecision({signals:[sig('comment','2026-11-09T12:05:00Z',{viaApp,body:'/approve '+H.slice(0,7)})],expectedHead:H,headPushedAt:PUSH,checks:GREEN}).ok,false);
+    assert.equal(founderDecision({signals:[sig('auto_merge_enabled','2026-11-09T12:05:00Z',{viaApp})],expectedHead:H,headPushedAt:PUSH,checks:GREEN}).ok,false);
   }
+});
+// Agent approval (Juss, 2026-11-16): Claude's /approve counts only after the required checks are green on the head.
+const done=(name,at,conclusion='success',status='completed')=>({name,status,conclusion,completed_at:at});
+const GREEN=['Repo Reality / exact-head','Review Gate Unit Tests','Juss & Co Site Browser Proof'].map(n=>done(n,'2026-11-09T12:04:00Z'));
+const claudeApprove=(at='2026-11-09T12:05:00Z')=>sig('comment',at,{viaApp:'claude',body:'/approve '+H.slice(0,7)});
+test('Claude /approve after every required check is green on the exact head passes the gate',()=>{
+  const r=reviewDecision({pull:pr(),reviews:[],expectedHead:H,founder:{signals:[claudeApprove()],headPushedAt:PUSH,checks:GREEN}});
+  assert.equal(r.ok,true);
+  assert.equal(r.founderReview,'agent-approve-after-green-checks');
+});
+test('Claude /approve fails closed when a required check is missing, red, pending or finished after the comment',()=>{
+  const cases=[
+    GREEN.slice(1),
+    [...GREEN.slice(1),done('Repo Reality / exact-head','2026-11-09T12:04:00Z','failure')],
+    [...GREEN.slice(1),done('Repo Reality / exact-head',null,null,'in_progress')],
+    [...GREEN.slice(1),done('Repo Reality / exact-head','2026-11-09T12:06:00Z')],
+    [...GREEN,done('Repo Reality / exact-head','2026-11-09T12:04:30Z','failure')],
+    undefined,
+  ];
+  for (const checks of cases) {
+    const d=founderDecision({signals:[claudeApprove()],expectedHead:H,headPushedAt:PUSH,checks});
+    assert.equal(d.ok,false);
+    assert.match(d.reason,/agent approval rejected|Missing founder review/);
+  }
+});
+test('Claude /approve for an old head, wrong sha or before the push never counts',()=>{
+  assert.equal(founderDecision({signals:[sig('comment','2026-11-09T12:05:00Z',{viaApp:'claude',body:'/approve '+OLD.slice(0,7)})],expectedHead:H,headPushedAt:PUSH,checks:GREEN}).ok,false);
+  assert.equal(founderDecision({signals:[claudeApprove('2026-11-09T11:00:00Z')],expectedHead:H,headPushedAt:PUSH,checks:GREEN}).ok,false);
+});
+test('the founder UI /approve still counts without waiting for checks',()=>{
+  assert.equal(founderDecision({signals:[sig('comment','2026-11-09T12:05:00Z',{body:'/approve '+H.slice(0,7)})],expectedHead:H,headPushedAt:PUSH,checks:[]}).ok,true);
 });
 test('wrong sha, wrong person, short sha or missing push time fail closed',()=>{
   const at='2026-11-09T12:05:00Z';
@@ -203,6 +235,14 @@ test('timeline reader keeps app attribution and takes the head push time from it
   const e=await getFounderEvidence({repo:'jussray/jussray',number:9,sha:H,token:'t',request:api});
   assert.deepEqual(e.signals.map(x=>[x.kind,x.viaApp]),[['comment',null],['comment','claude']]);
   assert.equal(e.headPushedAt,'2026-11-09T12:00:00.000Z');
+  assert.deepEqual(e.checks,[]);
+});
+test('evidence reader collects check runs for the exact head',async()=>{
+  const urls=[];
+  const api=async url=>{urls.push(url);return {ok:true,json:async()=>url.includes('/timeline?')?[]:url.includes('/check-runs')?{check_runs:[{name:'Review Gate Unit Tests',status:'completed',conclusion:'success',completed_at:'2026-11-09T12:04:00Z',extra:1}]}:{workflow_runs:[]}};};
+  const e=await getFounderEvidence({repo:'jussray/jussray',number:9,sha:H,token:'t',request:api});
+  assert.ok(urls.some(u=>u.endsWith('/commits/'+H+'/check-runs?per_page=100')));
+  assert.deepEqual(e.checks,[{name:'Review Gate Unit Tests',status:'completed',conclusion:'success',completed_at:'2026-11-09T12:04:00Z'}]);
 });
 
 // docs/rulesets/main-contract.json is the importable ruleset that matches CLAUDE.md's
