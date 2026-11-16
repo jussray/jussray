@@ -396,7 +396,6 @@ header nav a[aria-current="page"]{background:linear-gradient(180deg,#ffe2a3,#f5b
  header{background:none;border:0;backdrop-filter:none;padding:8px 10px 0}
  header .inner{width:100%;min-height:58px;padding:0 6px 0 16px;border-radius:20px;border:1px solid #ffdcae66;background:linear-gradient(180deg,#24194acc,#1a1438b8);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
  .brand{font-size:24px}
- #search-toggle{display:none}
  #mobile-menu{display:inline-flex;width:44px;height:44px;border-radius:14px;font-size:22px}
  .hub-crown{width:42px;height:30px;margin:0}
  .hero .eyebrow{font-size:13px}
@@ -451,38 +450,182 @@ html[data-tod=dawn] #living-world-scene .tod-art{background-image:url('/assets/i
 }
 @media(min-width:801px) and (max-width:1400px){#featured{margin-left:max(250px,calc((100% - 940px)/2));margin-right:auto;max-width:min(940px,calc(100% - 262px))}}
 @media(min-width:801px) and (max-height:800px){#game-hub-center{padding:12px}#game-hub-center h2{font-size:22px;margin-bottom:6px}#game-hub-center a{padding:6px 12px;font-size:14px}#game-hub-center a small{font-size:12px;margin-top:2px}#featured{margin-top:-100px}}
+
+/* ===== Founder Game Hub v3 mockups (gamehub-v3-desktop / gamehub-v3-mobile), 2026-11-10 ===== */
+.brand{display:inline-flex;align-items:center;gap:12px}
+.brand-crown{width:46px;height:32px;filter:drop-shadow(0 0 8px #f5c14b88)}
+.brand-words{display:flex;flex-direction:column;align-items:center;line-height:1}
+.brand-name{font:500 clamp(26px,2.3vw,36px)/1 "Playfair Display",Georgia,serif;color:#fff1de;letter-spacing:-.01em}
+.brand-sub{font:600 10px/1 system-ui,sans-serif;letter-spacing:.62em;color:#f1dcc0;margin-top:4px;padding-left:.62em}
+header nav a[aria-current="page"]{background:linear-gradient(180deg,#ffe2a3,#f5bf62);color:#26173a;box-shadow:0 0 16px #f5bf6288}
+.header-tools{display:flex;align-items:center;gap:8px}
+.header-tools .utility{display:inline-grid;place-items:center;position:relative;width:46px;height:46px;min-width:46px;border-radius:50%;border:1px solid #ffdcae66;background:#1c1538b8;color:#fff1de;cursor:pointer;padding:0}
+.header-tools svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.header-tools .dot{position:absolute;top:10px;right:11px;width:8px;height:8px;border-radius:50%;background:#ff9a3d;box-shadow:0 0 8px #ff9a3d}
+.header-tools .account-btn{width:auto;display:inline-flex;gap:8px;padding:0 14px;border-radius:999px;font:600 14px system-ui,sans-serif}
+.header-tools .account-btn .caret{width:16px;height:16px}
+.hero h1{background:linear-gradient(180deg,#fff6dc 10%,#f9d48a 55%,#e3a548);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;filter:drop-shadow(0 3px 14px #2a103a)}
+.hero h1 span{color:inherit}
+.hero .lead{letter-spacing:.28em}
+.hero-actions .action svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linejoin:round;stroke-linecap:round}
+.hero-actions .action{border:1.5px solid #ffd98a;box-shadow:0 0 18px #f5bf6266}
+.hero-actions .action.outline{background:linear-gradient(180deg,#25205ae6,#14123ae6);border-color:#7fb3ff;box-shadow:0 0 18px #5e8bff55;cursor:pointer;font:inherit;font-size:16px;font-weight:700}
+#game-hub-center a,#game-hub-center button{display:flex;align-items:center;gap:12px;width:100%;text-align:left;color:#fff1de;text-decoration:none;font:inherit;cursor:pointer;border:1px solid #ffdcae38;border-radius:14px;background:#ffffff0d;padding:10px 12px;margin-top:6px}
+#game-hub-center .hc-ico svg{width:28px;height:28px;fill:none;stroke:#fff1de;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+#game-hub-center .hc-txt{flex:1;display:flex;flex-direction:column;min-width:0}
+#game-hub-center .hc-txt b{font-size:15px;font-weight:600}
+#game-hub-center .hc-txt small{margin:2px 0 0;font-size:12px;font-weight:400;color:#e4d7ea}
+#game-hub-center .chev{width:18px;height:18px;fill:none;stroke:#fff1de;stroke-width:2;flex:none}
+.soon-pill{font:600 10px/1 system-ui,sans-serif;font-style:normal;letter-spacing:.06em;text-transform:uppercase;color:#26173a;background:#f5c97a;border-radius:999px;padding:4px 7px;flex:none}
+#ambience{width:230px;padding:0;background:none;border:0;box-shadow:none;display:flex;flex-direction:column;gap:10px}
+#ambience .amb-card{padding:10px 14px;border-radius:18px}
+#ambience svg{width:20px;height:20px;fill:none;stroke:#fff1de;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
+#ambience .amb-row{display:flex;align-items:center;gap:8px;font-size:13px}#ambience .amb-row span{flex:1}
+#ambience .amb-vol{display:flex;align-items:center;gap:8px}
+#ambient-volume{margin:0;flex:1;min-height:32px}
+#ambient-toggle[aria-pressed="true"]:before{background:#5e8bff}
+.amb-atmo{border-radius:18px;padding:10px 14px;gap:10px;background:linear-gradient(150deg,#3a2a5ccc,#1d1638b3)}
+.amb-atmo svg{width:28px!important;height:28px!important}
+.amb-atmo small{font-size:11px}.amb-atmo strong{font-size:13px;font-weight:500}
+#featured{background:linear-gradient(180deg,#2a1d4cd9,#16123ae6);border:1.5px solid #ffcf86;box-shadow:0 0 34px #ffb45e66,inset 0 0 22px #ffb45e33,0 24px 50px #080c30a6}
+#featured h2:before,#featured h2:after{background:linear-gradient(90deg,transparent,#ffcf86)}
+#featured .featured-tile{position:relative;justify-content:flex-end;gap:2px;padding:8px 6px 12px;border-radius:16px;border:1.5px solid #ffcf86aa;background:radial-gradient(circle at 50% 35%,#5a3aa0aa,transparent 70%),linear-gradient(180deg,#2a2052,#141032);box-shadow:0 0 14px #ffb45e44,inset 0 1px #fff3}
+#featured .featured-icon{display:block;width:100%;max-width:none;height:auto;flex:1;min-height:0;border:0;background:none;box-shadow:none;filter:none;border-radius:0}
+#featured .featured-icon svg{width:100%;height:100%;overflow:visible}
+#featured .featured-tile strong{font:500 19px/1.1 "Playfair Display",Georgia,serif;color:#fff6e6;text-shadow:0 0 10px #ffb45e66}
+#featured .tile-sync strong{font-size:30px;letter-spacing:.02em}
+#featured .featured-tile small{font-size:11px;color:#e9dcf5;letter-spacing:.04em}
+#featured .tile-sync small{font:600 11px system-ui,sans-serif;letter-spacing:.18em;text-transform:uppercase}
+#featured .tile-tag{font-size:11px;color:#f1e4ff}
+.featured-dots{grid-column:1/-1;display:flex;justify-content:center;gap:8px;margin-top:10px}
+.featured-dots i{width:8px;height:8px;border-radius:50%;background:#ffffff55}.featured-dots i.on{background:#fff;box-shadow:0 0 8px #fff}
+.featured-toolbar button{border-color:#ffcf86}
+#hub-toast{position:fixed;left:50%;bottom:110px;transform:translateX(-50%);z-index:60;margin:0;padding:10px 18px;border-radius:999px;background:#1c1538f2;border:1px solid #ffcf86;color:#fff1de;font-size:14px;box-shadow:0 8px 24px #0008}
+#hub-toast[hidden]{display:none}
+@media(min-width:1121px){#featured{max-width:1060px}#featured .featured-track{grid-auto-columns:calc((100% - 55px)/6);gap:11px}#featured .featured-tile{height:156px}}
+@media(min-width:801px) and (max-width:1400px){#featured{margin-left:max(250px,calc((100% - 940px)/2));max-width:min(940px,calc(100% - 262px))}}
+@media(min-width:801px){html[data-hub-view="home"] #ambience{bottom:28px}}
+#hub-bottom-nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:800px){
+ header .inner{padding:0 8px 0 12px}
+ .brand{gap:8px}.brand-crown{width:34px;height:24px}.brand-name{font-size:24px}.brand-sub{font-size:7px}
+ .header-tools{gap:5px}.header-tools .utility{width:38px;height:38px;min-width:38px}
+ .header-tools svg{width:19px;height:19px}.header-tools .dot{top:7px;right:8px}
+ .header-tools .account-btn{width:38px;padding:0;justify-content:center;border-radius:50%}.account-btn .account-label,.account-btn .caret{display:none}
+ #mobile-menu{width:38px;height:38px;border:0;background:none}
+ .hero-actions .action{font-size:14px}
+ #featured .featured-tile strong{font-size:16px}#featured .tile-sync strong{font-size:22px}
+ #featured .tile-sync .tile-tag{display:none}
+ #featured{padding:10px 30px 8px}
+ #featured-back{left:4px}#featured-next{right:4px}
+ #featured-back,#featured-next{width:30px;height:30px;min-width:30px;font-size:16px}
+ .featured-dots{margin-top:4px}
+ html[data-hub-view="home"] #hub-mobile-mount{display:block}
+ html[data-hub-view="home"] #ambient-mobile-mount{display:block}
+ #game-hub-toggle{font-size:18px;min-height:44px;border-color:#ffcf86;box-shadow:0 0 14px #ffb45e55}
+ #game-hub-toggle svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linejoin:round;stroke-linecap:round}
+ .hub-quick{margin-top:2px}.hub-quick a,.hub-quick button{display:inline-flex;align-items:center;min-height:36px;padding:0 10px;color:#e9dcf5;text-decoration:none;font:inherit;font-size:13px;background:none;border:0;cursor:pointer}
+ .hub-quick>*+*{border-left:1px solid #ffffff55}
+ #ambient-mobile-mount #ambience{display:grid;grid-template-columns:1fr 1.15fr;gap:8px;width:auto}
+ #ambient-mobile-mount #ambience>*{border:1px solid #ffdcae66;border-radius:999px;background:#1c1538cc;padding:4px 12px;margin:0}
+ #ambient-mobile-mount .amb-vol{display:none}
+ #ambient-mobile-mount .amb-row{font-size:12px;min-height:40px}
+ #ambient-mobile-mount .amb-atmo{min-height:40px}#ambient-mobile-mount .amb-atmo .chev{width:16px!important;height:16px!important}
+}
+/* v3 fit fixes */
+#game-hub-center{width:300px}
+#game-hub-center h2{margin:2px 0 8px}
+#game-hub-center a,#game-hub-center button{padding:7px 10px;margin-top:5px;gap:10px}
+#game-hub-center .hc-txt b,#game-hub-center .hc-txt small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#game-hub-center .hc-txt b{font-size:14px}#game-hub-center .hc-txt small{font-size:11px}
+#game-hub-center .hc-ico svg{width:24px;height:24px}
+.soon-pill{font-size:9px;padding:3px 6px}
+#featured .featured-tile small,#featured .tile-tag{white-space:nowrap}
+#featured .tile-sync small{letter-spacing:.08em;font-size:10px}
+#featured .tile-tag{font-size:10px}
+@media(min-width:801px){#featured{margin-left:max(262px,calc((100% - 1060px)/2));margin-right:auto;max-width:min(1060px,calc(100% - 274px))}}
+@media(min-width:801px) and (max-height:800px){#game-hub-center a,#game-hub-center button{padding:5px 10px;margin-top:4px}#game-hub-center .hc-txt small{display:none}}
+@media(max-width:800px){
+ .hero .eyebrow{font-size:12px}.hub-crown{display:none}
+ .hero h1{font-size:clamp(40px,12.5vw,54px);margin:2px 0}
+ .hero .lead{font-size:9.5px;letter-spacing:.14em;white-space:nowrap}
+ .hero .description{font-size:12.5px;line-height:1.35;margin-top:4px}
+ .hub-sig{font-size:24px;margin-top:0}
+ .hero-actions{margin-top:6px}.hero-actions .action{min-height:42px}
+ #featured{height:auto;padding:6px 30px 6px}
+ #featured h2{font-size:22px;margin:0 0 4px}
+ #featured .featured-track{flex:none;height:clamp(96px,15dvh,124px)}
+ #featured .featured-tile{padding:4px 3px 6px}
+ #featured .featured-tile strong{font-size:14px}#featured .tile-sync strong{font-size:19px}
+ #featured .featured-tile small{font-size:9px;letter-spacing:.02em}
+ #featured .tile-sync small{font-size:8px;letter-spacing:.06em}
+ #featured-back,#featured-next{top:55%}
+ .hub-quick a,.hub-quick button{white-space:nowrap;font-size:12px;padding:0 7px;min-height:30px}
+ #game-hub-toggle{min-height:40px;font-size:17px;padding:0 22px}
+ #ambient-mobile-mount .amb-row,#ambient-mobile-mount .amb-atmo{min-height:38px;white-space:nowrap}
+ #ambient-mobile-mount .amb-row{font-size:11.5px;gap:6px}
+ #ambient-mobile-mount #ambient-toggle{width:46px}
+ #ambient-mobile-mount .amb-atmo{gap:6px;padding:2px 10px}
+ #ambient-mobile-mount .amb-atmo>span{display:grid;grid-template-columns:auto auto;column-gap:4px;align-items:baseline}
+ #ambient-mobile-mount .amb-atmo>span small:first-child{grid-column:1/-1;font-size:11px}
+ #ambient-mobile-mount .amb-atmo strong{font-size:10px}#ambient-mobile-mount #season-window{font-size:10px}
+ #ambient-mobile-mount .amb-atmo>svg:first-child{width:22px!important;height:22px!important}
+}
+#game-hub-center{width:330px}
+@media(max-width:800px){
+ .hero-actions .action:not(.outline){color:#26173a}
+ #featured{padding:6px 36px}
+ #featured .featured-toolbar{position:static;display:contents}
+ #featured-back,#featured-next{grid-column:auto!important;grid-row:auto!important}
+ #featured-back{left:3px!important}#featured-next{right:3px!important}
+ #featured .featured-tile{height:100%;min-height:0;overflow:hidden}
+ #featured .featured-icon{min-height:0}
+ #ambient-mobile-mount #ambience{grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr)}
+ #ambient-mobile-mount #ambience>*{min-width:0;overflow:hidden;padding:2px 10px}
+ #ambient-mobile-mount .amb-row{font-size:11px;gap:4px}#ambient-mobile-mount #ambient-toggle{width:40px;flex:none}#ambient-mobile-mount .amb-card{padding:2px 6px 2px 10px}
+ #ambient-mobile-mount .amb-atmo small:first-child{font-size:10px}
+ #ambient-mobile-mount .amb-atmo .chev{display:none}
+}
+@media(max-width:800px){.header-tools{gap:2px}.header-tools .utility,.header-tools .account-btn,#mobile-menu{width:44px;height:44px;min-width:44px}.brand-crown{width:30px;height:21px}.brand-name{font-size:22px}header .inner{padding:0 4px 0 10px}}
+#featured .tile-fcr strong{font-size:15px}
+@media(max-width:800px){#featured .tile-fcr strong{font-size:12px}}
+#search-apps{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:4px}#search-apps a,#search-apps span{display:flex;align-items:center;min-height:40px;padding:4px 10px;border:1px solid #ffdcae40;border-radius:12px;color:#fff1de;text-decoration:none;font-size:13px}#search-apps a:hover{border-color:#ffd98a}
 </style>
 </head>
 <body>
+<p id="hub-toast" role="status" aria-live="polite" hidden></p><svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><linearGradient id="gold-g" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff0b8"/><stop offset=".55" stop-color="#f5c14b"/><stop offset="1" stop-color="#c7862a"/></linearGradient><filter id="neon" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs></svg>
 <a class="skip-link" href="#main">Skip to Game Hub content</a>
 <div id="living-world-scene" aria-hidden="true"><div class="tod-art"></div></div>
 <header><div class="inner">
-<a class="brand" href="https://jussco.company/" aria-label="Juss and Co home">Juss <em>&amp;</em> Co. <b class="games-word">GAMES</b></a>
+<a class="brand" href="https://jussco.company/" aria-label="Juss and Co Company home"><svg class="brand-crown" viewBox="0 0 40 28" aria-hidden="true"><path d="M3 25h34l3-18-10 8-10-13-10 13L0 7z" fill="url(#gold-g)"/><circle cx="0.5" cy="7" r="2" fill="#ffe7a8"/><circle cx="20" cy="2" r="2" fill="#ffe7a8"/><circle cx="39.5" cy="7" r="2" fill="#ffe7a8"/></svg><span class="brand-words"><span class="brand-name">Juss &amp; Co</span><span class="brand-sub">COMPANY</span></span></a>
 <nav id="site-nav" aria-label="Juss and Co sections">
 <a href="https://jussco.company/">Home</a><a href="https://jussco.company/portfolio.html">Portfolio</a>
-<a aria-current="page" href="https://games.jussco.company/">Games</a><a href="https://jussco.company/services.html">Solutions</a>
+<a aria-current="page" href="https://jussco.company/products.html">Products</a><a href="https://jussco.company/services.html">Solutions</a>
 <a href="https://jussco.company/work.html">Our Work</a><a href="https://jussco.company/founder.html">Founder</a><a href="https://jussco.company/contact.html">Contact</a></nav>
-<div class="header-tools"><button class="utility" id="search-toggle" type="button" aria-label="Search games" aria-controls="search-panel" aria-expanded="false">⌕</button>
+<div class="header-tools"><button class="utility icon-btn" id="search-toggle" type="button" aria-label="Search games" aria-controls="search-panel" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg></button><button class="utility icon-btn soon" id="bell-btn" type="button" data-soon="Notifications are coming soon." aria-label="Notifications (coming soon)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 17V11a6 6 0 0 1 12 0v6l2 2H4z"/><path d="M10 21h4"/></svg><i class="dot" aria-hidden="true"></i></button><button class="utility account-btn soon" id="account-btn" type="button" data-soon="My Juss accounts are coming soon." aria-label="My Juss account (coming soon)"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 4.5-7 8-7s7 2 8 7"/></svg><span class="account-label">My Juss</span><svg class="caret" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10l5 5 5-5"/></svg></button>
+
 <button class="utility" id="mobile-menu" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Open navigation">☰</button></div></div>
 <div id="search-panel" class="glass-world" hidden><label for="game-search">Find a game</label>
 <input type="search" id="game-search" placeholder="Search SYNC and upcoming games" aria-controls="game-cards" autocomplete="off">
-<p id="search-status" role="status" aria-live="polite"></p><a id="search-view" href="#games" hidden>View matching games ↓</a></div>
+<p id="search-status" role="status" aria-live="polite"></p><a id="search-view" href="#games" hidden>View matching games ↓</a><ul id="search-apps" aria-label="Other Juss &amp; Co apps that match"></ul></div>
 </header>
 <main id="main">
 <section class="hero" aria-labelledby="hero-title">
 <svg class="hub-crown" viewBox="0 0 30 22" aria-hidden="true"><path d="M2 20h26l2-14-8 6-7-10-7 10-8-6z"/></svg><div class="eyebrow">J U S S &nbsp;&amp;&nbsp; C O</div>
 <h1 id="hero-title">Game <span>Hub</span></h1>
-<p class="lead">Play · Connect · Create · Compete</p>
-<p class="description">A unified home for Juss &amp; Co games, experiences, and interactive worlds.</p>
+<p class="lead">Play · Connect · Create · Compete · Earn</p>
+<p class="description">A Unified Home for Juss &amp; Co Games, Experiences, and Interactive Worlds.</p>
 <p class="hub-sig" aria-hidden="true">Juss &amp; Co</p>
-<div class="hero-actions"><a class="action" href="#games"><span aria-hidden="true">🎮</span> Explore Games</a><a class="action outline" href="https://sync.jussco.company/" rel="noopener noreferrer">Play SYNC ↗</a></div>
-<blockquote class="hero-quote glass-world">More than games: interactive worlds that bring people, ideas, and experiences together.<b>Juss</b></blockquote>
+<div class="hero-actions"><a class="action" href="#games"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 8h10a5 5 0 0 1 4.6 7l-.6 1.6a2.4 2.4 0 0 1-4 .6L15 15H9l-2 2.2a2.4 2.4 0 0 1-4-.6L2.4 15A5 5 0 0 1 7 8z"/><path d="M7 10.5v3M5.5 12h3"/><circle cx="16" cy="11" r=".9"/><circle cx="18" cy="13" r=".9"/></svg> Explore Games</a><button class="action outline soon" type="button" id="library-btn" data-soon="My Library is coming soon."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 12.5l9 5 9-5"/><path d="M3 16.5l9 5 9-5"/></svg> My Library</button></div>
+<blockquote class="hero-quote glass-world">More than games—interactive worlds that bring people, ideas, and experiences together.”<b>Juss</b></blockquote>
 <aside id="game-hub-center" class="glass-world" aria-labelledby="hub-center-title">
 <h2 id="hub-center-title">Game Hub Center</h2>
-<a href="#games">All Games <small>Every Juss &amp; Co world, live and in development.</small></a>
-<a href="#sync-world">SYNC Game Center <small>Think alike. Beat the clock.</small></a>
-<a href="#safety">Play with care <small>Safety checks before any game opens.</small></a>
-<a href="https://jussco.company/">Juss &amp; Co home <small>The company behind the worlds.</small></a>
+<a href="#games"><span class="hc-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 8h10a5 5 0 0 1 4.6 7l-.6 1.6a2.4 2.4 0 0 1-4 .6L15 15H9l-2 2.2a2.4 2.4 0 0 1-4-.6L2.4 15A5 5 0 0 1 7 8z"/><path d="M7 10.5v3M5.5 12h3"/><circle cx="16" cy="11" r=".9"/><circle cx="18" cy="13" r=".9"/></svg></span><span class="hc-txt"><b>All Games</b><small>Play across the Juss &amp; Co universe.</small></span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></a>
+<a href="#sync-world"><span class="hc-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.2"/><circle cx="5" cy="10" r="2.4"/><circle cx="19" cy="10" r="2.4"/><path d="M6.5 20c.6-3.6 2.8-5.5 5.5-5.5s4.9 1.9 5.5 5.5M1.5 19c.3-2.5 1.6-3.8 3.5-3.8M22.5 19c-.3-2.5-1.6-3.8-3.5-3.8"/></svg></span><span class="hc-txt"><b>SYNC Game Center</b><small>Think alike. Beat the clock.</small></span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></a>
+<button type="button" class="soon" data-soon="Tournaments is coming soon."><span class="hc-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10v6a5 5 0 0 1-10 0z"/><path d="M7 5H3c0 4 2 5.5 4 5.5M17 5h4c0 4-2 5.5-4 5.5M12 14v4M8 21h8M9 18h6"/></svg></span><span class="hc-txt"><b>Tournaments</b><small>Compete and climb the ranks.</small></span><em class="soon-pill">Soon</em><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+<button type="button" class="soon" data-soon="Events &amp; Challenges is coming soon."><span class="hc-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M7 14h2M11 14h2M15 14h2M7 17.5h2M11 17.5h2"/></svg></span><span class="hc-txt"><b>Events &amp; Challenges</b><small>Live and seasonal experiences.</small></span><em class="soon-pill">Soon</em><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+<button type="button" class="soon" data-soon="Creator Zone is coming soon."><span class="hc-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/></svg></span><span class="hc-txt"><b>Creator Zone</b><small>Build, publish, and expand.</small></span><em class="soon-pill">Soon</em><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+<button type="button" class="soon" data-soon="Rewards &amp; Achievements is coming soon."><span class="hc-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12l4 6-10 12L2 9z"/><path d="M2 9h20M9 3L7.5 9 12 21l4.5-12L15 3"/></svg></span><span class="hc-txt"><b>Rewards &amp; Achievements</b><small>Earn, redeem, and unlock more.</small></span><em class="soon-pill">Soon</em><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
 </aside>
 <svg id="hub-lotus" viewBox="0 0 440 212" aria-hidden="true" focusable="false">
 <defs><linearGradient id="hub-petal-gradient" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#68edff"/><stop offset=".45" stop-color="#bc69ff"/><stop offset=".75" stop-color="#ff9de3"/><stop offset="1" stop-color="#ffd680"/></linearGradient><radialGradient id="hub-orb-gradient"><stop stop-color="#5eecff" stop-opacity=".82"/><stop offset=".57" stop-color="#6c6dff" stop-opacity=".31"/><stop offset="1" stop-color="#a157ff" stop-opacity=".08"/></radialGradient><filter id="hub-petal-glow" x="-50%" y="-60%" width="200%" height="220%"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
@@ -500,25 +643,29 @@ html[data-tod=dawn] #living-world-scene .tod-art{background-image:url('/assets/i
 <g fill="none" stroke="#d7adff" stroke-width="1.35" opacity=".9"><ellipse cx="220" cy="113" rx="26" ry="62"/><ellipse cx="220" cy="113" rx="52" ry="62"/><ellipse cx="220" cy="113" rx="62" ry="25"/><path d="M158 113h124 M178 72l84 82 M178 154l84-82"/></g>
 <circle cx="220" cy="183" r="11" fill="#fff1ad" filter="url(#hub-petal-glow)"/>
 </svg>
-<div id="ambience" class="glass-world" aria-label="Ambient sound and atmosphere">
-<div class="amb-row"><span id="amb-label">Ambient sound</span><button id="ambient-toggle" type="button" aria-pressed="false" aria-labelledby="amb-label"><span class="sr-only">Off</span></button></div>
-<input id="ambient-volume" type="range" min="0" max="100" value="40" aria-label="Ambient volume">
-<button class="amb-atmo" id="atmo-cycle" type="button"><span class="amb-sun" aria-hidden="true"></span><span><small>Current atmosphere</small><strong id="current-season">Sunset</strong></span><span aria-hidden="true">›</span></button>
+<div id="ambience" aria-label="Ambient sound and atmosphere">
+<div class="amb-card glass-world"><div class="amb-row"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 9.5a4 4 0 0 1 0 5M18.5 7a7.5 7.5 0 0 1 0 10"/></svg><span id="amb-label">Ambient Sound</span><button id="ambient-toggle" type="button" aria-pressed="false" aria-labelledby="amb-label"><span class="sr-only">Off</span></button></div>
+<div class="amb-vol"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/></svg><input id="ambient-volume" type="range" min="0" max="100" value="40" aria-label="Ambient volume"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 9.5a4 4 0 0 1 0 5M18.5 7a7.5 7.5 0 0 1 0 10"/></svg></div></div>
+<button class="amb-atmo glass-world" id="atmo-cycle" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="#ffd25e" stroke="none"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1" stroke="#ffd25e"/></svg><span><small>Current Atmosphere</small><strong id="current-season">Sunset</strong><small id="season-window"></small></span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
 </div>
 </section>
 <section id="featured" aria-labelledby="featured-title"><h2 id="featured-title">Featured Experiences</h2>
 <div class="featured-track" id="featured-track">
-<a class="featured-tile" href="#sync-world"><span class="featured-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><defs><linearGradient id="gi-sync" x1="0" x2="1"><stop stop-color="#ff9ad5"/><stop offset="1" stop-color="#ff5fb4"/></linearGradient></defs><path d="M10 32c4-12 16-12 22 0s18 12 22 0-16-12-22 0-18 12-22 0" fill="none" stroke="url(#gi-sync)" stroke-width="7" stroke-linecap="round"/></svg></span><strong>SYNC</strong><small>Group play · Live</small></a>
-<a class="featured-tile" href="#lumora-world"><span class="featured-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 8l13 18h-6l10 13h-7l10 12H12l10-12h-7l10-13h-6z" fill="#3ddc84"/><rect x="29" y="51" width="6" height="8" rx="1" fill="#c98a4a"/><path d="M50 8l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="#ffd36b"/></svg></span><strong>LUMORA</strong><small>In development</small></a>
-<a class="featured-tile" href="#chatquest-world"><span class="featured-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="21" fill="none" stroke="#6fd3ff" stroke-width="4"/><path d="M40 24l-5 12-11 4 5-12z" fill="#e8f7ff"/><path d="M40 24l-11 4 6 8z" fill="#3fa7ff"/></svg></span><strong>ChatQuest</strong><small>In development</small></a>
-<a class="featured-tile" href="#bipseek-world"><span class="featured-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M38 10a20 20 0 1 0 14 30 16 16 0 0 1-14-30z" fill="#b48cff"/><path d="M20 44l6 6-6 6-6-6z" fill="#ff7fbf"/><path d="M20 56v6" stroke="#ffd36b" stroke-width="2"/></svg></span><strong>Bip &amp; Seek</strong><small>In development</small></a>
-<a class="featured-tile" href="#junglejinx-world"><span class="featured-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M14 50C14 26 32 12 52 12c0 22-14 38-38 38z" fill="#4fdc8a"/><path d="M14 50L44 22" stroke="#1d7a48" stroke-width="3" stroke-linecap="round"/></svg></span><strong>Jungle Jinx</strong><small>In development</small></a>
-<a class="featured-tile" href="#lastlaugh-world"><span class="featured-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M12 14h40v18c0 12-9 20-20 20s-20-8-20-20z" fill="#ff8fc8"/><circle cx="24" cy="27" r="3" fill="#5a1440"/><circle cx="40" cy="27" r="3" fill="#5a1440"/><path d="M22 37q10 9 20 0" fill="none" stroke="#5a1440" stroke-width="3" stroke-linecap="round"/></svg></span><strong>Last Laugh</strong><small>Private prototype</small></a>
+<a class="featured-tile tile-sync" href="#sync-world"><span class="featured-icon" aria-hidden="true"><svg viewBox="0 0 120 80"><defs><linearGradient id="a-sync" x1="0" x2="1"><stop stop-color="#ff4fd8"/><stop offset=".5" stop-color="#9b6bff"/><stop offset="1" stop-color="#3fb8ff"/></linearGradient></defs><path d="M60 40C48 22 22 22 22 40s26 18 38 0 38-18 38 0-26 18-38 0z" fill="none" stroke="url(#a-sync)" stroke-width="9" stroke-linecap="round" filter="url(#neon)"/></svg></span><strong>SYNC</strong><small>Group play · Live</small><span class="tile-tag">Think alike. Beat the clock.</span></a>
+<a class="featured-tile tile-lumora" href="#lumora-world"><span class="featured-icon" aria-hidden="true"><svg viewBox="0 0 120 80"><defs><linearGradient id="a-lum" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#b7ffcb"/><stop offset="1" stop-color="#22c46a"/></linearGradient></defs><path d="M60 6l14 18h-7l12 15h-8l13 16H36l13-16h-8l12-15h-7z" fill="url(#a-lum)" filter="url(#neon)"/><rect x="56" y="55" width="8" height="10" rx="2" fill="#c98a4a"/><path d="M88 14l2 5 5 2-5 2-2 5-2-5-5-2 5-2zM30 48l1.5 3.5 3.5 1.5-3.5 1.5L30 58l-1.5-3.5L25 53l3.5-1.5z" fill="#ffe27a" filter="url(#neon)"/><ellipse cx="60" cy="70" rx="34" ry="4" fill="#7dffb2" opacity=".35"/></svg></span><strong>LUMORA</strong><small>In development</small></a>
+<a class="featured-tile tile-chatquest" href="#chatquest-world"><span class="featured-icon" aria-hidden="true"><svg viewBox="0 0 120 80"><circle cx="60" cy="36" r="27" fill="#1d3f9c" stroke="#5ec8ff" stroke-width="4" filter="url(#neon)"/><path d="M60 14v6M60 52v6M38 36h6M76 36h6" stroke="#bfe8ff" stroke-width="2.5" stroke-linecap="round"/><path d="M71 25l-7 15-15 6 7-15z" fill="#ff5f6e"/><path d="M71 25L56 31l8 9z" fill="#ffb08a"/><circle cx="60" cy="36" r="3" fill="#fff"/><ellipse cx="60" cy="70" rx="30" ry="4" fill="#5ec8ff" opacity=".35"/></svg></span><strong>ChatQuest</strong><small>In development</small></a>
+<a class="featured-tile tile-bipseek" href="#bipseek-world"><span class="featured-icon" aria-hidden="true"><svg viewBox="0 0 120 80"><defs><linearGradient id="a-bip" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff3a8"/><stop offset="1" stop-color="#ffb43f"/></linearGradient></defs><path d="M68 8a28 28 0 1 0 22 44 22 22 0 0 1-22-44z" fill="url(#a-bip)" filter="url(#neon)"/><path d="M36 42l12 8-8 13-12-8z" fill="#ff5fa2" filter="url(#neon)"/><path d="M40 63c2 4-2 6 1 10" fill="none" stroke="#5ee7ff" stroke-width="2" stroke-linecap="round"/><circle cx="94" cy="16" r="2" fill="#fff"/><circle cx="22" cy="20" r="1.6" fill="#fff"/></svg></span><strong>Bip &amp; Seek</strong><small>In development</small></a>
+<a class="featured-tile tile-junglejinx" href="#junglejinx-world"><span class="featured-icon" aria-hidden="true"><svg viewBox="0 0 120 80"><defs><linearGradient id="a-jj" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#2fd06a"/><stop offset="1" stop-color="#d4ff6a"/></linearGradient></defs><path d="M30 68C30 36 52 12 92 10c0 34-24 58-62 58z" fill="url(#a-jj)" filter="url(#neon)"/><path d="M30 68L76 26M48 52l-4-12M58 42l-3-12M48 52l12 1M58 42l12 1" stroke="#136b38" stroke-width="3" stroke-linecap="round"/><circle cx="90" cy="58" r="9" fill="#ff7a3d" filter="url(#neon)"/><circle cx="90" cy="58" r="3.4" fill="#ffd84a"/></svg></span><strong>Jungle Jinx</strong><small>In development</small></a>
+<a class="featured-tile tile-lastlaugh" href="#lastlaugh-world"><span class="featured-icon" aria-hidden="true"><svg viewBox="0 0 120 80"><defs><linearGradient id="a-ll" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff6dc"/><stop offset="1" stop-color="#ffb4d0"/></linearGradient></defs><path d="M34 10h52v26c0 18-12 30-26 30S34 54 34 36z" fill="url(#a-ll)" stroke="#ffd84a" stroke-width="3" filter="url(#neon)"/><path d="M44 30q6-6 12 0M64 30q6-6 12 0" fill="none" stroke="#5a1440" stroke-width="3.5" stroke-linecap="round"/><path d="M46 42q14 15 28 0z" fill="#5a1440"/><path d="M51 46q9 6 18 0" fill="#ff6f9f"/></svg></span><strong>Last Laugh</strong><small>Private prototype</small></a>
+<a class="featured-tile tile-sekretbip" href="https://sekretbip.net" rel="noopener"><span class="featured-icon" aria-hidden="true"><svg viewBox="0 0 120 80"><defs><radialGradient id="a-sb"><stop stop-color="#fff2fb"/><stop offset=".5" stop-color="#ff8fd6"/><stop offset="1" stop-color="#8b5cff"/></radialGradient></defs><path d="M60 66C30 48 26 28 40 20c9-5 17 0 20 7 3-7 11-12 20-7 14 8 10 28-20 46z" fill="url(#a-sb)" filter="url(#neon)"/><path d="M88 12l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="#ffe27a"/><circle cx="28" cy="58" r="2" fill="#fff"/></svg></span><strong>Se’kret Bip</strong><small>Opening soon</small></a>
+<div class="featured-tile tile-storyengine" role="group" aria-label="StoryEngine – Building"><span class="featured-icon" aria-hidden="true"><svg viewBox="0 0 120 80"><defs><linearGradient id="a-se" x1="0" x2="1"><stop stop-color="#ffd98a"/><stop offset="1" stop-color="#ff9f5a"/></linearGradient></defs><path d="M60 22c-10-7-26-8-36-4v46c10-4 26-3 36 4 10-7 26-8 36-4V18c-10-4-26-3-36 4z" fill="#2a1d55" stroke="url(#a-se)" stroke-width="3.5" stroke-linejoin="round" filter="url(#neon)"/><path d="M60 22v46" stroke="url(#a-se)" stroke-width="2.5"/><path d="M76 8l2.5 6 6 2.5-6 2.5L76 25l-2.5-6-6-2.5 6-2.5zM40 32h12M40 40h12M68 32h12M68 40h10" stroke="#ffe8b8" stroke-width="2" stroke-linecap="round"/></svg></span><strong>StoryEngine</strong><small>Building</small></div>
+<a class="featured-tile tile-fcr" href="https://foundercontrolroom.org" rel="noopener"><span class="featured-icon" aria-hidden="true"><svg viewBox="0 0 120 80"><defs><linearGradient id="a-fcr" x1="0" x2="1"><stop stop-color="#ffd98a"/><stop offset="1" stop-color="#ff9a5a"/></linearGradient></defs><rect x="24" y="14" width="72" height="46" rx="8" fill="#1d1640" stroke="url(#a-fcr)" stroke-width="3.5" filter="url(#neon)"/><path d="M34 48l10-12 8 6 10-14 10 8 12-10" fill="none" stroke="#5ee7ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" filter="url(#neon)"/><path d="M46 70h28M60 60v10" stroke="url(#a-fcr)" stroke-width="3.5" stroke-linecap="round"/><path d="M52 5h16l-2 6H54z" fill="#ffd98a"/></svg></span><strong>Founder Control Room</strong><small>Building</small></a>
+<a class="featured-tile tile-promptos" href="https://github.com/jussray/promptos" rel="noopener"><span class="featured-icon" aria-hidden="true"><svg viewBox="0 0 120 80"><defs><linearGradient id="a-pos" x1="0" x2="1"><stop stop-color="#9b6bff"/><stop offset="1" stop-color="#3fb8ff"/></linearGradient></defs><rect x="22" y="12" width="76" height="54" rx="10" fill="#151236" stroke="url(#a-pos)" stroke-width="3.5" filter="url(#neon)"/><path d="M36 30l12 9-12 9" fill="none" stroke="#7dffb2" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" filter="url(#neon)"/><path d="M56 49h22" stroke="#ffd98a" stroke-width="4" stroke-linecap="round" filter="url(#neon)"/><circle cx="32" cy="19" r="2" fill="#ff6f9f"/><circle cx="39" cy="19" r="2" fill="#ffd84a"/><circle cx="46" cy="19" r="2" fill="#7dffb2"/></svg></span><strong>PromptOS</strong><small>Building</small></a>
 </div>
 <div class="featured-toolbar"><button type="button" id="featured-back" aria-label="Scroll featured games left">‹</button><button type="button" id="featured-next" aria-label="Scroll featured games right">›</button></div>
-<p class="hint">Explore here. Play on each game’s own domain, with its original look preserved.</p>
+<div class="featured-dots" id="featured-dots" aria-hidden="true"></div><p class="hint">Explore here. Play on each game’s own domain, with its original look preserved.</p>
 </section>
-<section id="hub-mobile-mount" aria-label="Game Hub Center controls"><button type="button" id="game-hub-toggle" aria-expanded="false" aria-controls="game-hub-center"><span aria-hidden="true">🎮</span> Game Hub Center <span aria-hidden="true">›</span></button><nav class="hub-quick" aria-label="Game Hub shortcuts"><a href="#games">All Games</a><a href="#sync-world">SYNC</a><a href="#safety">Play with care</a></nav></section><div id="ambient-mobile-mount" aria-label="Sound and seasonal atmosphere"></div><a id="details-back" href="#home">← Back to Game Hub</a>
+<section id="hub-mobile-mount" aria-label="Game Hub Center controls"><button type="button" id="game-hub-toggle" aria-expanded="false" aria-controls="game-hub-center"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 8h10a5 5 0 0 1 4.6 7l-.6 1.6a2.4 2.4 0 0 1-4 .6L15 15H9l-2 2.2a2.4 2.4 0 0 1-4-.6L2.4 15A5 5 0 0 1 7 8z"/><path d="M7 10.5v3M5.5 12h3"/><circle cx="16" cy="11" r=".9"/><circle cx="18" cy="13" r=".9"/></svg> Game Hub Center <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button><nav class="hub-quick" aria-label="Game Hub shortcuts"><a href="#games">All Games</a><button type="button" class="soon" data-soon="Tournaments are coming soon.">Tournaments</button><button type="button" class="soon" data-soon="Events are coming soon.">Events</button><button type="button" class="soon" data-soon="Creator Zone is coming soon.">Creator Zone</button></nav></section><div id="ambient-mobile-mount" aria-label="Sound and seasonal atmosphere"></div><a id="details-back" href="#home">← Back to Game Hub</a>
 <div id="upcoming" aria-hidden="true"></div>
 <section id="games" aria-labelledby="games-title"><div class="section-heading"><h2 id="games-title">Our game worlds</h2><p>One home. Different adventures.</p><button type="button" id="all-games-toggle" aria-controls="game-cards" aria-expanded="true">Show all game worlds</button></div><div class="cards" id="game-cards">
 <article class="card" id="sync-world"><div class="art sync-art" aria-hidden="true"><span>🎉</span><b class="art-title">SYNC</b></div><div class="card-body"><span class="meta">Game family / three distinct experiences</span><h3>SYNC</h3><p>Think alike. Beat the clock. Read the room. SYNC has three flavors, each with its own personality.</p><span class="tag live">Live Site SYNC</span>
@@ -532,7 +679,7 @@ html[data-tod=dawn] #living-world-scene .tod-art{background-image:url('/assets/i
 <article class="card" id="lastlaugh-world"><div class="art city-art" aria-hidden="true"><span>🎭🌆</span><b class="art-title">Last Laugh</b></div><div class="card-body"><span class="meta">Story-driven 3D adventure / private prototype</span><h3>Last Laugh: City of Dreams</h3><p>A cinematic comedy-night adventure with exploration, performances, and choices. The original prototype is being tested across desktop and mobile.</p><span class="tag wait">Private prototype</span><p class="status">Public play is held pending release review, rights clearance, and live-device verification.</p></div></article>
 </div></section>
 <section class="notes" id="safety" aria-label="Safety and availability"><h2>Play with care ✨</h2><p>Games with friend chat or younger-player features are only opened publicly after their age, moderation, privacy, and guardian safeguards are verified. A game listing never means its unfinished experience is live.</p></section>
-</main><footer><div class="inner"><span>© 2026 Juss &amp; Co. · Different worlds. One place to discover them.</span><a href="https://jussco.company/">Back to Juss &amp; Co. ↗</a></div></footer><nav id="hub-bottom-nav" aria-label="Juss and Co destinations"><a href="https://jussco.company/"><span class="hub-nav-symbol" aria-hidden="true">⌂</span>Home</a><a href="https://games.jussco.company/" aria-current="page"><span class="hub-nav-symbol" aria-hidden="true">🎮</span>Games</a><a href="https://jussco.company/services.html"><span class="hub-nav-symbol" aria-hidden="true">◇</span>Solutions</a><a href="https://jussco.company/work.html"><span class="hub-nav-symbol" aria-hidden="true">♛</span>Our Work</a><a href="https://jussco.company/founder.html"><span class="hub-nav-symbol" aria-hidden="true">♙</span>Founder</a></nav>
+</main><footer><div class="inner"><span>© 2026 Juss &amp; Co. · Different worlds. One place to discover them.</span><a href="#safety">Play with care</a> <a href="https://jussco.company/">Back to Juss &amp; Co. ↗</a></div></footer><nav id="hub-bottom-nav" aria-label="Juss and Co destinations"><a href="https://jussco.company/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8v10h-6v-6H9v6H3z"/></svg>Home</a><a href="https://jussco.company/products.html" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/></svg>Products</a><a href="https://jussco.company/services.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 12.5l9 5 9-5"/><path d="M3 16.5l9 5 9-5"/></svg>Solutions</a><a href="https://jussco.company/work.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18h18l1.5-11-6 4.5L12 4l-4.5 7.5-6-4.5z"/><path d="M4 21h16"/></svg>Our Work</a><a href="https://jussco.company/founder.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 4.5-7 8-7s7 2 8 7"/></svg>Founder</a></nav>
 <script type="module" src="/assets/atmosphere.mjs"></script>
 <script>
 (() => {
@@ -553,6 +700,7 @@ html[data-tod=dawn] #living-world-scene .tod-art{background-image:url('/assets/i
     field.value='';
     gameCards.forEach(card=>card.hidden=false);
     searchStatus.textContent='';
+    document.getElementById('search-apps').replaceChildren();
     searchView.hidden=true;
     if(searchOpenedDetails){searchOpenedDetails=false;syncHubView();}
     if(mobile.matches&&games.dataset.searchExpanded==='true'){
@@ -582,7 +730,13 @@ html[data-tod=dawn] #living-world-scene .tod-art{background-image:url('/assets/i
       delete games.dataset.searchExpanded;
     }
     if(!q&&searchOpenedDetails){searchOpenedDetails=false;syncHubView();}
-    searchStatus.textContent=!q?'':matches?matches+' game'+(matches===1?'':'s')+' found for "'+value+'".':'No games found for "'+value+'".';
+    // Also match Juss & Co apps on the featured row that have no game card (Se'kret Bip, StoryEngine, FCR, PromptOS).
+    const apps=q?[...document.querySelectorAll('#featured .featured-tile')].filter(t=>!(t.getAttribute('href')||'').endsWith('-world')&&t.textContent.toLocaleLowerCase().includes(q)):[];
+    document.getElementById('search-apps').replaceChildren(...apps.map(t=>{const li=document.createElement('li');const name=t.querySelector('strong').textContent,st=t.querySelector('small').textContent;
+      const el=document.createElement(t.tagName==='A'?'a':'span');if(t.tagName==='A'){el.href=t.getAttribute('href');el.rel='noopener noreferrer';}
+      el.textContent=name+' · '+st;li.append(el);return li;}));
+    const parts=[];if(matches)parts.push(matches+' game'+(matches===1?'':'s'));if(apps.length)parts.push(apps.length+' app'+(apps.length===1?'':'s'));
+    searchStatus.textContent=!q?'':parts.length?parts.join(' and ')+' found for "'+value+'".':'No games found for "'+value+'".';
     searchView.hidden=!q||matches===0;
   }
   toggle.addEventListener('click',()=>{
@@ -681,12 +835,18 @@ html[data-tod=dawn] #living-world-scene .tod-art{background-image:url('/assets/i
   syncMobile();
   const season=document.getElementById('current-season');
   // The parent company's atmosphere module determines seasons automatically.
-  // Atmosphere follows local time (day / sunset / night scene) and cycles on tap.
+  // Opens on Sunset (founder mockup); tap cycles dawn / day / sunset / night. The date window is the live season.
   const ATMOS=['dawn','day','sunset','night'],NAMES={dawn:'Dawn',day:'Daylight',sunset:'Sunset',night:'Night'};
-  const hr=new Date().getHours();
-  let atmo=hr>=5&&hr<8?'dawn':hr>=8&&hr<17?'day':hr>=17&&hr<20?'sunset':'night';
+  let atmo='sunset';
   const setAtmo=a=>{atmo=a;document.documentElement.dataset.tod=a;season.textContent=NAMES[a];};
   setAtmo(atmo);
+  {const d=new Date(),y=d.getFullYear(),m=d.getMonth(),fmt=x=>x.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+   const starts=[[11,1],[2,1],[5,1],[8,1]],i=m===11||m<2?0:m<5?1:m<8?2:3,s0=new Date(m<2&&i===0?y-1:y,starts[i][0],1),s1=new Date(s0.getFullYear(),s0.getMonth()+3,0);
+   document.getElementById('season-window').textContent=fmt(s0)+' – '+fmt(s1);}
+  const toast=document.getElementById('hub-toast');let toastTimer=0;
+  document.addEventListener('click',e=>{const b=e.target.closest('.soon');if(!b)return;toast.textContent=b.dataset.soon||'Coming soon.';toast.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.hidden=true,2600);});
+  {const dots=document.getElementById('featured-dots'),tr=document.getElementById('featured-track');for(let i=0;i<4;i++)dots.append(document.createElement('i'));
+   const upd=()=>{const max=tr.scrollWidth-tr.clientWidth,k=max>0?Math.round(tr.scrollLeft/max*3):0;[...dots.children].forEach((d,j)=>d.classList.toggle('on',j===k));};tr.addEventListener('scroll',upd,{passive:true});upd();}
   document.getElementById('atmo-cycle').addEventListener('click',()=>setAtmo(ATMOS[(ATMOS.indexOf(atmo)+1)%ATMOS.length]));
   const vol=document.getElementById('ambient-volume');let gainNode=null;
   const level=()=>.02*(+vol.value/40);

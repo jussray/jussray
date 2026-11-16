@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
-import { readFile, realpath, stat } from 'node:fs/promises';
+import { mkdir, readFile, realpath, stat } from 'node:fs/promises';
 import { resolve, sep } from 'node:path';
 import { chromium } from 'playwright';
 
@@ -16,6 +16,9 @@ const game = await readFile(gameFile, 'utf8');
 assert.match(game, /const sagaStages\s*=/);
 assert.match(game, /const sagaNeighbors\s*=/);
 assert.match(game, /__steelCityDebug/);
+assert.match(game, /id="moveJoystick"/, 'Analog joystick missing from current build');
+assert.match(game, /cinematic-geometry-v3/, 'Latest playable renderer missing');
+assert.ok(!game.includes('assets/pittsburgh-night-skyline.jpg'), 'Preview must not request an unshipped image');
 assert.ok(game.length > 100_000, 'unexpected truncated game source');
 
 const server = createServer(async (req, res) => {
@@ -46,10 +49,30 @@ try {
     const response = await page.goto(`http://127.0.0.1:${port}/steel-city/`, { waitUntil: 'domcontentloaded' });
     assert.equal(response?.status(), 200, 'Steel City preview route unavailable');
     await page.waitForFunction(() => typeof window.__steelCityDebug === 'function');
+    await page.waitForFunction(() => document.querySelector('#skyBackdrop')?.dataset.graphicsAsset === 'loaded', { timeout: 20000 });
     let status = await page.evaluate(() => window.__steelCityDebug());
+    assert.equal(status.graphicsRevision, 'cinematic-geometry-v3', 'Wrong graphics revision');
+    assert.equal(status.hillsideHomeCount, 11, 'Missing Pittsburgh hillside geometry');
     assert.equal(status.started, false);
     assert.equal(status.campaignStage, 0);
     await page.locator('#playMuted').click();
+    await page.waitForFunction(() => document.querySelector('#titlecover')?.classList.contains('hidden') && Number(getComputedStyle(document.querySelector('#titlecover')).opacity) === 0);
+    assert.equal(await page.locator('#hud').isVisible(), true, 'Gameplay HUD must appear after title');
+    await mkdir('proof/site/steel-city', { recursive: true });
+    await page.screenshot({ path: `proof/site/steel-city/${label}-gameplay.png` });
+    if (label === 'mobile-emulated') {
+      const before = await page.evaluate(() => window.__steelCityDebug());
+      const pad = await page.locator('#moveJoystick').boundingBox();
+      assert.ok(pad && pad.width >= 100, 'Analog joystick touch target missing');
+      await page.mouse.move(pad.x + pad.width * .83, pad.y + pad.height * .5);
+      await page.mouse.down();
+      await page.waitForTimeout(650);
+      const moved = await page.evaluate(() => window.__steelCityDebug());
+      await page.mouse.up();
+      assert.ok(moved.x - before.x > 1 && Math.abs(moved.cameraYaw - before.cameraYaw) > .4, 'Joystick movement or camera follow failed');
+      const released = await page.evaluate(() => window.__steelJoystick);
+      assert.equal(released.active, false, 'Analog joystick remained stuck after release');
+    }
     await page.locator('#storyOpen').click();
     assert.equal(await page.locator('.storyAct').count(), 7);
     await page.locator('#storyClose').click();
