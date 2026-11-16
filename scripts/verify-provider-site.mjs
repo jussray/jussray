@@ -206,7 +206,13 @@ export async function cfRequest({accountId, token, endpoint, body, fetchImpl=fet
         continue;
       }
       // Never echo request headers, cookies, response bodies, or token text.
-      if(!response.ok)throw new Error(`Browser Rendering ${endpoint}: HTTP ${response.status}`);
+      // Only Cloudflare's numeric error codes are surfaced (e.g. 1000 invalid token, 10000 auth/permission):
+      // integers, never text, so nothing secret can leak.
+      if(!response.ok){
+        let codes=[];
+        try{codes=((await response.json())?.errors||[]).map(e=>e?.code).filter(Number.isSafeInteger).slice(0,5);}catch{}
+        throw new Error(`Browser Rendering ${endpoint}: HTTP ${response.status}${codes.length?` (Cloudflare error code ${codes.join(', ')})`:''}`);
+      }
       const payload=await response.json();
       if(payload?.success!==true)throw new Error(`Browser Rendering ${endpoint}: provider unsuccessful`);
       // API HTTP 200 is not proof the TARGET page returned HTTP 200.

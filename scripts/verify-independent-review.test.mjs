@@ -205,3 +205,13 @@ test('timeline reader keeps app attribution and takes the head push time from it
   assert.deepEqual(e.signals.map(x=>[x.kind,x.viaApp]),[['comment',null],['comment','claude'],['auto_merge_enabled',undefined]]);
   assert.equal(e.headPushedAt,'2026-11-09T12:00:00.000Z');
 });
+
+test('squash and rebase auto-merge events count as enabling auto-merge (observed on PR #74)',async()=>{
+  const api=async url=>({ok:true,json:async()=>url.includes('/timeline?')?[
+    {event:'auto_squash_enabled',actor:{login:'jussray'},performed_via_github_app:null,created_at:'2026-11-09T12:05:00Z'},
+    {event:'auto_rebase_enabled',actor:{login:'jussray'},performed_via_github_app:null,created_at:'2026-11-09T12:06:00Z'},
+  ]:{workflow_runs:[{created_at:PUSH}]}});
+  const e=await getFounderEvidence({repo:'jussray/jussray',number:74,sha:H,token:'t',request:api});
+  assert.deepEqual(e.signals.map(x=>x.kind),['auto_merge_enabled','auto_merge_enabled']);
+  assert.equal(founderDecision({...e,expectedHead:H}).via,'founder-auto-merge');
+});
