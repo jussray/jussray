@@ -1,58 +1,37 @@
 # Codex Runtime Configuration — Juss & Co
 
-OpenAI Codex platform configuration for Juss & Co founder studio runtime.
+## Scope and identity
 
-## Platform Identity
+Repository: `jussray/jussray`, the Juss & Co public profile and Cloudflare-backed website. Read the repository's root `CLAUDE.md`, applicable `AGENTS.md` files, and product-specific policies before work.
 
-**Project**: jussray/jussray — Juss & Co public profile
-**Platform**: OpenAI Codex (code generation, completion)
-**Authority**: Founder-gated operations per root CLAUDE.md
-**Skills Available**: Limited to Codex capabilities (no multi-modal reasoning)
+Codex is an AI coding agent. Available model features, tools, repository access, browser execution, CI, and connected services depend on the actual running environment; never claim an unavailable tool or a successful operation without directly inspecting evidence.
 
-## Operating Constraints
+## Repository configuration and skills
 
-Codex is a code-generation model. Use it for:
-- **Syntax completion** and code generation tasks
-- **API reference** lookups
-- **Pattern recognition** in existing code
-- **Refactoring suggestions**
+- `.codex/config.toml` sets project-scoped reasoning and multi-agent defaults; credentials and account-specific settings stay outside the repository.
+- Codex discovers repository skills from `.agents/skills/*/SKILL.md`. The export under `skills/juss-authored/` is source material, not by itself the Codex discovery directory.
+- Installed project skills include `godmode-devil-ultrathink`, `goalfix`, `portfolio-bottleneck-finder`, `juss-os` and `futureyou-me-v10`. Read each skill only when relevant and preserve stronger repository rules.
+- The same-name/overlapping command definitions are **not** separate authorization paths. `/godmode`, `/devil`, `/goalfix`, `/truthmode`, and `/confess` are governed workflows, not capabilities or permissions granted by writing slash commands.
+- Model reasoning effort, delegation and skill descriptions cannot expand founder authorization.
 
-Do NOT use for:
-- Business decisions or strategic planning
-- Real-time system diagnostics
-- Unverified claims or proofs
-- Multi-step reasoning requiring state tracking
+## Approved operating loop
 
-## Authority Routing
+1. **Observe:** inspect the exact authorized repository, branch, current SHA, relevant source, tests, and evidence.
+2. **Challenge:** perform Devil I on the premise; identify what would falsify the request. Choose the smallest reversible path.
+3. **Implement:** use real tools within the explicit task scope; preserve existing code, consent boundaries, privacy, and unpublished information.
+4. **Test:** run repository-native focused tests, CI at the exact candidate head when accessible, and browser/runtime checks when behavior changes.
+5. **Challenge again:** Devil II examines false-green checks, stale evidence, permissions, regressions, and rollback.
+6. **Report:** `REALITY / FIX / PROOF / RISK / ROLLBACK / NEXT GATE`, identifying executed commands and exact commit SHAs.
 
-When using Codex for jussray-owned work:
-1. **Observe** the real source of truth (git, runtime, tests)
-2. **Verify** code patterns against `CLAUDE.md` standing rules
-3. **Act** only on code-generation tasks (no merge authority)
-4. **Report** findings to founder for approval before changes
+## Authorization and evidence gates
 
-## Applicable Rules (from root CLAUDE.md)
+- Repository write ability does not grant merge, deploy, production-routing, payment, migration, publication, credential, deletion or data-export permission. Follow the strongest applicable founder gate for each action.
+- Do not force-push or delete founder content without specific approval.
+- Do not open additional pull requests by default when an existing route is available; use current approved work items.
+- Never call tests green when there are no current exact-head jobs, or call a code commit production-ready without a real-runtime observation.
+- Do not claim ChatGPT or Codex lacks code execution, GitHub access, or analysis capability *categorically*. State the actual connected tools and limitations observed in the present session.
+- Preserve `CLAUDE.md` and pre-existing instructions; this document explains Codex's execution route rather than overriding repo governance.
 
-- **Proof-led**: verify generated code against existing tests
-- **Smallest reversible change**: generate only what's asked
-- **Real state only**: read actual code, don't hallucinate
-- **Never merge**: Codex cannot push or merge — requires human review
+## Verification status
 
-## Skill Subset
-
-From `skills/juss-authored/`, Codex can assist with:
-- **reasoning-stack** patterns (multi-step code analysis)
-- **runtime-kernel** (runtime behavior modeling)
-- **sauce-guard** (security boundary patterns)
-
-Not available to Codex:
-- /godmode (founder authority — requires human)
-- /confess (truth declaration — requires human)
-- /goalfix (repair workflow — requires founder approval)
-
-## Integration Notes
-
-- Codex works best for **standalone code tasks**
-- Always **diff-check** generated code before use
-- **Link to CLAUDE.md** for authority questions
-- **Escalate to founder** (Juss) for merged decisions
+File presence is not proof of automatic skill invocation. A real Codex session in the target trusted checkout must inspect the discovered skill list and execute a read-only smoke task. Until that succeeds, record `SKILL_RUNTIME = UNKNOWN`. A passing TOML parser checks syntax only, not the Codex client or production runtime.

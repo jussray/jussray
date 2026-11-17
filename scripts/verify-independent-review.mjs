@@ -7,54 +7,24 @@ import { pathToFileURL } from 'node:url';
 // author approving his own PR, and every PR here is opened from his account, so his signal is
 // read from actions only a person in the GitHub UI can make on the exact head:
 //   - a PR comment "/approve <head sha, 7+ chars>", or
-//   - turning auto-merge on after the head was pushed (Juss, 2026-11-16: "I am the human sign off if I press
-//     auto merge"). GitHub records it as auto_merge_enabled, auto_squash_enabled or auto_rebase_enabled;
-//     a later auto_merge_disabled withdraws it. Claude never enables auto-merge (CLAUDE.md).
-// Actions made through other apps (Codex, bots) carry performed_via_github_app and never count.
-// Agent approval (Juss, 2026-11-16): Claude may post the "/approve <head sha>" comment for Juss, through the
-// Claude app on his account, only after every other required check passed on that exact head. The gate
-// enforces it: the comment must be newer than the last completed run of each required check, and each must be green.
+//   - enabling auto-merge after the head was pushed (disabling it later withdraws that).
+// Actions made through an app (Claude, Codex, bots) carry performed_via_github_app and never count.
 export const FOUNDER='jussray';
-export const AGENT_APP='claude';
-const AUTO_ON=new Set(['auto_merge_enabled','auto_squash_enabled','auto_rebase_enabled']);
-export const AGENT_REQUIRED_CHECKS=['Repo Reality / exact-head','Review Gate Unit Tests','Juss & Co Site Browser Proof'];
-export function checksGreenBefore(checks, at, required=AGENT_REQUIRED_CHECKS) {
-  const t=Date.parse(at||'');
-  if (!Array.isArray(checks) || !Number.isFinite(t)) return {ok:false,reason:'Missing check-run evidence'};
-  for (const name of required) {
-    const runs=checks.filter(c=>c?.name===name);
-    if (!runs.length) return {ok:false,reason:name+' has not run on this head'};
-    for (const r of runs) {
-      if (r.status!=='completed' || r.conclusion!=='success') return {ok:false,reason:name+' is not green on this head'};
-      const done=Date.parse(r.completed_at||'');
-      if (!Number.isFinite(done) || done>t) return {ok:false,reason:name+' finished after the approval comment'};
-    }
-  }
-  return {ok:true};
-}
 const APPROVE=/^\s*\/approve\s+([0-9a-f]{7,40})\b/i;
-export function founderDecision({signals, expectedHead, headPushedAt, checks, owner=FOUNDER}) {
+export function founderDecision({signals, expectedHead, headPushedAt, owner=FOUNDER}) {
   const pushed=Date.parse(headPushedAt||'');
   if (!Array.isArray(signals) || !Number.isFinite(pushed)) return {ok:false,via:null,reason:'Missing founder review evidence or head push time'};
-  const approves=signals.filter(x=>String(x?.login||'').toLowerCase()===owner && x?.kind==='comment' && Number.isFinite(Date.parse(x?.at||'')) && Date.parse(x.at)>=pushed
-    && (()=>{const m=APPROVE.exec(String(x.body||''));return m && expectedHead.startsWith(m[1].toLowerCase());})())
+  const human=signals.filter(x=>String(x?.login||'').toLowerCase()===owner && x?.viaApp===null && Number.isFinite(Date.parse(x?.at||'')))
     .sort((a,b)=>Date.parse(a.at)-Date.parse(b.at));
-  const human=approves.find(x=>x.viaApp===null);
-  if (human) return {ok:true,via:'founder-approve-comment',at:human.at};
+  const comment=human.find(x=>x.kind==='comment' && Date.parse(x.at)>=pushed && (()=>{const m=APPROVE.exec(String(x.body||''));return m && expectedHead.startsWith(m[1].toLowerCase());})());
+  if (comment) return {ok:true,via:'founder-approve-comment',at:comment.at};
   let auto=null;
-  for (const x of signals.filter(x=>String(x?.login||'').toLowerCase()===owner && x?.viaApp===null && Number.isFinite(Date.parse(x?.at||'')))
-    .sort((a,b)=>Date.parse(a.at)-Date.parse(b.at))) {
-    if (AUTO_ON.has(x.kind)) auto=Date.parse(x.at)>=pushed ? x : null;
+  for (const x of human) {
+    if (x.kind==='auto_merge_enabled') auto=Date.parse(x.at)>=pushed ? x : null;
     if (x.kind==='auto_merge_disabled') auto=null;
   }
   if (auto) return {ok:true,via:'founder-auto-merge',at:auto.at};
-  let agentReason='';
-  for (const x of approves.filter(x=>x.viaApp===AGENT_APP)) {
-    const g=checksGreenBefore(checks,x.at);
-    if (g.ok) return {ok:true,via:'agent-approve-after-green-checks',at:x.at};
-    agentReason=g.reason;
-  }
-  return {ok:false,via:null,reason:'Missing founder review on exact head (turn on auto-merge or comment /approve '+expectedHead.slice(0,7)+' in GitHub)'+(agentReason?'; agent approval rejected: '+agentReason:'')};
+  return {ok:false,via:null,reason:'Missing founder review on exact head (comment /approve '+expectedHead.slice(0,7)+' or enable auto-merge in GitHub)'};
 }
 
 export function reviewDecision({pull, reviews, expectedHead, founder}) {
@@ -155,17 +125,16 @@ export async function getFounderEvidence({repo,number,sha,token,request=fetch}){
     const batch=await apiGet(root+'/issues/'+number+'/timeline?per_page=100&page='+page,token,request);
     if (!Array.isArray(batch)) throw new Error('Timeline API returned non-list result');
     for (const e of batch) {
-      const kind=e?.event==='commented'?'comment':e?.event;
-      if (!['comment','auto_merge_enabled','auto_squash_enabled','auto_rebase_enabled','auto_merge_disabled'].includes(kind)) continue;
+      // GitHub names the enable event by merge method: auto_merge_enabled, auto_squash_enabled, auto_rebase_enabled.
+      const kind=e?.event==='commented'?'comment':/^auto_(merge|squash|rebase)_enabled$/.test(e?.event||'')?'auto_merge_enabled':e?.event;
+      if (!['comment','auto_merge_enabled','auto_merge_disabled'].includes(kind)) continue;
       signals.push({kind,login:(e.user||e.actor)?.login,viaApp:'performed_via_github_app' in e ? (e.performed_via_github_app?.slug ?? null) : undefined,
         at:e.created_at,body:kind==='comment'?e.body:''});
     }
     if (batch.length<100) {
       const runs=await apiGet(root+'/actions/runs?event=pull_request&head_sha='+sha+'&per_page=100',token,request);
       const times=(runs?.workflow_runs||[]).map(r=>Date.parse(r.created_at)).filter(Number.isFinite);
-      const cr=await apiGet(root+'/commits/'+sha+'/check-runs?per_page=100',token,request);
-      const checks=(cr?.check_runs||[]).map(c=>({name:c.name,status:c.status,conclusion:c.conclusion,completed_at:c.completed_at}));
-      return {signals,headPushedAt:times.length?new Date(Math.min(...times)).toISOString():null,checks};
+      return {signals,headPushedAt:times.length?new Date(Math.min(...times)).toISOString():null};
     }
   }
   throw new Error('Timeline pagination exceeded safe limit; refusing incomplete evidence');

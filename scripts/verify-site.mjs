@@ -77,8 +77,25 @@ for (const vp of [{n:'desktop',w:1440,h:900},{n:'mobile',w:390,h:844}]) {
   say(vp.n==='mobile'?perView===3:perView>=6,`${vp.n}: ${vp.n==='mobile'?'three':'six or more'} ecosystem tiles per view (${perView})`);
   await page.click('#sound');
   say((await page.getAttribute('#sound','aria-checked'))==='true',`${vp.n}: ambient sound toggles on a user gesture`);
+  say((await page.textContent('#atmoName'))==='Sunset'&&/\w{3} \d+ – \w{3} \d+/.test(await page.textContent('#seasonWindow')),`${vp.n}: opens on Sunset with the live season window (founder v3)`);
+  await page.click('#home-search-toggle');await page.fill('#home-search-input','PromptOS');
+  await page.waitForFunction(()=>document.querySelectorAll('#home-search-results a').length>0,null,{timeout:5000});
+  say((await page.locator('#ecoTrack .eco-tile:not([hidden])').count())===1&&/1 in Our Ecosystem/.test(await page.textContent('#home-search-status')),`${vp.n}: header search filters Our Ecosystem`);
+  say((await page.locator('#home-search-results a',{hasText:'PromptOS'}).getAttribute('href'))==='https://github.com/jussray/promptos',`${vp.n}: search result uses the worlds.json link`);
+  const hrefFor=async(q,name)=>{await page.fill('#home-search-input',q);await page.waitForFunction(n=>[...document.querySelectorAll('#home-search-results a strong')].some(s=>s.textContent===n),name,{timeout:5000});return page.locator('#home-search-results a',{has:page.locator('strong',{hasText:new RegExp('^'+name+'$')})}).first().getAttribute('href');};
+  say((await hrefFor('truth compass','Truth Compass'))==='/portfolio.html',`${vp.n}: portfolio-only projects open the portfolio, never a guessed link`);
+  say((await hrefFor('lumora','LUMORA'))==='https://games.jussco.company/#lumora-world',`${vp.n}: search reaches Game Hub worlds`);
+  say((await hrefFor('storyengine','StoryEngine'))==='/portfolio.html',`${vp.n}: StoryEngine stays unlinked in search`);
+  say((await hrefFor('contact','Contact'))==='/contact.html',`${vp.n}: search reaches site pages`);
+  await page.fill('#home-search-input','zzqx-nothing');await page.waitForFunction(()=>/Nothing matches/.test(document.querySelector('#home-search-status').textContent),null,{timeout:5000});
+  say((await page.locator('#home-search-results li').count())===0,`${vp.n}: no false search results`);
+  await page.keyboard.press('Escape');
+  say((await page.locator('#ecoTrack .eco-tile[hidden]').count())===0,`${vp.n}: Escape clears the ecosystem search`);
+  await page.locator('.hdr-btn.soon').first().click();
+  say(/coming soon/i.test(await page.textContent('#home-toast')),`${vp.n}: unbuilt header features say coming soon`);
+  say(!!(await page.locator('html').getAttribute('data-tod')),`${vp.n}: automatic atmosphere is set`);
   const atmoBefore=await page.textContent('#atmoName');await page.click('#atmo');
-  say((await page.textContent('#atmoName'))!==atmoBefore,`${vp.n}: atmosphere cycles`);
+  say((await page.textContent('#atmoName'))!==atmoBefore,`${vp.n}: atmosphere card is visible and cycles (founder, 2026-11-13: keep the card)`);
   say((await page.locator('.site-header a[href="/ideas.html"]').count())===1,`${vp.n}: Ideas is in the main navigation`);
   if(vp.n==='mobile') {
     const button=page.locator('.menu-toggle');const menu=page.locator('#site-navigation');
@@ -363,7 +380,7 @@ for (const vp of [{ n: 'portfolio-desktop', w: 1440, h: 900 }, { n: 'portfolio-m
   const ctx = await browser.newContext({ viewport: { width: vp.w, height: vp.h }, isMobile: !!vp.m, hasTouch: !!vp.m }); const page = await ctx.newPage();
   const errors = []; page.on('pageerror', (e) => errors.push(String(e))); page.on('requestfailed', (r) => { if (!/fonts\.(googleapis|gstatic)\.com/.test(r.url())) errors.push(`${r.failure()?.errorText} ${r.url()}`); }); page.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) errors.push(m.text()); });
   await page.goto(`${url}portfolio.html`, { waitUntil: 'load' });
-  await page.waitForFunction(() => document.querySelectorAll('#projects .project').length === 20);
+  await page.waitForFunction(() => document.querySelectorAll('#filters button').length > 1 && document.querySelectorAll('#projects .project').length === 20);
   say((await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)) === 0, `${vp.n}: no horizontal overflow`);
   say((await page.locator('#projects .project').count()) === 20, `${vp.n}: renders all 20 public-safe identities`);
   say((await page.locator('#worldOverlays .project[data-noncanonical="true"]').count()) === worldOverlays.length &&
@@ -384,6 +401,32 @@ for (const vp of [{ n: 'portfolio-desktop', w: 1440, h: 900 }, { n: 'portfolio-m
   say((await page.evaluate(() => [...document.querySelectorAll('a,button')].filter((e) => { const b = e.getBoundingClientRect(); return b.width > 0 && b.height < 40; }).length)) === 0, `${vp.n}: tap targets >= 40px`);
   say(errors.length === 0, `${vp.n}: no console errors${errors.length ? ' — ' + errors.join(' | ') : ''}`);
   await page.screenshot({ path: `proof/site/${vp.n}.png`, fullPage: true }); await ctx.close();
+}
+// Portfolio without JavaScript: the published snapshot must carry every canonical identity
+// exactly as site/data/portfolio.json declares it (names, labels, descriptions, link decisions).
+{
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, javaScriptEnabled: false }); const page = await ctx.newPage();
+  await page.goto(`${url}portfolio.html`, { waitUntil: 'load' });
+  const cards = await page.$$eval('#projects .project', (els) => els.map((el) => ({
+    slug: el.dataset.slug, name: el.querySelector('h3')?.textContent, label: el.querySelector('.state')?.textContent,
+    desc: el.querySelector('.desc')?.textContent, link: el.querySelector('a.open')?.getAttribute('href') || null })));
+  say(cards.length === portfolio.projects.length, `portfolio no-JS: all ${portfolio.projects.length} identities in the initial HTML`);
+  say(portfolio.projects.every((p, i) => cards[i] && cards[i].slug === p.slug && cards[i].name === p.name && cards[i].label === p.publicLabel &&
+    cards[i].desc === p.description && cards[i].link === (p.link || null)), 'portfolio no-JS: names, labels, descriptions and links match portfolio.json exactly');
+  say(cards.every((c) => c.link === null || portfolio.projects.some((p) => p.link === c.link)), 'portfolio no-JS: no invented links');
+  say((await page.locator('#worldOverlays .project[data-noncanonical="true"]').count()) === worldOverlays.length, 'portfolio no-JS: noncanonical overlay published separately');
+  say(((await page.textContent('#countLine')) || '').startsWith(`${portfolio.projects.length} of ${portfolio.projects.length}`), 'portfolio no-JS: count line published');
+  say((await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)) === 0, 'portfolio no-JS: no horizontal overflow');
+  await ctx.close();
+}
+// Portfolio data outage: the truthful published snapshot stays; nothing is removed or invented.
+{
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } }); const page = await ctx.newPage();
+  await page.route('**/data/portfolio.json', (r) => r.abort());
+  await page.goto(`${url}portfolio.html`, { waitUntil: 'load' });
+  await page.waitForFunction(() => /live data unavailable/.test(document.getElementById('countLine').textContent), null, { timeout: 5000 });
+  say((await page.locator('#projects .project').count()) === portfolio.projects.length, 'portfolio outage: published snapshot kept when JSON fetch fails');
+  await ctx.close();
 }
 /* ---------- Games hub: code-level Playwright proof at exact source ---------- */
 for (const vp of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile', width: 390, height: 844 }]) {

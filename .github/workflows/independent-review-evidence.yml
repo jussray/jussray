@@ -1,7 +1,7 @@
 name: Independent Review Evidence
 on:
   pull_request:
-    # Founder review: Juss turning auto-merge on (2026-11-16), or a /approve <sha> comment (re-run via founder-review-rerun.yml).
+    # auto_merge_enabled/disabled: Juss turning auto-merge on in the GitHub UI is his founder review.
     types: [opened, reopened, synchronize, ready_for_review, auto_merge_enabled, auto_merge_disabled]
   pull_request_review:
     types: [submitted, dismissed]

@@ -1,3 +1,9 @@
+## 2026-11-17 — PR #75 brought up to date with main (d62410b)
+
+- `main` moved overnight (#74, #76, #67, #79, #81). The Governance ruleset is now disabled; Production is still active. PR #75 had conflicts.
+- Resolution: `main`'s review gate from #74 kept as is (it already counts auto-merge under all three event names). The Claude-approve path from 29ecdc1/29ba9ea was dropped; it never worked because GitHub stores Claude's comment as `·/·a·pprove`. `CLAUDE.md` takes main's governance text, plus the Needed PR comments rule and a note on that attempt. `.claude/CLAUDE.md` combines main's Codex `.agents/skills` line with the skills-pack field list. `home-world.mjs` keeps main's `BADGE_ART`; main's `visibilitychange` handler is dropped because the shared ambience engine already handles hidden tabs.
+- Local proof on the merged tree: gate tests 28/28 (plus the main-contract test), site node tests 31/31, approved stories OK, skills sums OK, verify-site exit 0 (510 ok, "all checks passed").
+
 ## 2026-11-16 — Auto-merge is Juss's sign-off again (Juss: "I am the human sign off if I press auto merge it should count as human review")
 
 - Gate: Juss turning auto-merge on after the head push counts as founder review. GitHub's real event names are `auto_squash_enabled` / `auto_merge_enabled` / `auto_rebase_enabled` (PR #75 timeline shows `auto_squash_enabled`, actor jussray, no app). `main`'s gate only matched `auto_merge_enabled`, which is why Juss's toggles never counted. Turning it off withdraws it; it must be on after each new head push. App-attributed, unknown-attribution or other-user events never count.
@@ -821,3 +827,57 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
   - The ruleset repair script now sets native approvals to 0.
   - Tests 35/35 pass.
 - This needs a bootstrap merge: main's old gate still demands a non-author approval until this lands.
+
+## 2026-11-09 PR #73 merged (`0caf4d1`); provider readback 401 traced
+- Juss merged #73 at 14:00 UTC. Main's gate now includes `founderDecision`, so his `/approve <sha>` comment or turning on auto-merge counts as the founder review.
+- Juss says the Browser Rendering token was renewed days ago. Observed:
+  - Both `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_BROWSER_RENDERING_TOKEN` reach the job: they show masked as `***`, so they came from secrets.
+  - Every push and dispatch run of `provider-site-proof.yml` since 2026-10-20 has failed or been cancelled. None passed. The runs whose logs are still readable say `HTTP 401` (11-06, 11-08, 11-09). PR runs pass only because they skip the live step.
+  - So the token that is set is rejected. Possible causes: wrong token type (a Global API Key instead of an API Token), missing "Browser Rendering: Edit" permission, the token scoped to a different account, an expired token, or stray whitespace when it was pasted.
+- Fix on this branch: on failure, the readback prints only Cloudflare's numeric error codes, never text. The next main run will then name the cause.
+- 2026-11-09 14:07 UTC: Juss turned on auto-merge for #74 (squash). GitHub recorded it as `auto_squash_enabled`, not `auto_merge_enabled`, so the gate missed it. Fixed on #74: all three method-named enable events now count. The fix only takes effect after #74 merges, because the gate runs from main.
+- 2026-11-09 ~15:35 UTC: commit 0f5a23e (from Juss's account, unsigned, pushed 15:20 UTC) removed the founder-review path from #74. I asked Juss which rule stands; he answered "I'm the reviewer". Reverted 0f5a23e; the code again matches 8be2019.
+- 2026-11-09 ~16:40 UTC: eb112c8 (Juss's account, unsigned, 16:24 UTC) reintroduced the non-author approval requirement. Juss: "The system accordingly is the sec reviewer". Reverted eb112c8; CLAUDE.md records two reviewers (the system's 4 required checks + Juss's UI founder review) as settled.
+
+## RESUME HERE (handover 2026-11-09 ~16:45 UTC)
+- **Review rule (settled; Juss chose it three times on 2026-11-09):**
+  - Two reviewers. (1) The system: the 4 required exact-head checks plus systematic review. (2) Juss: a `/approve <sha>` comment, or turning on auto-merge, done in the GitHub UI.
+  - Never reintroduce a required non-author human approval, and never set native approvals to 1.
+  - Claude never posts `/approve`, never turns on auto-merge, and never merges without Juss's word.
+- **PR #74** (branch `claude/sleepy-mayer-1s8avr`, head `0b9df0a`) holds:
+  - the Cloudflare numeric error-code readback fix;
+  - the fix for squash/rebase auto-merge events in the gate;
+  - the reverts of `0f5a23e` and `eb112c8`, both unsigned commits from Juss's account (likely another agent using his token).
+  - Its CI was green apart from Independent Review Evidence on the earlier heads. CI on `0b9df0a` has not been read back.
+- **Blockers, all Juss's admin actions:**
+  1. Governance ruleset 26857902: approvals 1→0; add `Review Gate Unit Tests`; remove `focused-browser` (nothing reports it) and `Workers Builds: jussco-games`; remove the 17 required deployments; turn on strict checks.
+  2. Delete the Production ruleset 26428639 (~ALL, 4 bypass actors). Pre-change snapshot: `ruleset-before.json` in the old session scratchpad.
+  3. CodeQL default setup is "not-configured", but rulesets require code scanning. Set it up, or remove that rule.
+  4. Alternative to 1–3: import the fixed ruleset JSON. Its generator is `scripts/prepare-native-review-ruleset.mjs` on 8be2019/0b9df0a (main only, approvals 0, 4 checks, non_fast_forward, no deployments, no bypass).
+  5. Stop the tool that pushes reverts as Juss.
+  6. Provider readback: 401 on every main run since 2026-10-20, so the token secret is wrong. #74 makes the next main run print Cloudflare's error code.
+  7. The morning digest routine (trig_01GRi7McgNmbS6vyhuDCPiGN) has no repo attached and gets 403. Fix it in the claude.ai Routines UI.
+- **After the merge:** read back main's checks, the provider readback error code and the live site (the sandbox can't reach jussco.company, so use CI or Juss's browser).
+- 2026-11-09 ~17:30 UTC, Juss: "the other PRs too fix merge deploy".
+  - #70 and #71 closed as superseded: their unique assets are byte-identical on main, and the rest of their diffs would roll back the #68/#69 redesign. Reopen either one to undo.
+  - #67 (Codex skills export) is now `9389b99`: main merged in, conflicts resolved to main's versions (site/index.html, verify-site.mjs), and the obsolete homepage asserts dropped from site-proof-boundary.test.mjs. Local results: node tests 57/57, verify-codex-release PASS, codex release unittest OK, juss-os test_modes OK, Game Hub cinematic PASS at all widths.
+  - #67 and #74 both wait on Juss's `/approve <sha>` (or auto-merge) and on the ruleset/CodeQL fixes.
+  - #74's title, rewritten by another tool to say "one independent human approval", is restored.
+- 2026-11-10: 8e64961 (Juss's account, unsigned, 2026-11-09 19:58 UTC) reintroduced the non-author approval requirement for the third time. Juss answered "Revert (I'm reviewer)". Reverted; the code again matches e020e65. The tool pushing as Juss is still unidentified.
+- 2026-11-10 04:17 UTC: games.jussco.company was still serving the 2026-10-14 version. The Cloudflare Workers Builds trigger for `jussco-games` ran `wrangler versions upload`, so v3 and v4 (main 5c3e1aa, the #68 Game Hub) were uploaded but never deployed. Promoted v4 (351b7483) to 100%, and changed the trigger deploy command to `npx wrangler deploy --config wrangler.games.jsonc`. Rollback: deploy version 77ba0d02. The `jussray` worker was already current (v153, main 0caf4d1). The live read-back is blocked: Bot Fight Mode challenges Browser Rendering, and the sandbox can't reach the domain.
+- 2026-11-13: Founder enabled squash auto-merge on #76 at d04ebb0. Gate on main still red: (1) main's checker ignores auto_squash_enabled (fix lives in #74) → founder needs /approve d04ebb0; (2) Production ruleset 26428639 lacks required check 'Review Gate Unit Tests'; (3) Governance 26857902 still active.
+- 2026-11-15: **Standing founder rule (Juss):** "if I pressed auto that is the independent review to actually merge too always." Recorded in CLAUDE.md. Auto-merge in any method (merge/squash/rebase), turned on after the exact head is pushed, is review + merge authority; a later push withdraws it. Main's checker still counts only `auto_merge_enabled`; the fix that counts squash/rebase is on this PR (#74), so until #74 lands, squash auto-merge on other PRs is not seen by the gate.
+- 2026-11-15: Blockers on main (Governance 26857902, edited 16:50 UTC, now main-only): required deployments [github-pages, Think Tank / production, StoryEngine / production]; 1 required native approval (the author can't give it); required checks no workflow emits (`focused-browser`, `Think Tank - jussray`; `Workers Builds: jussco-games` only runs on games changes); CodeQL, code quality and Copilot review. Production 26428639 still targets `~ALL`, but its bypass list let Claude's branch pushes through.
+- 2026-11-15: #79 (claude/portfolio-static-render, 87ecb58) is open as a draft. portfolio.html now carries a static snapshot of portfolio.json; `scripts/portfolio-snapshot.mjs --check` runs in site-proof; it has no-JS and outage browser checks. Local verify-site: all pass. #76 stays at a696ac4 (founder-approved, green) and must not be pushed to.
+- 2026-11-15: Codex posted plans (as jussray) on #76/#74 that keep "one independent native approval" and want Steel City added to #76. Not adopted: they conflict with the founder rule above and would void #76's approval.
+## 2026-11-10 — Game Hub v3 mockups (founder, binding)
+- Founder sent `gamehub-v3-desktop` / `gamehub-v3-mobile` mockups: crown "Juss & Co COMPANY" logo header, search + bell + "My Juss" account, tagline PLAY · CONNECT · CREATE · COMPETE · EARN, Explore Games + My Library, crystal-globe lotus, gold-glow Featured carousel with dots, Hub Center rows (All Games, SYNC Game Center, Tournaments, Events & Challenges, Creator Zone, Rewards & Achievements), ambient + "Current Atmosphere: Sunset · Apr 12 – May 31", phone: Game Hub Center pill + All Games | Tournaments | Events | Creator Zone, bottom nav Home/Products/Solutions/Our Work/Founder.
+- Founder decision: build **exactly as drawn**, but the tiles/content must be his **actual games and apps from the repo** (worlds.json / portfolio.json). Unbuilt features render as drawn and are honestly marked "Coming soon" (no fake links/claims).
+- Founder decision: **search comes back** (reverses fix-4 of PR #76).
+- Founder decision: the **main page (www.jussco.company) gets the same look and fixes** accordingly.
+- Carrier: PR #76 branch `claude/gamehub-mockup-fixes`.
+- 2026-11-10: Game Hub v3 built on PR #76 (supersedes fix 1–4 except colour art + Sunset default; search restored). Real content only: 6 games + Se'kret Bip (own domain) + StoryEngine (no link). Tournaments / Events & Challenges / Creator Zone / Rewards, bell, My Juss, My Library render as drawn and say "coming soon". Nav highlights Products (Game Hub sits under Products). Atmosphere shows the live season window. Next: homepage (site/index.html) gets the same v3 look.
+- 2026-11-10: Founder: "use PromptOS and FCR too" — Founder Control Room (foundercontrolroom.org) and PromptOS (github.com/jussray/promptos) added as featured tiles with worlds.json links/labels. Include them wherever real apps show (homepage too).
+- 2026-11-11: Homepage (site/index.html) given the v3 look on PR #76: crown COMPANY header + search (filters Our Ecosystem) + bell/My Juss (coming soon), gold title, hub-style ecosystem rows, split ambience cards with Sunset + live season window, gold-glow ecosystem band with dots, phone bottom nav (Home active). Ecosystem still renders every worlds.json world (incl. FCR + PromptOS).
+- 2026-11-11: Founder added a beehiiv API key as a GitHub Actions secret (name not readable from this sandbox; Actions secrets API is proxy-blocked). Nothing in the repo uses beehiiv yet. A GitHub secret is only visible to Actions, not to the jussray Worker; a signup form needs the key as a Cloudflare Worker secret behind a server-side endpoint, never in the browser.
+- 2026-11-11: Search expanded (PR #76). Homepage search covers site pages, the six Game Hub worlds, worlds.json and portfolio.json; projects without a founder-declared live link open /portfolio.html (no guessed links; StoryEngine unlinked). Game Hub search also lists the featured apps (Se'kret Bip, StoryEngine text-only, FCR, PromptOS).
