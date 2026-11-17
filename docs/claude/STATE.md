@@ -1,3 +1,10 @@
+## 2026-11-17 — Founder pronouns are she/her (Juss: "I am she her")
+
+- FIX: every reference to Juss as he/him/his/himself across repo docs, skills, scripts comments and the review workflow comment now reads she/her/herself. Skill checksums in `skills/juss-authored/SHA256SUMS.txt` updated for the three edited SKILL.md files.
+- RULE: refer to Juss as she/her in all agent-written docs, comments and receipts.
+- PROOF (local): no he/him/his/himself left in text files. `node --test scripts/*.test.mjs` 103/105, same 2 failures as the unchanged tree (vitest gap; Sync Party static fallback). `verify_inventory.py` fails the same way before and after (MANIFEST.md missing from SHA256SUMS, from 6c25ec9).
+- ROLLBACK: revert this commit.
+
 ## 2026-11-08 — SUPERSEDING founder governance decision: systematic-first, human-final
 
 - Review live `main` and exact PR head; systematically review and repair; verify exact-head checks and applicable browser proof; then require **Juss's founder review on that exact head** (`/approve <sha>` comment or auto-merge, in the GitHub UI; superseded 2026-11-09, see CLAUDE.md).
@@ -40,7 +47,7 @@
   - Each icon is mapped by product name from the JSON data. Unknown names fall back to a crown.
   - The SVG is parsed as SVG, never as HTML.
 - PROOF (local): verify-site exit 0, 482 ok. New checks: every ecosystem tile and every featured tile renders an icon. `node --test` 86/87 (the known vitest gap). Screenshots at 1672 and 390 reviewed.
-- SIGNED-HISTORY REPLACEMENT: Juss approved it ("Approved"). The guarded force-with-lease push of signed 51cba7a over unsigned 4fb6f02 was DENIED by the session's auto-mode safety classifier (Git Destructive), so it was not pushed. It needs Juss to allow the action, or to do it himself. The branch stays at 4fb6f02 plus this commit.
+- SIGNED-HISTORY REPLACEMENT: Juss approved it ("Approved"). The guarded force-with-lease push of signed 51cba7a over unsigned 4fb6f02 was DENIED by the session's auto-mode safety classifier (Git Destructive), so it was not pushed. It needs Juss to allow the action, or to do it herself. The branch stays at 4fb6f02 plus this commit.
 - ROLLBACK: revert this commit.
 
 ## 2026-11-07 — One phone pattern across the site
@@ -657,7 +664,7 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
 ## HANDOFF for a new session (2026-11-08 ~21:00 UTC)
 - **PR #68** `claude/sleepy-mayer-1s8avr`, head `d72dcf8`, 0 commits behind main `2309b55`. GitHub mergeable_state: **blocked**.
 - **Green on the exact head:** Site Browser Proof, verify, Repo Reality, Review Gate Unit Tests, GitGuardian, qr-assets, receipts, and both Cloudflare preview builds.
-- **Red:** Independent Review Evidence. The log says the Production ruleset 26428639 (1) requires a human approval, which contradicts policy; (2) lists none of the 4 required checks; (3) does not block force pushes or deletion. No review exists, and Juss cannot approve his own PR.
+- **Red:** Independent Review Evidence. The log says the Production ruleset 26428639 (1) requires a human approval, which contradicts policy; (2) lists none of the 4 required checks; (3) does not block force pushes or deletion. No review exists, and Juss cannot approve her own PR.
 - **Merge authority:** Juss has approved the merge. Do not bypass the gate. Merge only when every check is green on the exact head, then re-observe jussco.company and games.jussco.company.
 - **Founder decisions:**
   - Done: keep main's architecture and implant the mockups; the Game Hub worlds belong.
@@ -684,7 +691,7 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
 - Still open: fix the Browser Rendering credential (provider-site-proof.yml); fix ruleset 26428639; long pages (universe, portfolio); ideas and opportunity-engine share a title.
 - 2026-11-08 ~22:40 UTC, Juss chose "Claude review counts". Reverted the 5 human-approval governance commits (34e8326, c0095b3, 6111638, 6cf62d2, 2f72569), restoring the systematic-review policy: 0 human approvals; the four checks green on the exact head; an independent Claude review on each PR. Ruleset 26428639 change proposed to Juss for exact approval. The bootstrap merge needs Juss's override, because main's gate code still requires a human until this lands.
 - 2026-11-08 ~22:47 UTC: Juss approved the ruleset change ("Both"): approvals 1→0; require the 4 checks; add non_fast_forward; remove all 16 required deployments. DEAD END: applying it via `gh api -X PUT repos/jussray/jussray/rulesets/26428639` from the agent returns proxy HTTP 403 (writes not permitted). Juss applies it in the UI. Pre-change snapshot is in the agent scratchpad (`ruleset-before.json`). PR #72 now carries the governance reverts; it needs a one-time override merge (bootstrap).
-- 2026-11-08 ~23:00 UTC: Juss ran the "Claude as digital employee" setup prompt. His answers: top 3 tasks are mockup→site, PR review→merge, live-site checks; connect all four apps (GitHub, Gmail, Notion, Slack) drafts-only; rules live in both repo files and Claude Projects. Guide written to `docs/claude/SYSTEM.md`. No scheduled tasks created yet: each needs Juss's approval.
+- 2026-11-08 ~23:00 UTC: Juss ran the "Claude as digital employee" setup prompt. Her answers: top 3 tasks are mockup→site, PR review→merge, live-site checks; connect all four apps (GitHub, Gmail, Notion, Slack) drafts-only; rules live in both repo files and Claude Projects. Guide written to `docs/claude/SYSTEM.md`. No scheduled tasks created yet: each needs Juss's approval.
 - 2026-11-08 22:43 UTC: created scheduled task "jussray daily GitHub digest" (trig_01GRi7McgNmbS6vyhuDCPiGN). Runs weekdays at 8:40 New York time in a fresh session, read-only, with push notifications. First run 2026-11-09 13:40 UTC. Warning from creation: it stores no connectors, so the run falls back to `gh` read-only calls. Gmail, Notion and Slack automations are not created yet.
 - 2026-11-09 ~06:30 UTC: the audit found Ideas and Opportunity Engine sharing a title. Fix: `opportunity-engine.html` `<title>` and `og:title` now say "Opportunity Engine", matching its own meta description. Its visible h1 is unchanged (founder copy). Checks: verify-opportunity-engine PASS on desktop and mobile; verify-site 439 ok. The page has had no live check yet.
 - 2026-11-09 13:41 UTC: the first digest run (trig_01GRi7McgNmbS6vyhuDCPiGN, session cse_01KbtbVi1VXVtpa8UEAB7XYq) FAILED to read GitHub. Each fire starts a fresh session with no repository attached, so `gh` returned 403 ("GitHub access to this repository is not enabled for this session"). The run changed nothing and sent a push notification. Fix (Juss, in the claude.ai Routines UI): attach jussray/jussray with read access, or recreate the routine there with the repo selected. An agent-created trigger can't attach a source. Next fire: 2026-11-10 13:40 UTC. Until then, the task fails the same way every weekday.
@@ -694,7 +701,7 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
 - PR #72 merged by Juss 13:52 UTC as `b7695f9`, without an outside approval. Checks on main `b7695f9`: Workers Builds jussray, Site Browser Proof, site verify and Repo Reality all pass. Provider readback fails (Browser Rendering HTTP 401; it was failing before this merge). Live runtime: UNKNOWN.
 - Juss's decision, 2026-11-09: "I am the independent reviewer; my pressing review and auto merge should sign and/or trigger those approvals." This supersedes the non-author-approval rule.
 - Built on branch `claude/sleepy-mayer-1s8avr` from `b7695f9`:
-  - The gate accepts Juss's `/approve <sha>` PR comment or his enabling auto-merge, made in the GitHub UI after the head push. Actions made through an app are rejected.
+  - The gate accepts Juss's `/approve <sha>` PR comment or her enabling auto-merge, made in the GitHub UI after the head push. Actions made through an app are rejected.
   - Observed on #72's timeline: Claude's comment carries `performed_via_github_app=claude`; Juss's auto_merge_disabled and merge carry `null`.
   - The gate workflow now also runs on auto_merge_enabled/disabled. New `founder-review-rerun.yml` re-runs the gate when Juss comments `/approve`.
   - The ruleset repair script now sets native approvals to 0.
@@ -702,14 +709,14 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
 - This needs a bootstrap merge: main's old gate still demands a non-author approval until this lands.
 
 ## 2026-11-09 PR #73 merged (`0caf4d1`); provider readback 401 traced
-- Juss merged #73 at 14:00 UTC. Main's gate now includes `founderDecision`, so his `/approve <sha>` comment or turning on auto-merge counts as the founder review.
+- Juss merged #73 at 14:00 UTC. Main's gate now includes `founderDecision`, so her `/approve <sha>` comment or turning on auto-merge counts as the founder review.
 - Juss says the Browser Rendering token was renewed days ago. Observed:
   - Both `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_BROWSER_RENDERING_TOKEN` reach the job: they show masked as `***`, so they came from secrets.
   - Every push and dispatch run of `provider-site-proof.yml` since 2026-10-20 has failed or been cancelled. None passed. The runs whose logs are still readable say `HTTP 401` (11-06, 11-08, 11-09). PR runs pass only because they skip the live step.
   - So the token that is set is rejected. Possible causes: wrong token type (a Global API Key instead of an API Token), missing "Browser Rendering: Edit" permission, the token scoped to a different account, an expired token, or stray whitespace when it was pasted.
 - Fix on this branch: on failure, the readback prints only Cloudflare's numeric error codes, never text. The next main run will then name the cause.
 - 2026-11-09 14:07 UTC: Juss turned on auto-merge for #74 (squash). GitHub recorded it as `auto_squash_enabled`, not `auto_merge_enabled`, so the gate missed it. Fixed on #74: all three method-named enable events now count. The fix only takes effect after #74 merges, because the gate runs from main.
-- 2026-11-09 ~15:35 UTC: commit 0f5a23e (from Juss's account, unsigned, pushed 15:20 UTC) removed the founder-review path from #74. I asked Juss which rule stands; he answered "I'm the reviewer". Reverted 0f5a23e; the code again matches 8be2019.
+- 2026-11-09 ~15:35 UTC: commit 0f5a23e (from Juss's account, unsigned, pushed 15:20 UTC) removed the founder-review path from #74. I asked Juss which rule stands; she answered "I'm the reviewer". Reverted 0f5a23e; the code again matches 8be2019.
 - 2026-11-09 ~16:40 UTC: eb112c8 (Juss's account, unsigned, 16:24 UTC) reintroduced the non-author approval requirement. Juss: "The system accordingly is the sec reviewer". Reverted eb112c8; CLAUDE.md records two reviewers (the system's 4 required checks + Juss's UI founder review) as settled.
 
 ## RESUME HERE (handover 2026-11-09 ~16:45 UTC)
@@ -720,7 +727,7 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
 - **PR #74** (branch `claude/sleepy-mayer-1s8avr`, head `0b9df0a`) holds:
   - the Cloudflare numeric error-code readback fix;
   - the fix for squash/rebase auto-merge events in the gate;
-  - the reverts of `0f5a23e` and `eb112c8`, both unsigned commits from Juss's account (likely another agent using his token).
+  - the reverts of `0f5a23e` and `eb112c8`, both unsigned commits from Juss's account (likely another agent using her token).
   - Its CI was green apart from Independent Review Evidence on the earlier heads. CI on `0b9df0a` has not been read back.
 - **Blockers, all Juss's admin actions:**
   1. Governance ruleset 26857902: approvals 1→0; add `Review Gate Unit Tests`; remove `focused-browser` (nothing reports it) and `Workers Builds: jussco-games`; remove the 17 required deployments; turn on strict checks.
@@ -745,7 +752,7 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
 - 2026-11-15: Codex posted plans (as jussray) on #76/#74 that keep "one independent native approval" and want Steel City added to #76. Not adopted: they conflict with the founder rule above and would void #76's approval.
 ## 2026-11-10 — Game Hub v3 mockups (founder, binding)
 - Founder sent `gamehub-v3-desktop` / `gamehub-v3-mobile` mockups: crown "Juss & Co COMPANY" logo header, search + bell + "My Juss" account, tagline PLAY · CONNECT · CREATE · COMPETE · EARN, Explore Games + My Library, crystal-globe lotus, gold-glow Featured carousel with dots, Hub Center rows (All Games, SYNC Game Center, Tournaments, Events & Challenges, Creator Zone, Rewards & Achievements), ambient + "Current Atmosphere: Sunset · Apr 12 – May 31", phone: Game Hub Center pill + All Games | Tournaments | Events | Creator Zone, bottom nav Home/Products/Solutions/Our Work/Founder.
-- Founder decision: build **exactly as drawn**, but the tiles/content must be his **actual games and apps from the repo** (worlds.json / portfolio.json). Unbuilt features render as drawn and are honestly marked "Coming soon" (no fake links/claims).
+- Founder decision: build **exactly as drawn**, but the tiles/content must be her **actual games and apps from the repo** (worlds.json / portfolio.json). Unbuilt features render as drawn and are honestly marked "Coming soon" (no fake links/claims).
 - Founder decision: **search comes back** (reverses fix-4 of PR #76).
 - Founder decision: the **main page (www.jussco.company) gets the same look and fixes** accordingly.
 - Carrier: PR #76 branch `claude/gamehub-mockup-fixes`.
