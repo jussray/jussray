@@ -39,7 +39,7 @@ Never send, delete, spend, merge or deploy without Juss's explicit yes in this c
 |---------|---------|-------------|----------------------|----------------|
 | Juss & Co Site | Mockups → site decisions | Founder mockups; `CLAUDE.md`; `site/data/worlds.json` | "Match mockup proportions, not just parts. Status and links only from worlds.json. Done = screenshot list at 1440/1672/390 with every mismatch named." | A mismatch list with fixes |
 | Release Desk | PRs, gates, rollbacks | `CLAUDE.md`; `docs/claude/STATE.md` | "Report REALITY / FIX / PROOF / RISK / ROLLBACK / NEXT GATE. Never claim live without a readback." | The merge note for a PR |
-| Brand Voice | Posts, replies, launches | 5 pieces Juss wrote himself | "Keep Juss's rough edges: terse, direct, no hype words. Draft only." | One post in his voice |
+| Brand Voice | Posts, replies, launches | 5 pieces Juss wrote herself | "Keep Juss's rough edges: terse, direct, no hype words. Draft only." | One post in her voice |
 
 **Voice guide (starter):** short sentences; says what is real and what is pending; no "revolutionary", "seamless" or "game-changing"; signs as Juss.
 

@@ -48,7 +48,7 @@ export function planNativeRepair(live) {
   const pull=live.rules.find(x=>x.type==='pull_request').parameters;
   if(pull?.required_review_thread_resolution!==true || ![0,1].includes(pull.required_approving_review_count))
     throw new Error('Review gate cannot be altered or relaxed implicitly');
-  // Founder review (Juss, 2026-11-09): the PR author cannot approve his own PR, so native approvals
+  // Founder review (Juss, 2026-11-09): the PR author cannot approve her own PR, so native approvals
   // go to 0 and the required Independent Review Evidence check enforces the founder review.
   const checks=live.rules.find(x=>x.type==='required_status_checks').parameters;
   if(!checks || checks.strict_required_status_checks_policy!==true ||
