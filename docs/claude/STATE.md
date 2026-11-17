@@ -3,6 +3,7 @@
 - FIX: every reference to Juss as he/him/his/himself across repo docs, skills, scripts comments and the review workflow comment now reads she/her/herself. Skill checksums in `skills/juss-authored/SHA256SUMS.txt` updated for the three edited SKILL.md files.
 - RULE: refer to Juss as she/her in all agent-written docs, comments and receipts.
 - PROOF (local): no he/him/his/himself left in text files. `node --test scripts/*.test.mjs` 103/105, same 2 failures as the unchanged tree (vitest gap; Sync Party static fallback). `verify_inventory.py` fails the same way before and after (MANIFEST.md missing from SHA256SUMS, from 6c25ec9).
+- PR #84 (branch `claude/memory-migration-snapshot-9a7et7`). CI on f7a293c: `receipts` red from the same pre-existing MANIFEST.md checksum gap, fixed in the follow-up commit by adding MANIFEST.md to SHA256SUMS.txt; `Repo Reality` red because the PR body lacked the five `###` evidence sections, fixed by editing the body.
 - ROLLBACK: revert this commit.
 
 ## 2026-11-08 — SUPERSEDING founder governance decision: systematic-first, human-final

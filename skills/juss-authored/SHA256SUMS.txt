@@ -1,3 +1,4 @@
+dd5bd92a25e15faa1344aef314832ddee8f87d766b504585adbbf83bc3469fd0  ./MANIFEST.md
 1141d5b0242d33d69db7aa7fcced04b9ed06bec756061ccc69127d0c4745e2e2  ./README.md
 170c840176fd62a43b88a5eb6fcd39cbbb7c07f7b8ae7fd111fffb5067e22116  ./confess/SKILL.md
 1806dc748ee8a024a5141a26c26f9a02af0cf40eadf34e46fa4564fda21f27d7  ./fcr-set/ai-skills/chatgpt-openai-developers-zapier-bridge/SKILL.md
