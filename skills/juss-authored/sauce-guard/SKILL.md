@@ -1,6 +1,6 @@
 ---
 name: sauce-guard
-description: "Founder-owned progress publishing pipeline for jussray. Lets Juss publicly talk about his own products — progress, discoveries, corrections, wins — without exposing proprietary implementation. Pipeline: verified evidence → Chief AI proposes public-safe story → Sauce Guard strips private machinery → temporal classification → Current You approves → FCR revalidates → executes → provider readback confirms → receipt stored. Use whenever Juss is drafting LinkedIn posts, public progress updates, product announcements, or any content derived from internal product work. Also triggers on /confess (honest corrections), proof-led content, campaign drafts, and Buffer/Zapier publish flows. Never publish until provider readback proves the observable artifact.\n"
+description: "Founder-owned progress publishing pipeline for jussray. Lets Juss publicly talk about her own products — progress, discoveries, corrections, wins — without exposing proprietary implementation. Pipeline: verified evidence → Chief AI proposes public-safe story → Sauce Guard strips private machinery → temporal classification → Current You approves → FCR revalidates → executes → provider readback confirms → receipt stored. Use whenever Juss is drafting LinkedIn posts, public progress updates, product announcements, or any content derived from internal product work. Also triggers on /confess (honest corrections), proof-led content, campaign drafts, and Buffer/Zapier publish flows. Never publish until provider readback proves the observable artifact.\n"
 ---
 
 # Sauce Guard — Founder Content Pipeline
@@ -9,7 +9,7 @@ Author: Juss
 
 ## Mission
 
-Let Juss publicly talk from his own products about his own products — progress,
+Let Juss publicly talk from her own products about her own products — progress,
 discoveries, corrections, wins — without exposing the proprietary sauce.
 
 ## The pipeline

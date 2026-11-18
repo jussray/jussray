@@ -45,7 +45,7 @@ html[data-tod=night] .tod-art{background-image:url('/assets/ideas-night.webp');o
 .eco-track{flex:1;min-width:0;display:flex;gap:10px;margin:0;padding:2px;list-style:none;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
 .eco-track::-webkit-scrollbar{display:none}
 .eco-tile{flex:0 0 calc((100% - 50px)/6);min-width:96px;scroll-snap-align:start}
-.eco-tile>a,.eco-tile>div{display:flex;flex-direction:column;align-items:center;gap:5px;height:150px;padding:10px 6px;border:1px solid var(--gline);border-radius:14px;background:linear-gradient(180deg,rgba(60,36,110,.6),rgba(24,14,52,.7));text-decoration:none;text-align:center}
+.eco-tile>a,.eco-tile>div{display:flex;flex-direction:column;align-items:center;gap:5px;min-height:150px;padding:10px 6px;border:1px solid var(--gline);border-radius:14px;background:linear-gradient(180deg,rgba(60,36,110,.6),rgba(24,14,52,.7));text-decoration:none;text-align:center}
 .eco-tile>a:hover{border-color:#ffd98a;transform:translateY(-2px)}
 .eco-badge{display:grid;place-items:center;width:46px;height:46px;border-radius:12px;background:linear-gradient(160deg,#d6a6ff,#7b4fd6 55%,#f5c14b);box-shadow:0 0 16px rgba(190,140,255,.55);font:700 17px/1 "Playfair Display",Georgia,serif;color:#fff}
 .eco-tile strong{font-size:12.5px;line-height:1.25;color:#fff1de}
@@ -138,7 +138,6 @@ html[data-tod=dawn] .tod-art{background-image:url('/assets/ideas-sunset.webp');o
 .eco-foot{margin-top:0}
 #home-toast{position:fixed;left:50%;bottom:110px;transform:translateX(-50%);z-index:60;margin:0;padding:10px 18px;border-radius:999px;background:rgba(28,21,56,.95);border:1px solid #ffcf86;color:#fff1de;font-size:14px;box-shadow:0 8px 24px rgba(0,0,0,.5)}
 #home-toast[hidden]{display:none}
-.home-bottom-nav{display:none}
 .menu-word{margin-right:2px}
 @media(min-width:761px){.menu-toggle svg{display:none}}
 @media(min-width:761px) and (max-width:1500px){.home-world .site-nav a{padding-left:10px;padding-right:10px}.hdr-btn.account .account-label{display:none}.hdr-btn.account{width:46px;padding:0;justify-content:center}.hdr-btn .caret{display:none}}
@@ -150,7 +149,7 @@ html[data-tod=dawn] .tod-art{background-image:url('/assets/ideas-sunset.webp');o
   .hdr-btn{width:44px;height:44px}.hdr-btn svg{width:19px;height:19px}.hdr-btn .dot{top:9px;right:10px}
   .hdr-btn.account{width:44px;padding:0;justify-content:center;border-radius:50%}.hdr-btn.account .account-label,.hdr-btn .caret{display:none}
   .menu-toggle{width:44px;height:44px;padding:0;justify-content:center;align-items:center;border-radius:50%}.menu-word{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-  .home-world main{min-height:calc(100svh - 62px);padding-bottom:76px}
+  .home-world main{min-height:calc(100svh - 62px)}
   .world-stage.cinematic{padding-top:8px}
   .crown{width:30px;height:22px}.brandline{margin:2px 0}
   .world-stage h1{font-size:clamp(25px,7.6vw,33px);margin:2px 0 6px}
@@ -168,16 +167,12 @@ html[data-tod=dawn] .tod-art{background-image:url('/assets/ideas-sunset.webp');o
   .atmo-btn .chev{display:none}.atmo-btn .sun-ico{width:22px;height:22px}
   .eco-band{margin:10px 10px 8px;padding:8px 6px 2px}
   .eco-band h2{font-size:20px;margin-bottom:6px}
-  .eco-tile>a,.eco-tile>div{height:120px;padding:8px 4px}
+  .eco-tile>a,.eco-tile>div{min-height:120px;padding:8px 4px}
   .eco-badge{width:46px;height:46px;font-size:16px}
   .eco-tile strong{font-size:13px}
   .eco-dots{margin-top:2px}.eco-foot a{min-height:32px;font-size:11.5px}
-  .home-bottom-nav{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(100%,580px);height:calc(70px + env(safe-area-inset-bottom,0px));padding:5px 6px calc(5px + env(safe-area-inset-bottom,0px));z-index:50;background:linear-gradient(180deg,rgba(36,25,74,.92),rgba(20,16,46,.97));border:1px solid rgba(255,220,174,.4);border-bottom:0;border-radius:24px 24px 0 0;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
-  .home-bottom-nav a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:18px;color:#e9dcf5;font-size:12px;text-decoration:none}
-  .home-bottom-nav a[aria-current="page"]{background:rgba(245,193,75,.15);box-shadow:inset 0 0 0 1px rgba(255,217,138,.53);color:#ffd98a}
-  .home-bottom-nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
   .home-search{right:8px;left:8px;width:auto}
-  #home-toast{bottom:86px}
+  #home-toast{bottom:24px}
 }
 @media(max-width:760px){
   .home-world .site-header .header-tools{order:2}.home-world .site-header .menu-toggle{order:3;border:0;background:none}
@@ -194,7 +189,7 @@ html[data-tod=dawn] .tod-art{background-image:url('/assets/ideas-sunset.webp');o
 .home-world .home-search{background:linear-gradient(160deg,#2a1d55,#17123c);z-index:46}
 
 .home-world .work-cta { display: none; }
-.home-world .eco-badge { overflow: hidden; }
+.home-world .eco-badge { overflow: hidden; flex: none; }
 .home-world .eco-badge img { width: 100%; height: 100%; display: block; object-fit: cover; }
 @media (prefers-reduced-motion: no-preference) {
   .home-world .glass { isolation: isolate; overflow: hidden; }

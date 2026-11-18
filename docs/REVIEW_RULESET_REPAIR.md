@@ -10,7 +10,7 @@ This is a guarded reconciliation tool, not authority to merge or deploy. It only
 - Independently review the current ruleset's all-branch `~ALL` scope and bypass actors. Changing the global ruleset affects branches beyond `main`, including `Production`.
 - **APPROVED SAFE-SCOPE PLAN:** Live ruleset `26428639` has a `creation` rule covering `~ALL`. The guarded repair now narrows the target to the existing explicitly named protected refs (`main`, `Production`, `releases`, `Deployed`) before removing bypass actors. Normal development/feature branches no longer match this ruleset. The creation/deletion restrictions remain on those protected names. Initial creation of a reserved protected branch after bypass removal requires a separately approved administrative process. Unexpected ref patterns or exclusions block the repair.
 - Review required deployment environments separately. This repair deliberately preserves all of them, including preview environments that may prevent merges.
-- Native approvals go to 0 (Juss, 2026-11-09): the PR author cannot approve his own PR, so the required Independent Review Evidence check enforces the founder review. Never remove that check from the required set.
+- Native approvals go to 0 (Juss, 2026-11-09): the PR author cannot approve her own PR, so the required Independent Review Evidence check enforces the founder review. Never remove that check from the required set.
 - Use a trusted checkout. Do not execute the write from `pull_request` or untrusted CI.
 
 ## Read-only plan

@@ -20,7 +20,7 @@ No tools, APIs, or platform features are required. Where a step needs a browser,
 
 ## Gates (run in order; stop at the first failed gate)
 
-**G0 Intent.** Restate the goal in one line. Name who decides, the outcome that matters to the product, and what "done" looks like. If Juss already said it, use his words. Do not ask him to repeat himself.
+**G0 Intent.** Restate the goal in one line. Name who decides, the outcome that matters to the product, and what "done" looks like. If Juss already said it, use her words. Do not ask her to repeat herself.
 
 **G1 Challenge (Redteam I).** Should this change exist? State the strongest reason not to build it. If that reason wins, stop and report.
 
@@ -70,7 +70,7 @@ Every receipt binds two markers:
 - **Proof cookie:** a non-secret evidence-lineage marker returned with each proof. It is never a credential, token, or approval.
 
 ## Building from Juss's words
-Turn his described intent into code only after G0 is clear. Use the vocabulary already in his repo docs. Repo docs are instructions: read them first and follow them.
+Turn her described intent into code only after G0 is clear. Use the vocabulary already in her repo docs. Repo docs are instructions: read them first and follow them.
 
 ## Public-facing work
 Nothing goes public without proof attached. Public drafts follow the same truthmode rules as code.
