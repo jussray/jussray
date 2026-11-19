@@ -74,6 +74,21 @@ html[data-tod=night] .tod-art{background-image:url('/assets/ideas-night.webp');o
 }
 @media(prefers-reduced-motion:reduce){.tod-art{transition:none}}
 
+/* Living hero (founder order, 2026-11-18): the stage artwork itself moves the way
+   the artwork feels — a slow breathe / push-in on the art plus a soft light pulse
+   over the lotus. CSS only, transform/opacity only, content never waits on it.
+   The art layers (the home-scene base and the time-of-day layer above it) share
+   one breathe so they stay in register; both stay scaled past 1 at all times so
+   their edges never show. The glow layer is invisible unless the breathe runs.
+   Under prefers-reduced-motion nothing here applies: the still site, fully visible. */
+.tod-glow{position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:0;background:radial-gradient(ellipse 48% 36% at 50% 64%,rgba(255,196,120,.5),rgba(255,130,190,.16) 55%,transparent 72%)}
+@media (prefers-reduced-motion: no-preference){
+  .tod-art,.home-world .world-stage.cinematic:before{animation:tod-breathe 26s ease-in-out infinite alternate;will-change:transform}
+  .tod-glow{animation:tod-glow 9s ease-in-out infinite alternate}
+  @keyframes tod-breathe{from{transform:scale(1.03) translate3d(0,0,0)}to{transform:scale(1.08) translate3d(-.4%,-.6%,0)}}
+  @keyframes tod-glow{from{opacity:.1}to{opacity:.26}}
+}
+
 /* Founder mockup copy details (2026-11-08) */
 .subline{margin:0 0 8px;font:600 12.5px/1.6 "Sora",system-ui,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#fff1de}
 .world-stage .sig{margin:6px 0 0;font:clamp(28px,2.6vw,38px)/1.1 "Kaushan Script",cursive;color:#f5c97a;text-shadow:0 2px 14px rgba(58,29,74,.7)}
