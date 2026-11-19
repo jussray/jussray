@@ -215,3 +215,13 @@ test('squash and rebase auto-merge events count as enabling auto-merge (observed
   assert.deepEqual(e.signals.map(x=>x.kind),['auto_merge_enabled','auto_merge_enabled']);
   assert.equal(founderDecision({...e,expectedHead:H}).via,'founder-auto-merge');
 });
+
+// docs/rulesets/main-contract.json is the importable ruleset that matches CLAUDE.md's
+// "Native ruleset" contract. It must satisfy the gate's own ruleset check by itself.
+test('docs/rulesets/main-contract.json satisfies the gate ruleset contract on its own',async()=>{
+  const {readFileSync}=await import('node:fs');
+  const contract=JSON.parse(readFileSync(new URL('../docs/rulesets/main-contract.json',import.meta.url),'utf8'));
+  assert.deepEqual(rulesetDecision([contract]),{ok:true,errors:[]});
+  assert.deepEqual(contract.conditions.ref_name.include,['~DEFAULT_BRANCH']);
+  assert.equal(contract.bypass_actors.length,0);
+});

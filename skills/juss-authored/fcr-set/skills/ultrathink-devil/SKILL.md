@@ -8,16 +8,14 @@ description: >
 version: 1.0.0
 owner: Juss
 triggers:
-  - ULTRATHINK
-  - /devil
   - /ultrathink-devil
-  - /truthmode
-  - /confess
 compatible:
   - ChatGPT GPT-5.6 Sol
   - Founder Control Room
   - Chief AI
 ---
+
+> Scope: FCR export. Its triggers and merge wording govern Founder Control Room, not jussray. In jussray, the repository `CLAUDE.md` and `skills/juss-authored/README.md` (trigger ownership) govern.
 
 # ULTRATHINK / DEVIL
 
