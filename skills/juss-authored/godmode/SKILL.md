@@ -3,10 +3,10 @@ name: "godmode"
 description: "One governed build loop for Juss's projects. Combines ULTRATHINK, goalfix, redteam, L99, OODA, confess and truthmode into one path: challenge the goal, make the smallest focused fix, verify on the real path (Playwright for UI), and commit only with evidence. Merge only on explicit approval."
 version: 1.0
 owner: Juss
-trigger:
-- /godmode
-- ULTRATHINK /godmode
+triggers: []
 ---
+
+> Superseded for `/godmode` by `godmode-devil-ultrathink` (Juss, 2026-11-10). This file no longer claims a trigger and is kept as reference only. Where the two differ, `godmode-devil-ultrathink` and the repository's `CLAUDE.md` govern.
 
 # /godmode — Challenge, Build, Verify, Commit
 

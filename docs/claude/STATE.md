@@ -1,9 +1,142 @@
+## 2026-11-18 — PR #75 merged with main again (335de6e)
+
+- `main` gained #84 (she/her), #85, #87 and MANIFEST.md, and PR #75 conflicted again. Juss's auto-merge toggle at 23:54 UTC could not run the gate on a conflicted PR.
+- Resolution: `CLAUDE.md` takes main's she/her text, plus the Needed PR comments rule and the `/approve` note. `STATE.md` keeps both sides. Skills `SHA256SUMS.txt` is regenerated. No he/him remains in the lines this branch adds.
+- Local proof: gate 28/28, site node 31/31, codex release + receipt + modes tests OK, inventory OK, verify-site exit 0 (510 ok).
+- NEXT (Juss): after this push, turn auto-merge off and back on to sign off on the new head.
+
 ## 2026-11-17 — Founder pronouns are she/her (Juss: "I am she her")
 
 - FIX: every reference to Juss as he/him/his/himself across repo docs, skills, scripts comments and the review workflow comment now reads she/her/herself. Skill checksums in `skills/juss-authored/SHA256SUMS.txt` updated for the three edited SKILL.md files.
 - RULE: refer to Juss as she/her in all agent-written docs, comments and receipts.
 - PROOF (local): no he/him/his/himself left in text files. `node --test scripts/*.test.mjs` 103/105, same 2 failures as the unchanged tree (vitest gap; Sync Party static fallback). `verify_inventory.py` fails the same way before and after (MANIFEST.md missing from SHA256SUMS, from 6c25ec9).
 - PR #84 (branch `claude/memory-migration-snapshot-9a7et7`). CI on f7a293c: `receipts` red from the same pre-existing MANIFEST.md checksum gap, fixed in the follow-up commit by adding MANIFEST.md to SHA256SUMS.txt; `Repo Reality` red because the PR body lacked the five `###` evidence sections, fixed by editing the body.
+
+## 2026-11-17 — PR #75 brought up to date with main (d62410b)
+
+- `main` moved overnight (#74, #76, #67, #79, #81). The Governance ruleset is now disabled; Production is still active. PR #75 had conflicts.
+- Resolution: `main`'s review gate from #74 kept as is (it already counts auto-merge under all three event names). The Claude-approve path from 29ecdc1/29ba9ea was dropped; it never worked because GitHub stores Claude's comment as `·/·a·pprove`. `CLAUDE.md` takes main's governance text, plus the Needed PR comments rule and a note on that attempt. `.claude/CLAUDE.md` combines main's Codex `.agents/skills` line with the skills-pack field list. `home-world.mjs` keeps main's `BADGE_ART`; main's `visibilitychange` handler is dropped because the shared ambience engine already handles hidden tabs.
+- Local proof on the merged tree: gate tests 28/28 (plus the main-contract test), site node tests 31/31, approved stories OK, skills sums OK, verify-site exit 0 (510 ok, "all checks passed").
+
+## 2026-11-16 — Auto-merge is Juss's sign-off again (Juss: "I am the human sign off if I press auto merge it should count as human review")
+
+- Gate: Juss turning auto-merge on after the head push counts as founder review. GitHub's real event names are `auto_squash_enabled` / `auto_merge_enabled` / `auto_rebase_enabled` (PR #75 timeline shows `auto_squash_enabled`, actor jussray, no app). `main`'s gate only matched `auto_merge_enabled`, which is why Juss's toggles never counted. Turning it off withdraws it; it must be on after each new head push. App-attributed, unknown-attribution or other-user events never count.
+- Workflow re-runs the gate on `auto_merge_enabled` / `auto_merge_disabled`. Tests 33/33.
+- Claude `/approve`: GitHub stores Claude's comment as `·/·a·pprove`, so it is not an approval. Not worked around.
+- PR #75 still needs one founder action (bypass merge or UI `/approve`), because the gate runs `main`'s copy until this merges.
+
+## 2026-11-16 — Claude may post /approve after green checks (Juss: "Fix rule so that the approval comments to merge come from you after they pass tests and checks")
+
+- Gate `scripts/verify-independent-review.mjs`: a `/approve <head>` comment made through the Claude app now counts, but only if Repo Reality / exact-head, Review Gate Unit Tests and Juss & Co Site Browser Proof are all completed green on that exact head and finished before the comment. A founder comment in the UI still counts any time. Other apps and auto-merge never count.
+- Tests: 32/32 pass (new tests cover missing, red, pending and late checks, old head, and the evidence reader).
+- `CLAUDE.md` rule updated. Known limit: the gate runs from `main`, so this rule takes effect only once it is merged. PR #75 still needs one founder action, either `/approve` in the UI or a bypass merge.
+- Risk accepted by Juss: a Claude approval proves green checks, not that a human reviewed the change.
+
+## 2026-11-15 — Importable contract ruleset; PR #75 at ac8c125 (Juss: "Implement")
+
+- Another Claude session pushed `ac8c125` to this branch: the Opportunity Engine no longer gets a second soundscape. Verified locally: verify-site exit 0, 481 ok, sums OK. Two sessions are working on one branch, and the risk is flagged to Juss.
+- NEW `docs/rulesets/main-contract.json` with README: the Native ruleset as one importable file. Target is the default branch only, with 0 approvals, the 4 strict checks, threads resolved, no force push or deletion, and no bypass actors. A gate test checks it passes `rulesetDecision`.
+- `CLAUDE.md`: rules on ruleset drift and bypass disclosure, and on UI-only steps.
+- NEXT (Juss): import the ruleset, disable Governance and Production, then `/approve <head>` on PR #75.
+
+## 2026-11-15 — Founder review is comment-only (Juss: "Begin", after Claude recommended comment-only)
+
+- `cf4af71` (auto-merge from issue events) is reverted.
+- The gate (`scripts/verify-independent-review.mjs`) now accepts only a `/approve <sha>` comment made in the GitHub UI. Auto-merge never counts. The workflow no longer triggers on auto-merge events, and `CLAUDE.md` is updated to match.
+- Why: issue events made through an agent's user token can show `performed_via_github_app: null`, the same as a UI action.
+- Pushes to `claude/*` currently pass only because GitHub applies the "Production" bypass (integration 4047066). This is disclosed on PR #75.
+- PROOF (local): gate tests 26/26. `node --test` 111 pass, with the 2 known failures that also fail on `main`.
+
+## 2026-11-13 — Standing preference and blockers (Juss: "you do it for me always", "use fcr remember")
+
+- PREFERENCE (Juss): Claude does GitHub and admin work for Juss whenever a tool and credential allow it. Claude posts needed PR comments itself. The founder approval (`/approve <sha>` or Juss-made auto-merge) stays Juss's.
+- BLOCKED (this session):
+  - There is no tool or admin credential to edit rulesets.
+  - Attaching `jussray/founder-control-room` to record this in FCR was denied by the session classifier.
+  - Every push is rejected with GH013 because both rulesets target `~ALL`.
+- PR #75: head `f0806d0`, all CI green except Independent Review Evidence.
+  - The gate does not see auto-merge: it is recorded as `auto_squash_enabled` in issue events.
+  - Neither ruleset has `non_fast_forward`.
+  - Local commits `cf4af71` (auto-merge detection, recommended to replace with a comment-only gate) and `31897be` (comment rule) are unpushed.
+- RULESET DRIFT from the CLAUDE.md contract:
+  - "Governance" 26857902 and "Production" 26428639: `~ALL` target; 1 required approval; 16 impossible deployments; signed commits required; CodeQL required; 4 required checks that never run (`Workers Builds: jussco-games`, `focused-browser`, `Think Tank - jussray`, `qr-assets`); integration 4047066 has `always` bypass.
+  - Contract: `main` only, 0 approvals, the 4 strict checks, review threads resolved, force pushes and deletion blocked.
+
+## 2026-11-10 — Remaining skills findings fixed (Juss: "fix the remaining skills findings cont")
+
+- FIX (all in `skills/juss-authored/` plus two docs):
+  - fcr-set `ultrathink-devil` no longer claims ULTRATHINK, `/devil`, `/truthmode` or `/confess`. It owns only `/ultrathink-devil`, and its `ai-skills` copy now routes to the canonical file (nothing deleted). The FCR goalfix uses `/goalfix-fcr`, and `truth-decay-audit` uses `/truth-decay-audit`.
+  - `/confess`, `/truthmode`, `/juss-os` and `/truth-decay` are declared by their own skills. A YAML-checked scan finds no trigger collisions.
+  - The `juss-flow-launch-loop` merge gate says standing intent alone never authorizes a merge.
+  - `confess` and `truthmode` use the real script path `skills/juss-authored/juss-os/scripts/`.
+  - Frontmatter:
+    - The bridge skill gets frontmatter.
+    - 11 fcr-set skills get descriptions written from their own opening text.
+    - `reasoning-stack` had invalid YAML (an unquoted colon); it is now quoted.
+    - Every SKILL.md parses with a name and a description.
+  - Dead relative links to unexported FCR files now name the source repo. The fact-check canonical path is fixed.
+  - `.claude/CLAUDE.md` no longer claims a `requirements` field, and documents one owner per trigger.
+  - CI (`juss-authored-skills-conformance.yml`) now runs the juss-os `test_evidence_ledger` and `test_modes` suites.
+  - SHA256SUMS regenerated (no `__pycache__`).
+- PROOF: INVENTORY_OK; unittest OK; juss-os tests OK; frontmatter 0 bad; trigger collisions none; workflow YAML parses.
+- ROLLBACK: revert this commit.
+
+## 2026-11-10 — Draft PR #75 opened for `claude/tender-allen-cvkpqa` (ambience and skills). It waits on exact-head CI and Juss's `/approve <sha>` or her auto-merge.
+
+## 2026-11-10 — Skills fixes 1–3 applied (Juss: "Approved cont")
+
+- FIX:
+  - `/godmode` is owned only by `godmode-devil-ultrathink`. `godmode/` now claims no trigger and is kept as reference.
+  - `/goalfix`, `/fixfast` and `/repair-verify-merge` are owned only by `goalfix`, which now declares them in its frontmatter. They were removed from `l99-v21` (frozen), which keeps `/l99`.
+  - `goalfix` merge rule: merge only with Juss's explicit approval for the exact PR and head SHA, after green checks. Green checks alone never authorize a merge.
+  - The README trigger-ownership section and the MANIFEST note are updated, and SHA256SUMS is regenerated.
+- PROOF: `sha256sum -c` OK, `verify_inventory` INVENTORY_OK, unittest OK, juss-os script tests OK. `node --test` over all repo tests gives 111 pass and 2 fail. Both failures predate this branch: `evidence-sync-proof` is the known vitest gap, and `sync-party-link` fails on the base too and is not in CI.
+- OPEN (not done):
+  - fcr-set trigger collisions (goalfix, ultrathink-devil) and its merge wording. These are an FCR export, so they are noted in the README as FCR-scoped.
+  - Broken script path in confess and truthmode.
+  - Frontmatter consistency.
+  - The juss-os tests are not in CI.
+
+## 2026-11-10 — Parallel audits: red-team of the ambience commit, and the skills pack (Juss: "audit in parallel too @skills")
+
+- RED-TEAM FIXES (ambience follow-up commit on `claude/tender-allen-cvkpqa`):
+  - A remembered "on" no longer turns sound back on after the visitor switches it off. Any explicit toggle cancels the pending resume.
+  - The resume listener is only set up on pages that show a switch wired to the shared engine. The Game Hub served by this worker no longer gets a hidden second engine.
+  - Resume listens for pointerup, touchend and keydown, the events browsers treat as a user gesture.
+  - The audio context is suspended after it fades out (when turned off or in a hidden tab), so it no longer drains the battery.
+  - The control injects its own stylesheet, which fixes the unstyled button on opportunity-engine.
+  - Removed the dead `.tabbar` lift rule. No `.tabbar` element exists, and its check cost about 3 minutes of CI time per run.
+  - Rapid double-clicks are ignored while a toggle is still in progress.
+  - Firefly glow is drawn once as a sprite instead of a new gradient every frame.
+  - Tests now read the real engine state: whether it is on, the audio context state and the playing scene. New cases: no autoplay on load, off stays off, resume on the next tap, the Game Hub never starts the shared engine, and opportunity-engine is styled.
+- PROOF (local): verify-site exit 0, 481 ok. atmosphere and site-proof-boundary tests 8/8.
+- SKILLS AUDIT (`skills/juss-authored`, read-only, NOT FIXED, needs Juss's word because these are founder-authored operating rules):
+  - Integrity is green. SHA256SUMS: 57 entries OK. `verify_inventory.py`: INVENTORY_OK. Unit tests: 37 OK. juss-os script tests: 27 OK, but CI does not run them.
+  - HIGH: `/godmode` is claimed by both `godmode` and `godmode-devil-ultrathink`, and their merge rules conflict.
+  - HIGH: `/goalfix`, `/fixfast` and `/repair-verify-merge` are each claimed by three skills: goalfix, l99-v21 (a payments spec) and the fcr-set goalfix.
+  - HIGH: `goalfix/SKILL.md:73` says "no merge unless checks … green", which implies green alone is enough to merge. The CLAUDE.md contract requires Juss's word on the exact head.
+  - MED: the fcr-set ultrathink-devil skill takes over `/truthmode`, `/confess` and `/devil`.
+  - MED: the fcr-set juss-flow-launch-loop says standing intent allows a merge, which contradicts godmode.
+  - MED: `confess:64` and `truthmode:60` point at a missing `.claude/skills/juss-os/scripts/ultrathink.py`. The real path is under `skills/juss-authored/juss-os/scripts/`.
+  - MED: frontmatter is inconsistent. One skill has none, eight have no description, `trigger:` and `triggers:` are both used, and no skill has the `requirements:` field that `.claude/CLAUDE.md` describes.
+  - LOW: broken relative links in fcr-set, two byte-identical ultrathink-devil copies, and the juss-os tests are absent from CI. No secrets were found.
+  - Any skill edit requires regenerating SHA256SUMS.
+
+## 2026-11-10 — Atmosphere-matched ambient sound and motion (Juss: "add the according ambient sounds and animations")
+
+- BRANCH: `claude/tender-allen-cvkpqa`, from `main` 0caf4d1.
+- FIX:
+  - New `site/assets/ambience.mjs`: one generated soundscape per atmosphere, all made in the browser with Web Audio (no audio files, no third-party assets). Every scene has a lake-water bed and a pad chord.
+    - Dawn: birds and a chime.
+    - Day: brighter birds and a breeze.
+    - Sunset: warm chimes and wind.
+    - Night: crickets and low chimes.
+  - The sound crossfades when the atmosphere changes. It is off by default and starts only on a user gesture. The on/off choice and volume are remembered on the device and resume on the visitor's next gesture, never by autoplay. It fades out in a hidden tab.
+  - `atmosphere.mjs` has a new time-of-day motion layer on top of the season particles: stars and fireflies at night, rising embers at sunset, sun glints on the water by day, and mist at dawn. Reduced motion still hides it.
+  - The homepage `#sound` and `#vol` controls now drive the shared engine, so cycling the atmosphere changes the sound.
+  - Every other world page gets a floating "Ambient sound" pill at the bottom left. On phones it is an icon, lifted above a tab bar when one exists. `world-shell.js` adds the atmosphere layer to shell pages that did not load it (builds, licensing, returns). The Ideas page keeps its own panel.
+- PROOF (local): verify-site exit 0, 469 ok, including 30 new ambience checks at desktop and mobile: one control per page, off by default, on and off by gesture, clear of the tab bar, no duplicate control on Home or Ideas, sound stays on while the atmosphere cycles, no console errors. `node --test` 31/31 on the CI set plus the atmosphere test. approved-stories passed. Screenshots reviewed (home dawn and night at 1440, services at 390 night). A headless check confirmed the engine is on and following the scene.
+- NOT YET: exact-head CI, Juss's founder review, merge, and live readback.
 - ROLLBACK: revert this commit.
 
 ## 2026-11-08 — SUPERSEDING founder governance decision: systematic-first, human-final
