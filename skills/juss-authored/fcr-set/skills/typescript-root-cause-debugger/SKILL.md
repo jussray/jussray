@@ -1,5 +1,6 @@
 ---
 name: typescript-root-cause-debugger
+description: "Root-cause debugging of a specific TypeScript, Node, Worker or app behavior from logs, code, screenshots or diffs, with ranked hypotheses and checks."
 version: 1.0.0
 status: active
 scope: founder-control-room

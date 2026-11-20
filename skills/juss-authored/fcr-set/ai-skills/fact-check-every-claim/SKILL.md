@@ -1,18 +1,19 @@
 ---
 name: fact-check-every-claim
+description: "Provider-neutral entry point that routes agents to the canonical fact-check-every-claim contract."
 version: 1.0.0
 status: active
 scope: founder-control-room
 owners:
   - founder
-canonical: ../../../skills/fact-check-every-claim/SKILL.md
+canonical: ../../skills/fact-check-every-claim/SKILL.md
 ---
 
 # Fact Check Every Claim — AI Entry Point
 
 Use the canonical contract:
 
-[`skills/fact-check-every-claim/SKILL.md`](../../../skills/fact-check-every-claim/SKILL.md)
+[`skills/fact-check-every-claim/SKILL.md`](../../skills/fact-check-every-claim/SKILL.md)
 
 Do not duplicate the full rules here. This provider-neutral entry point routes ChatGPT, Claude, Codex, Perplexity, and connected research agents to one versioned source.
 

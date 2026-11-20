@@ -1,5 +1,6 @@
 ---
 name: product-design-gate
+description: "Product Design evidence for design, prototype and UX decisions across FCR and managed repos; it never authorizes merge, deployment, spending or publication."
 version: 1.0.0
 status: active
 scope: founder-control-room

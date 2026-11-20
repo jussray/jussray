@@ -1,5 +1,6 @@
 ---
 name: portfolio-control-plane
+description: "For agents working in Founder Control Room or across Jussray projects: inspect, reason, propose and implement on approved branches with evidence; never turn analysis into founder approval."
 version: 1.0.0
 status: active
 scope: founder-control-room
