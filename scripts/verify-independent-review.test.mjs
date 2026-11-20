@@ -173,6 +173,14 @@ test('founder enabling auto-merge after the head push passes; disabling withdraw
   assert.equal(founderDecision({signals:[sig('auto_merge_enabled','2026-11-09T12:05:00Z')],expectedHead:H,headPushedAt:PUSH}).via,'founder-auto-merge');
   assert.equal(founderDecision({signals:[sig('auto_merge_enabled','2026-11-09T12:05:00Z'),sig('auto_merge_disabled','2026-11-09T12:06:00Z')],expectedHead:H,headPushedAt:PUSH}).ok,false);
 });
+test('squash and rebase auto-merge founder signals respect exact-head time, revocation and app attribution',()=>{
+  for (const kind of ['auto_squash_enabled','auto_rebase_enabled']) {
+    assert.equal(founderDecision({signals:[sig(kind,'2026-11-09T12:05:00Z')],expectedHead:H,headPushedAt:PUSH}).via,'founder-auto-merge');
+    assert.equal(founderDecision({signals:[sig(kind,'2026-11-09T12:05:00Z'),sig('auto_merge_disabled','2026-11-09T12:06:00Z')],expectedHead:H,headPushedAt:PUSH}).ok,false);
+    assert.equal(founderDecision({signals:[sig(kind,'2026-11-09T11:00:00Z')],expectedHead:H,headPushedAt:PUSH}).ok,false);
+    assert.equal(founderDecision({signals:[sig(kind,'2026-11-09T12:05:00Z',{viaApp:'claude'})],expectedHead:H,headPushedAt:PUSH}).ok,false);
+  }
+});
 test('auto-merge or approval given before the head was pushed does not carry to the new head',()=>{
   assert.equal(founderDecision({signals:[sig('auto_merge_enabled','2026-11-09T11:00:00Z')],expectedHead:H,headPushedAt:PUSH}).ok,false);
   assert.equal(founderDecision({signals:[sig('comment','2026-11-09T11:00:00Z',{body:'/approve '+H.slice(0,7)})],expectedHead:H,headPushedAt:PUSH}).ok,false);
@@ -199,10 +207,11 @@ test('timeline reader keeps app attribution and takes the head push time from it
     {event:'commented',user:{login:'jussray'},performed_via_github_app:null,created_at:'2026-11-09T12:05:00Z',body:'/approve aaaaaaa'},
     {event:'commented',user:{login:'jussray'},performed_via_github_app:{slug:'claude'},created_at:'2026-11-09T12:06:00Z',body:'/approve aaaaaaa'},
     {event:'auto_merge_enabled',actor:{login:'jussray'},created_at:'2026-11-09T12:07:00Z'},
+    {event:'auto_squash_enabled',actor:{login:'jussray'},performed_via_github_app:null,created_at:'2026-11-09T12:07:30Z'},
     {event:'labeled',actor:{login:'jussray'},created_at:'2026-11-09T12:08:00Z'},
   ]:{workflow_runs:[{created_at:'2026-11-09T12:01:00Z'},{created_at:PUSH}]}});
   const e=await getFounderEvidence({repo:'jussray/jussray',number:9,sha:H,token:'t',request:api});
-  assert.deepEqual(e.signals.map(x=>[x.kind,x.viaApp]),[['comment',null],['comment','claude'],['auto_merge_enabled',undefined]]);
+  assert.deepEqual(e.signals.map(x=>[x.kind,x.viaApp]),[['comment',null],['comment','claude'],['auto_merge_enabled',undefined],['auto_squash_enabled',null]]);
   assert.equal(e.headPushedAt,'2026-11-09T12:00:00.000Z');
 });
 
