@@ -1,5 +1,6 @@
 ---
 name: typescript-behavior-tests
+description: "Write, repair or review behavior-focused Jest or Vitest tests that prove real outcomes; never delete tests just because they fail or are slow."
 version: 1.0.0
 status: active
 scope: founder-control-room
