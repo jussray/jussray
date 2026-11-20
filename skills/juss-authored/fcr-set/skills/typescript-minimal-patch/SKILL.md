@@ -1,5 +1,6 @@
 ---
 name: typescript-minimal-patch
+description: "Smallest safe repair for a specific TypeScript, Node or Worker bug after the repo has been audited; no refactors, fake mocks or build-passing deletion."
 version: 1.0.0
 status: active
 scope: founder-control-room

@@ -173,7 +173,7 @@ test('founder enabling auto-merge after the head push passes; disabling withdraw
   assert.equal(founderDecision({signals:[sig('auto_merge_enabled','2026-11-09T12:05:00Z')],expectedHead:H,headPushedAt:PUSH}).via,'founder-auto-merge');
   assert.equal(founderDecision({signals:[sig('auto_merge_enabled','2026-11-09T12:05:00Z'),sig('auto_merge_disabled','2026-11-09T12:06:00Z')],expectedHead:H,headPushedAt:PUSH}).ok,false);
 });
-test('squash or rebase auto-merge counts the same as merge-commit auto-merge; disabling withdraws it',()=>{
+test('squash and rebase auto-merge founder signals respect exact-head time, revocation and app attribution',()=>{
   for (const kind of ['auto_squash_enabled','auto_rebase_enabled']) {
     assert.equal(founderDecision({signals:[sig(kind,'2026-11-09T12:05:00Z')],expectedHead:H,headPushedAt:PUSH}).via,'founder-auto-merge');
     assert.equal(founderDecision({signals:[sig(kind,'2026-11-09T12:05:00Z'),sig('auto_merge_disabled','2026-11-09T12:06:00Z')],expectedHead:H,headPushedAt:PUSH}).ok,false);
@@ -213,4 +213,24 @@ test('timeline reader keeps app attribution and takes the head push time from it
   const e=await getFounderEvidence({repo:'jussray/jussray',number:9,sha:H,token:'t',request:api});
   assert.deepEqual(e.signals.map(x=>[x.kind,x.viaApp]),[['comment',null],['comment','claude'],['auto_merge_enabled',undefined],['auto_squash_enabled',null]]);
   assert.equal(e.headPushedAt,'2026-11-09T12:00:00.000Z');
+});
+
+test('squash and rebase auto-merge events count as enabling auto-merge (observed on PR #74)',async()=>{
+  const api=async url=>({ok:true,json:async()=>url.includes('/timeline?')?[
+    {event:'auto_squash_enabled',actor:{login:'jussray'},performed_via_github_app:null,created_at:'2026-11-09T12:05:00Z'},
+    {event:'auto_rebase_enabled',actor:{login:'jussray'},performed_via_github_app:null,created_at:'2026-11-09T12:06:00Z'},
+  ]:{workflow_runs:[{created_at:PUSH}]}});
+  const e=await getFounderEvidence({repo:'jussray/jussray',number:74,sha:H,token:'t',request:api});
+  assert.deepEqual(e.signals.map(x=>x.kind),['auto_merge_enabled','auto_merge_enabled']);
+  assert.equal(founderDecision({...e,expectedHead:H}).via,'founder-auto-merge');
+});
+
+// docs/rulesets/main-contract.json is the importable ruleset that matches CLAUDE.md's
+// "Native ruleset" contract. It must satisfy the gate's own ruleset check by itself.
+test('docs/rulesets/main-contract.json satisfies the gate ruleset contract on its own',async()=>{
+  const {readFileSync}=await import('node:fs');
+  const contract=JSON.parse(readFileSync(new URL('../docs/rulesets/main-contract.json',import.meta.url),'utf8'));
+  assert.deepEqual(rulesetDecision([contract]),{ok:true,errors:[]});
+  assert.deepEqual(contract.conditions.ref_name.include,['~DEFAULT_BRANCH']);
+  assert.equal(contract.bypass_actors.length,0);
 });

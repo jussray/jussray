@@ -1,6 +1,10 @@
 ---
 name: "goalfix"
 description: "Token-efficient repair skill for any AI agent working on Juss-owned GitHub projects: finds the real blocker, makes the smallest verified fix, and proves it on the real path."
+triggers:
+- /goalfix
+- /fixfast
+- /repair-verify-merge
 ---
 
 # /goalfix — Seek, Build, Fix, Verify
@@ -70,7 +74,7 @@ Rules:
 - smallest reversible patch
 - no unrelated refactors
 - no deleting without explicit approval
-- no merge unless checks and real-path evidence are green
+- merge only with Juss's explicit approval for the exact PR and head SHA, after required checks and real-path evidence are green; green checks alone never authorize a merge
 - no public claim without proof
 
 ### 4. Act

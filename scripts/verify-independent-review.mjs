@@ -4,15 +4,14 @@
 import { pathToFileURL } from 'node:url';
 
 // Founder review (Juss, 2026-11-09): Juss is the independent reviewer. GitHub forbids a PR
-// author approving his own PR, and every PR here is opened from his account, so his signal is
+// author approving her own PR, and every PR here is opened from her account, so her signal is
 // read from actions only a person in the GitHub UI can make on the exact head:
 //   - a PR comment "/approve <head sha, 7+ chars>", or
 //   - enabling auto-merge after the head was pushed (disabling it later withdraws that).
 // Actions made through an app (Claude, Codex, bots) carry performed_via_github_app and never count.
 export const FOUNDER='jussray';
 const APPROVE=/^\s*\/approve\s+([0-9a-f]{7,40})\b/i;
-// GitHub names the timeline event after the merge method: auto_merge_enabled (merge commit),
-// auto_squash_enabled or auto_rebase_enabled. Each is the same founder action; auto_merge_disabled withdraws any.
+// GitHub timeline event names depend on the auto-merge method.
 const AUTO_ON=new Set(['auto_merge_enabled','auto_squash_enabled','auto_rebase_enabled']);
 export function founderDecision({signals, expectedHead, headPushedAt, owner=FOUNDER}) {
   const pushed=Date.parse(headPushedAt||'');
@@ -76,7 +75,7 @@ export function rulesetDecision(rulesets) {
   const prRules=allRules.filter(r=>r.type==='pull_request');
   if (!prRules.length || !prRules.some(r=>r.parameters?.required_review_thread_resolution===true))
     errors.push('Missing protected PR rule with resolved review threads');
-  // Native approvals may be 0: the author cannot approve his own PR, so the founder review is
+  // Native approvals may be 0: the author cannot approve her own PR, so the founder review is
   // enforced by the required Independent Review Evidence check instead.
   if (prRules.some(r=>![0,1].includes(r.parameters?.required_approving_review_count)))
     errors.push('Main ruleset approval count must be 0 or 1');
@@ -128,7 +127,8 @@ export async function getFounderEvidence({repo,number,sha,token,request=fetch}){
     const batch=await apiGet(root+'/issues/'+number+'/timeline?per_page=100&page='+page,token,request);
     if (!Array.isArray(batch)) throw new Error('Timeline API returned non-list result');
     for (const e of batch) {
-      const kind=e?.event==='commented'?'comment':e?.event;
+      // GitHub names the enable event by merge method: auto_merge_enabled, auto_squash_enabled, auto_rebase_enabled.
+      const kind=e?.event==='commented'?'comment':/^auto_(merge|squash|rebase)_enabled$/.test(e?.event||'')?'auto_merge_enabled':e?.event;
       if (kind!=='comment' && kind!=='auto_merge_disabled' && !AUTO_ON.has(kind)) continue;
       signals.push({kind,login:(e.user||e.actor)?.login,viaApp:'performed_via_github_app' in e ? (e.performed_via_github_app?.slug ?? null) : undefined,
         at:e.created_at,body:kind==='comment'?e.body:''});

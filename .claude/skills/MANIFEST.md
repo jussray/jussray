@@ -5,7 +5,7 @@ Curated Juss-authored skills for Codex runtime. Updated 2026-11-07.
 ## Core Frameworks
 
 - **godmode-devil-ultrathink** — Founder operating system: godmode + Devil's Advocate + ULTRATHINK (redteam, OODA, L99)
-- **godmode** — Founder authority routing and decision framework
+- **godmode** — Founder authority routing and decision framework (reference only; `/godmode` is owned by godmode-devil-ultrathink)
 - **l99-v21-transactional-authority** — Authority layer (state, evidence, rollback, compounding value)
 
 ## Repair & Delivery

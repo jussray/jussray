@@ -380,7 +380,7 @@ for (const vp of [{ n: 'portfolio-desktop', w: 1440, h: 900 }, { n: 'portfolio-m
   const ctx = await browser.newContext({ viewport: { width: vp.w, height: vp.h }, isMobile: !!vp.m, hasTouch: !!vp.m }); const page = await ctx.newPage();
   const errors = []; page.on('pageerror', (e) => errors.push(String(e))); page.on('requestfailed', (r) => { if (!/fonts\.(googleapis|gstatic)\.com/.test(r.url())) errors.push(`${r.failure()?.errorText} ${r.url()}`); }); page.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) errors.push(m.text()); });
   await page.goto(`${url}portfolio.html`, { waitUntil: 'load' });
-  await page.waitForFunction(() => document.querySelectorAll('#projects .project').length === 20);
+  await page.waitForFunction(() => document.querySelectorAll('#filters button').length > 1 && document.querySelectorAll('#projects .project').length === 20);
   say((await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)) === 0, `${vp.n}: no horizontal overflow`);
   say((await page.locator('#projects .project').count()) === 20, `${vp.n}: renders all 20 public-safe identities`);
   say((await page.locator('#worldOverlays .project[data-noncanonical="true"]').count()) === worldOverlays.length &&
@@ -401,6 +401,32 @@ for (const vp of [{ n: 'portfolio-desktop', w: 1440, h: 900 }, { n: 'portfolio-m
   say((await page.evaluate(() => [...document.querySelectorAll('a,button')].filter((e) => { const b = e.getBoundingClientRect(); return b.width > 0 && b.height < 40; }).length)) === 0, `${vp.n}: tap targets >= 40px`);
   say(errors.length === 0, `${vp.n}: no console errors${errors.length ? ' — ' + errors.join(' | ') : ''}`);
   await page.screenshot({ path: `proof/site/${vp.n}.png`, fullPage: true }); await ctx.close();
+}
+// Portfolio without JavaScript: the published snapshot must carry every canonical identity
+// exactly as site/data/portfolio.json declares it (names, labels, descriptions, link decisions).
+{
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, javaScriptEnabled: false }); const page = await ctx.newPage();
+  await page.goto(`${url}portfolio.html`, { waitUntil: 'load' });
+  const cards = await page.$$eval('#projects .project', (els) => els.map((el) => ({
+    slug: el.dataset.slug, name: el.querySelector('h3')?.textContent, label: el.querySelector('.state')?.textContent,
+    desc: el.querySelector('.desc')?.textContent, link: el.querySelector('a.open')?.getAttribute('href') || null })));
+  say(cards.length === portfolio.projects.length, `portfolio no-JS: all ${portfolio.projects.length} identities in the initial HTML`);
+  say(portfolio.projects.every((p, i) => cards[i] && cards[i].slug === p.slug && cards[i].name === p.name && cards[i].label === p.publicLabel &&
+    cards[i].desc === p.description && cards[i].link === (p.link || null)), 'portfolio no-JS: names, labels, descriptions and links match portfolio.json exactly');
+  say(cards.every((c) => c.link === null || portfolio.projects.some((p) => p.link === c.link)), 'portfolio no-JS: no invented links');
+  say((await page.locator('#worldOverlays .project[data-noncanonical="true"]').count()) === worldOverlays.length, 'portfolio no-JS: noncanonical overlay published separately');
+  say(((await page.textContent('#countLine')) || '').startsWith(`${portfolio.projects.length} of ${portfolio.projects.length}`), 'portfolio no-JS: count line published');
+  say((await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)) === 0, 'portfolio no-JS: no horizontal overflow');
+  await ctx.close();
+}
+// Portfolio data outage: the truthful published snapshot stays; nothing is removed or invented.
+{
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } }); const page = await ctx.newPage();
+  await page.route('**/data/portfolio.json', (r) => r.abort());
+  await page.goto(`${url}portfolio.html`, { waitUntil: 'load' });
+  await page.waitForFunction(() => /live data unavailable/.test(document.getElementById('countLine').textContent), null, { timeout: 5000 });
+  say((await page.locator('#projects .project').count()) === portfolio.projects.length, 'portfolio outage: published snapshot kept when JSON fetch fails');
+  await ctx.close();
 }
 /* ---------- Games hub: code-level Playwright proof at exact source ---------- */
 for (const vp of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile', width: 390, height: 844 }]) {
@@ -491,6 +517,53 @@ for (const vp of [{ n: 'ideas-desktop', w: 1440, h: 900 }, { n: 'ideas-tablet', 
   say(!/jussco-signature-world/.test(readFileSync(join(ROOT, 'assets/flagship.css'), 'utf8')) && !existsSync(join(ROOT, 'assets/jussco-signature-world.jpg')), `${vp.n}: founder-rejected living-room artwork stays retired`);
   say(errors.length === 0, `${vp.n}: no console errors${errors.length ? ' — ' + errors.join(' | ') : ''}`);
   await page.screenshot({ path: `proof/site/${vp.n}.png`, fullPage: true }); await ctx.close();
+}
+
+// Ambience (2026-11-10): one generated soundscape per atmosphere and a matching motion layer on every world page.
+for (const vp of [{ n: 'ambience-desktop', w: 1440, h: 900 }, { n: 'ambience-mobile', w: 390, h: 844 }]) {
+  const ctx = await browser.newContext({ viewport: { width: vp.w, height: vp.h } }); const page = await ctx.newPage();
+  const errors = []; page.on('pageerror', (e) => errors.push(String(e))); page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
+  for (const route of ['services.html', 'builds.html', 'contact.html']) {
+    await page.goto(url + route, { waitUntil: 'load' });
+    const ctl = page.locator('.amb-float'); await ctl.waitFor({ timeout: 5000 });
+    say((await ctl.count()) === 1 && (await ctl.getAttribute('aria-pressed')) === 'false', `${vp.n}: ${route} has one ambient control, off by default`);
+    say((await page.locator('canvas.world-atmosphere').count()) === 1, `${vp.n}: ${route} has the atmosphere motion layer`);
+    const box = await ctl.boundingBox();
+    say(box && box.y + box.height <= vp.h && box.x >= 0 && (await ctl.evaluate((e) => getComputedStyle(e).position)) === 'fixed', `${vp.n}: ${route} ambient control is styled, fixed and on screen`);
+  }
+  await page.click('.amb-float');
+  await page.waitForFunction(() => document.querySelector('.amb-float').getAttribute('aria-pressed') === 'true', null, { timeout: 5000 }).catch(() => {});
+  const engine = () => page.evaluate(() => import('/assets/ambience.mjs').then((m) => m.ambienceState()));
+  let st = await engine();
+  say((await page.getAttribute('.amb-float', 'aria-pressed')) === 'true' && st.on && st.context === 'running', `${vp.n}: ambient control turns on with a user gesture and the audio context runs (${st.context})`);
+  await page.evaluate(() => document.body.setAttribute('data-atmo', 'night')); await page.waitForTimeout(300);
+  st = await engine(); say(st.scene === 'night', `${vp.n}: soundscape follows the atmosphere to night (${st.scene})`);
+  await page.click('.amb-float');
+  st = await engine(); say((await page.getAttribute('.amb-float', 'aria-pressed')) === 'false' && !st.on, `${vp.n}: ambient control turns off`);
+  // Remembered "on": a returning visitor whose first gesture is the switch itself turns sound off; it must stay off.
+  await page.evaluate(() => localStorage.setItem('jc-ambience', JSON.stringify({ on: true, vol: 0.4 })));
+  await page.goto(url + 'services.html', { waitUntil: 'load' }); await page.locator('.amb-float').waitFor();
+  await page.click('.amb-float'); await page.click('.amb-float'); await page.click('h1'); await page.keyboard.press('Tab'); await page.waitForTimeout(200);
+  st = await engine(); say(!st.on && (await page.getAttribute('.amb-float', 'aria-pressed')) === 'false', `${vp.n}: sound turned off stays off after later taps`);
+  await page.evaluate(() => localStorage.setItem('jc-ambience', JSON.stringify({ on: true, vol: 0.4 })));
+  await page.goto(url + 'services.html', { waitUntil: 'load' }); await page.locator('.amb-float').waitFor();
+  st = await engine(); say(!st.on && (await page.getAttribute('.amb-float', 'aria-pressed')) === 'false', `${vp.n}: remembered sound never autoplays on load`);
+  await page.click('h1'); await page.waitForFunction(() => document.querySelector('.amb-float').getAttribute('aria-pressed') === 'true', null, { timeout: 3000 }).catch(() => {});
+  st = await engine(); say(st.on && (await page.getAttribute('.amb-float', 'aria-pressed')) === 'true', `${vp.n}: remembered sound resumes on the next tap, not before`);
+  await page.goto(url + 'games/index.html', { waitUntil: 'load' }); await page.waitForTimeout(300); await page.click('body', { position: { x: 5, y: 5 } }); await page.waitForTimeout(200);
+  st = await engine(); say(!st.on && (await page.locator('.amb-float').count()) === 0, `${vp.n}: Game Hub keeps its own sound; the shared engine never starts there`);
+  await page.goto(url + 'opportunity-engine.html', { waitUntil: 'load' }); await page.waitForTimeout(300); await page.click('#ambience-toggle'); await page.waitForTimeout(200);
+  st = await engine(); say(!st.on && (await page.locator('.amb-float').count()) === 0, `${vp.n}: Opportunity Engine keeps its own ambience; no second soundscape`);
+  await page.evaluate(() => localStorage.removeItem('jc-ambience'));
+  await page.goto(url + 'ideas.html', { waitUntil: 'load' }); await page.waitForTimeout(300);
+  say((await page.locator('.amb-float').count()) === 0, `${vp.n}: Ideas keeps its own ambience panel, no duplicate control`);
+  await page.goto(url, { waitUntil: 'load' }); await page.waitForTimeout(300);
+  say((await page.locator('.amb-float').count()) === 0, `${vp.n}: homepage keeps its own ambience panel, no duplicate control`);
+  await page.click('#sound'); await page.click('#atmo'); await page.click('#atmo'); await page.waitForTimeout(300);
+  st = await engine(); const tod = await page.evaluate(() => document.documentElement.dataset.tod);
+  say((await page.getAttribute('#sound', 'aria-checked')) === 'true' && st.on && st.scene === tod, `${vp.n}: homepage sound stays on and crossfades as the atmosphere cycles (${st.scene}/${tod})`);
+  say(errors.length === 0, `${vp.n}: no console errors${errors.length ? ' — ' + errors.join(' | ') : ''}`);
+  await ctx.close();
 }
 
 await browser.close(); srv.close();
