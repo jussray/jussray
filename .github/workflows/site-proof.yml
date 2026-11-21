@@ -35,6 +35,8 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: '24'
+      - name: Verify isolated Juss & Co editorial preview safeguards
+        run: node --test tests/the-edit.test.mjs
       - run: npm i --no-save --no-audit --no-fund playwright@1.61.1 && npx playwright install chromium --with-deps
       - run: node -e "const c=JSON.parse(require('fs').readFileSync('wrangler.jsonc','utf8')); const routes=c.routes||[]; const expected=['jussco.company','www.jussco.company']; const actual=routes.filter(r=>r?.custom_domain===true).map(r=>r.pattern).sort(); if(c.name!=='jussray'||c.assets?.directory!=='./site'||JSON.stringify(actual)!==JSON.stringify(expected)) process.exit(1); console.log('wrangler deploy target + custom domains valid')"
       - name: Validate world registry
