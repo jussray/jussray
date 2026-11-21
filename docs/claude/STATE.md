@@ -1,3 +1,8 @@
+## 2026-11-21 — Standing rule: Playwright for visual verification (Juss: "use playwright remember always")
+
+- Recorded in `CLAUDE.md` under "Working with Juss". Any visual, layout, motion or graphic repair is checked in a real browser with Playwright (desktop and mobile screenshots plus console/page errors) before it is called done.
+- Note: `/playwright` is not an installed command in this session. The rule uses the local Playwright install and, when connected, the Playwright MCP tools.
+
 ## 2026-11-19 — PR #75 MERGED (Juss) as b22d22b
 
 - Merged by jussray at 2026-11-19 21:40:48 UTC from head `3f26b8a` (squash, merge commit `b22d22b`). Confirmed on GitHub: merged=true, merged_by=jussray.
