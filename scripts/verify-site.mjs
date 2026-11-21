@@ -561,6 +561,8 @@ for (const vp of [{ n: 'ideas-desktop', w: 1440, h: 900 }, { n: 'ideas-tablet', 
 // Ambience (2026-11-10): one generated soundscape per atmosphere and a matching motion layer on every world page.
 for (const vp of [{ n: 'ambience-desktop', w: 1440, h: 900 }, { n: 'ambience-mobile', w: 390, h: 844 }]) {
   const ctx = await browser.newContext({ viewport: { width: vp.w, height: vp.h } }); const page = await ctx.newPage();
+  // The SYNC board is a deterministic fixture in PR checks (same rule as the games leaderboard tests above).
+  await page.route(LB_URL, (route) => route.fulfill({ status: 200, contentType: 'application/json', headers: { 'Access-Control-Allow-Origin': '*' }, body: JSON.stringify(lbFixture) }));
   const errors = []; page.on('pageerror', (e) => errors.push(String(e))); page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
   for (const route of ['services.html', 'builds.html', 'contact.html']) {
     await page.goto(url + route, { waitUntil: 'load' });
