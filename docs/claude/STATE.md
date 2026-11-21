@@ -903,3 +903,4 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
 - merge-review on #34 fails on draft by design (race guard masks the real "Draft PR is not merge-authorized" reason). Diagnosis posted on #34.
 - OPEN founder decisions: minimum players (2 is farmable at 100%; 3 recommended); Hub Center entry for Leaderboards (would change the drawn mockup).
 - Order: merge/deploy #34 first, then #88.
+- 2026-11-21: merge-review false-race fix: jussray/sync-party-game PR #35 (draft), branch `claude/merge-review-draft-reason`, head `f320efc`. Drafts now report "Draft PR is not merge-authorized" (still fail closed); only real mid-run changes report the race. Test red on old code, green on fix. Takes effect only after merge (pull_request_target runs main's script).
