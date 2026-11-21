@@ -895,3 +895,11 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
 - 2026-11-11: Homepage (site/index.html) given the v3 look on PR #76: crown COMPANY header + search (filters Our Ecosystem) + bell/My Juss (coming soon), gold title, hub-style ecosystem rows, split ambience cards with Sunset + live season window, gold-glow ecosystem band with dots, phone bottom nav (Home active). Ecosystem still renders every worlds.json world (incl. FCR + PromptOS).
 - 2026-11-11: Founder added a beehiiv API key as a GitHub Actions secret (name not readable from this sandbox; Actions secrets API is proxy-blocked). Nothing in the repo uses beehiiv yet. A GitHub secret is only visible to Actions, not to the jussray Worker; a signup form needs the key as a Cloudflare Worker secret behind a server-side endpoint, never in the browser.
 - 2026-11-11: Search expanded (PR #76). Homepage search covers site pages, the six Game Hub worlds, worlds.json and portfolio.json; projects without a founder-declared live link open /portfolio.html (no guessed links; StoryEngine unlinked). Game Hub search also lists the featured apps (Se'kret Bip, StoryEngine text-only, FCR, PromptOS).
+
+## 2026-11-21 — COMPETE: SYNC leaderboard + Game Hub Leaderboards
+- Founder: "build the SYNC leaderboard", then "/expand pass just sync games".
+- SYNC side: jussray/sync-party-game PR #34 (draft), branch `claude/jolly-carson-b4odqb`, head `bc4a36f`. Anonymous top-25 rooms by average room sync, recorded server-side at GAME_FINISHED; `GET /api/leaderboard`; read-only cross-origin for games./www./apex jussco.company only.
+- Hub side: jussray PR #88 (draft), head `093ca85`. Leaderboards section: live SYNC top 5; LUMORA, ChatQuest, Bip & Seek, Jungle Jinx, Last Laugh get "board opens when it goes live" (no links out). Details view only; home stage unchanged.
+- merge-review on #34 fails on draft by design (race guard masks the real "Draft PR is not merge-authorized" reason). Diagnosis posted on #34.
+- OPEN founder decisions: minimum players (2 is farmable at 100%; 3 recommended); Hub Center entry for Leaderboards (would change the drawn mockup).
+- Order: merge/deploy #34 first, then #88.
