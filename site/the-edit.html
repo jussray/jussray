@@ -22,7 +22,11 @@
     /* Use Juss & Co's existing published scene asset, not Daybreak Watch art. */
     .scene { position:fixed; z-index:-1; inset:0; pointer-events:none; background-color:#26173b;
       background-image:linear-gradient(90deg,rgba(7,5,16,.86) 0%,rgba(15,9,25,.59) 46%,rgba(8,7,21,.28) 100%),linear-gradient(0deg,rgba(8,6,17,.86),transparent 47%,rgba(8,6,20,.20)),url('/assets/home-scene.webp');
-      background-size:cover; background-position:center center; transform:translateZ(0);
+      background-size:cover; background-position:center center; transform:translateZ(0); animation:scene-drift 34s ease-in-out infinite alternate;
+    }
+    @keyframes scene-drift {
+      from { transform:translate3d(0,0,0) scale(1); }
+      to { transform:translate3d(-.45%,.2%,0) scale(1.035); }
     }
     .scene:after { content:""; position:absolute; inset:0; background:radial-gradient(circle at 72% 32%,rgba(245,193,75,.12),transparent 35%); }
     .masthead { position:relative; z-index:3; min-height:79px; padding:15px clamp(18px,5vw,75px); display:flex; gap:24px; justify-content:space-between; align-items:center; background:linear-gradient(180deg,rgba(7,5,18,.82),rgba(7,5,18,.3)); border-bottom:1px solid rgba(250,220,180,.24); }
@@ -64,7 +68,7 @@
       .editorial { padding-block:26px; }
       .caption { flex-wrap:wrap; }
     }
-    @media (prefers-reduced-motion:reduce) { html{scroll-behavior:auto;} }
+    @media (prefers-reduced-motion:reduce) { .scene { animation:none; } html{scroll-behavior:auto;} }
   </style>
 </head>
 <body>
