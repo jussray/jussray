@@ -450,6 +450,43 @@ for (const vp of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile
   await ctx.close();
 }
 
+/* ---------- Games hub leaderboards: SYNC board states, no fake boards ---------- */
+const LB_URL = 'https://sync.jussco.company/api/leaderboard';
+const lbFixture = { version: 'sync-leaderboard-v1', size: 25, entries: [
+  { rank: 1, sync: 100, players: 4, rounds: 5, day: '2026-11-21' },
+  { rank: 2, sync: '<img src=x onerror=alert(1)>', players: 2, rounds: 5, day: '<b>x</b>' }
+] };
+for (const [mode, vp] of [['loaded', { width: 1440, height: 900 }], ['loaded', { width: 390, height: 844 }], ['empty', { width: 390, height: 844 }], ['outage', { width: 1440, height: 900 }]]) {
+  const ctx = await browser.newContext({ viewport: vp });
+  const page = await ctx.newPage();
+  await page.route('**/_telemetry/v1', (route) => route.fulfill({ status: 204, body: '' }));
+  // PR checks must not call production: the SYNC board is a deterministic fixture.
+  await page.route(LB_URL, (route) => mode === 'outage' ? route.abort()
+    : route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(mode === 'empty' ? { ...lbFixture, entries: [] } : lbFixture) }));
+  const errors = [];
+  page.on('pageerror', e => errors.push(String(e)));
+  await page.goto(url + 'games/index.html', { waitUntil: 'load' });
+  const tag = `games leaderboards (${mode}, ${vp.width})`;
+  await page.waitForFunction(() => !/Loading/.test(document.getElementById('sync-lb-status').textContent), null, { timeout: 5000 });
+  const rows = page.locator('#sync-lb-list li');
+  const status = await page.textContent('#sync-lb-status');
+  if (mode === 'loaded') {
+    say(await rows.count() === 2 && /100%/.test(await rows.first().innerText()) && /4 players · 5 rounds/.test(await rows.first().innerText()), `${tag}: SYNC rows render from the board`);
+    say(await page.locator('#sync-lb-list img, #sync-lb-list b b').count() === 0 && /\?%/.test(await rows.nth(1).innerText()), `${tag}: hostile board values render as text, never markup`);
+  } else if (mode === 'empty') {
+    say(await rows.count() === 0 && /No rooms on the board yet/.test(status), `${tag}: empty board says so honestly`);
+  } else {
+    say(await rows.count() === 0 && /unavailable/.test(status), `${tag}: outage shows unavailable, no stale or fake rows`);
+  }
+  const pendingLinks = await page.locator('#leaderboards .lb-pending a').evaluateAll(a => a.map(x => x.getAttribute('href')));
+  say(pendingLinks.length === 5 && pendingLinks.every(h => /^#[a-z]+-world$/.test(h)), `${tag}: unreleased games get no board and no external link`);
+  say(!/<img|onerror/.test(await page.locator('#leaderboards').innerHTML()), `${tag}: no injected markup in leaderboards`);
+  say((await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)) <= 0, `${tag}: no horizontal overflow`);
+  say(errors.length === 0, `${tag}: no JS errors`);
+  if (mode === 'loaded') await page.locator('#leaderboards').screenshot({ path: `proof/site/games-leaderboards-${vp.width}.png` });
+  await ctx.close();
+}
+
 
 /* ---------- Builds for others: honest status, no unconsented client names ---------- */
 for (const vp of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile', width: 390, height: 844 }]) {
