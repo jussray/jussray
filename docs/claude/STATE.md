@@ -1,3 +1,11 @@
+## 2026-11-19 — PR #75 MERGED (Juss) as b22d22b
+
+- Merged by jussray at 2026-11-19 21:40:48 UTC from head `3f26b8a` (squash, merge commit `b22d22b`). Confirmed on GitHub: merged=true, merged_by=jussray.
+- Gate: the sign-off was Juss's own merge action. Claude did not merge, enable auto-merge or post an approval.
+- Live readback: NOT VERIFIED from this session. `curl https://www.jussco.company/` returned no HTTP status through the agent proxy (the same block seen earlier on `jussco.company`). Re-observe in a browser.
+- Open issue on another branch (not PR #75): `bc70397` on `claude/jolly-carson-b4odqb` fails the homepage ambience console check. Cause: the SYNC leaderboard fetch to `sync.jussco.company/api/leaderboard` is CORS-blocked from the test origin. Not fixed here; awaiting Juss's choice.
+- main is now `d579f9f` (after b22d22b).
+
 ## 2026-11-18 — PR #75 merged with main again (335de6e)
 
 - `main` gained #84 (she/her), #85, #87 and MANIFEST.md, and PR #75 conflicted again. Juss's auto-merge toggle at 23:54 UTC could not run the gate on a conflicted PR.
