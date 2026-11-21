@@ -465,7 +465,7 @@ for (const [mode, vp] of [['loaded', { width: 1440, height: 900 }], ['loaded', {
     : route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(mode === 'empty' ? { ...lbFixture, entries: [] } : lbFixture) }));
   const errors = [];
   page.on('pageerror', e => errors.push(String(e)));
-  await page.goto(url + 'games/index.html', { waitUntil: 'load' });
+  await page.goto(url + 'games/index.html#leaderboards', { waitUntil: 'load' });
   const tag = `games leaderboards (${mode}, ${vp.width})`;
   await page.waitForFunction(() => !/Loading/.test(document.getElementById('sync-lb-status').textContent), null, { timeout: 5000 });
   const rows = page.locator('#sync-lb-list li');
@@ -481,8 +481,10 @@ for (const [mode, vp] of [['loaded', { width: 1440, height: 900 }], ['loaded', {
   const pendingLinks = await page.locator('#leaderboards .lb-pending a').evaluateAll(a => a.map(x => x.getAttribute('href')));
   say(pendingLinks.length === 5 && pendingLinks.every(h => /^#[a-z]+-world$/.test(h)), `${tag}: unreleased games get no board and no external link`);
   say(!/<img|onerror/.test(await page.locator('#leaderboards').innerHTML()), `${tag}: no injected markup in leaderboards`);
+  say(await page.locator('#leaderboards').isVisible() && (await page.evaluate(() => document.documentElement.dataset.hubView)) === 'details', `${tag}: board opens in the details view`);
   say((await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)) <= 0, `${tag}: no horizontal overflow`);
   say(errors.length === 0, `${tag}: no JS errors`);
+  if (mode === 'loaded') { await page.goto(url + 'games/index.html', { waitUntil: 'load' }); say(!(await page.locator('#leaderboards').isVisible()), `${tag}: home stage stays as drawn, board hidden until opened`); await page.goto(url + 'games/index.html#leaderboards', { waitUntil: 'load' }); await page.waitForFunction(() => !/Loading/.test(document.getElementById('sync-lb-status').textContent), null, { timeout: 5000 }); }
   if (mode === 'loaded') await page.locator('#leaderboards').screenshot({ path: `proof/site/games-leaderboards-${vp.width}.png` });
   await ctx.close();
 }
