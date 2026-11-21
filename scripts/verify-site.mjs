@@ -12,7 +12,12 @@ const CONNECTOR_REGISTRY = JSON.parse(readFileSync(join(ROOT, 'data/connectors.j
 const srv = createServer((q, r) => { let p = decodeURIComponent(q.url.split('?')[0]); if (p === '/') p = '/index.html'; const f = join(ROOT, p); if (!existsSync(f)) { r.writeHead(404); return r.end(); } r.writeHead(200, { 'content-type': MIME[extname(f)] || 'application/octet-stream' }); r.end(readFileSync(f)); });
 await new Promise((res) => srv.listen(0, '127.0.0.1', res)); const url = `http://127.0.0.1:${srv.address().port}/`; const universeUrl = url + 'universe.html';
 mkdirSync('proof/site', { recursive: true });
-const browser = await chromium.launch(); let failed = 0; const say = (ok, m) => { console.log(`${ok ? 'ok ' : 'FAIL'} ${m}`); if (!ok) failed++; };
+const browser = await chromium.launch(); let failed = 0;
+// PR checks never call production. Every context gets an empty SYNC leaderboard
+// fixture; the leaderboard checks override it per page (page routes win).
+const SYNC_BOARD_URL = 'https://sync.jussco.company/api/leaderboard';
+const rawNewContext = browser.newContext.bind(browser);
+browser.newContext = async (...args) => { const c = await rawNewContext(...args); await c.route(SYNC_BOARD_URL, (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ version: 'sync-leaderboard-v1', size: 25, entries: [] }) })); return c; }; const say = (ok, m) => { console.log(`${ok ? 'ok ' : 'FAIL'} ${m}`); if (!ok) failed++; };
 
 const projectSlugs = portfolio.projects.map((project) => project.slug);
 const featuredSlugs = portfolio.projects.filter((project) => project.featured).map((project) => project.slug).sort();
@@ -451,7 +456,7 @@ for (const vp of [{ name: 'desktop', width: 1440, height: 900 }, { name: 'mobile
 }
 
 /* ---------- Games hub leaderboards: SYNC board states, no fake boards ---------- */
-const LB_URL = 'https://sync.jussco.company/api/leaderboard';
+const LB_URL = SYNC_BOARD_URL;
 const lbFixture = { version: 'sync-leaderboard-v1', size: 25, entries: [
   { rank: 1, sync: 100, players: 4, rounds: 5, day: '2026-11-21' },
   { rank: 2, sync: '<img src=x onerror=alert(1)>', players: 2, rounds: 5, day: '<b>x</b>' }
