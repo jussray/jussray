@@ -4,7 +4,7 @@
 import { pathToFileURL } from 'node:url';
 
 // Founder review (Juss, 2026-11-09): Juss is the independent reviewer. GitHub forbids a PR
-// author approving his own PR, and every PR here is opened from his account, so his signal is
+// author approving her own PR, and every PR here is opened from her account, so her signal is
 // read from actions only a person in the GitHub UI can make on the exact head:
 //   - a PR comment "/approve <head sha, 7+ chars>", or
 //   - enabling auto-merge after the head was pushed (disabling it later withdraws that).
@@ -73,7 +73,7 @@ export function rulesetDecision(rulesets) {
   const prRules=allRules.filter(r=>r.type==='pull_request');
   if (!prRules.length || !prRules.some(r=>r.parameters?.required_review_thread_resolution===true))
     errors.push('Missing protected PR rule with resolved review threads');
-  // Native approvals may be 0: the author cannot approve his own PR, so the founder review is
+  // Native approvals may be 0: the author cannot approve her own PR, so the founder review is
   // enforced by the required Independent Review Evidence check instead.
   if (prRules.some(r=>![0,1].includes(r.parameters?.required_approving_review_count)))
     errors.push('Main ruleset approval count must be 0 or 1');
@@ -125,7 +125,8 @@ export async function getFounderEvidence({repo,number,sha,token,request=fetch}){
     const batch=await apiGet(root+'/issues/'+number+'/timeline?per_page=100&page='+page,token,request);
     if (!Array.isArray(batch)) throw new Error('Timeline API returned non-list result');
     for (const e of batch) {
-      const kind=e?.event==='commented'?'comment':e?.event;
+      // GitHub names the enable event by merge method: auto_merge_enabled, auto_squash_enabled, auto_rebase_enabled.
+      const kind=e?.event==='commented'?'comment':/^auto_(merge|squash|rebase)_enabled$/.test(e?.event||'')?'auto_merge_enabled':e?.event;
       if (!['comment','auto_merge_enabled','auto_merge_disabled'].includes(kind)) continue;
       signals.push({kind,login:(e.user||e.actor)?.login,viaApp:'performed_via_github_app' in e ? (e.performed_via_github_app?.slug ?? null) : undefined,
         at:e.created_at,body:kind==='comment'?e.body:''});

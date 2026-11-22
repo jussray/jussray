@@ -1,7 +1,7 @@
 name: Independent Review Evidence
 on:
   pull_request:
-    # auto_merge_enabled/disabled: Juss turning auto-merge on in the GitHub UI is his founder review.
+    # auto_merge_enabled/disabled: Juss turning auto-merge on in the GitHub UI is her founder review.
     types: [opened, reopened, synchronize, ready_for_review, auto_merge_enabled, auto_merge_disabled]
   pull_request_review:
     types: [submitted, dismissed]

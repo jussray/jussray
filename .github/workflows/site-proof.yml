@@ -2,7 +2,7 @@ name: Juss & Co site browser proof
 on:
   push:
     branches: [main]
-    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/verify-approved-stories.mjs', 'scripts/licensable-assets.test.mjs', 'scripts/verify-licensing-page.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/conversion-receiver.test.mjs', 'scripts/conversion-client-first-party.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'scripts/wrangler-games-preview.test.mjs', 'wrangler.games.jsonc', 'scripts/site-proof-boundary.test.mjs', 'scripts/public-resources.test.mjs', 'scripts/verify-independent-review.mjs', 'scripts/verify-independent-review.test.mjs', 'tests/jussco-github-webhook.test.mjs', 'tests/atmosphere.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', 'workers/**', 'wrangler.conversions.example.jsonc', '.github/workflows/site-proof.yml']
+    paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/portfolio-snapshot.mjs', 'scripts/verify-approved-stories.mjs', 'scripts/licensable-assets.test.mjs', 'scripts/verify-licensing-page.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/conversion-receiver.test.mjs', 'scripts/conversion-client-first-party.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'scripts/wrangler-games-preview.test.mjs', 'wrangler.games.jsonc', 'scripts/site-proof-boundary.test.mjs', 'scripts/public-resources.test.mjs', 'scripts/verify-independent-review.mjs', 'scripts/verify-independent-review.test.mjs', 'tests/jussco-github-webhook.test.mjs', 'tests/atmosphere.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', 'workers/**', 'wrangler.conversions.example.jsonc', '.github/workflows/site-proof.yml']
   pull_request:
   workflow_dispatch:
 permissions:
@@ -45,6 +45,8 @@ jobs:
         run: node -e "const d=JSON.parse(require('fs').readFileSync('site/data/connectors.json','utf8')); const ids=(d.lanes||[]).map(x=>x.id); const expected=['exa','notion','linear','slack']; const systems=d.systems||{}; const publicSystems=['Truth Weaver','Truth Compass','Exact Match Engine','Living Truth','Proof Core']; const bindings=Object.values(systems).flatMap(x=>x.bindings||[]); if(JSON.stringify(ids)!==JSON.stringify(expected)||!publicSystems.every(n=>Array.isArray(systems[n]?.bindings)&&systems[n].bindings.length===4)||bindings.some(x=>x.state==='connected')) process.exit(1); console.log('connector fabric registry valid; no unproven connected state')"
       - name: Verify canonical public URL
         run: node -e "const s=require('fs').readFileSync('site/index.html','utf8'); const good='<link rel=\\\"canonical\\\" href=\\\"https://www.jussco.company/\\\">'; const stale='https://jussray.github.io/jussray/'; if(!s.includes(good)||s.includes(stale)) process.exit(1); console.log('canonical Juss & Co URL valid')"
+      - name: Portfolio static snapshot matches portfolio.json
+        run: node scripts/portfolio-snapshot.mjs --check
       - name: Validate public outcome approval gate
         run: node scripts/verify-approved-stories.mjs
       - name: Test conversion tracking event and privacy contract
@@ -78,4 +80,4 @@ jobs:
         with:
           name: site-proof-${{ github.sha }}
           path: proof/site/
-          retention-days: 30
+          retention-days: 1

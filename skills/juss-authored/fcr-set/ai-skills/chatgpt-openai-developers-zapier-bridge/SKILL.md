@@ -1,3 +1,9 @@
+---
+name: chatgpt-openai-developers-zapier-bridge
+description: "Fallback route for ChatGPT to invoke or verify the Founder Signal Engine Zapier workflow through an OpenAI Developers key reference when no native Zapier connector is available."
+scope: founder-control-room
+---
+
 # ChatGPT OpenAI Developers Zapier Bridge
 
 ## Use this skill when
@@ -8,7 +14,7 @@
 - Zapier's GitHub integration is available for repository metadata, but GitHub Actions runtime operations require another path.
 - Another approved agent such as Claude may have direct Zapier access, while ChatGPT needs the OpenAI Developers fallback.
 
-Read [`docs/founder-signal-engine/zapier-github-metadata-contract.md`](../../../docs/founder-signal-engine/zapier-github-metadata-contract.md) before using Zapier's GitHub app for diagnosis or repair.
+Read `docs/founder-signal-engine/zapier-github-metadata-contract.md` (in the founder-control-room repo; not exported here) before using Zapier's GitHub app for diagnosis or repair.
 
 ## Canonical route
 

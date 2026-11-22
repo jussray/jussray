@@ -63,3 +63,16 @@ test('new homepage routes content to dedicated pages without discarding source d
   assert.match(html,/id="worlds"/);
   assert.match(landing,/Scan to explore/);
 });
+
+test('public page canonical metadata uses the www origin and sitemap locations',()=>{
+  for(const name of ['portfolio.html','opportunity-engine.html','creative-history.html']){
+    const page=read('site/'+name).toString('utf8');
+    const canonical='https://www.jussco.company/'+name;
+    assert.equal((page.match(/rel="canonical"/g)||[]).length,1,name+' must have one canonical');
+    assert.ok(page.includes('<link rel="canonical" href="'+canonical+'">'),name+' canonical must use www');
+    assert.ok(sitemap.includes('<loc>'+canonical+'</loc>'),name+' canonical must appear in sitemap');
+  }
+  const opportunity=read('site/opportunity-engine.html').toString('utf8');
+  assert.ok(opportunity.includes('<meta property="og:url" content="https://www.jussco.company/opportunity-engine.html">'));
+  assert.ok(opportunity.includes('<meta property="og:image" content="https://www.jussco.company/assets/home-scene.webp">'));
+});
