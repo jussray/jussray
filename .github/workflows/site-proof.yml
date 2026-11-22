@@ -59,6 +59,8 @@ jobs:
         run: node --test scripts/verify-independent-review.test.mjs scripts/prepare-native-review-ruleset.test.mjs
       - name: Test automatic seasonal atmosphere
         run: node --test tests/atmosphere.test.mjs
+      - name: Test shared cinematic visual contract
+        run: node --test tests/brand-continuity.test.mjs
       - name: Verify source/provider proof responsibility boundary
         run: node --test scripts/site-proof-boundary.test.mjs
       - name: Validate future provider readback against new Game Hub and source authority

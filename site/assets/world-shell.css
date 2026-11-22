@@ -52,3 +52,19 @@ html.ws-on main h1{color:#f8ecd0;text-shadow:0 4px 30px rgba(20,6,50,.75)}
   header.top.ws-top.nav-open .ws-nav{display:flex}
   header.top.ws-top .ws-nav a{min-height:46px;font-size:15px;padding:0 14px}
 }
+
+
+/* Shared world parity: let the original lake, buildings and mountains be seen.
+   Surface-specific content retains its own readable cards and header. */
+.ws-scene .tint{background:linear-gradient(180deg,rgba(10,6,30,.38),rgba(10,6,30,.58))}
+.ws-scene .art{background-position:center 53%;transform-origin:50% 53%}
+@keyframes ws-world-breathe{
+  from{transform:scale(1.02) translate3d(-.2%,0,0)}
+  to{transform:scale(1.05) translate3d(.2%,-.3%,0)}
+}
+@media(prefers-reduced-motion:no-preference){
+  .ws-scene .art{animation:ws-world-breathe 30s ease-in-out infinite alternate}
+}
+@media(prefers-reduced-motion:reduce){
+  .ws-scene .art{animation:none!important;transform:none!important}
+}
