@@ -12,6 +12,7 @@ jobs:
   call-claude:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - name: Fetch GitHub OIDC token
         uses: actions/github-script@v8
         with:
@@ -49,3 +50,11 @@ jobs:
           echo "HTTP $code"
           test "$code" = 200
           jq -r '.data[].id' models.json | head -5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Call Claude through the Python SDK (WorkloadIdentityCredentials)
+        run: |
+          set -euo pipefail
+          pip install --quiet 'anthropic==2.12.0'
+          python scripts/anthropic_wif_hello.py
