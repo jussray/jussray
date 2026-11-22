@@ -1,0 +1,51 @@
+# Proves GitHub Actions -> Anthropic workload identity federation (no stored API key).
+# Fails closed: a rejected exchange or an unusable token turns the job red.
+name: anthropic-wif-test
+on:
+  push:
+    branches: ['claude/**']
+  workflow_dispatch:
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  call-claude:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch GitHub OIDC token
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const token = await core.getIDToken('https://api.anthropic.com');
+            core.setSecret(token);
+            core.exportVariable('JWT', token);
+      - name: Exchange for an Anthropic access token
+        run: |
+          set -euo pipefail
+          curl -sS -o resp.json -w '%{http_code}' https://api.anthropic.com/v1/oauth/token \
+            -H "content-type: application/json" \
+            --data @- > status.txt <<JSON
+          {
+            "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+            "assertion": "$JWT",
+            "federation_rule_id": "fdrl_01KxC6qaSac1TyA4GZhG9Ptd",
+            "organization_id": "8b43629b-d1f7-4ef7-8e27-ab3eeaaad07a",
+            "service_account_id": "svac_01U2khLVUuKHUsrR3yNHmPup",
+            "workspace_id": "wrkspc_01VEE3W3YbS82K9KLV1B1F3b"
+          }
+          JSON
+          echo "HTTP $(cat status.txt)"
+          jq 'with_entries(if (.key | test("token$")) then .value = "<redacted>" else . end)' resp.json
+          TOKEN=$(jq -er '.access_token' resp.json)
+          echo "::add-mask::$TOKEN"
+          echo "ANTHROPIC_TOKEN=$TOKEN" >> "$GITHUB_ENV"
+          rm -f resp.json
+      - name: Use the token (list models, no inference cost)
+        run: |
+          set -euo pipefail
+          code=$(curl -sS -o models.json -w '%{http_code}' https://api.anthropic.com/v1/models \
+            -H "authorization: Bearer $ANTHROPIC_TOKEN" \
+            -H "anthropic-version: 2026-10-21")
+          echo "HTTP $code"
+          test "$code" = 200
+          jq -r '.data[].id' models.json | head -5
