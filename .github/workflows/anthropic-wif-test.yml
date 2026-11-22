@@ -20,6 +20,10 @@ jobs:
             const token = await core.getIDToken('https://api.anthropic.com');
             core.setSecret(token);
             core.exportVariable('JWT', token);
+            // Print only the non-secret identity claims the federation rule matches on.
+            const claims = JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString());
+            const { iss, aud, sub, repository, ref, job_workflow_ref, environment } = claims;
+            core.info(JSON.stringify({ iss, aud, sub, repository, ref, job_workflow_ref, environment }, null, 2));
       - name: Exchange for an Anthropic access token
         run: |
           set -euo pipefail
