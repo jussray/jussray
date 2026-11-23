@@ -1,0 +1,152 @@
+/* Sunset terrace composition shared by the canonical homepage and Sites. */
+.home-world .site-header {
+  min-height: 72px;
+  padding-block: 8px;
+  background: transparent;
+  border-bottom: 0;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.home-world .brand-v3, .home-world .header-tools {
+  border-radius: 999px;
+  background: #100d22ad;
+  box-shadow: 0 2px 20px #10091e70;
+}
+.home-world .brand-v3 { padding: 5px 12px; }
+.home-world .header-tools { gap: 0; border: 1px solid #ffe5bf58; }
+.home-world .hdr-btn { border: 0; background: transparent; }
+.home-world .site-nav { background: linear-gradient(100deg, #372541b8, #33558c9e); }
+.home-world .site-nav a[aria-current="page"] {
+  background: radial-gradient(ellipse at 50% 100%, #fff1cf, #f3ae76);
+  box-shadow: inset 0 0 8px #fff3d3, 0 0 18px #ffd39baf;
+}
+.home-world .world-stage.cinematic::before {
+  background-position: center top;
+}
+.home-world .world-stage.cinematic::after {
+  background: radial-gradient(ellipse at 50% 24%, #190e3670, transparent 58%);
+}
+.home-world .stage-center { z-index: 1; }
+.home-world .world-stage h1 {
+  background: none;
+  color: #fff5e3;
+  font-weight: 500;
+  text-shadow: 0 2px 16px #160c2b, 0 0 28px #301539b0;
+  filter: none;
+}
+.home-world .world-stage .action.primary {
+  background: radial-gradient(ellipse at 50% 100%, #fff5dc, #efb27b);
+  box-shadow: inset 0 0 8px #fff6dd, 0 0 20px #ffd79885;
+  text-shadow: none;
+}
+.home-world .founder-quote.glass, .home-world .eco-panel.glass,
+.home-world .ctl-card.glass, .home-world .atmo-btn.glass {
+  background: linear-gradient(135deg, #212637d6, #111722ad);
+  border-color: #ffe2bc59;
+}
+.home-world .founder-quote.glass { background: linear-gradient(120deg, #2b160fb0, #1c152478); }
+.home-world .eco-panel h2 { font: 500 15px/1.35 Georgia, serif; text-align: left; }
+.home-world .eco-panel.glass a { border: 0; border-top: 1px solid #fde9d12b; border-radius: 0; margin: 0; padding-inline: 0; background: none; }
+.home-world .eco-panel a:hover { border-color: #ffe2bc88; }
+.home-world .eco-band.glass {
+  --gline: #ffca81ab;
+  border: 2px solid #ffd397;
+  border-radius: 38px;
+  background: linear-gradient(180deg, #231a3dbd, #45273996 76%, #db965a91);
+  box-shadow: inset 0 -7px 18px #ffc374a6, inset 0 0 18px #ffbb6c66, 0 0 26px #ffaf677d, 0 14px 25px #190e284d;
+}
+.home-world .eco-band h2 { font-weight: 500; }
+.home-world .eco-band h2::before, .home-world .eco-band h2::after {
+  box-shadow: 0 0 10px #ffc176;
+}
+.home-world .eco-tile > :is(a, div) {
+  height: 100%;
+  border: 1px solid #ffce8fbf;
+  background: linear-gradient(180deg, #281938, #171029 66%, #462538);
+  box-shadow: inset 0 0 8px #ffda9754, 0 0 8px #ffbb7954;
+}
+.home-world .eco-track { padding: 4px; }
+.home-world .eco-tile strong { font-family: Sora, system-ui, sans-serif; font-size: 12px; }
+.home-world .eco-tile small {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  font-size: 9px;
+}
+.home-world .eco-badge.is-reference {
+  width: 100%;
+  max-width: 90px;
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  background-image: url('/assets/home-reference.webp');
+  background-size: 1920% 1080%;
+  background-position: var(--art-x) 75%;
+  background-color: #201733;
+  box-shadow: none;
+  color: transparent;
+}
+.home-world [data-art="fcr"] { --art-x: 24.66%; }
+.home-world [data-art="chief"] { --art-x: 31.66%; }
+.home-world [data-art="promptos"] { --art-x: 38.05%; }
+.home-world [data-art="bip"] { --art-x: 44.92%; }
+.home-world [data-art="sol"] { --art-x: 51.32%; }
+.home-world [data-art="think"] { --art-x: 57.76%; }
+.home-world [data-art="truth"] { --art-x: 64.15%; }
+.home-world [data-art="sleepwealth"] { --art-x: 70.55%; }
+.home-world [data-art="jbh"] { --art-x: 76.85%; }
+.home-world .world-atmosphere { position: absolute; inset: 0 0 auto; z-index: 2; }
+
+@media (min-width: 1200px) {
+  .home-world .site-header { padding-inline: max(20px, 4vw); }
+  .home-world .site-nav { position: absolute; left: 50%; transform: translateX(-50%); }
+  .home-world .site-nav a { min-height: 39px; padding: 6px clamp(7px, .86vw, 14px); }
+  .home-world .hdr-btn.account { width: auto; padding-inline: 10px; }
+  .home-world .hdr-btn.account .account-label, .home-world .hdr-btn.account .caret { display: inline; }
+  .home-world .stage-center { top: clamp(76px, 9.4svh, 110px); width: min(640px, 50%); }
+  .home-world .world-stage h1 { font-size: clamp(41px, 3.35vw, 58px); }
+  .home-world .world-stage .actions { margin-top: 20px; }
+  .home-world .world-stage .action { min-height: 44px; padding: 8px 18px; }
+  .home-world .founder-quote { top: 27%; left: 5%; width: clamp(170px, 13vw, 225px); }
+  .home-world .eco-panel { top: 15.5%; right: max(10px, .8vw); width: clamp(205px, 14vw, 255px); padding: 14px 16px; }
+  .home-world .eco-panel.glass a { min-height: 48px; }
+  .home-world .eco-panel strong { font-size: 12px; }
+  .home-world .ep-txt span { font-size: 10px; }
+  .home-world .stage-controls { left: 2%; bottom: 11%; width: min(13vw, 200px); }
+  .home-world .ctl-card, .home-world .atmo-btn { padding: 4px 10px; }
+  .home-world .ctl-row > span { font-size: 11px; }
+  .home-world .eco-band { bottom: clamp(38px, 9svh, 100px); width: 63%; padding: 12px 10px 8px; }
+  .home-world .eco-track { gap: 6px; }
+  .home-world .eco-tile { flex-basis: calc((100% - 48px) / 9); min-width: 0; }
+  .home-world .eco-tile > :is(a, div) { min-height: clamp(124px, 9vw, 148px); padding: 5px 2px 6px; }
+  .home-world .eco-nav { width: 34px; height: 38px; }
+  .home-world .eco-foot a { min-height: 30px; }
+}
+@media (min-width: 761px) and (max-width: 1199px) {
+  .home-world .stage-center { left: 50%; width: min(630px, 88%); }
+  .home-world .founder-quote, .home-world .eco-panel { display: none; }
+  .home-world .eco-band { left: 5%; bottom: 6%; width: 90%; transform: none; }
+  .home-world .stage-controls { display: grid; left: 5%; bottom: 39%; width: 155px; }
+  .home-world .ctl-card, .home-world .atmo-btn { padding: 3px 8px; }
+  .home-world .ctl-row > span { font-size: 10px; }
+  .home-world .site-header { padding-inline: 12px; gap: 6px; }
+  .home-world .brand-name { font-size: 24px; }
+  .home-world .brand-crown { width: 29px; }
+  .home-world .site-nav a { font-size: 11px; padding-inline: 7px; }
+}
+@media (max-width: 760px) {
+  .home-world .site-header { min-height: 62px; }
+  .home-world .brand-v3 { padding: 0 5px; }
+  .home-world .site-nav.is-open { background: #18142bf7; }
+  .home-world .world-stage.cinematic::before { background-position: 50% 43%; }
+  .home-world .world-stage.cinematic { flex: none; min-height: clamp(360px, 53svh, 480px); }
+  .home-world .stage-controls { margin-top: auto; padding-top: 12px; }
+  .home-world .eco-band.glass { border-radius: 25px; }
+  .home-world .eco-badge.is-reference { max-width: 67px; }
+}
+@media (max-width: 350px) {
+  .home-world .hdr-btn.soon { display: none; }
+  .home-world #seasonWindow { display: none; }
+}

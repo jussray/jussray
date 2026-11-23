@@ -1,5 +1,5 @@
 /* Homepage world stage: atmosphere by local time, opt-in ambient sound, and the
-   "Our Ecosystem" band built only from founder-declared site/data/worlds.json. */
+   "Our Ecosystem" band sourced from the public worlds and systems registries. */
 const $ = (s) => document.querySelector(s);
 const root = document.documentElement;
 
@@ -43,10 +43,20 @@ soundBtn?.addEventListener('click', async () => {
   if (!(await m.setAmbience(next))) soundBtn.setAttribute('aria-checked', 'false');
 });
 
-const BADGE = { "Se'kret Bip": 'SK' }; // founder mockup badge
-const BADGE_ART = { "Se'kret Bip": "bip", "Founder Control Room": "fcr", "Chief AI": "chief", "Juss Beautiful Hair": "jbh", "StoryEngine": "story", "Sync Party": "sync" };
+const FEATURED = new Map([
+  ['Founder Control Room', { art: 'fcr' }],
+  ['Chief AI', { art: 'chief' }],
+  ['PromptOS', { art: 'promptos' }],
+  ["Se'kret Bip", { art: 'bip' }],
+  ['SolContinuity', { art: 'sol', title: 'SOL' }],
+  ['Think Tank', { art: 'think' }],
+  ['Truth Weaver', { art: 'truth' }],
+  ['SleepWealth Agent', { art: 'sleepwealth', title: 'SleepWealth' }],
+  ['Juss Beautiful Hair', { art: 'jbh', title: 'JBH' }],
+]);
+const BADGE_ART = { StoryEngine: 'story', 'Sync Party': 'sync' };
 // Hidden tab: the shared ambience engine (ambience.mjs) fades and suspends itself.
-const initials = (name) => BADGE[name] || name.replace(/[’']/g, '').split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
+const initials = (name) => name.replace(/[’']/g, '').split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
 // CLAUDE.md: a world links only when worlds.json declares a link and its front door is live.
 // "Opening soon" worlds stay unlinked unless the founder confirmed the front door (Se'kret Bip, 2026-11-08).
 const LIVE_FRONT_DOORS = new Set(["Se'kret Bip"]);
@@ -56,16 +66,41 @@ function tile(w) {
   const inner = document.createElement(linkable(w) ? 'a' : 'div');
   if (linkable(w)) { inner.href = w.link.url; if (/^https?:/.test(w.link.url)) inner.rel = 'noopener noreferrer'; inner.setAttribute('aria-label', `${w.name}: ${w.label || ''}. ${w.link.text || 'Visit'}`); }
   const badge = document.createElement('span'); badge.className = 'eco-badge'; badge.setAttribute('aria-hidden', 'true'); badge.textContent = initials(w.name);
-  if (BADGE_ART[w.name]) { const img = document.createElement("img"); img.src = `/assets/w-${BADGE_ART[w.name]}.jpg`; img.alt = ""; img.loading = "lazy"; badge.replaceChildren(img); }
-  const name = document.createElement('strong'); name.textContent = w.name;
+  const featured = FEATURED.get(w.name);
+  if (featured) {
+    badge.classList.add('is-reference');
+    badge.dataset.art = featured.art;
+  } else if (BADGE_ART[w.name]) { const img = document.createElement("img"); img.src = `/assets/w-${BADGE_ART[w.name]}.jpg`; img.alt = ""; img.loading = "lazy"; badge.replaceChildren(img); }
+  const name = document.createElement('strong'); name.textContent = featured?.title ?? w.name;
   const status = document.createElement('small'); status.textContent = w.label || 'Status pending';
   inner.append(badge, name, status); li.append(inner); return li;
+}
+async function truthWeaver() {
+  try {
+    const response = await fetch('/data/systems.json', { cache: 'no-cache' });
+    if (!response.ok) return;
+    const { systems } = await response.json();
+    const system = systems?.find((entry) => entry.name === 'Truth Weaver' && entry.public === true);
+    if (system) return {
+      name: system.name, st: system.status, label: system.label,
+      link: system.publicUrl ? { url: system.publicUrl, text: 'Explore Truth Weaver' } : null,
+    };
+  } catch {
+    // The other worlds remain available if the systems registry cannot load.
+  }
 }
 async function ecosystem() {
   const track = $('#ecoTrack'); if (!track) return;
   try {
-    const data = await (await fetch('/data/worlds.json', { cache: 'no-cache' })).json();
-    track.replaceChildren(...(data.worlds || []).map(tile));
+    const [data, truth] = await Promise.all([
+      fetch('/data/worlds.json', { cache: 'no-cache' }).then((response) => response.json()),
+      truthWeaver(),
+    ]);
+    const worlds = new Map((data.worlds || []).map((world) => [world.name, world]));
+    if (truth) worlds.set(truth.name, truth);
+    const ordered = [...FEATURED.keys()].map((name) => worlds.get(name)).filter(Boolean);
+    ordered.push(...[...worlds.values()].filter((world) => !FEATURED.has(world.name)));
+    track.replaceChildren(...ordered.map(tile));
   } catch {
     track.innerHTML = '<li class="eco-loading">The ecosystem is unavailable right now. <a href="/portfolio.html">Open the portfolio</a>.</li>';
   }
@@ -114,7 +149,7 @@ async function buildIndex() {
   async function filter() {
     const raw = field.value.trim(), q = norm(raw); let n = 0;
     const tiles = [...document.querySelectorAll('#ecoTrack .eco-tile')];
-    const hits = q ? tiles.filter((li) => norm(li.textContent).includes(q)) : tiles;
+    const hits = q ? tiles.filter((li) => norm(`${li.textContent} ${li.querySelector('a')?.getAttribute('aria-label') || ''}`).includes(q)) : tiles;
     n = q ? hits.length : 0;
     // Narrow the band only when something in it matches; never leave it empty.
     tiles.forEach((li) => { li.hidden = q && hits.length > 0 && !hits.includes(li); });
