@@ -158,3 +158,28 @@ test('sanitized world feed preserves all previously declared public destinations
   assert.deepEqual(worlds.filter(w => w.link).map(w => [w.name,w.link.url]), expected);
   assert.ok(worlds.filter(w => w.link).every(w => !w.held));
 });
+
+
+test('product catalog exposes all selected public identities in HTML and structured data', () => {
+  const d = JSON.parse(readFileSync(join(SITE, 'data/discovery.json'), 'utf8'));
+  const html = readFileSync(join(SITE, 'products.html'), 'utf8');
+  const region = html.match(/<!-- discovery-products:start -->([\s\S]*?)<!-- discovery-products:end -->/);
+  assert.ok(region, 'public product directory must exist without JavaScript');
+  const schema = JSON.parse(html.match(/<script type="application\/ld\+json" id="public-product-schema">([\s\S]*?)<\/script>/)[1]);
+  assert.equal(schema.mainEntity.itemListElement.length, d.products.length);
+  for (const [i,p] of d.products.entries()) {
+    const item = schema.mainEntity.itemListElement[i];
+    assert.equal(item.name, p.name);
+    assert.equal(item.url, p.source);
+    assert.ok(region[1].includes(p.source));
+  }
+  assert.match(region[1], /Current operation unverified/);
+});
+test('public site directory and games link to company discovery without asserting live operation', () => {
+  const sites = readFileSync(join(SITE, 'sites.html'), 'utf8');
+  const games = readFileSync(join(SITE, 'games/index.html'), 'utf8');
+  for (const html of [sites,games]) {
+    assert.ok(html.includes('https://www.jussco.company/data/discovery.json'));
+    assert.match(html, /Current operation is not verified by this directory/i);
+  }
+});
