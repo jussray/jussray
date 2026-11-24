@@ -47,3 +47,38 @@ test('no unbacked auth/agent discovery files are published', () => {
     assert.equal(existsSync(join(SITE, p)), false, `${p} would advertise a capability jussco.company does not have`);
   }
 });
+
+
+test('agent catalog advertises only the sanitized discovery and licensing feeds', () => {
+  assert.deepEqual(catalog.linkset[0].item.map(x => x.href).sort(), [
+    ORIGIN + '/data/discovery.json', ORIGIN + '/data/licensable-assets.json'
+  ].sort());
+  assert.match(headers, /<\/data\/discovery\.json>; rel="describedby"/);
+  assert.doesNotMatch(headers, /<\/data\/(worlds|systems|connectors)\.json>/);
+});
+
+test('discovery projection matches sitemap and llms and does not claim runtime proof', () => {
+  const d = JSON.parse(readFileSync(join(SITE, 'data/discovery.json'), 'utf8'));
+  assert.deepEqual(Object.keys(d).sort(), ['canonicalOrigin','company','pages','products','schema'].sort());
+  assert.equal(d.canonicalOrigin, ORIGIN);
+  const sitemap = readFileSync(join(SITE, 'sitemap.xml'), 'utf8');
+  const llms = readFileSync(join(SITE, 'llms.txt'), 'utf8');
+  const crawlers = JSON.parse(readFileSync(join(SITE, 'crawlers.json'), 'utf8'));
+  assert.equal(crawlers.discoveryManifest, ORIGIN + '/data/discovery.json');
+  assert.deepEqual(d.pages, [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]));
+  for (const page of d.pages) {
+    assert.ok(page.startsWith(ORIGIN + '/'));
+    assert.ok(llms.includes(page), 'llms missing ' + page);
+    const p = new URL(page).pathname;
+    assert.ok(existsSync(join(SITE, p.endsWith('/') ? p + 'index.html' : p)), 'missing source ' + p);
+  }
+  assert.ok(d.products.length >= 10);
+  assert.equal(new Set(d.products.map(x => x.name)).size, d.products.length);
+  for (const p of d.products) {
+    assert.deepEqual(Object.keys(p).sort(), ['name','purpose','source','sourceStatus','operationStatus'].sort());
+    assert.match(p.source, /^https:\/\/github\.com\/jussray\/[A-Za-z0-9_.-]+$/);
+    assert.equal(p.sourceStatus, 'public_source_observed');
+    assert.equal(p.operationStatus, 'unknown');
+    assert.ok(llms.includes(p.source), 'llms missing ' + p.name);
+  }
+});
