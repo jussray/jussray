@@ -83,3 +83,38 @@
   @keyframes scene-light-breath{from{filter:brightness(.98) saturate(1.02)}to{filter:brightness(1.06) saturate(1.07)}}
 }
 @media(prefers-reduced-motion:reduce){.home-world .world-stage.cinematic::before{animation:none}}
+
+
+/* Scene-integrated revision: no scene-only mode, no boxed-over panorama. */
+.home-world .glass{background:var(--scene-glass);border-color:var(--scene-rim);box-shadow:var(--scene-sheen);backdrop-filter:blur(3px) saturate(1.12);-webkit-backdrop-filter:blur(3px) saturate(1.12)}
+.home-world .world-stage.cinematic::after{background:radial-gradient(ellipse at 50% 22%,#11172c27,transparent 45%)}
+.home-world .site-nav{background:var(--scene-glass);border-color:var(--scene-rim);box-shadow:var(--scene-sheen)}
+.home-world .founder-quote{background:linear-gradient(120deg,#4b342c40,#241b2820)}
+.home-world .eco-panel{background:linear-gradient(145deg,#59423c34,#24293743)}
+.home-world .eco-band{border:1px solid #ffdfa2;border-radius:11% / 28%;background:linear-gradient(180deg,#3d40582b,#553f6640 76%,#ba6b2f24);backdrop-filter:blur(2px) saturate(1.12);-webkit-backdrop-filter:blur(2px) saturate(1.12);box-shadow:inset 0 0 14px #ffc97755,0 0 24px #ffb65c60,0 6px 0 -2px #e9a05b,0 10px 0 -2px #3a293b,0 13px 0 -3px #ffc16d,0 17px 15px #150f2466}
+.home-world .eco-tile>a,.home-world .eco-tile>div{background:linear-gradient(180deg,#45305d38,#171d3355);border-color:#ffcc86b8;box-shadow:inset 0 0 7px #ffcc7855,0 0 8px #ffbc6e55;border-radius:12px}
+.home-world .eco-badge img{object-fit:contain}
+.home-world .home-search{background:#17263cf2;backdrop-filter:blur(12px)}
+@media(min-width:1181px){
+.home-world .stage-center{top:9%;width:48vw}
+.home-world .world-stage h1{font-size:clamp(31px,3.1vw,56px);margin-bottom:9px}
+.home-world .world-stage .sig{margin:5px 0 0}
+.home-world .world-stage .actions{margin-top:12px}
+.home-world .founder-quote{left:5.4%;top:25%;width:11.3%;padding:13px 12px}
+.home-world .eco-panel{right:1.7%;top:26%;width:12%;min-width:165px;padding:11px 12px 8px}
+.home-world .eco-panel h2{font-size:clamp(12px,.98vw,16px)}
+.home-world .eco-panel a{min-height:38px;padding:6px 2px}
+.home-world .eco-panel .ep-txt>span{font-size:9px}
+.home-world .stage-controls{left:4.8%;bottom:19%;width:11.7%;min-width:158px}
+.home-world .eco-band{width:53%;bottom:9%;padding:7px 13px 10px}
+.home-world .eco-band h2{font-size:clamp(20px,1.85vw,31px);margin-bottom:6px}
+.home-world .eco-track{gap:5px}
+.home-world .eco-tile{flex-basis:calc((100% - 40px)/9)}
+.home-world .eco-tile>a,.home-world .eco-tile>div{min-height:107px;padding:4px 3px 6px;gap:3px}
+.home-world .eco-badge{height:52px}
+.home-world .eco-tile strong{font-size:clamp(9px,.78vw,12px)}
+.home-world .eco-tile small{font-size:9px}
+.home-world .eco-nav{width:28px;height:36px}
+}
+@media(max-width:760px){.home-world .site-nav{background:#19273ef5}.home-world .eco-band{border-radius:24px}.home-world .world-stage.cinematic{min-height:500px}.home-world .stage-controls{margin-top:auto}}
+@media(prefers-reduced-motion:reduce){.home-world .world-stage.cinematic::before{animation:none!important}}

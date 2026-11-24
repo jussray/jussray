@@ -30,3 +30,18 @@ h1,h2,h3,p{margin-top:0}h1,h2,h3{font-family:"Playfair Display",Georgia,serif}h1
 .site-nav a{padding:8px 14px;border:0;border-radius:999px;white-space:nowrap}
 .site-nav a:hover{color:var(--gold)}.site-nav a[aria-current=page]{background:linear-gradient(180deg,#ffe2a3,#f5c14b);color:#24183a}}
 @media(min-width:761px) and (max-width:1100px){.site-nav a{padding:8px 9px;font-size:12px}}
+
+
+/* Founder Living Scene material contract: scenery continues behind every public route.
+   Dense editorial content keeps a stronger reading layer for contrast. */
+:root{--scene-glass:linear-gradient(135deg,#57465b25,#14233229);--scene-rim:#ffdda66b;--scene-sheen:inset 0 1px 1px #fff5,0 0 12px #ffbb6530;--scene-ivory:#fff5e8;--scene-reading:linear-gradient(145deg,#261e3aaf,#15182dcc)}
+body:not(.home-world){background:linear-gradient(180deg,#100b2510,#100b2540),url('/assets/home-scene.webp') center center/cover fixed no-repeat;color:var(--scene-ivory)}
+body:not(.home-world) .page-main{background:transparent}
+body:not(.home-world) .site-header{background:linear-gradient(180deg,#18203542,transparent);border:0;backdrop-filter:none;-webkit-backdrop-filter:none}
+body:not(.home-world) .site-nav{background:var(--scene-glass);border-color:var(--scene-rim);box-shadow:var(--scene-sheen);backdrop-filter:blur(3px) saturate(1.12);-webkit-backdrop-filter:blur(3px) saturate(1.12)}
+body:not(.home-world) .site-nav a[aria-current=page]{background:linear-gradient(130deg,#fff6dd,#efbd8d);color:#2a2131;box-shadow:0 0 15px #ffb67d}
+body:not(.home-world) :is(.text-panel,.route-card,.feature-card,.directory-card,.glass-intro){background:var(--scene-reading);border-color:var(--scene-rim);box-shadow:inset 0 1px 1px #fff3,0 12px 40px #10172d60;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+body:not(.home-world) .routes{background:#15182d65}
+body:not(.home-world) .page-head{text-shadow:0 3px 18px #151124;max-width:100%;background:linear-gradient(90deg,#15182d55,transparent)}
+body:not(.home-world) .page-footer{background:#15182db8;backdrop-filter:blur(10px);border-color:var(--scene-rim)}
+@media(max-width:760px){body:not(.home-world) .site-nav{background:#19273ef5}body:not(.home-world){background-attachment:scroll}}
