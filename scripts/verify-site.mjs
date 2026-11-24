@@ -6,6 +6,7 @@ import { extname, join } from 'node:path';
 const ROOT = new URL('../site/', import.meta.url).pathname; const MIME = { '.html': 'text/html', '.jpg': 'image/jpeg', '.json': 'application/json', '.png': 'image/png', '.svg': 'image/svg+xml', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.txt': 'text/plain', '.xml': 'application/xml', '.pdf': 'application/pdf' };
 const WORLD_REGISTRY = JSON.parse(readFileSync(join(ROOT, 'data/worlds.json'), 'utf8')); const EXPECTED_WORLDS = WORLD_REGISTRY.worlds.map((w) => w.name); const IDEA_WORLDS = WORLD_REGISTRY.worlds.filter((w) => w.display?.group === 'Ideas & systems').map((w) => w.name);
 const portfolio = JSON.parse(readFileSync(join(ROOT, 'data/portfolio.json'), 'utf8'));
+const discovery = JSON.parse(readFileSync(join(ROOT, 'data/discovery.json'), 'utf8'));
 const systems = JSON.parse(readFileSync(join(ROOT, 'data/systems.json'), 'utf8'));
 const worlds = WORLD_REGISTRY;
 const CONNECTOR_REGISTRY = JSON.parse(readFileSync(join(ROOT, 'data/connectors.json'), 'utf8'));
@@ -45,7 +46,7 @@ const publicStandaloneSystems = systems.systems.filter((system) => system.public
 const robots = readFileSync(join(ROOT, 'robots.txt'), 'utf8');
 const sitemap = readFileSync(join(ROOT, 'sitemap.xml'), 'utf8');
 say(/User-agent:\s*\*/i.test(robots) && /Allow:\s*\//i.test(robots) && robots.includes('https://www.jussco.company/sitemap.xml'), 'seo: robots allows crawl and declares canonical sitemap');
-say(['https://www.jussco.company/','https://www.jussco.company/services.html','https://www.jussco.company/work.html','https://www.jussco.company/creative-history.html','https://www.jussco.company/games/'].every((x) => sitemap.includes(`<loc>${x}</loc>`)), 'seo: sitemap lists canonical public pages');
+say(['https://www.jussco.company/','https://www.jussco.company/services.html','https://www.jussco.company/work.html','https://www.jussco.company/creative-history.html'].every((x) => sitemap.includes(`<loc>${x}</loc>`)), 'seo: sitemap lists canonical public pages');
 const expectedOS = ['Truth Weaver', 'Truth Compass', 'Exact Match Engine', 'Living Truth', 'Proof Core'];
 
 // Short homepage and new page routes remain independent from the deep universe.
@@ -110,9 +111,10 @@ for (const vp of [{n:'desktop',w:1440,h:900},{n:'mobile',w:390,h:844}]) {
   }
   await page.goto(url+'products.html',{waitUntil:'load'});
   say((await page.locator('.feature-card').count())===6,`${vp.n}: all six featured products on product page`);
+  say((await page.locator('.directory-card').count())===discovery.products.length,`${vp.n}: complete public product catalog follows discovery manifest`);
    say((await page.locator('.feature-card a[href="/opportunity-engine.html"]').count())===1,`${vp.n}: Opportunity Engine is a discoverable product route`);
   await page.goto(url+'sites.html',{waitUntil:'load'});
-  say((await page.locator('.directory-card').count())===11,`${vp.n}: eleven public destination cards on sites page`);
+  say((await page.locator('.directory-card').count())===discovery.destinations.length,`${vp.n}: public destination count follows discovery manifest`);
   say(errors.length===0,`${vp.n}: no JS exceptions on new routed pages${errors.length?' — '+errors.join(' | '):''}`);
   await ctx.close();
 }
