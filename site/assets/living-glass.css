@@ -1,0 +1,85 @@
+/* Living Scene — reference-led composition. Existing artwork is scenery only;
+   all navigation, headlines, cards and status labels remain real HTML. */
+.home-world{--glass:linear-gradient(145deg,rgba(27,33,52,.43),rgba(17,23,39,.24));--gline:rgba(255,218,161,.40)}
+.home-world .glass{background:var(--glass);border:1px solid var(--gline);backdrop-filter:blur(7px) saturate(1.16);-webkit-backdrop-filter:blur(7px) saturate(1.16);box-shadow:inset 0 1px 1px #ffffff35,0 10px 30px #07091545}
+.home-world .world-stage.cinematic::after{background:radial-gradient(ellipse at 50% 22%,#10122b45,transparent 56%);pointer-events:none}
+.home-world .world-stage.cinematic::before{background-image:url('/assets/home-scene.webp');background-position:center center}
+.home-world .site-header{background:transparent;border:0;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+.home-world .site-nav{background:linear-gradient(120deg,#52637a65,#293b5760);border:1px solid #c9dcff55;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:inset 0 1px 1px #ffffff55,0 8px 24px #10183035}
+.home-world .site-nav a[aria-current=page]{color:#241b29;background:linear-gradient(160deg,#fff9e8,#f1bc83);box-shadow:0 0 18px #ffba82a8,inset 0 1px 2px #fff}
+.home-world .header-tools{padding:3px 5px;background:#18263a60;border:1px solid #d7e6ff40;border-radius:999px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.home-world .hdr-btn{background:transparent;border-color:transparent;text-decoration:none}
+.home-world .hdr-btn:hover,.home-world .hdr-btn:focus-visible{background:#ffffff20;border-color:#f7d3a777}
+.home-world .world-stage h1{color:#fff2e0;background:none;filter:none;text-shadow:0 3px 22px #171425b5;font-weight:500;letter-spacing:-.025em}
+.home-world .subline{font-weight:500;letter-spacing:.17em}
+.home-world .world-stage .action{background:#23395373;border:1px solid #d4e5ff99;box-shadow:inset 0 1px 2px #fff3,0 0 18px #7bafff40}
+.home-world .world-stage .action.primary{color:#2e2122;background:linear-gradient(155deg,#fff6dc,#eeb780);border-color:#fff0c6;box-shadow:0 0 24px #ffc27c80,inset 0 1px 1px #fff}
+.home-world .founder-quote{background:linear-gradient(100deg,#30261f6b,#18192125);border-color:#ffdb9a70;border-radius:18px}
+.home-world .eco-panel{background:linear-gradient(150deg,#35465370,#13233280);border-color:#c6e6ff4d}
+.home-world .eco-panel a{border:0;border-top:1px solid #e9edff26;border-radius:0;background:transparent;margin:0}
+.home-world .eco-panel a:hover{background:#ffffff10}
+.home-world .eco-panel h2{font-weight:500}
+.home-world .eco-band{isolation:isolate;border-radius:clamp(24px,5vw,78px) / 32px;background:linear-gradient(180deg,#30364c45,#30244258 70%,#af612c38);border:1.5px solid #ffda9d;backdrop-filter:blur(5px) saturate(1.2);-webkit-backdrop-filter:blur(5px) saturate(1.2);box-shadow:inset 0 0 12px #ffc26a7c,0 0 28px #ffb75165,0 12px 0 -5px #c78a45,0 17px 0 -5px #4b342d,0 20px 20px #130b27aa}
+.home-world .eco-band h2{font-weight:500;line-height:1.12}
+.home-world .eco-band h2:before,.home-world .eco-band h2:after{box-shadow:0 0 8px #ffbb7b}
+.home-world .eco-tile>a,.home-world .eco-tile>div{position:relative;border-color:#ffca87b3;background:radial-gradient(ellipse at 50% 22%,#57578d75,transparent 76%),linear-gradient(180deg,#27283c50,#161b2d83);box-shadow:inset 0 0 9px #ffe2a82b,0 0 11px #ffad5365;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.home-world .eco-badge{background:none;border-radius:10px;box-shadow:none;color:#f5d7a2;text-shadow:0 0 15px #f6b7ff,0 0 6px #fff7;font-size:30px}
+.home-world .eco-badge img{border-radius:10px;object-fit:cover}
+.home-world .eco-nav{background:#1b243b72;box-shadow:inset 0 1px 1px #fff4}
+.home-world .eco-tile[hidden]{display:none}
+.home-world .home-search{background:#17263ce8}
+@media(min-width:1181px){
+  .home-world .site-header{min-height:72px;padding:10px 5vw;gap:12px}
+  .home-world .site-nav{position:absolute;left:50%;transform:translateX(-50%);justify-content:center;gap:2px;padding:4px 8px}
+  .home-world .site-nav a{min-height:36px;padding:6px clamp(8px,1.0vw,17px);font-size:clamp(11px,.91vw,14px)}
+  .home-world .hdr-btn.account{width:auto;padding:0 12px}.home-world .hdr-btn.account .account-label,.home-world .hdr-btn .caret{display:inline}
+  .home-world main{height:100svh;min-height:700px}
+  .home-world .stage-center{top:10%;left:50%;width:46vw;max-width:740px}
+  .home-world .world-stage h1{font-size:clamp(35px,3.22vw,57px);margin:4px 0 10px}
+  .home-world .world-stage .sig{font-size:clamp(25px,2.5vw,38px);margin:8px 0 0}
+  .home-world .world-stage .actions{margin-top:18px}
+  .home-world .world-stage .action{min-height:40px;padding:8px 20px}
+  .home-world .founder-quote{left:5.5%;top:26.5%;width:12%;padding:17px 16px}
+  .home-world .founder-quote p{font-size:clamp(13px,1.08vw,18px)}
+  .home-world .eco-panel{right:1.2%;top:15.5%;width:14%;min-width:190px;padding:13px 12px}
+  .home-world .eco-panel h2{font-size:clamp(14px,1.15vw,19px)}
+  .home-world .eco-panel a{padding:9px 2px;gap:7px;min-height:45px}
+  .home-world .eco-panel strong{font-size:12px}.home-world .eco-panel span{font-size:10px}
+  .home-world .stage-controls{left:1.8%;bottom:14%;width:13%;min-width:176px}
+  .home-world .eco-band{left:50%;bottom:10%;width:64%;max-width:1150px;padding:13px 14px 8px}
+  .home-world .eco-track{gap:8px;padding:5px 2px}
+  .home-world .eco-tile{flex:0 0 calc((100% - 64px)/9);min-width:0}
+  .home-world .eco-tile>a,.home-world .eco-tile>div{min-height:134px;padding:7px 3px;gap:4px}
+  .home-world .eco-badge{width:100%;height:62px}
+  .home-world .eco-tile strong{font-size:clamp(11px,1vw,15px)}
+  .home-world .eco-tile small{font-size:9px;overflow-wrap:anywhere}
+  .home-world .eco-nav{width:34px;height:38px}
+}
+@media(min-width:1181px) and (max-width:1430px){
+  .home-world .site-header{padding-inline:2vw}
+  .home-world .site-nav a{padding-inline:8px}
+  .home-world .brand-name{font-size:27px}
+  .home-world .header-tools{gap:2px}
+  .home-world .hdr-btn{width:38px;height:38px}
+}
+@media(min-width:761px) and (max-width:1180px){
+  .home-world .site-header{background:#17243b50}
+  .home-world .eco-band{width:calc(100% - 36px);left:18px;bottom:3%;transform:none}
+  .home-world .eco-tile{flex-basis:calc((100% - 40px)/6)}
+}
+@media(max-width:760px){
+  .home-world .site-header{background:#16243b70;backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px)}
+  .home-world .site-nav{background:#19273eea}
+  .home-world .header-tools{padding:0;gap:0}
+  .home-world .world-stage.cinematic{min-height:460px;padding-top:24px;justify-content:space-between}
+  .home-world .world-stage.cinematic::before{background-position:50% center}
+  .home-world .world-stage h1{font-size:clamp(26px,8vw,38px)}
+  .home-world .stage-controls{margin-top:auto;margin-bottom:12px}
+  .home-world .eco-band{margin:10px 10px 20px;border-radius:25px}
+  .home-world .eco-tile{flex-basis:calc((100% - 20px)/3)}
+}
+@media(prefers-reduced-motion:no-preference){
+  .home-world .world-stage.cinematic::before{animation:scene-light-breath 22s ease-in-out infinite alternate}
+  @keyframes scene-light-breath{from{filter:brightness(.98) saturate(1.02)}to{filter:brightness(1.06) saturate(1.07)}}
+}
+@media(prefers-reduced-motion:reduce){.home-world .world-stage.cinematic::before{animation:none}}

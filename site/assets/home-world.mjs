@@ -43,7 +43,7 @@ soundBtn?.addEventListener('click', async () => {
   if (!(await m.setAmbience(next))) soundBtn.setAttribute('aria-checked', 'false');
 });
 
-const BADGE = { "Se'kret Bip": 'SK' }; // founder mockup badge
+const BADGE = { "Se'kret Bip": 'SK', "PromptOS": '◇', "SolContinuity": '☀', "Think Tank": '◉', "SleepWealth Agent": '↗' }; // founder mockup badge
 const BADGE_ART = { "Se'kret Bip": "bip", "Founder Control Room": "fcr", "Chief AI": "chief", "Juss Beautiful Hair": "jbh", "StoryEngine": "story", "Sync Party": "sync" };
 // Hidden tab: the shared ambience engine (ambience.mjs) fades and suspends itself.
 const initials = (name) => BADGE[name] || name.replace(/[’']/g, '').split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
@@ -65,7 +65,10 @@ async function ecosystem() {
   const track = $('#ecoTrack'); if (!track) return;
   try {
     const data = await (await fetch('/data/worlds.json', { cache: 'no-cache' })).json();
-    track.replaceChildren(...(data.worlds || []).map(tile));
+    const preferred = ['Founder Control Room','Chief AI','PromptOS',"Se'kret Bip",'SolContinuity','Think Tank','SleepWealth Agent','Juss Beautiful Hair'];
+    const worlds = data.worlds || [];
+    const order = new Map(preferred.map((name,i)=>[name,i]));
+    track.replaceChildren(...worlds.map((world,i)=>({world,i})).sort((a,b)=>(order.get(a.world.name)??preferred.length)-(order.get(b.world.name)??preferred.length)||a.i-b.i).map(x=>tile(x.world)));
   } catch {
     track.innerHTML = '<li class="eco-loading">The ecosystem is unavailable right now. <a href="/portfolio.html">Open the portfolio</a>.</li>';
   }
