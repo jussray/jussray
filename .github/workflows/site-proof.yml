@@ -1,8 +1,8 @@
 name: Juss & Co site browser proof
 on:
   push:
-    branches: [main]
-    paths: ['site/**', 'scripts/agent-discovery.test.mjs', 'scripts/sync-party-link.test.mjs', 'README.md', 'scripts/verify-site.mjs', 'scripts/portfolio-snapshot.mjs', 'scripts/verify-approved-stories.mjs', 'scripts/licensable-assets.test.mjs', 'scripts/verify-licensing-page.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/conversion-receiver.test.mjs', 'scripts/conversion-client-first-party.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'scripts/wrangler-games-preview.test.mjs', 'wrangler.games.jsonc', 'scripts/site-proof-boundary.test.mjs', 'scripts/public-resources.test.mjs', 'scripts/verify-independent-review.mjs', 'scripts/verify-independent-review.test.mjs', 'tests/jussco-github-webhook.test.mjs', 'tests/atmosphere.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', 'workers/**', 'wrangler.conversions.example.jsonc', '.github/workflows/site-proof.yml']
+    branches: [main, fix/sauce-guard-discovery-20261124]
+    paths: ['site/**', 'scripts/agent-discovery.test.mjs', 'scripts/discovery-page-snapshot.mjs', 'scripts/verify-games-hub-cinematic.mjs', 'scripts/sync-party-link.test.mjs', 'README.md', 'scripts/verify-site.mjs', 'scripts/portfolio-snapshot.mjs', 'scripts/verify-approved-stories.mjs', 'scripts/licensable-assets.test.mjs', 'scripts/verify-licensing-page.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/conversion-receiver.test.mjs', 'scripts/conversion-client-first-party.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'scripts/wrangler-games-preview.test.mjs', 'wrangler.games.jsonc', 'scripts/site-proof-boundary.test.mjs', 'scripts/public-resources.test.mjs', 'scripts/verify-independent-review.mjs', 'scripts/verify-independent-review.test.mjs', 'tests/jussco-github-webhook.test.mjs', 'tests/atmosphere.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', 'workers/**', 'wrangler.conversions.example.jsonc', '.github/workflows/site-proof.yml']
   pull_request:
   workflow_dispatch:
 permissions:
@@ -25,7 +25,9 @@ jobs:
       - name: Verify Games Worker preview config without changing production route
         run: node --test scripts/wrangler-games-preview.test.mjs
       - name: Agent discovery only points at shipped public files
-        run: node --test scripts/agent-discovery.test.mjs
+        run: node --test scripts/agent-discovery.test.mjs scripts/sync-party-link.test.mjs
+      - name: Public discovery snapshots must match the manifest
+        run: node scripts/discovery-page-snapshot.mjs --check
       - name: Licensing export is sanitized and rights are reserved
         run: node --test scripts/licensable-assets.test.mjs
       - name: IndexNow key file is served and matches its filename
