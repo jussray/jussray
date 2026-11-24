@@ -1,682 +1,429 @@
 {
   "generatedAt": "2026-10-29T19:30:00Z",
-  "source": "founder-declared portfolio worlds + builder/repository carriers; evidence fields remain FCR-owned",
+  "registryVersion": 3,
+  "source": "Public presentation only; current operation requires direct verification.",
   "worlds": [
     {
       "name": "Se'kret Bip",
-      "repo": "jussray/Sekret-Bip",
       "st": "soon",
       "label": "Opening soon",
+      "repo": "jussray/Sekret-Bip",
       "contact": {
-        "site": "https://sekretbip.net",
-        "github": "https://github.com/jussray/Sekret-Bip",
         "email": "founder@sekretbip.net",
         "support": "support@sekretbip.net"
       },
       "evidence": {},
       "display": {
         "group": "People & belonging"
-      },
-      "carriers": [
-        {
-          "platform": "github",
-          "ref": "jussray/Sekret-Bip",
-          "role": "canonical source",
-          "visibility": "public"
-        },
-        {
-          "platform": "github",
-          "ref": "jussray/sekret-bip-demo",
-          "role": "demo/supporting source",
-          "visibility": "public"
-        }
-      ],
-      "link": {
-        "text": "Visit Se’kret Bip",
-        "url": "https://sekretbip.net"
       }
     },
     {
       "name": "Founder Control Room",
-      "repo": "jussray/founder-control-room",
       "st": "building",
       "label": "Building",
-      "link": {
-        "text": "Visit Founder Control Room",
-        "url": "https://foundercontrolroom.org"
-      },
+      "repo": "jussray/founder-control-room",
       "contact": {
-        "site": "https://foundercontrolroom.org",
-        "github": "https://github.com/jussray/founder-control-room",
         "email": "support@foundercontrolroom.org",
-        "linkedin": "https://www.linkedin.com/in/juss-rayy-13ba691a1",
         "founder": "founder@foundercontrolroom.org"
       },
       "evidence": {},
       "display": {
         "group": "Ideas & systems"
-      },
-      "carriers": [
-        {
-          "platform": "github",
-          "ref": "jussray/founder-control-room",
-          "role": "canonical source",
-          "visibility": "public"
-        }
-      ]
+      }
     },
     {
       "name": "Chief AI",
-      "repo": "jussray/chief-ai-machine",
       "st": "progress",
       "label": "In progress",
-      "link": {
-        "text": "Follow the build",
-        "url": "https://github.com/jussray/chief-ai-machine"
-      },
+      "repo": "jussray/chief-ai-machine",
       "contact": {
-        "github": "https://github.com/jussray/chief-ai-machine",
         "email": "support@jussco.company"
       },
       "evidence": {},
       "display": {
         "group": "Ideas & systems"
-      },
-      "carriers": [
-        {
-          "platform": "github",
-          "ref": "jussray/chief-ai-machine",
-          "role": "canonical source",
-          "visibility": "public"
-        }
-      ]
+      }
     },
     {
       "name": "Juss Beautiful Hair",
-      "repo": "jussray/jussbeautifulhair-site",
       "st": "progress",
-      "label": "Store open · awaiting first order",
-      "link": {
-        "text": "Shop the store",
-        "url": "https://jussbeautifulhair.com"
-      },
+      "label": "Public destination · operation unverified",
+      "repo": "jussray/jussbeautifulhair-site",
       "contact": {
-        "site": "https://jussbeautifulhair.com",
         "email": "hello@jussbeautifulhair.com",
-        "wholesale": "wholesale@jussbeautifulhair.com",
-        "instagram": "[JBH INSTAGRAM URL]",
-        "facebook": "[JBH FACEBOOK PAGE URL]",
-        "hello": "hello@jussbeautifulhair.com"
+        "hello": "hello@jussbeautifulhair.com",
+        "wholesale": "wholesale@jussbeautifulhair.com"
       },
       "evidence": {},
       "display": {
         "group": "People & belonging"
-      },
-      "carriers": [
-        {
-          "platform": "github",
-          "ref": "jussray/jussbeautifulhair-site",
-          "role": "canonical storefront source",
-          "visibility": "public"
-        },
-        {
-          "platform": "github",
-          "ref": "jussray/jussbeautifulhair1",
-          "role": "additional private carrier",
-          "visibility": "private"
-        },
-        {
-          "platform": "github",
-          "ref": "jussray/jbh-private",
-          "role": "additional carrier",
-          "visibility": "private"
-        },
-        {
-          "platform": "github",
-          "ref": "jussray/Juss-beautiful-hair-",
-          "role": "archived lineage",
-          "visibility": "private",
-          "archived": true
-        }
-      ]
+      }
     },
     {
       "name": "StoryEngine",
-      "repo": "jussray/StoryEngine",
       "st": "building",
       "label": "Building",
-      "held": "Coming soon · no public link yet",
+      "held": "Public destination not yet listed",
+      "repo": "jussray/StoryEngine",
       "contact": {
-        "github": "https://github.com/jussray/StoryEngine",
         "email": "support@jussco.company"
       },
-      "legacyRoutingNote": "Earlier shared contact candidate: support@jussco.company; not verified for delivery.",
       "evidence": {},
       "display": {
         "group": "Stories & play"
-      },
-      "carriers": [
-        {
-          "platform": "github",
-          "ref": "jussray/StoryEngine",
-          "role": "canonical source",
-          "visibility": "public"
-        }
-      ]
+      }
     },
     {
       "name": "Sync Party",
+      "st": "progress",
+      "label": "Public destination · operation unverified",
       "repo": "jussray/sync-party-game",
-      "st": "live",
-      "label": "Live",
       "contact": {
-        "github": "https://github.com/jussray/sync-party-game",
         "email": "support@jussco.company"
       },
-      "legacyRoutingNote": "Earlier shared contact candidate: support@jussco.company; not verified for delivery.",
       "evidence": {},
       "display": {
         "group": "Stories & play"
-      },
-      "carriers": [
-        {
-          "platform": "github",
-          "ref": "jussray/sync-party-game",
-          "role": "canonical game source",
-          "visibility": "public"
-        }
-      ],
-      "link": {
-        "text": "Play SYNC",
-        "url": "https://sync.jussco.company/"
       }
     },
     {
       "name": "Bip Jr",
-      "repo": "jussray/Bip-Jr",
       "st": "building",
-      "label": "Private build",
-      "held": "Private build · tracked internally",
+      "label": "Building",
+      "held": "Public destination not yet listed",
       "contact": {
         "email": "support@sekretbip.net"
       },
       "evidence": {},
-      "carriers": [
-        {
-          "platform": "github",
-          "ref": "jussray/Bip-Jr",
-          "role": "canonical source",
-          "visibility": "private"
-        }
-      ],
       "display": {
         "group": "People & belonging",
         "accent": "#9A7CFF",
         "img": "assets/w-bip.jpg",
         "alt": "Se’kret Bip family-world artwork",
-        "desc": "The younger-family branch of the Se’kret Bip universe.",
         "tags": [
           "Family",
           "Kids",
           "Belonging"
         ],
-        "tag": "A younger doorway into the Bip universe.",
-        "blurb": "A family-facing branch built around belonging, communication and age-appropriate connection.",
+        "tag": "A family-facing experience for age-appropriate belonging and connection.",
+        "desc": "A family-facing experience for age-appropriate belonging and connection.",
+        "blurb": "A family-facing experience for age-appropriate belonging and connection.",
         "facts": [
           [
-            "Source",
-            "Private GitHub project"
+            "Purpose",
+            "A family-facing experience for age-appropriate belonging and connection."
           ],
           [
-            "Relationship",
-            "Part of the wider Se’kret Bip family"
-          ],
-          [
-            "Public state",
-            "No public front door declared"
+            "Availability",
+            "Current operation not verified"
           ]
         ]
       }
     },
     {
       "name": "PromptOS",
-      "repo": "jussray/promptos",
       "st": "building",
       "label": "Building",
-      "link": {
-        "text": "Follow the build",
-        "url": "https://github.com/jussray/promptos"
-      },
+      "repo": "jussray/promptos",
       "contact": {
-        "github": "https://github.com/jussray/promptos",
         "email": "support@jussco.company"
       },
       "evidence": {},
-      "carriers": [
-        {
-          "platform": "github",
-          "ref": "jussray/promptos",
-          "role": "canonical source",
-          "visibility": "public"
-        }
-      ],
       "display": {
         "group": "Ideas & systems",
         "accent": "#7C5CFF",
         "img": "assets/w-fcr.jpg",
         "alt": "Founder systems command-center artwork",
-        "desc": "A governed prompt, skill and mission runtime for turning founder intent into bounded work.",
         "tags": [
           "AI",
           "Prompts",
           "Governance"
         ],
-        "tag": "Intent becomes bounded missions.",
-        "blurb": "A portable instruction and skill runtime that keeps intent, authority, execution and proof separate.",
+        "tag": "Governed instructions and reusable skills for AI workflows.",
+        "desc": "Governed instructions and reusable skills for AI workflows.",
+        "blurb": "Governed instructions and reusable skills for AI workflows.",
         "facts": [
           [
-            "Role",
-            "Prompt + skill runtime"
+            "Purpose",
+            "Governed instructions and reusable skills for AI workflows."
           ],
           [
-            "Boundary",
-            "Consequential authority stays outside the prompt layer"
-          ],
-          [
-            "Source",
-            "Public GitHub build"
+            "Availability",
+            "Current operation not verified"
           ]
         ]
       }
     },
     {
       "name": "SolContinuity",
-      "repo": "jussray/solcontinuity",
       "st": "building",
       "label": "Building",
-      "link": {
-        "text": "Follow the build",
-        "url": "https://github.com/jussray/solcontinuity"
-      },
+      "repo": "jussray/solcontinuity",
       "contact": {
-        "github": "https://github.com/jussray/solcontinuity",
         "email": "support@jussco.company"
       },
       "evidence": {},
-      "carriers": [
-        {
-          "platform": "github",
-          "ref": "jussray/solcontinuity",
-          "role": "canonical source",
-          "visibility": "public"
-        }
-      ],
       "display": {
         "group": "Ideas & systems",
         "accent": "#14F195",
         "img": "assets/w-fcr.jpg",
         "alt": "Founder systems command-center artwork",
-        "desc": "Provider-aware continuity and resilience tooling with a platform-neutral JSON-RPC core and a Solana-first adapter.",
         "tags": [
           "Continuity",
           "JSON-RPC",
           "Proof"
         ],
-        "tag": "Continuity that survives provider failure and handoffs.",
-        "blurb": "A public continuity build for route diversity, quorum, failover, recovery and evidence. Solana is the first fully implemented adapter, not the product boundary.",
+        "tag": "Service continuity and recovery for technology systems.",
+        "desc": "Service continuity and recovery for technology systems.",
+        "blurb": "Service continuity and recovery for technology systems.",
         "facts": [
           [
-            "Source",
-            "Public GitHub build"
+            "Purpose",
+            "Service continuity and recovery for technology systems."
           ],
           [
-            "Focus",
-            "Provider-aware continuity + proof"
-          ],
-          [
-            "Boundary",
-            "Platform-neutral core; Solana-specific transaction semantics stay adapter-scoped"
+            "Availability",
+            "Current operation not verified"
           ]
         ]
       }
     },
     {
       "name": "Untold Stories",
-      "repo": "jussray/untold-stories-storefront",
       "st": "building",
-      "label": "Private build",
-      "held": "Private storefront build · tracked internally",
+      "label": "Building",
+      "held": "Public destination not yet listed",
       "contact": {
         "email": "support@jussco.company"
       },
       "evidence": {},
-      "carriers": [
-        {
-          "platform": "github",
-          "ref": "jussray/untold-stories-storefront",
-          "role": "canonical storefront source",
-          "visibility": "private"
-        }
-      ],
       "display": {
         "group": "Stories & play",
         "accent": "#FF8A5B",
         "img": "assets/w-story.jpg",
         "alt": "Story and filmmaking world artwork",
-        "desc": "A storefront world for stories that deserve a place to live.",
         "tags": [
           "Stories",
           "Commerce",
           "Culture"
         ],
-        "tag": "Stories become tangible worlds.",
-        "blurb": "A private storefront build connecting narrative, culture and commerce.",
+        "tag": "Story-led commerce and creative experiences.",
+        "desc": "Story-led commerce and creative experiences.",
+        "blurb": "Story-led commerce and creative experiences.",
         "facts": [
           [
-            "Source",
-            "Private GitHub storefront"
+            "Purpose",
+            "Story-led commerce and creative experiences."
           ],
           [
-            "Stage",
-            "Building"
-          ],
-          [
-            "Public state",
-            "No public front door declared"
+            "Availability",
+            "Current operation not verified"
           ]
         ]
       }
     },
     {
       "name": "SWEATS",
-      "repo": "jussray/Sweats",
       "st": "building",
-      "label": "Private build",
-      "held": "Private brand build · tracked internally",
+      "label": "Building",
+      "held": "Public destination not yet listed",
       "contact": {
         "email": "support@jussco.company"
       },
       "evidence": {},
-      "carriers": [
-        {
-          "platform": "github",
-          "ref": "jussray/Sweats",
-          "role": "canonical brand source",
-          "visibility": "private"
-        }
-      ],
       "display": {
         "group": "People & belonging",
         "accent": "#E8E6E3",
         "img": "assets/w-jbh.jpg",
         "alt": "Fashion and lifestyle world artwork",
-        "desc": "A soft-luxury athleisure brand and buyer-psychology experiment.",
         "tags": [
           "Fashion",
           "Brand",
           "Commerce"
         ],
-        "tag": "Soft luxury with a point of view.",
-        "blurb": "An apparel experiment built to test brand identity, buyer psychology and real demand.",
+        "tag": "Soft-luxury athleisure and apparel.",
+        "desc": "Soft-luxury athleisure and apparel.",
+        "blurb": "Soft-luxury athleisure and apparel.",
         "facts": [
           [
-            "Source",
-            "Private GitHub build"
+            "Purpose",
+            "Soft-luxury athleisure and apparel."
           ],
           [
-            "Category",
-            "Athleisure / fashion"
-          ],
-          [
-            "Stage",
-            "Building"
+            "Availability",
+            "Current operation not verified"
           ]
         ]
       }
     },
     {
       "name": "SleepWealth Agent",
-      "repo": "jussray/SleepWealth-Agent",
       "st": "building",
       "label": "Building",
-      "link": {
-        "text": "Follow the build",
-        "url": "https://github.com/jussray/SleepWealth-Agent"
-      },
+      "repo": "jussray/SleepWealth-Agent",
       "contact": {
-        "github": "https://github.com/jussray/SleepWealth-Agent",
         "email": "support@jussco.company"
       },
       "evidence": {},
-      "carriers": [
-        {
-          "platform": "github",
-          "ref": "jussray/SleepWealth-Agent",
-          "role": "canonical source",
-          "visibility": "public"
-        }
-      ],
       "display": {
         "group": "People & belonging",
         "accent": "#6CCFF6",
         "img": "assets/w-bip.jpg",
         "alt": "Calm night-world artwork",
-        "desc": "A governed research agent whose implemented execution path is paper/simulation only.",
         "tags": [
           "Agents",
           "Research",
           "Governance"
         ],
-        "tag": "The machine proposes; the human owns the ceiling.",
-        "blurb": "A public governed-agent experiment with approval, risk and audit boundaries. Live account observation is a separate evidence plane and live order execution remains disabled.",
+        "tag": "Research into governed financial technology; not a live trading service.",
+        "desc": "Research into governed financial technology; not a live trading service.",
+        "blurb": "Research into governed financial technology; not a live trading service.",
         "facts": [
           [
-            "Source",
-            "Public GitHub repository"
+            "Purpose",
+            "Research into governed financial technology; not a live trading service."
           ],
           [
-            "Execution",
-            "Paper / simulation only"
-          ],
-          [
-            "Boundary",
-            "Live order execution disabled"
+            "Availability",
+            "Current operation not verified"
           ]
         ]
       }
     },
     {
       "name": "Solwealth",
-      "repo": "jussray/SolWealth-Meteora-",
       "st": "building",
       "label": "Building",
-      "link": {
-        "text": "Follow the build",
-        "url": "https://github.com/jussray/SolWealth-Meteora-"
-      },
+      "repo": "jussray/SolWealth-Meteora-",
       "contact": {
-        "github": "https://github.com/jussray/SolWealth-Meteora-",
         "email": "support@jussco.company"
       },
       "evidence": {},
-      "carriers": [
-        {
-          "platform": "github",
-          "ref": "jussray/SolWealth-Meteora-",
-          "role": "canonical source",
-          "visibility": "public"
-        }
-      ],
       "display": {
         "group": "Ideas & systems",
         "accent": "#14F195",
         "img": "assets/w-fcr.jpg",
         "alt": "Founder systems command-center artwork",
-        "desc": "An independently runnable learning-agent experiment with its own mind, memory, evidence and developmental state.",
         "tags": [
           "Agents",
           "Solana",
           "Learning"
         ],
-        "tag": "Learn, propose and remember without self-authorizing.",
-        "blurb": "Solwealth inherits documented principles from portfolio systems but runs independently. Its current lab is dry-run / Solana Devnet / Meteora-shaped, with signing, mainnet and real-money execution not implemented.",
+        "tag": "An independent learning-agent research experiment.",
+        "desc": "An independent learning-agent research experiment.",
+        "blurb": "An independent learning-agent research experiment.",
         "facts": [
           [
-            "Source",
-            "Public GitHub repository"
+            "Purpose",
+            "An independent learning-agent research experiment."
           ],
           [
-            "Stage",
-            "Active learning-agent experiment"
-          ],
-          [
-            "Authority",
-            "No signing, mainnet or real-money execution"
+            "Availability",
+            "Current operation not verified"
           ]
         ]
       }
     },
     {
       "name": "Think Tank",
-      "repo": "jussray/THINK-TANK",
       "st": "building",
       "label": "Building",
-      "link": {
-        "text": "Explore Think Tank",
-        "url": "https://thinktank.jussco.company/"
-      },
+      "repo": "jussray/THINK-TANK",
       "contact": {
-        "github": "https://github.com/jussray/THINK-TANK",
         "email": "support@jussco.company"
       },
       "evidence": {},
-      "carriers": [
-        {
-          "platform": "github",
-          "ref": "jussray/THINK-TANK",
-          "role": "canonical source",
-          "visibility": "public"
-        }
-      ],
       "display": {
         "group": "Ideas & systems",
         "accent": "#F5C14B",
         "img": "assets/w-fcr.jpg",
         "alt": "Founder systems command-center artwork",
-        "desc": "A deterministic local-first founder idea interview, challenge, scoring, synthesis and versioning loop.",
         "tags": [
           "Ideas",
           "Decision support",
           "Portability"
         ],
-        "tag": "Pressure-test an idea without pretending heuristics are market proof.",
-        "blurb": "Think Tank turns founder answers into a durable Idea Record with deterministic critique, scoring, synthesis, recovery and portable export/import.",
+        "tag": "Idea evaluation and decision support.",
+        "desc": "Idea evaluation and decision support.",
+        "blurb": "Idea evaluation and decision support.",
         "facts": [
           [
-            "Source",
-            "Public GitHub repository"
+            "Purpose",
+            "Idea evaluation and decision support."
           ],
           [
-            "Stage",
-            "Verified local-first V0"
-          ],
-          [
-            "Boundary",
-            "Deterministic heuristic workflow; not presented as production AI or market validation"
+            "Availability",
+            "Current operation not verified"
           ]
         ]
       }
     },
     {
       "name": "Alexa Commerce Engine",
-      "repo": "jussray/alexa-commerce-engine-",
       "st": "building",
       "label": "Building · public source",
-      "held": "Production operation not verified",
+      "held": "Public destination not yet listed",
+      "repo": "jussray/alexa-commerce-engine-",
       "contact": {
         "email": "support@jussco.company"
       },
       "evidence": {},
-      "carriers": [
-        {
-          "platform": "github",
-          "ref": "jussray/alexa-commerce-engine-",
-          "role": "canonical source",
-          "visibility": "public"
-        }
-      ],
       "display": {
         "group": "Ideas & systems",
         "accent": "#4CB5FF",
         "img": "assets/w-jbh.jpg",
         "alt": "Commerce world artwork",
-        "desc": "A private commerce-engine project inside the Juss portfolio.",
         "tags": [
           "Commerce",
           "Automation",
           "Systems"
         ],
-        "tag": "Commerce workflows as a system.",
-        "blurb": "A private engine build exploring reusable commerce and product-operation workflows.",
+        "tag": "Shopping assistance based on stated needs.",
+        "desc": "Shopping assistance based on stated needs.",
+        "blurb": "Shopping assistance based on stated needs.",
         "facts": [
           [
-            "Source",
-            "Public GitHub repository"
+            "Purpose",
+            "Shopping assistance based on stated needs."
           ],
           [
-            "Stage",
-            "Building"
-          ],
-          [
-            "Public state",
-            "Production operation not verified"
+            "Availability",
+            "Current operation not verified"
           ]
         ]
       }
     },
     {
       "name": "Ayure",
-      "repo": "jussray/Ayure",
       "st": "building",
       "label": "Building · public source",
-      "held": "Production operation not verified",
+      "held": "Public destination not yet listed",
+      "repo": "jussray/Ayure",
       "contact": {
         "email": "support@jussco.company"
       },
       "evidence": {},
-      "carriers": [
-        {
-          "platform": "github",
-          "ref": "jussray/Ayure",
-          "role": "canonical source",
-          "visibility": "public"
-        }
-      ],
       "display": {
         "group": "Ideas & systems",
         "accent": "#C98BFF",
         "img": "assets/w-fcr.jpg",
         "alt": "Founder systems command-center artwork",
-        "desc": "An active private product build moving through its architecture and data layer.",
         "tags": [
           "Product",
           "Data",
           "Architecture"
         ],
-        "tag": "A private product under active construction.",
-        "blurb": "Ayure is tracked as an active company project while its product and runtime state continue to mature.",
+        "tag": "Discovery of properties, professionals, services and opportunities.",
+        "desc": "Discovery of properties, professionals, services and opportunities.",
+        "blurb": "Discovery of properties, professionals, services and opportunities.",
         "facts": [
           [
-            "Source",
-            "Public GitHub repository"
+            "Purpose",
+            "Discovery of properties, professionals, services and opportunities."
           ],
           [
-            "Stage",
-            "Active architecture build"
-          ],
-          [
-            "Public state",
-            "Production operation not verified"
+            "Availability",
+            "Current operation not verified"
           ]
         ]
       }
@@ -690,9 +437,7 @@
     "email": "founder@jussco.company",
     "linkedin": "https://www.linkedin.com/in/juss-rayy-13ba691a1",
     "facebook": "https://www.facebook.com/share/1cH3mxVRpi/?mibextid=wwXIfr",
-    "youtube": "[YOUTUBE URL]",
-    "support": "https://buymeacoffee.com/jussrayy",
-    "contact_source": "Cloudflare Email Routing rules checked for jussco.company, jussbeautifulhair.com, foundercontrolroom.org and sekretbip.net. Other portfolio projects use the shared Juss & Co support route. Configured mail routing is not proof of successful delivery or outbound sending."
+    "support": "https://buymeacoffee.com/jussrayy"
   },
   "quotes": [
     {
@@ -727,8 +472,5 @@
       "text": "Standardize the laws of trust. Customize how trust feels.",
       "note": "ideas. products.\npeople. proof."
     }
-  ],
-  "quotes_source": "Juss's own lines: the Juss & Co mockup, the 'Day I Became a Coder' poster, and the jussray profile README ('The signal')",
-  "registryVersion": 3,
-  "canonicalization": "Worlds render once; standalone OS products live in systems.json; copies and supporting surfaces stay nested carriers."
+  ]
 }
