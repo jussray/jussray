@@ -57,6 +57,13 @@ for (const vp of [{n:'desktop',w:1440,h:900},{n:'mobile',w:390,h:844}]) {
   say(response?.status()===200, `${vp.n}: homepage status 200`);
   say((await page.locator('main > section').count())===2,`${vp.n}: home has only introduction and navigation choices`);
   say((await page.locator('.site-header a[href="/products.html"]').count())===1,`${vp.n}: products has a proper page route`);
+  say((await page.locator('.stage-center a[href="/products.html"], .stage-center a[href="/work.html"]').count())===0,`${vp.n}: redundant hero destination buttons are absent`);
+  say((await page.locator('.site-header a[href="/work.html"]').count())===1,`${vp.n}: Our Work remains in primary navigation`);
+  for (const [href,label] of [['/products.html','Our Products'],['/work.html','Our Work']]) {
+    const link=page.locator(`main a[href="${href}"]`).filter({has:page.locator('strong',{hasText:new RegExp('^'+label+'$')})});
+    say((await link.count())===1 && await link.isVisible(),`${vp.n}: ${label} remains accessible in the homepage ecosystem panel`);
+  }
+  say((await page.locator('.home-bottom-nav').count())===0,`${vp.n}: bottom navigation stays removed`);
   say((await page.locator('.site-header a[href="/portfolio.html"]').count())===1,`${vp.n}: portfolio has a proper page route`);
   say((await page.locator('a[href="https://games.jussco.company/"]').count())>=2,`${vp.n}: game hub remains independent`);
   { const cta=page.locator('.site-header .work-cta'); const shown=await cta.isVisible(); say(!shown||(await cta.boundingBox()).height<=48,`${vp.n}: Work with Juss stays a compact header button (founder mockup), never oversized`); }
@@ -112,7 +119,9 @@ for (const vp of [{n:'desktop',w:1440,h:900},{n:'mobile',w:390,h:844}]) {
   say((await page.locator('.feature-card').count())===6,`${vp.n}: all six featured products on product page`);
    say((await page.locator('.feature-card a[href="/opportunity-engine.html"]').count())===1,`${vp.n}: Opportunity Engine is a discoverable product route`);
   await page.goto(url+'sites.html',{waitUntil:'load'});
-  say((await page.locator('.directory-card').count())===11,`${vp.n}: eleven public destination cards on sites page`);
+  const expectedDestinations=["https://github.com/jussray","https://www.jussco.company/","https://chief.foundercontrolroom.org","https://sync.jussco.company/","https://compass.jussco.company/","https://exactmatch.jussco.company/","https://jussbeautifulhair.com/","https://games.jussco.company/","https://protect.jussco.company/","https://protect2.jussco.company/","https://makevideo.jussco.company/","https://junglejinx.jussco.company/","https://lumora.jussco.company/"];
+  const actualDestinations=await page.locator('.directory-card').evaluateAll(cards=>cards.map(a=>a.getAttribute('href')));
+  say(JSON.stringify(actualDestinations.sort())===JSON.stringify(expectedDestinations.sort()),`${vp.n}: all thirteen exact public destinations, including GitHub and the canonical company site`);
   say(errors.length===0,`${vp.n}: no JS exceptions on new routed pages${errors.length?' — '+errors.join(' | '):''}`);
   await ctx.close();
 }

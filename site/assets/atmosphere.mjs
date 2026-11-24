@@ -20,11 +20,14 @@ export function startAtmosphere() {
   canvas.setAttribute('aria-hidden', 'true');
   const context = canvas.getContext('2d');
   if (!context) return;
-  document.body.append(canvas);
+  const homeStage = document.querySelector('.home-world .world-stage');
+  const scene = homeStage || document.body;
+  scene.append(canvas);
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let width = 0, height = 0, particles = [], lights = [], frame = 0, last = 0, day = '';
   function resize() {
-    width = innerWidth; height = innerHeight;
+    width = scene.clientWidth;
+    height = homeStage ? homeStage.clientHeight : innerHeight;
     const ratio = Math.min(devicePixelRatio || 1, 1.5);
     canvas.width = Math.round(width * ratio); canvas.height = Math.round(height * ratio);
     canvas.style.width = width + 'px'; canvas.style.height = height + 'px';
