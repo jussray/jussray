@@ -82,3 +82,30 @@ test('discovery projection matches sitemap and llms and does not claim runtime p
     assert.ok(llms.includes(p.source), 'llms missing ' + p.name);
   }
 });
+
+
+test('public presentation feeds exclude private carrier and implementation metadata', () => {
+  const read = p => JSON.parse(readFileSync(join(SITE, 'data', p), 'utf8'));
+  const worlds = read('worlds.json');
+  const systems = read('systems.json');
+  const connectors = read('connectors.json');
+  const portfolio = read('portfolio.json');
+  assert.equal(worlds.worlds.length, 16);
+  for (const w of worlds.worlds) {
+    assert.ok(Object.keys(w).every(k => ['name','repo','st','label','contact','evidence','display','link','held'].includes(k)));
+    assert.deepEqual(w.evidence, {});
+  }
+  assert.equal(systems.systems.length, 5);
+  for (const s of systems.systems) {
+    assert.equal(s.public, true);
+    assert.ok(Object.keys(s).every(k => ['name','kind','public','status','label','role','publicUrl'].includes(k)));
+  }
+  assert.deepEqual(connectors.systems, {});
+  assert.ok(connectors.lanes.every(l => Object.keys(l).every(k => ['id','name'].includes(k))));
+  for (const s of systems.supportingSurfaces || []) {
+    assert.ok(Object.keys(s).every(k => ['name','parent','status','kind'].includes(k)));
+  }
+  assert.doesNotMatch(JSON.stringify(portfolio), /id-preview--|\.lovable\.app/);
+  assert.doesNotMatch(readFileSync(join(SITE, 'portfolio.html'), 'utf8'), /id-preview--/);
+  assert.equal(portfolio.projects.length, 20);
+});
