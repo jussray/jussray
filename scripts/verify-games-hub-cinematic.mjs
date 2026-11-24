@@ -32,7 +32,7 @@ try {
     assert.equal(await page.locator('#featured .featured-tile').count(),10,'six game worlds plus Se’kret Bip, StoryEngine, Founder Control Room and PromptOS (founder: actual games and apps)');
     assert.deepEqual(await page.locator('#featured .featured-tile').evaluateAll(els=>els.slice(0,3).map(el=>el.querySelector('strong')?.textContent?.trim())),['SYNC','LUMORA','ChatQuest'],'first three cards match the founder Game Hub mockups');
     assert.equal(await page.locator('#featured .featured-icon svg').count(),10,'every featured world has its glowing art (founder v3 mockups)');
-    assert.deepEqual(await page.locator('#featured .featured-tile small').allTextContents(),['Group play · Live','In development','In development','In development','In development','Private prototype','Opening soon','Building','Building','Building'],'featured statuses match the founder mockups');
+    assert.deepEqual(await page.locator('#featured .featured-tile small').allTextContents(),['Group play · Public destination','In development','In development','In development','In development','Private prototype','Opening soon','Building','Building','Building'],'featured statuses match the founder mockups');
     assert.equal(await page.locator('#games article.card').count(),6,'existing game detail cards preserved');
     assert.equal(await page.locator('#games article.card:has(.tag.wait) a').count(),0,'unreleased game cards have no public play links');
     assert.equal(await page.locator('.header-tools .utility').evaluateAll(nodes=>nodes.filter(el=>getComputedStyle(el).display!=='none').every(el=>{const box=el.getBoundingClientRect();return box.width>=44&&box.height>=44;})),true,'header tools meet 44px touch targets');
