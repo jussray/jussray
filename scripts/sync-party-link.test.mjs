@@ -9,17 +9,18 @@ import { fileURLToPath } from 'node:url';
 const SITE = new URL('../site/', import.meta.url);
 const SYNC_URL = 'https://sync.jussco.company/';
 
-test('worlds.json declares the verified SYNC Party link', () => {
+test('worlds.json declares the public SYNC Party link without claiming operation', () => {
   const registry = JSON.parse(readFileSync(fileURLToPath(new URL('data/worlds.json', SITE)), 'utf8'));
   const sync = registry.worlds.find((w) => w.name === 'Sync Party');
   assert.ok(sync, 'Sync Party world exists');
-  assert.equal(sync.st, 'live');
+  assert.equal(sync.st, 'progress');
+  assert.equal(sync.label, 'Public destination · operation unverified');
   assert.equal(sync.link?.url, SYNC_URL);
   assert.equal(sync.held, undefined, 'a held "link coming" state must not coexist with a declared link');
 });
 
-test('static fallback in index.html links Sync Party and drops the "link coming" state', () => {
-  const html = readFileSync(fileURLToPath(new URL('index.html', SITE)), 'utf8');
+test('static fallback in universe.html links Sync Party and drops the "link coming" state', () => {
+  const html = readFileSync(fileURLToPath(new URL('universe.html', SITE)), 'utf8');
   const start = html.indexOf('{name:"Sync Party"');
   assert.ok(start >= 0, 'fallback entry for Sync Party exists');
   const entry = html.slice(start, html.indexOf('}', html.indexOf('link:[', start)) + 1);
