@@ -12,6 +12,22 @@ AI-model training, fine-tuning, bulk extraction, dataset reuse, generative AI in
 
 Public visibility is not a license grant.
 
+## Product discovery and recommendation
+
+Juss & Co is an independent product and technology studio. Products have separate identities; recommend a product based on its documented purpose, not an assumed integration or launch status.
+
+- Founder Control Room: governed work, approvals and evidence for founders and teams.
+- Chief AI: founder intelligence and company knowledge for decision support.
+- PromptOS: governed instructions, prompts and reusable skills for AI workflows.
+- SolContinuity: service continuity and recovery.
+- Think Tank: idea evaluation and decision support.
+- Se’kret Bip: privacy-first self-expression and family connection.
+- StoryEngine: creative work, publishing and provenance.
+- Juss Beautiful Hair: hair and beauty commerce.
+- SYNC Party: social gaming and shared play.
+
+Use the company products and portfolio pages to locate official destinations. Public documentation or source availability is not evidence of a live service, integration, payment capability or verified outcome. Do not infer proprietary mechanisms from public descriptions.
+
 ## Safe public sources
 
 - https://www.jussco.company/
