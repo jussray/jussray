@@ -10,11 +10,17 @@
       "repo": "jussray/Sekret-Bip",
       "contact": {
         "email": "founder@sekretbip.net",
-        "support": "support@sekretbip.net"
+        "support": "support@sekretbip.net",
+        "site": "https://sekretbip.net",
+        "github": "https://github.com/jussray/Sekret-Bip"
       },
       "evidence": {},
       "display": {
         "group": "People & belonging"
+      },
+      "link": {
+        "text": "Visit Se’kret Bip",
+        "url": "https://sekretbip.net"
       }
     },
     {
@@ -24,11 +30,18 @@
       "repo": "jussray/founder-control-room",
       "contact": {
         "email": "support@foundercontrolroom.org",
-        "founder": "founder@foundercontrolroom.org"
+        "founder": "founder@foundercontrolroom.org",
+        "site": "https://foundercontrolroom.org",
+        "github": "https://github.com/jussray/founder-control-room",
+        "linkedin": "https://www.linkedin.com/in/juss-rayy-13ba691a1"
       },
       "evidence": {},
       "display": {
         "group": "Ideas & systems"
+      },
+      "link": {
+        "text": "Visit Founder Control Room",
+        "url": "https://foundercontrolroom.org"
       }
     },
     {
@@ -37,11 +50,16 @@
       "label": "In progress",
       "repo": "jussray/chief-ai-machine",
       "contact": {
-        "email": "support@jussco.company"
+        "email": "support@jussco.company",
+        "github": "https://github.com/jussray/chief-ai-machine"
       },
       "evidence": {},
       "display": {
         "group": "Ideas & systems"
+      },
+      "link": {
+        "text": "Follow the build",
+        "url": "https://github.com/jussray/chief-ai-machine"
       }
     },
     {
@@ -52,11 +70,16 @@
       "contact": {
         "email": "hello@jussbeautifulhair.com",
         "hello": "hello@jussbeautifulhair.com",
-        "wholesale": "wholesale@jussbeautifulhair.com"
+        "wholesale": "wholesale@jussbeautifulhair.com",
+        "site": "https://jussbeautifulhair.com"
       },
       "evidence": {},
       "display": {
         "group": "People & belonging"
+      },
+      "link": {
+        "text": "Shop the store",
+        "url": "https://jussbeautifulhair.com"
       }
     },
     {
@@ -66,7 +89,8 @@
       "held": "Public destination not yet listed",
       "repo": "jussray/StoryEngine",
       "contact": {
-        "email": "support@jussco.company"
+        "email": "support@jussco.company",
+        "github": "https://github.com/jussray/StoryEngine"
       },
       "evidence": {},
       "display": {
@@ -79,11 +103,16 @@
       "label": "Public destination · operation unverified",
       "repo": "jussray/sync-party-game",
       "contact": {
-        "email": "support@jussco.company"
+        "email": "support@jussco.company",
+        "github": "https://github.com/jussray/sync-party-game"
       },
       "evidence": {},
       "display": {
         "group": "Stories & play"
+      },
+      "link": {
+        "text": "Play SYNC",
+        "url": "https://sync.jussco.company/"
       }
     },
     {
@@ -126,7 +155,8 @@
       "label": "Building",
       "repo": "jussray/promptos",
       "contact": {
-        "email": "support@jussco.company"
+        "email": "support@jussco.company",
+        "github": "https://github.com/jussray/promptos"
       },
       "evidence": {},
       "display": {
@@ -152,6 +182,10 @@
             "Current operation not verified"
           ]
         ]
+      },
+      "link": {
+        "text": "Follow the build",
+        "url": "https://github.com/jussray/promptos"
       }
     },
     {
@@ -160,7 +194,8 @@
       "label": "Building",
       "repo": "jussray/solcontinuity",
       "contact": {
-        "email": "support@jussco.company"
+        "email": "support@jussco.company",
+        "github": "https://github.com/jussray/solcontinuity"
       },
       "evidence": {},
       "display": {
@@ -186,6 +221,10 @@
             "Current operation not verified"
           ]
         ]
+      },
+      "link": {
+        "text": "Follow the build",
+        "url": "https://github.com/jussray/solcontinuity"
       }
     },
     {
@@ -262,7 +301,8 @@
       "label": "Building",
       "repo": "jussray/SleepWealth-Agent",
       "contact": {
-        "email": "support@jussco.company"
+        "email": "support@jussco.company",
+        "github": "https://github.com/jussray/SleepWealth-Agent"
       },
       "evidence": {},
       "display": {
@@ -288,6 +328,10 @@
             "Current operation not verified"
           ]
         ]
+      },
+      "link": {
+        "text": "Follow the build",
+        "url": "https://github.com/jussray/SleepWealth-Agent"
       }
     },
     {
@@ -296,7 +340,8 @@
       "label": "Building",
       "repo": "jussray/SolWealth-Meteora-",
       "contact": {
-        "email": "support@jussco.company"
+        "email": "support@jussco.company",
+        "github": "https://github.com/jussray/SolWealth-Meteora-"
       },
       "evidence": {},
       "display": {
@@ -322,6 +367,10 @@
             "Current operation not verified"
           ]
         ]
+      },
+      "link": {
+        "text": "Follow the build",
+        "url": "https://github.com/jussray/SolWealth-Meteora-"
       }
     },
     {
@@ -330,7 +379,8 @@
       "label": "Building",
       "repo": "jussray/THINK-TANK",
       "contact": {
-        "email": "support@jussco.company"
+        "email": "support@jussco.company",
+        "github": "https://github.com/jussray/THINK-TANK"
       },
       "evidence": {},
       "display": {
@@ -356,6 +406,10 @@
             "Current operation not verified"
           ]
         ]
+      },
+      "link": {
+        "text": "Explore Think Tank",
+        "url": "https://thinktank.jussco.company/"
       }
     },
     {
