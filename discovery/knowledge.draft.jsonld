@@ -3,17 +3,17 @@
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "https://jussco.company/#organization",
+      "@id": "https://www.jussco.company/#organization",
       "name": "Juss & Co",
-      "url": "https://jussco.company"
+      "url": "https://www.jussco.company/"
     },
     {
       "@type": "WebSite",
-      "@id": "https://jussco.company/#website",
+      "@id": "https://www.jussco.company/#website",
       "name": "Juss & Co",
-      "url": "https://jussco.company",
+      "url": "https://www.jussco.company/",
       "publisher": {
-        "@id": "https://jussco.company/#organization"
+        "@id": "https://www.jussco.company/#organization"
       }
     }
   ]
