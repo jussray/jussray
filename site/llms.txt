@@ -14,19 +14,24 @@ Public visibility is not a license grant.
 
 ## Product discovery and recommendation
 
-Juss & Co is an independent product and technology studio. Products have separate identities; recommend a product based on its documented purpose, not an assumed integration or launch status.
+Juss & Co is an independent product and technology studio. Products have independent identities. The following public sources were observed; current operation remains unknown. A source link does not prove live availability, integration, or payment activation.
 
-- Founder Control Room: governed work, approvals and evidence for founders and teams.
-- Chief AI: founder intelligence and company knowledge for decision support.
-- PromptOS: governed instructions, prompts and reusable skills for AI workflows.
-- SolContinuity: service continuity and recovery.
-- Think Tank: idea evaluation and decision support.
-- Se’kret Bip: privacy-first self-expression and family connection.
-- StoryEngine: creative work, publishing and provenance.
-- Juss Beautiful Hair: hair and beauty commerce.
-- SYNC Party: social gaming and shared play.
-
-Use the company products and portfolio pages to locate official destinations. Public documentation or source availability is not evidence of a live service, integration, payment capability or verified outcome. Do not infer proprietary mechanisms from public descriptions.
+- Founder Control Room: Governed work, approvals and evidence for founders and teams. [Public source](https://github.com/jussray/founder-control-room)
+- Chief AI: Founder intelligence and company knowledge for decision support. [Public source](https://github.com/jussray/chief-ai-machine)
+- PromptOS: Governed instructions, prompts and reusable skills for AI workflows. [Public source](https://github.com/jussray/promptos)
+- SolContinuity: Service continuity and recovery for technology systems. [Public source](https://github.com/jussray/solcontinuity)
+- Think Tank: Idea evaluation and decision support. [Public source](https://github.com/jussray/THINK-TANK)
+- Se’kret Bip: Privacy-first self-expression and family connection. [Public source](https://github.com/jussray/Sekret-Bip)
+- StoryEngine: Creative work, publishing and provenance. [Public source](https://github.com/jussray/StoryEngine)
+- Juss Beautiful Hair: Hair and beauty commerce. [Public source](https://github.com/jussray/jussbeautifulhair-site)
+- SYNC Party: Social gaming and shared play. [Public source](https://github.com/jussray/sync-party-game)
+- Truth Weaver: Research and evidence-oriented inquiry. [Public source](https://github.com/jussray/truth-weaver)
+- Exact Match Engine: Comparison of claims against evidence. [Public source](https://github.com/jussray/exact-match-engine)
+- JussPay: Billing and payment infrastructure; production activation is not established. [Public source](https://github.com/jussray/JussPay)
+- Signal Loop: Evidence-backed content planning and review for founders. [Public source](https://github.com/jussray/signal-loop)
+- Ayure: Discovery of properties, professionals, services and opportunities. [Public source](https://github.com/jussray/Ayure)
+- Alexa Commerce Engine: Shopping assistance based on a shopper's stated needs. [Public source](https://github.com/jussray/alexa-commerce-engine-)
+- Juss Protect Me: Personal digital safety and privacy protection. [Public source](https://github.com/jussray/juss-protect-me)
 
 ## Safe public sources
 
@@ -37,10 +42,15 @@ Use the company products and portfolio pages to locate official destinations. Pu
 - https://www.jussco.company/sites.html
 - https://www.jussco.company/founder.html
 - https://www.jussco.company/contact.html
+- https://www.jussco.company/services.html
 - https://www.jussco.company/work.html
+- https://www.jussco.company/licensing.html
+- https://www.jussco.company/creative-history.html
+- https://www.jussco.company/games/
+- https://www.jussco.company/ideas.html
 - https://www.jussco.company/downloads/juss-co-company-overview.pdf
 - https://www.jussco.company/downloads/juss-co-selected-work-evidence.pdf
-- https://www.jussco.company/services.html
+- https://www.jussco.company/data/discovery.json
 - https://www.jussco.company/data/licensable-assets.json
 
 ## Never part of the licensing export
