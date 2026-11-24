@@ -87,7 +87,7 @@ const PAGES = [
   ['Public destinations', '/sites.html', 'Page'], ['Licensing', '/licensing.html', 'Page'],
 ];
 const GAMES = [
-  ['SYNC', 'https://sync.jussco.company/', 'Game · Live'], ['LUMORA', 'https://games.jussco.company/#lumora-world', 'Game · In development'],
+  ['SYNC', 'https://sync.jussco.company/', 'Game · Public destination'], ['LUMORA', 'https://games.jussco.company/#lumora-world', 'Game · In development'],
   ['ChatQuest', 'https://games.jussco.company/#chatquest-world', 'Game · In development'], ['Bip & Seek', 'https://games.jussco.company/#bipseek-world', 'Game · In development'],
   ['Jungle Jinx', 'https://games.jussco.company/#junglejinx-world', 'Game · In development'], ['Last Laugh', 'https://games.jussco.company/#lastlaugh-world', 'Game · Private prototype'],
 ];
