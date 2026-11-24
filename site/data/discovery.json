@@ -1,5 +1,5 @@
 {
-  "schema": "jussco/public-discovery@v1",
+  "schema": "jussco/public-discovery@v2",
   "canonicalOrigin": "https://www.jussco.company",
   "company": "Juss & Co",
   "pages": [
@@ -14,7 +14,6 @@
     "https://www.jussco.company/work.html",
     "https://www.jussco.company/licensing.html",
     "https://www.jussco.company/creative-history.html",
-    "https://www.jussco.company/games/",
     "https://www.jussco.company/ideas.html",
     "https://www.jussco.company/downloads/juss-co-company-overview.pdf",
     "https://www.jussco.company/downloads/juss-co-selected-work-evidence.pdf"
@@ -130,6 +129,154 @@
       "purpose": "Personal digital safety and privacy protection.",
       "source": "https://github.com/jussray/juss-protect-me",
       "sourceStatus": "public_source_observed",
+      "operationStatus": "unknown"
+    }
+  ],
+  "destinations": [
+    {
+      "name": "Chief AI",
+      "purpose": "Standalone AI workspace",
+      "url": "https://chief.foundercontrolroom.org",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "SYNC Party",
+      "purpose": "Multiplayer party game",
+      "url": "https://sync.jussco.company/",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "Truth Compass",
+      "purpose": "Claims and evidence",
+      "url": "https://compass.jussco.company/",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "Exact Match Engine",
+      "purpose": "Evidence reconciliation",
+      "url": "https://exactmatch.jussco.company/",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "Juss Beautiful Hair",
+      "purpose": "Independent beauty storefront",
+      "url": "https://jussbeautifulhair.com/",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "Juss & Co Games",
+      "purpose": "Games collection",
+      "url": "https://games.jussco.company/",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "JUSS Protect · One",
+      "purpose": "Digital protection experience",
+      "url": "https://protect.jussco.company/",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "JUSS Protect · Two",
+      "purpose": "Digital protection experience",
+      "url": "https://protect2.jussco.company/",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "Make Video",
+      "purpose": "Video creation experience",
+      "url": "https://makevideo.jussco.company/",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "Jungle Jinx",
+      "purpose": "Game experience",
+      "url": "https://junglejinx.jussco.company/",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "Lumora",
+      "purpose": "Digital experience",
+      "url": "https://lumora.jussco.company/",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "Founder Control Room",
+      "purpose": "Governed work and evidence for founders and teams.",
+      "url": "https://foundercontrolroom.org/",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "Chief AI — standalone",
+      "purpose": "Founder intelligence and decision support.",
+      "url": "https://chief.jussco.company/",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "PromptOS",
+      "purpose": "Governed AI instructions and reusable skills.",
+      "url": "https://promptos.jussco.company/",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "PromptOS — FCR",
+      "purpose": "Founder workspace entry point for PromptOS.",
+      "url": "https://promptos.foundercontrolroom.org/",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "SolContinuity",
+      "purpose": "Service continuity and recovery.",
+      "url": "https://sol.foundercontrolroom.org/",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "Think Tank",
+      "purpose": "Idea evaluation and decision support.",
+      "url": "https://thinktank.jussco.company/",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "Se’kret Bip",
+      "purpose": "Self-expression and family connection.",
+      "url": "https://sekretbip.net/",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "Truth Weaver",
+      "purpose": "Educational legal navigation and research.",
+      "url": "https://truthweaver.jussco.company/",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "StoryEngine",
+      "purpose": "Creative work, publishing and provenance.",
+      "url": "https://storyengine.jussco.company/",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "Ayure",
+      "purpose": "Property, professional and service discovery.",
+      "url": "https://ayure.us/",
+      "operationStatus": "unknown"
+    }
+  ],
+  "gameEditions": [
+    {
+      "name": "Live Site SYNC",
+      "purpose": "Real-time party-game edition.",
+      "url": "https://sync.jussco.company/",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "Chat SYNC",
+      "purpose": "Chat-based SYNC edition.",
+      "url": "https://sync.jussco.company/chat/",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "Lovable SYNC",
+      "purpose": "Social playtest signup destination.",
+      "url": "https://sync-playtest.lovable.app/",
       "operationStatus": "unknown"
     }
   ]
