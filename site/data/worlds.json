@@ -129,7 +129,7 @@
           "platform": "github",
           "ref": "jussray/jbh-private",
           "role": "additional carrier",
-          "visibility": "public"
+          "visibility": "private"
         },
         {
           "platform": "github",
@@ -591,8 +591,8 @@
       "name": "Alexa Commerce Engine",
       "repo": "jussray/alexa-commerce-engine-",
       "st": "building",
-      "label": "Private build",
-      "held": "Private commerce build · tracked internally",
+      "label": "Building · public source",
+      "held": "Production operation not verified",
       "contact": {
         "email": "support@jussco.company"
       },
@@ -602,7 +602,7 @@
           "platform": "github",
           "ref": "jussray/alexa-commerce-engine-",
           "role": "canonical source",
-          "visibility": "private"
+          "visibility": "public"
         }
       ],
       "display": {
@@ -621,7 +621,7 @@
         "facts": [
           [
             "Source",
-            "Private GitHub repository"
+            "Public GitHub repository"
           ],
           [
             "Stage",
@@ -629,17 +629,17 @@
           ],
           [
             "Public state",
-            "No public front door declared"
+            "Production operation not verified"
           ]
         ]
       }
     },
     {
       "name": "Ayure",
-      "repo": "jussray/Ayure-",
+      "repo": "jussray/Ayure",
       "st": "building",
-      "label": "Private build",
-      "held": "Private product build · tracked internally",
+      "label": "Building · public source",
+      "held": "Production operation not verified",
       "contact": {
         "email": "support@jussco.company"
       },
@@ -647,9 +647,9 @@
       "carriers": [
         {
           "platform": "github",
-          "ref": "jussray/Ayure-",
+          "ref": "jussray/Ayure",
           "role": "canonical source",
-          "visibility": "private"
+          "visibility": "public"
         }
       ],
       "display": {
@@ -668,7 +668,7 @@
         "facts": [
           [
             "Source",
-            "Private GitHub repository"
+            "Public GitHub repository"
           ],
           [
             "Stage",
@@ -676,7 +676,7 @@
           ],
           [
             "Public state",
-            "No public front door declared"
+            "Production operation not verified"
           ]
         ]
       }
