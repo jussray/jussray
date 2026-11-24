@@ -1,0 +1,136 @@
+{
+  "schema": "jussco/public-discovery@v1",
+  "canonicalOrigin": "https://www.jussco.company",
+  "company": "Juss & Co",
+  "pages": [
+    "https://www.jussco.company/",
+    "https://www.jussco.company/products.html",
+    "https://www.jussco.company/opportunity-engine.html",
+    "https://www.jussco.company/portfolio.html",
+    "https://www.jussco.company/sites.html",
+    "https://www.jussco.company/founder.html",
+    "https://www.jussco.company/contact.html",
+    "https://www.jussco.company/services.html",
+    "https://www.jussco.company/work.html",
+    "https://www.jussco.company/licensing.html",
+    "https://www.jussco.company/creative-history.html",
+    "https://www.jussco.company/games/",
+    "https://www.jussco.company/ideas.html",
+    "https://www.jussco.company/downloads/juss-co-company-overview.pdf",
+    "https://www.jussco.company/downloads/juss-co-selected-work-evidence.pdf"
+  ],
+  "products": [
+    {
+      "name": "Founder Control Room",
+      "purpose": "Governed work, approvals and evidence for founders and teams.",
+      "source": "https://github.com/jussray/founder-control-room",
+      "sourceStatus": "public_source_observed",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "Chief AI",
+      "purpose": "Founder intelligence and company knowledge for decision support.",
+      "source": "https://github.com/jussray/chief-ai-machine",
+      "sourceStatus": "public_source_observed",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "PromptOS",
+      "purpose": "Governed instructions, prompts and reusable skills for AI workflows.",
+      "source": "https://github.com/jussray/promptos",
+      "sourceStatus": "public_source_observed",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "SolContinuity",
+      "purpose": "Service continuity and recovery for technology systems.",
+      "source": "https://github.com/jussray/solcontinuity",
+      "sourceStatus": "public_source_observed",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "Think Tank",
+      "purpose": "Idea evaluation and decision support.",
+      "source": "https://github.com/jussray/THINK-TANK",
+      "sourceStatus": "public_source_observed",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "Se’kret Bip",
+      "purpose": "Privacy-first self-expression and family connection.",
+      "source": "https://github.com/jussray/Sekret-Bip",
+      "sourceStatus": "public_source_observed",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "StoryEngine",
+      "purpose": "Creative work, publishing and provenance.",
+      "source": "https://github.com/jussray/StoryEngine",
+      "sourceStatus": "public_source_observed",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "Juss Beautiful Hair",
+      "purpose": "Hair and beauty commerce.",
+      "source": "https://github.com/jussray/jussbeautifulhair-site",
+      "sourceStatus": "public_source_observed",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "SYNC Party",
+      "purpose": "Social gaming and shared play.",
+      "source": "https://github.com/jussray/sync-party-game",
+      "sourceStatus": "public_source_observed",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "Truth Weaver",
+      "purpose": "Research and evidence-oriented inquiry.",
+      "source": "https://github.com/jussray/truth-weaver",
+      "sourceStatus": "public_source_observed",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "Exact Match Engine",
+      "purpose": "Comparison of claims against evidence.",
+      "source": "https://github.com/jussray/exact-match-engine",
+      "sourceStatus": "public_source_observed",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "JussPay",
+      "purpose": "Billing and payment infrastructure; production activation is not established.",
+      "source": "https://github.com/jussray/JussPay",
+      "sourceStatus": "public_source_observed",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "Signal Loop",
+      "purpose": "Evidence-backed content planning and review for founders.",
+      "source": "https://github.com/jussray/signal-loop",
+      "sourceStatus": "public_source_observed",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "Ayure",
+      "purpose": "Discovery of properties, professionals, services and opportunities.",
+      "source": "https://github.com/jussray/Ayure",
+      "sourceStatus": "public_source_observed",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "Alexa Commerce Engine",
+      "purpose": "Shopping assistance based on a shopper's stated needs.",
+      "source": "https://github.com/jussray/alexa-commerce-engine-",
+      "sourceStatus": "public_source_observed",
+      "operationStatus": "unknown"
+    },
+    {
+      "name": "Juss Protect Me",
+      "purpose": "Personal digital safety and privacy protection.",
+      "source": "https://github.com/jussray/juss-protect-me",
+      "sourceStatus": "public_source_observed",
+      "operationStatus": "unknown"
+    }
+  ]
+}
