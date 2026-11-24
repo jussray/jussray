@@ -25,7 +25,7 @@
       },
       "repo": {
         "name": "jussray/truth-weaver",
-        "visibility": "private"
+        "visibility": "public"
       },
       "embeddedIn": [
         {
@@ -80,7 +80,7 @@
       },
       "repo": {
         "name": "jussray/exact-match-engine",
-        "visibility": "private"
+        "visibility": "public"
       },
       "embeddedIn": [
         {
