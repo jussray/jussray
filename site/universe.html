@@ -827,37 +827,37 @@ a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-colo
      alt:"A teen girl in a purple hoodie lies on her bed at night, smiling at her phone while a soft cloud companion floats beside her",
      desc:"A safe and kind space to feel, share, and grow, for teens, parents and kids.", tags:["Community","Wellness","AI"],
      tag:"Teen emotional culture.", blurb:"A softer, more honest corner of the internet, with companions who get the 3am brain.",
-     facts:[["Companions","Sy Suhana, Night and Cloud"],["Voice","Cool cousin, trusted older sibling. Never clinical."],["Front door","Public signup still gated (#925)"]],
+     facts:[["Purpose","Self-expression and family connection"],["Availability","Current operation not verified"]],
      held:"Opening soon · no public link yet"},
     {name:"Founder Control Room", group:"Ideas & systems", st:"building", label:"Building", w:"#3D6BFF", img:"assets/w-fcr.jpg",
      alt:"A founder seen from behind at a desk of glowing monitors, a sunset over mountains and a city beyond the window",
      desc:"A system to turn ideas into products, proof and long-term impact.", tags:["Productivity","AI","Founder tools"],
-     tag:"The founder operating environment.", blurb:"Agents propose, the founder approves, and every change leaves a receipt. Same truth, higher outcomes.",
-     facts:[["Merged #900","Cinematic Founder Home, 56 of 56 browser checks"],["Merged #902","Capability market fed from relay receipts"],["Not yet live","API deploy pending, so sign-in is offline"]],
+     tag:"The founder operating environment.", blurb:"Governed work, approvals and evidence for founders and teams.",
+     facts:[["Purpose","Governed work and evidence"],["Availability","Current operation not verified"]],
      link:["Follow the build","https://github.com/jussray/founder-control-room"]},
     {name:"Chief AI", group:"Ideas & systems", st:"progress", label:"In progress", w:"#5EA8FF", img:"assets/w-chief.jpg",
      alt:"Profile of a woman lit by violet circuitry and light, eyes forward",
      desc:"A founder intelligence partner that helps you think bigger and build faster.", tags:["AI agents","Automation","Intelligence"],
-     tag:"Intent → bounded execution → evidence.", blurb:"The intelligence partner that starts with one question: what are you trying to move forward?",
-     facts:[["Runtime","Deployed on Cloudflare Workers"],["Merged #142","MCP identity surface and credential membrane"],["Role","Defines intent; Control Room governs the doing"]],
+     tag:"Founder intelligence.", blurb:"The intelligence partner that starts with one question: what are you trying to move forward?",
+     facts:[["Purpose","Founder intelligence and decision support"],["Availability","Current operation not verified"]],
      link:["Follow the build","https://github.com/jussray/chief-ai-machine"]},
-    {name:"Juss Beautiful Hair", group:"People & belonging", st:"progress", label:"Store open · awaiting first order", w:"#FF4FB8", img:"assets/w-jbh.jpg",
+    {name:"Juss Beautiful Hair", group:"People & belonging", st:"progress", label:"Public destination · operation unverified", w:"#FF4FB8", img:"assets/w-jbh.jpg",
      alt:"A woman with long curly hair in warm light, hand at her cheek, confident and relaxed",
      desc:"Premium hair for real people. Confidence, culture and care.", tags:["Beauty","Commerce","Community"],
-     tag:"Beauty commerce, built to convert.", blurb:"Curated human hair bundles, closures and frontals, shipped to your door.",
-     facts:[["Store","jussbeautifulhair.com"],["Claims audited","Unproven hair claims removed (#115, 29 Sep)"],["Checkout","Exact-head checkout gate passed in a real browser"]],
+     tag:"Beauty commerce, built to convert.", blurb:"Hair and beauty commerce. Check the store for current availability.",
+     facts:[["Store","jussbeautifulhair.com"],["Availability","Current checkout and fulfillment not verified"]],
      link:["Shop the store","https://jussbeautifulhair.com"]},
     {name:"StoryEngine", group:"Stories & play", st:"building", label:"Building", w:"#F5C14B", img:"assets/w-story.jpg",
      alt:"Silhouette of a filmmaker behind a camera rig against a violet sunset city",
      desc:"A media engine for real stories. Ideas to impact through content.", tags:["Media","Storytelling","Education"],
      tag:"Narrative, media and cinematic creation.", blurb:"Tools that turn ideas into stories you can watch, read and share.",
-     facts:[["Merged #122","Security fix on main"],["Live server","Waiting on redeploy to the latest main"]],
+     facts:[["Purpose","Creative work and publishing"],["Availability","Current operation not verified"]],
      held:"Coming soon · no public link yet"},
-    {name:"Sync Party", group:"Stories & play", st:"live", label:"Live", w:"#3BE3FF", img:"assets/w-sync.jpg",
+    {name:"Sync Party", group:"Stories & play", st:"progress", label:"Public destination · operation unverified", w:"#3BE3FF", img:"assets/w-sync.jpg",
      alt:"Friends crowd around a tablet, laughing, neon reactions glowing around them",
      desc:"Get in sync. Play together. Real connection in a digital world.", tags:["Social","Games","Community"],
      tag:"Get in sync. Play together.", blurb:"A party game for friends in the same room: answer together and find out who is really in sync.",
-     facts:[["Live","Game runtime deployed 28 Sep; live per founder, 30 Sep"],["Stage","Public link live at sync.jussco.company"]],
+     facts:[["Purpose","Social gaming and shared play"],["Availability","Current multiplayer operation not verified"]],
      link:["Play SYNC Party","https://sync.jussco.company"]}
   ];
 
@@ -900,11 +900,11 @@ a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-colo
   }).catch(function(){var stamp=document.getElementById("liveStamp");if(stamp)stamp.textContent="Portfolio feed unavailable; displayed labels may be outdated. Verify on each product site.";});
 
 /* ---------- standalone OS registry ---------- */
-var osGrid=document.getElementById("osGrid"), surfaceStrip=document.getElementById("surfaceStrip"), connectorRegistry=null;
+var osGrid=document.getElementById("osGrid"), surfaceStrip=document.getElementById("surfaceStrip");
 function renderSystems(d){
   if(!osGrid || !d || !Array.isArray(d.systems)){var failure=document.getElementById("osStamp");if(failure)failure.textContent="Standalone OS registry unavailable; current status is unverified.";return;}
   osGrid.innerHTML="";
-  var visible=d.systems.filter(function(x){ return x.public!==false; });
+  var visible=d.systems.filter(function(x){ return x.public===true; });
   visible.forEach(function(x){
     var card=document.createElement("article"); card.className="os-card";
     var top=document.createElement("div"); top.className="os-top";
@@ -913,29 +913,14 @@ function renderSystems(d){
     top.appendChild(kind); top.appendChild(state); card.appendChild(top);
     var h=document.createElement("h3"); h.textContent=x.name; card.appendChild(h);
     var role=document.createElement("p"); role.className="os-role"; role.textContent=x.role||"Standalone operating system."; card.appendChild(role);
-    var meta=document.createElement("div"); meta.className="os-meta";
-    var provider=document.createElement("span"); provider.textContent=(x.builder&&x.builder.provider)||"Tracked"; meta.appendChild(provider);
-    if(x.repo&&x.repo.name){ var repo=document.createElement("span"); repo.textContent=x.repo.visibility==="private"?"Private repo":"Repo"; meta.appendChild(repo); }
-    card.appendChild(meta);
-    var connectorEntry=connectorRegistry&&connectorRegistry.systems&&connectorRegistry.systems[x.name];
-    var bindings=connectorEntry&&Array.isArray(connectorEntry.bindings)?connectorEntry.bindings:[];
-    if(bindings.length){
-      var cw=document.createElement("div"); cw.className="os-connectors"; var cwb=document.createElement("b"); cwb.textContent="Connector fabric"; cw.appendChild(cwb);
-      bindings.forEach(function(binding){ var lane=(connectorRegistry.lanes||[]).find(function(l){ return l.id===binding.id; }); var sp=document.createElement("span"); sp.dataset.connector=binding.id; sp.dataset.state=binding.state; sp.textContent=(lane?lane.name:binding.id)+" · "+String(binding.state||"unknown").replace(/_/g," "); cw.appendChild(sp); });
-      card.appendChild(cw);
-    }
-    if(x.embeddedIn&&x.embeddedIn.length){ var emb=document.createElement("div"); emb.className="os-embed"; var eb=document.createElement("b"); eb.textContent="Already embedded in"; emb.appendChild(eb); x.embeddedIn.forEach(function(e){ var sp=document.createElement("span"); sp.textContent=e.name; emb.appendChild(sp); }); card.appendChild(emb); }
-    var target=x.publicUrl || (x.builder && x.builder.preview);
-    if(target){ var a=document.createElement("a"); a.className="os-link"; a.href=target; a.textContent=x.publicUrl ? "Open "+x.name+" ↗" : "Open builder preview ↗"; card.appendChild(a); }
+    var target=x.publicUrl;
+    if(target && /^https:\/\//.test(target)){ var a=document.createElement("a"); a.className="os-link"; a.href=target; a.textContent="Open "+x.name+" ↗"; card.appendChild(a); }
     osGrid.appendChild(card);
   });
-  var stamp=document.getElementById("osStamp"); if(stamp) stamp.textContent=visible.length+" public standalone OS builds · internal carriers tracked separately"+(d.generatedAt?" · record updated "+new Date(d.generatedAt).toISOString().slice(0,10):"");
-  if(surfaceStrip && Array.isArray(d.supportingSurfaces) && d.supportingSurfaces.length){ surfaceStrip.hidden=false; surfaceStrip.innerHTML=""; var b=document.createElement("b"); b.textContent="Supporting surfaces:"; surfaceStrip.appendChild(b); d.supportingSurfaces.forEach(function(x){ var sp=document.createElement("span"); sp.textContent=x.name+" → "+x.parent+" · "+((x.builder&&x.builder.provider)||"tracked")+" · "+x.status; surfaceStrip.appendChild(sp); }); }
+  var stamp=document.getElementById("osStamp"); if(stamp) stamp.textContent=visible.length+" public standalone OS builds · operation requires verification"+(d.generatedAt?" · record updated "+new Date(d.generatedAt).toISOString().slice(0,10):"");
+  if(surfaceStrip && Array.isArray(d.supportingSurfaces) && d.supportingSurfaces.length){ surfaceStrip.hidden=false; surfaceStrip.innerHTML=""; var b=document.createElement("b"); b.textContent="Supporting surfaces:"; surfaceStrip.appendChild(b); d.supportingSurfaces.forEach(function(x){ var sp=document.createElement("span"); sp.textContent=x.name+" → "+x.parent+" · "+x.status; surfaceStrip.appendChild(sp); }); }
 }
-Promise.all([
-  fetch("data/systems.json",{cache:"no-store"}).then(function(r){ return r.ok?r.json():null; }).catch(function(){ return null; }),
-  fetch("data/connectors.json",{cache:"no-store"}).then(function(r){ return r.ok?r.json():null; }).catch(function(){ return null; })
-]).then(function(pair){ connectorRegistry=pair[1]; renderSystems(pair[0]); }).catch(function(){});
+fetch("data/systems.json",{cache:"no-store"}).then(function(r){return r.ok?r.json():null;}).then(renderSystems).catch(function(){renderSystems(null);});
 
 /* ---------- rotating founder quotes (data-driven, founder-declared) ---------- */
   var QUOTES=[{text:"A thought is not a result. Proof is a different kind of power.",note:"higher standards.\nbrighter tomorrows."}], qi=0, qTimer=null, qPaused=false;
@@ -953,14 +938,6 @@ Promise.all([
   qBox.addEventListener("focusin",function(){ qPaused=true; }); qBox.addEventListener("focusout",function(){ qPaused=false; });
   window.JC = { nextQuote:function(){ showQuote(qi+1,false); }, quoteIndex:function(){ return qi; }, quoteCount:function(){ return QUOTES.length; } };
   showQuote(0,false);
-  function evidenceRows(L){
-    var rows=[]; if(!L || !L.evidence) return rows; var e=L.evidence;
-    if(e.mainSha) rows.push(["Main", e.mainSha.slice(0,7)+(e.mainDate?" · "+e.mainDate.slice(0,10):"")]);
-    if(e.latestMergedPr) rows.push(["Latest merged", "#"+e.latestMergedPr.number+" "+e.latestMergedPr.title+(e.latestMergedPr.mergedAt?" · "+e.latestMergedPr.mergedAt.slice(0,10):"")]);
-    if(e.ci) rows.push(["CI on main", e.ci]);
-    if(L.carriers&&L.carriers.length) rows.push(["Tracked carriers",L.carriers.map(function(x){return x.ref||x.name||x.id||x.platform;}).join(" · ")]);
-    return rows;
-  }
   function renderContacts(L){
     var box=document.getElementById("dContacts"), ul=document.getElementById("dContactList"); ul.innerHTML="";
     var c=(L&&L.contact)||{}; var keys=Object.keys(c);
@@ -991,7 +968,7 @@ Promise.all([
     document.getElementById("dBlurb").textContent = w.blurb;
     document.getElementById("dIdx").textContent = String(i+1).padStart(2,"0")+" / "+String(WORLDS.length).padStart(2,"0");
     var f = document.getElementById("dFacts"); f.innerHTML = "";
-    w.facts.concat(evidenceRows(LIVE[w.name])).forEach(function(p,ix){ var li=document.createElement("li"), k=document.createElement("b"), v=document.createElement("span"); k.textContent=p[0]; v.textContent=p[1]; if(ix>=w.facts.length) li.className="evid"; li.appendChild(k); li.appendChild(v); f.appendChild(li); });
+    w.facts.forEach(function(p){ var li=document.createElement("li"), k=document.createElement("b"), v=document.createElement("span"); k.textContent=p[0]; v.textContent=p[1]; li.appendChild(k); li.appendChild(v); f.appendChild(li); });
     renderContacts(LIVE[w.name]);
     var c = document.getElementById("dCta"); c.innerHTML = "";
     if(w.link){ var a=document.createElement("a"); a.className="btn btn-violet"; a.href=w.link[1]; a.textContent=w.link[0]+" ↗"; c.appendChild(a); }
