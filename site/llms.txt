@@ -46,12 +46,40 @@ Juss & Co is an independent product and technology studio. Products have indepen
 - https://www.jussco.company/work.html
 - https://www.jussco.company/licensing.html
 - https://www.jussco.company/creative-history.html
-- https://www.jussco.company/games/
 - https://www.jussco.company/ideas.html
 - https://www.jussco.company/downloads/juss-co-company-overview.pdf
 - https://www.jussco.company/downloads/juss-co-selected-work-evidence.pdf
 - https://www.jussco.company/data/discovery.json
 - https://www.jussco.company/data/licensable-assets.json
+
+## Declared public product destinations
+
+<!-- discovery-destinations:start -->
+- Chief AI: https://chief.foundercontrolroom.org — current operation unverified.
+- SYNC Party: https://sync.jussco.company/ — current operation unverified.
+- Truth Compass: https://compass.jussco.company/ — current operation unverified.
+- Exact Match Engine: https://exactmatch.jussco.company/ — current operation unverified.
+- Juss Beautiful Hair: https://jussbeautifulhair.com/ — current operation unverified.
+- Juss & Co Games: https://games.jussco.company/ — current operation unverified.
+- JUSS Protect · One: https://protect.jussco.company/ — current operation unverified.
+- JUSS Protect · Two: https://protect2.jussco.company/ — current operation unverified.
+- Make Video: https://makevideo.jussco.company/ — current operation unverified.
+- Jungle Jinx: https://junglejinx.jussco.company/ — current operation unverified.
+- Lumora: https://lumora.jussco.company/ — current operation unverified.
+- Founder Control Room: https://foundercontrolroom.org/ — current operation unverified.
+- Chief AI — standalone: https://chief.jussco.company/ — current operation unverified.
+- PromptOS: https://promptos.jussco.company/ — current operation unverified.
+- PromptOS — FCR: https://promptos.foundercontrolroom.org/ — current operation unverified.
+- SolContinuity: https://sol.foundercontrolroom.org/ — current operation unverified.
+- Think Tank: https://thinktank.jussco.company/ — current operation unverified.
+- Se’kret Bip: https://sekretbip.net/ — current operation unverified.
+- Truth Weaver: https://truthweaver.jussco.company/ — current operation unverified.
+- StoryEngine: https://storyengine.jussco.company/ — current operation unverified.
+- Ayure: https://ayure.us/ — current operation unverified.
+- Live Site SYNC: https://sync.jussco.company/ — current operation unverified.
+- Chat SYNC: https://sync.jussco.company/chat/ — current operation unverified.
+- Lovable SYNC: https://sync-playtest.lovable.app/ — current operation unverified.
+<!-- discovery-destinations:end -->
 
 ## Never part of the licensing export
 
