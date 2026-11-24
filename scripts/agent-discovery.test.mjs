@@ -59,8 +59,9 @@ test('agent catalog advertises only the sanitized discovery and licensing feeds'
 
 test('discovery projection matches sitemap and llms and does not claim runtime proof', () => {
   const d = JSON.parse(readFileSync(join(SITE, 'data/discovery.json'), 'utf8'));
-  assert.deepEqual(Object.keys(d).sort(), ['canonicalOrigin','company','pages','products','schema'].sort());
+  assert.deepEqual(Object.keys(d).sort(), ['canonicalOrigin','company','pages','products','schema','destinations','gameEditions'].sort());
   assert.equal(d.canonicalOrigin, ORIGIN);
+  assert.equal(d.schema, 'jussco/public-discovery@v2');
   const sitemap = readFileSync(join(SITE, 'sitemap.xml'), 'utf8');
   const llms = readFileSync(join(SITE, 'llms.txt'), 'utf8');
   const crawlers = JSON.parse(readFileSync(join(SITE, 'crawlers.json'), 'utf8'));
@@ -182,4 +183,28 @@ test('public site directory and games link to company discovery without assertin
     assert.ok(html.includes('https://www.jussco.company/data/discovery.json'));
     assert.match(html, /Current operation is not verified by this directory/i);
   }
+});
+
+test('public destination schema, visible links and llms agree with the public manifest', () => {
+  const d = JSON.parse(readFileSync(join(SITE, 'data/discovery.json'), 'utf8'));
+  const llms = readFileSync(join(SITE, 'llms.txt'), 'utf8');
+  for (const [items, file, id] of [[d.destinations,'sites.html','public-sites-schema'],[d.gameEditions,'games/index.html','public-games-schema']]) {
+    const html = readFileSync(join(SITE,file),'utf8');
+    const start = '<script type="application/ld+json" id="'+id+'">';
+    const raw = html.split(start)[1]?.split('</script>')[0];
+    assert.ok(raw);
+    const list = JSON.parse(raw).mainEntity.itemListElement;
+    assert.deepEqual(list.map(x=>[x.name,x.url]),items.map(x=>[x.name,x.url]));
+    assert.equal(new Set(items.map(x=>x.url)).size,items.length);
+    for (const x of items) {
+      assert.deepEqual(Object.keys(x).sort(),['name','operationStatus','purpose','url'].sort());
+      assert.equal(x.operationStatus,'unknown');
+      assert.match(x.url,/^https:\/\/[a-zA-Z0-9.-]+\/?[a-zA-Z0-9/_-]*$/);
+      assert.doesNotMatch(x.url,/id-preview--|\/admin(?:\/|$)|\/private(?:\/|$)/i);
+      assert.ok(html.includes('href="'+x.url+'"'));
+      assert.ok(llms.includes(x.url));
+    }
+  }
+  assert.ok(!d.pages.includes(ORIGIN+'/games/'), 'cross-host canonical game page does not belong in the company sitemap');
+  assert.ok(d.destinations.some(x=>x.url==='https://games.jussco.company/'));
 });
