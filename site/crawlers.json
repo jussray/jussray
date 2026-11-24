@@ -27,5 +27,6 @@
     "internal-receipts",
     "unreleased-architecture"
   ],
-  "authority": "Crawler and licensing metadata never grants authentication, deployment, publication, merge, payment, or mutation authority."
+  "authority": "Crawler and licensing metadata never grants authentication, deployment, publication, merge, payment, or mutation authority.",
+  "discoveryManifest": "https://www.jussco.company/data/discovery.json"
 }
