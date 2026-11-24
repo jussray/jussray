@@ -8,7 +8,7 @@ const WORLD_REGISTRY = JSON.parse(readFileSync(join(ROOT, 'data/worlds.json'), '
 const portfolio = JSON.parse(readFileSync(join(ROOT, 'data/portfolio.json'), 'utf8'));
 const systems = JSON.parse(readFileSync(join(ROOT, 'data/systems.json'), 'utf8'));
 const worlds = WORLD_REGISTRY;
-const CONNECTOR_REGISTRY = JSON.parse(readFileSync(join(ROOT, 'data/connectors.json'), 'utf8')); const EXPECTED_CONNECTORS = CONNECTOR_REGISTRY.lanes.map((x) => x.name);
+const CONNECTOR_REGISTRY = JSON.parse(readFileSync(join(ROOT, 'data/connectors.json'), 'utf8'));
 const srv = createServer((q, r) => { let p = decodeURIComponent(q.url.split('?')[0]); if (p === '/') p = '/index.html'; const f = join(ROOT, p); if (!existsSync(f)) { r.writeHead(404); return r.end(); } r.writeHead(200, { 'content-type': MIME[extname(f)] || 'application/octet-stream' }); r.end(readFileSync(f)); });
 await new Promise((res) => srv.listen(0, '127.0.0.1', res)); const url = `http://127.0.0.1:${srv.address().port}/`; const universeUrl = url + 'universe.html';
 mkdirSync('proof/site', { recursive: true });
@@ -209,15 +209,16 @@ for (const mode of ['abort', 'malformed']) {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } }); const page = await ctx.newPage();
   // Deterministic first-party receiver fixture: PR checks must not call production.
   await page.route('**/_telemetry/v1', (route) => route.fulfill({ status: 204, body: '' }));
-  await page.route('**/data/connectors.json', (r) => mode === 'abort'
+  let rawConnectorRequests = 0;
+  await page.route('**/data/connectors.json', (r) => { rawConnectorRequests++; return mode === 'abort'
     ? r.abort()
-    : r.fulfill({ status: 200, contentType: 'application/json', body: '{not json' }));
+    : r.fulfill({ status: 200, contentType: 'application/json', body: '{not json' }); });
   await page.goto(universeUrl, { waitUntil: 'load' });
   await page.waitForFunction(() => document.querySelectorAll('.os-card').length === 5, null, { timeout: 5000 });
   const osCardCount = await page.locator('.os-card').count();
   const connectorClaimCount = await page.locator('.os-connectors').count();
   say(osCardCount === 5, `isolation: connectors.json ${mode} still renders 5 OS cards`);
-  say(connectorClaimCount === 0, `isolation: connectors.json ${mode} renders no connector claims`);
+  say(rawConnectorRequests === 0 && connectorClaimCount === 0, `isolation: connectors.json ${mode} is not requested and renders no connector claims`);
   await ctx.close();
 }
 // Outcome Edit: no unapproved, wrong-destination, or unproven stories may render.
@@ -326,10 +327,10 @@ for (const vp of [{ n: 'desktop', w: 1440, h: 900 }, { n: 'tablet', w: 834, h: 1
   say(JSON.stringify(await page.evaluate(() => [...document.querySelectorAll('.os-card h3')].map((e) => e.textContent))) === JSON.stringify(expectedOS), `${vp.n}: standalone OS identities preserved`);
   say((await page.locator('.os-card').first().locator('a.os-link').getAttribute('href')) === 'https://truthweaver.jussco.company', `${vp.n}: Truth Weaver card links to verified custom domain`);
   say((await page.evaluate(() => [...document.querySelectorAll('.os-kind')].every((e) => e.textContent === 'Standalone OS'))), `${vp.n}: every public system is labeled standalone OS`);
-  say((await page.evaluate((names) => [...document.querySelectorAll('.os-card')].every((c) => { const text=c.innerText.toLowerCase(); return names.every((n) => text.includes(n.toLowerCase())); }), EXPECTED_CONNECTORS)), `${vp.n}: every standalone OS exposes Exa Notion Linear Slack fabric`);
-  say((await page.evaluate(() => document.querySelector('.os-card:nth-child(3)')?.innerText.toLowerCase().includes('blocked'))), `${vp.n}: Exact Match connector fabric remains visibly blocked`);
+  say(Object.keys(CONNECTOR_REGISTRY.systems).length === 0 && (await page.locator('.os-connectors').count()) === 0, `${vp.n}: internal connector mappings are not published`);
+  say(/current operation unverified/i.test(await page.locator('.os-card:nth-child(3)').innerText()), `${vp.n}: Exact Match does not claim operational integrations`);
   say((await page.evaluate(() => ![...document.querySelectorAll('.os-connectors span')].some((e) => e.dataset.state === 'connected'))), `${vp.n}: no connector claims connected without runtime proof`);
-  say((await page.evaluate(() => [...document.querySelectorAll('.os-card')].every((c) => c.querySelector('.os-embed') && /already embedded in/i.test(c.querySelector('.os-embed').innerText)))), `${vp.n}: embedded relationships render without demoting identity`);
+  say((await page.locator('.os-embed').count()) === 0, `${vp.n}: internal system relationships are not rendered`);
   say(!(await page.evaluate(() => document.getElementById('surfaceStrip').hidden)) && /Sync Playtest Signups/.test(await page.innerText('#surfaceStrip')) && /Sync Party/.test(await page.innerText('#surfaceStrip')), `${vp.n}: Sync supporting surface rolls up under Sync Party`);
   say(!/ULTRATHINK/.test(await page.innerText('#systems')), `${vp.n}: internal ULTRATHINK carriers stay off public systems surface`);
   say((await page.locator('a[href="portfolio.html"]').count()) === 1, `${vp.n}: complete portfolio is discoverable from primary nav`);
@@ -393,7 +394,7 @@ for (const vp of [{ n: 'portfolio-desktop', w: 1440, h: 900 }, { n: 'portfolio-m
   const story = page.locator('#projects .project', { has: page.locator('h3', { hasText: 'StoryEngine' }) });
   say((await story.locator('a.open').count()) === 0, `${vp.n}: StoryEngine has no invented front-door link`);
   const sync = page.locator('#projects .project', { has: page.locator('h3', { hasText: 'SYNC Party' }) });
-  say((await sync.locator('.state').textContent()) === 'Live', `${vp.n}: Sync Party remains Live`);
+  say((await sync.locator('.state').textContent()) === 'Public destination · operation unverified', `${vp.n}: Sync Party link is distinct from operation proof`);
   await page.click('button[data-category="Founder software"]'); await page.waitForTimeout(100);
   say((await page.locator('#worldOverlays .project').count()) === 0, `${vp.n}: experimental worlds stay separate from canonical project category filters`);
   say((await page.locator('#projects .project').count()) === 10, `${vp.n}: category filter renders ten founder-software identities`);
