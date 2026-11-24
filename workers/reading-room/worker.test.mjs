@@ -1,0 +1,20 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import worker from './worker.mjs';
+const origin='https://reading-room.jussco.company';
+const owner={access:{aud:'test-aud',getIdentity:async()=>({email:'owner@example.test'})}};
+const stranger={access:{aud:'test-aud',getIdentity:async()=>({email:'stranger@example.test'})}};
+const wrongAud={access:{...owner.access,aud:'wrong'}};
+function setup(){const store=new Map([['releases/v25.html','<html>PRIVATE FIXTURE</html>']]);let reads=0;const env={OWNER_EMAIL:'owner@example.test',ACCESS_AUD:'test-aud',VAULT:{async get(k){reads++;const v=store.get(k);return v===undefined?null:{body:v}},async put(k,v,o){assert.equal(o.onlyIf.etagDoesNotMatch,'*');if(store.has(k))return null;store.set(k,v);return {}},async list(){return {objects:[...store.keys()].filter(k=>k.startsWith('backups/')).map(key=>({key})),truncated:false}}}};return {env,store,reads:()=>reads}}
+const call=(env,ctx,path='/',init={})=>worker.fetch(new Request(origin+path,init),env,ctx);
+const payload=JSON.stringify({records:[{title:'fixture',content:'private'}]});
+const post=(body=payload,site=origin)=>({method:'POST',headers:{origin:site,'content-type':'application/json'},body});
+test('anonymous, spoofed header and wrong account cannot read storage',async()=>{const {env,reads}=setup();for(const ctx of [{},stranger,wrongAud]){const r=await call(env,ctx,'/',{headers:{'cf-access-authenticated-user-email':'owner@example.test'}});assert.equal(r.status,403);assert.equal(r.headers.get('Cache-Control'),'private, no-store');assert.doesNotMatch(await r.text(),/PRIVATE FIXTURE/)}assert.equal(reads(),0)});
+test('missing owner configuration fails closed',async()=>{const {env,reads}=setup();delete env.OWNER_EMAIL;assert.equal((await call(env,owner)).status,503);assert.equal(reads(),0)});
+test('alternate host denied even with authenticated context',async()=>{const {env,reads}=setup();assert.equal((await worker.fetch(new Request('https://other.example.test/'),env,owner)).status,404);assert.equal(reads(),0)});
+test('owner receives release with private response headers',async()=>{const {env}=setup();const r=await call(env,owner);assert.equal(r.status,200);assert.match(await r.text(),/PRIVATE FIXTURE/);assert.match(r.headers.get('X-Robots-Tag'),/noindex/);assert.match(r.headers.get('Content-Type'),/text\/html/)});
+test('unknown path never retrieves arbitrary storage object',async()=>{const {env,reads}=setup();assert.equal((await call(env,owner,'/releases/v25.html')).status,404);assert.equal(reads(),0)});
+test('backup origin and shape checked; unauthorized backup denied',async()=>{const {env,store}=setup();assert.equal((await call(env,stranger,'/api/backups',post())).status,403);assert.equal((await call(env,owner,'/api/backups',post(payload,'https://evil.test'))).status,403);assert.equal((await call(env,owner,'/api/backups',post('{}'))).status,400);assert.equal(store.size,1)});
+test('owner append-only backup round trip and deduplication',async()=>{const {env,store}=setup();const r=await call(env,owner,'/api/backups',post());assert.equal(r.status,201);const {sha256}=await r.json();assert.match(sha256,/^[a-f0-9]{64}$/);assert.equal((await call(env,owner,'/api/backups',post())).status,200);assert.equal(store.size,2);const l=await (await call(env,owner,'/api/backups')).json();assert.deepEqual(l.backups,[sha256]);assert.equal(await (await call(env,owner,'/api/backups/'+sha256)).text(),payload);assert.equal((await call(env,stranger,'/api/backups/'+sha256)).status,403)});
+test('identity provider error fails closed',async()=>{const {env,reads}=setup();assert.equal((await call(env,{access:{aud:'test-aud',getIdentity:async()=>{throw Error('fail')}}})).status,403);assert.equal(reads(),0)});
+test('missing release and unsupported method fail closed',async()=>{const {env,store}=setup();store.clear();assert.equal((await call(env,owner)).status,503);assert.equal((await call(env,owner,'/',{method:'POST'})).status,404)});

@@ -1,0 +1,13 @@
+{
+  "name": "jussco-reading-room",
+  "main": "workers/reading-room/worker.mjs",
+  "compatibility_date": "2026-11-24",
+  "workers_dev": false,
+  "preview_urls": false,
+  "r2_buckets": [
+    {
+      "binding": "VAULT",
+      "bucket_name": "jussco-reading-room-private"
+    }
+  ]
+}
