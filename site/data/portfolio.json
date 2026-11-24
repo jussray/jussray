@@ -44,103 +44,105 @@
       "slug": "founder-control-room",
       "name": "Founder Control Room",
       "category": "Founder software",
-      "role": "Core software company",
+      "role": "Founder software",
       "portfolioStatus": "active",
       "publicLabel": "Building",
       "featured": true,
-      "description": "A governed founder operating environment for intent, authority, execution, evidence, continuity and next gates.",
+      "description": "Governed work, approvals and evidence for founders and teams.",
       "link": "https://github.com/jussray/founder-control-room"
     },
     {
       "slug": "chief-ai-machine",
       "name": "Chief AI Machine",
       "category": "Founder software",
-      "role": "Supporting system",
+      "role": "Founder intelligence",
       "portfolioStatus": "active",
       "publicLabel": "In progress",
       "featured": true,
-      "description": "Provider-neutral company intelligence and structured executive reasoning inside the founder software world.",
+      "description": "Founder intelligence and company knowledge for decision support.",
       "link": "https://github.com/jussray/chief-ai-machine"
     },
     {
       "slug": "promptos",
       "name": "PromptOS",
       "category": "Founder software",
-      "role": "Supporting system",
+      "role": "AI workflow software",
       "portfolioStatus": "active",
       "publicLabel": "Building",
       "featured": true,
-      "description": "Governed prompt, skill and founder-intent workflows with lineage and evidence.",
+      "description": "Governed instructions and reusable skills for AI workflows.",
       "link": "https://github.com/jussray/promptos"
     },
     {
       "slug": "truth-compass",
       "name": "Truth Compass",
       "category": "Founder software",
-      "role": "Evidence and reconciliation module",
+      "role": "Evidence and reconciliation product",
       "technicalForm": "standalone_os",
       "portfolioStatus": "external",
-      "publicLabel": "Published build",
+      "publicLabel": "Current operation unverified",
       "featured": false,
-      "description": "Keeps claims, evidence, observed versions, continuity markers and failure receipts separate from authority while remaining independently runnable.",
-      "link": "https://id-preview--0fa1fd0f-9ec2-4bf3-9415-79bbfd4b3917.lovable.app"
+      "description": "Organizes claims, evidence and uncertainty.",
+      "link": "https://compass.jussco.company/"
     },
     {
       "slug": "truth-weaver",
       "name": "Truth Weaver Counsel",
-      "aliases": ["Truth Weaver"],
+      "aliases": [
+        "Truth Weaver"
+      ],
       "category": "Founder software",
-      "role": "Legal knowledge and decision-support module",
+      "role": "Legal research product",
       "technicalForm": "standalone_os",
       "portfolioStatus": "external",
-      "publicLabel": "Published build",
+      "publicLabel": "Current operation unverified",
       "featured": false,
-      "description": "Evidence-first legal knowledge and bounded decision support that remains educational and non-authorizing while preserving an independent product surface.",
-      "link": "https://id-preview--8ef43cd3-8d93-4494-a685-59ce0f795614.lovable.app"
+      "description": "Independent legal-navigation and notice-research product. Educational information, not legal advice.",
+      "link": "https://truthweaver.jussco.company"
     },
     {
       "slug": "exact-match-engine",
       "name": "Exact Match Engine",
       "category": "Founder software",
-      "role": "Claims-to-reality reconciliation module",
+      "role": "Evidence comparison product",
       "technicalForm": "standalone_os",
       "portfolioStatus": "continuity-only",
-      "publicLabel": "Published build",
+      "publicLabel": "Current operation unverified",
       "featured": false,
-      "description": "Compares claimed state with observed evidence and records mismatches, gaps and receipts through an independently runnable reconciliation surface.",
-      "link": "https://id-preview--e1436754-7a41-40bb-927c-c9a0e081e70b.lovable.app"
+      "description": "Compares claims against evidence.",
+      "link": "https://exactmatch.jussco.company/"
     },
     {
       "slug": "living-truth",
       "name": "Living Truth",
       "category": "Founder software",
-      "role": "Commercial candidate",
+      "role": "Product candidate",
       "technicalForm": "standalone_os",
       "portfolioStatus": "tracked",
       "publicLabel": "Candidate",
       "featured": false,
-      "description": "A standalone truth-product candidate whose commercial path remains separate from product, runtime and payment proof."
+      "description": "Evidence-oriented product candidate."
     },
     {
       "slug": "proof-core",
       "name": "Proof Core",
       "category": "Founder software",
-      "role": "Proof and reconciliation prototype",
+      "role": "Research prototype",
       "technicalForm": "standalone_os_prototype",
       "portfolioStatus": "tracked",
       "publicLabel": "Prototype",
       "featured": false,
-      "description": "An isolated proof and reconciliation build tracked independently while its commercial identity remains ungraduated."
+      "description": "Proof and reconciliation prototype."
     },
     {
       "slug": "think-tank",
       "name": "Think Tank",
       "category": "Founder software",
-      "role": "Acquisition wedge",
+      "role": "Idea evaluation product",
       "portfolioStatus": "external",
       "publicLabel": "Building",
       "featured": true,
-      "description": "Turns rough ideas into challenged, scored and portable idea records.",
+      "description": "Idea evaluation and decision support.",
       "link": "https://thinktank.jussco.company/"
     },
     {
@@ -151,62 +153,66 @@
       "portfolioStatus": "external",
       "publicLabel": "Building",
       "featured": true,
-      "description": "Continuity, evidence history and resilience infrastructure.",
+      "description": "Service continuity and recovery for technology systems.",
       "link": "https://github.com/jussray/solcontinuity"
     },
     {
       "slug": "sleepwealth-agent",
       "name": "SleepWealth Agent",
       "category": "Research",
-      "role": "Research lane",
+      "role": "Research project",
       "portfolioStatus": "external",
       "publicLabel": "Building",
       "featured": true,
-      "description": "A governed consequential-agent research lane used to test risk and control primitives.",
+      "description": "Research into governed financial technology; not a live trading service.",
       "link": "https://github.com/jussray/SleepWealth-Agent"
     },
     {
       "slug": "storyengine",
       "name": "StoryEngine",
-      "aliases": ["L99 StoryEngine"],
+      "aliases": [
+        "L99 StoryEngine"
+      ],
       "category": "Creator software",
-      "role": "Core creator software company",
+      "role": "Creator software",
       "portfolioStatus": "active",
       "publicLabel": "Building",
       "featured": true,
-      "description": "Carries creative work from idea through controlled release preparation while preserving provenance and creator authority."
+      "description": "Creative work, publishing and provenance."
     },
     {
       "slug": "sekret-bip",
       "name": "Se’kret Bip",
       "category": "Family product",
-      "role": "Core family product",
+      "role": "Family product",
       "portfolioStatus": "active",
       "publicLabel": "Opening soon",
       "featured": true,
-      "description": "A private emotional-growth and self-expression world designed around teen trust and relationship-aware family boundaries."
+      "description": "Privacy-first self-expression and family connection."
     },
     {
       "slug": "bip-jr",
       "name": "Bip Jr",
       "category": "Family product",
-      "role": "Family module",
+      "role": "Family experience",
       "portfolioStatus": "continuity-only",
-      "publicLabel": "Private build",
+      "publicLabel": "Building",
       "featured": true,
       "parent": "sekret-bip",
-      "description": "A younger-family experience inside the Se’kret Bip world rather than a separate company."
+      "description": "A family-facing experience for age-appropriate belonging and connection."
     },
     {
       "slug": "juss-beautiful-hair",
       "name": "Juss Beautiful Hair",
-      "aliases": ["JBH"],
+      "aliases": [
+        "JBH"
+      ],
       "category": "Commerce",
-      "role": "Core commerce business",
+      "role": "Commerce brand",
       "portfolioStatus": "active",
-      "publicLabel": "Store open · awaiting first order",
+      "publicLabel": "Public destination · operation unverified",
       "featured": true,
-      "description": "A real hair-commerce brand with its own catalog, storefront, customer economics and fulfillment truth.",
+      "description": "Hair and beauty commerce.",
       "link": "https://jussbeautifulhair.com"
     },
     {
@@ -215,50 +221,53 @@
       "category": "Commerce",
       "role": "Commerce brand",
       "portfolioStatus": "active",
-      "publicLabel": "Private build",
+      "publicLabel": "Building",
       "featured": true,
-      "description": "Story-led commerce with its own storefront identity and economics."
+      "description": "Story-led commerce and creative experiences."
     },
     {
       "slug": "sweats",
       "name": "SWEATS",
-      "aliases": ["Sweats", "SWEAT"],
+      "aliases": [
+        "Sweats",
+        "SWEAT"
+      ],
       "category": "Commerce",
       "role": "Commerce brand",
       "portfolioStatus": "external",
-      "publicLabel": "Private build",
+      "publicLabel": "Building",
       "featured": true,
-      "description": "A soft-luxury athleisure brand whose catalog and fulfillment truth remain separate from its visual identity."
+      "description": "Soft-luxury athleisure and apparel."
     },
     {
       "slug": "alexa-commerce-engine",
       "name": "Alexa Commerce Engine",
       "category": "Commerce",
-      "role": "Supporting system",
+      "role": "Shopping assistance",
       "portfolioStatus": "external",
-      "publicLabel": "Private build",
+      "publicLabel": "Building · public source",
       "featured": true,
-      "description": "Commerce-agent infrastructure that supports portfolio commerce without becoming the brand itself."
+      "description": "Shopping assistance based on stated needs."
     },
     {
       "slug": "sync-party",
       "name": "SYNC Party",
       "category": "Consumer experiences",
-      "role": "Consumer experience product",
+      "role": "Social gaming product",
       "portfolioStatus": "active",
-      "publicLabel": "Live",
+      "publicLabel": "Public destination · operation unverified",
       "featured": true,
-      "description": "A social party experience built around matching the vibe, playing together and finding your people."
+      "description": "Social gaming and shared play."
     },
     {
       "slug": "ayure",
       "name": "AYURE",
       "category": "Networks",
-      "role": "Emerging network product",
+      "role": "Property network",
       "portfolioStatus": "continuity-only",
-      "publicLabel": "Private build",
+      "publicLabel": "Building · public source",
       "featured": true,
-      "description": "An intent-first property network connecting search, matching, evidence, people, services and outcome proof."
+      "description": "Discovery of properties, professionals, services and opportunities."
     }
   ],
   "excludedFromPublicProjection": {
