@@ -109,3 +109,52 @@ test('public presentation feeds exclude private carrier and implementation metad
   assert.doesNotMatch(readFileSync(join(SITE, 'portfolio.html'), 'utf8'), /id-preview--/);
   assert.equal(portfolio.projects.length, 20);
 });
+
+
+test('sanitized world feed preserves all previously declared public destinations', () => {
+  const worlds = JSON.parse(readFileSync(join(SITE, 'data/worlds.json'), 'utf8')).worlds;
+  const expected = [
+  [
+    "Se'kret Bip",
+    "https://sekretbip.net"
+  ],
+  [
+    "Founder Control Room",
+    "https://foundercontrolroom.org"
+  ],
+  [
+    "Chief AI",
+    "https://github.com/jussray/chief-ai-machine"
+  ],
+  [
+    "Juss Beautiful Hair",
+    "https://jussbeautifulhair.com"
+  ],
+  [
+    "Sync Party",
+    "https://sync.jussco.company/"
+  ],
+  [
+    "PromptOS",
+    "https://github.com/jussray/promptos"
+  ],
+  [
+    "SolContinuity",
+    "https://github.com/jussray/solcontinuity"
+  ],
+  [
+    "SleepWealth Agent",
+    "https://github.com/jussray/SleepWealth-Agent"
+  ],
+  [
+    "Solwealth",
+    "https://github.com/jussray/SolWealth-Meteora-"
+  ],
+  [
+    "Think Tank",
+    "https://thinktank.jussco.company/"
+  ]
+];
+  assert.deepEqual(worlds.filter(w => w.link).map(w => [w.name,w.link.url]), expected);
+  assert.ok(worlds.filter(w => w.link).every(w => !w.held));
+});
