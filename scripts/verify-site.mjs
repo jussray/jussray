@@ -61,7 +61,8 @@ for (const vp of [{n:'desktop',w:1440,h:900},{n:'mobile',w:390,h:844}]) {
   say((await page.locator('.site-header a[href="/work.html"]').count())===1,`${vp.n}: Our Work remains in primary navigation`);
   for (const [href,label] of [['/products.html','Our Products'],['/work.html','Our Work']]) {
     const link=page.locator(`main a[href="${href}"]`).filter({has:page.locator('strong',{hasText:new RegExp('^'+label+'$')})});
-    say((await link.count())===1 && await link.isVisible(),`${vp.n}: ${label} remains accessible in the homepage ecosystem panel`);
+    say((await link.count())===1,`${vp.n}: ${label} destination remains in the ecosystem panel`);
+    if(vp.n==='desktop') say(await link.isVisible(),`${vp.n}: ${label} is visible in the homepage ecosystem panel`);
   }
   say((await page.locator('.home-bottom-nav').count())===0,`${vp.n}: bottom navigation stays removed`);
   say((await page.locator('.site-header a[href="/portfolio.html"]').count())===1,`${vp.n}: portfolio has a proper page route`);
@@ -111,6 +112,16 @@ for (const vp of [{n:'desktop',w:1440,h:900},{n:'mobile',w:390,h:844}]) {
     say(await menu.isVisible()&&await button.getAttribute('aria-expanded')==='true','mobile: nav opens');
     await page.keyboard.press('Escape');
     say(!(await menu.isVisible())&&await button.getAttribute('aria-expanded')==='false','mobile: nav closes on Escape');
+    // Mobile intentionally hides the desktop ecosystem panel; prove both real menu routes.
+    for (const [href,label] of [['/products.html','Our Products'],['/work.html','Our Work']]) {
+      await button.click();
+      const link=menu.locator('a[href="'+href+'"]');
+      say((await link.count())===1 && await link.isVisible(),`mobile: ${label} is reachable through the open menu`);
+      await Promise.all([page.waitForURL(url+href.slice(1),{waitUntil:'load'}),link.click()]);
+      say(page.url()===url+href.slice(1),`mobile: ${label} menu link navigates to its actual page`);
+      await page.goto(url,{waitUntil:'load'});
+      say(!(await menu.isVisible()),'mobile: navigation starts collapsed after returning home');
+    }
   }
   for(const route of ['products.html','sites.html','founder.html','contact.html','portfolio.html','services.html','work.html','games/index.html','opportunity-engine.html','universe.html']){
     const res=await page.request.get(url+route);say(res.status()===200,`${vp.n}: ${route} returns 200`);
