@@ -1,0 +1,38 @@
+{
+  "_comment": "Synthetic example assessment for test_medusa.py. Not a real assessment, finding or approval.",
+  "target": {"name": "example-change", "version": "0.0.0-example", "date": "2026-01-01"},
+  "decider": "Founder",
+  "audience": ["Founder"],
+  "stakes": "consequential",
+  "next_gate": "Founder decides whether the named change is made",
+  "material": [],
+  "coverage": ["premise", "assumptions", "failure_modes", "misuse", "authority", "evidence", "reversibility", "lindy", "second_order", "cheaper_path"],
+  "adversaries": [
+    {"kind": "outsider"},
+    {"kind": "insider"},
+    {"kind": "untrusted_input"}
+  ],
+  "stone": {
+    "assumption": "Independent evidence is required before release",
+    "reversal_evidence": "Revert the example change",
+    "verified": false
+  },
+  "findings": [
+    {
+      "id": "EX-1",
+      "source": "example review",
+      "frame_check": "founder controls classification",
+      "severity": "High",
+      "attack": "example misuse path",
+      "scenario": "an untrusted input claims approval it does not have",
+      "consequence": "an unapproved release",
+      "evidence_tag": "UNVERIFIED",
+      "check_needed": "re-observe the approval record",
+      "source_of_knowledge": "AUTHORED",
+      "likelihood": "medium",
+      "likelihood_basis": "synthetic example",
+      "rebuttal": {"outcome": "Stands", "defense": "no control in the example blocks it"},
+      "named_change": "require an exact-head approval record"
+    }
+  ]
+}
