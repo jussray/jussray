@@ -208,7 +208,7 @@ export async function getRulesEvidence({repo,token,request=fetch}) {
         // proves it is gone. Never silently omit a still-active protection.
         const fresh=await listRulesetInventory(base,token,request);
         if (!fresh.some(x=>x.id===item.id)) continue;
-        throw new Error('Inherited ruleset detail still unavailable after readback: '+item.id);
+        throw new Error('Inherited ruleset detail still unavailable after readback (HTTP 404): '+item.id);
       }
       throw error;
     }
