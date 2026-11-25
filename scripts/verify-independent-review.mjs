@@ -97,7 +97,11 @@ async function apiGet(url,token,request=fetch){
       headers:{Accept:'application/vnd.github+json',Authorization:'Bearer '+token,'X-GitHub-Api-Version':'2022-11-28','User-Agent':'jussco-review-evidence'},
       signal:abort.signal,
     });
-    if (!response.ok) throw new Error('GitHub review evidence read failed: HTTP '+response.status);
+    if (!response.ok) {
+      const error=new Error('GitHub review evidence read failed: HTTP '+response.status);
+      error.status=response.status;
+      throw error;
+    }
     return await response.json();
   } finally {clearTimeout(timer);}
 }
@@ -117,39 +121,101 @@ export async function getReviewEvidence({repo,number,token,request=fetch}){
   throw new Error('Review pagination exceeded safe limit; refusing incomplete evidence');
 }
 
+// Preserve unknown GitHub timeline events in evidence diagnostics, never as human authority.
+export function normalizeReviewEvent(event) {
+  if (typeof event!=='string') return null;
+  const key=event.trim().toLowerCase();
+  if (key==='commented') return 'comment';
+  const match=/^auto_(?:merge|squash|rebase)_(enabled|disabled)$/.exec(key);
+  return match?'auto_merge_'+match[1]:null;
+}
+
 // Timeline events keep performed_via_github_app (null for the GitHub UI). A missing key is treated as unknown, never as human.
 export async function getFounderEvidence({repo,number,sha,token,request=fetch}){
   const root='https://api.github.com/repos/'+repo;
   const signals=[];
+  const unknownEvents=new Set();
   for(let page=1;page<=10;page++){
     const batch=await apiGet(root+'/issues/'+number+'/timeline?per_page=100&page='+page,token,request);
     if (!Array.isArray(batch)) throw new Error('Timeline API returned non-list result');
     for (const e of batch) {
-      // GitHub names the enable event by merge method: auto_merge_enabled, auto_squash_enabled, auto_rebase_enabled.
-      const kind=e?.event==='commented'?'comment':/^auto_(merge|squash|rebase)_enabled$/.test(e?.event||'')?'auto_merge_enabled':e?.event;
-      if (!['comment','auto_merge_enabled','auto_merge_disabled'].includes(kind)) continue;
+      const kind=normalizeReviewEvent(e?.event);
+      if (!kind) {
+        unknownEvents.add(typeof e?.event==='string'?e.event:'<missing>');
+        continue;
+      }
       signals.push({kind,login:(e.user||e.actor)?.login,viaApp:'performed_via_github_app' in e ? (e.performed_via_github_app?.slug ?? null) : undefined,
         at:e.created_at,body:kind==='comment'?e.body:''});
     }
     if (batch.length<100) {
       const runs=await apiGet(root+'/actions/runs?event=pull_request&head_sha='+sha+'&per_page=100',token,request);
       const times=(runs?.workflow_runs||[]).map(r=>Date.parse(r.created_at)).filter(Number.isFinite);
-      return {signals,headPushedAt:times.length?new Date(Math.min(...times)).toISOString():null};
+      return {signals,unknownEvents:[...unknownEvents].sort(),headPushedAt:times.length?new Date(Math.min(...times)).toISOString():null};
     }
   }
   throw new Error('Timeline pagination exceeded safe limit; refusing incomplete evidence');
 }
 
-export async function getRulesEvidence({repo,token,request=fetch}) {
-  const base='https://api.github.com/repos/'+repo+'/rulesets';
-  const list=await apiGet(base+'?includes_parents=true',token,request);
-  if (!Array.isArray(list)) throw new Error('GitHub returned incomplete ruleset inventory');
-  const details=[];
-  for (const item of list) {
-    if (item?.enforcement==='active' && item?.target==='branch') {
-      if (!Number.isInteger(item.id)) throw new Error('Ruleset missing stable ID');
-      details.push(await apiGet(base+'/'+item.id,token,request));
+export const RULESET_PAGE_SIZE=100;
+export const RULESET_MAX_PAGES=100;
+
+// Rulesets can be owned by repositories, organizations or enterprises. Their detail
+// URL must follow ownership; a repo-owned URL cannot fetch inherited parent rules.
+function rulesetDetailUrl(item,repoBase) {
+  if (!Number.isInteger(item?.id)) throw new Error('Ruleset missing stable ID');
+  const owner=String(item.source||'');
+  if (item.source_type==='Organization'||item.source_type==='Enterprise') {
+    if (!/^[A-Za-z0-9_.-]+$/.test(owner)) throw new Error('Unverifiable inherited ruleset owner for '+item.id);
+    const scope=item.source_type==='Organization'?'orgs':'enterprises';
+    return 'https://api.github.com/'+scope+'/'+owner+'/rulesets/'+item.id;
+  }
+  if (item.source_type && item.source_type!=='Repository') throw new Error('Unknown ruleset owner type: '+item.source_type);
+  return repoBase+'/'+item.id;
+}
+
+async function listRulesetInventory(base,token,request) {
+  const inventory=new Map();
+  for(let page=1;page<=RULESET_MAX_PAGES;page++){
+    const batch=await apiGet(base+'?includes_parents=true&per_page='+RULESET_PAGE_SIZE+'&page='+page,token,request);
+    if (!Array.isArray(batch)) throw new Error('GitHub returned incomplete ruleset inventory');
+    for (const item of batch) {
+      if (!Number.isInteger(item?.id)) throw new Error('Ruleset missing stable ID');
+      const prior=inventory.get(item.id);
+      if (prior && (prior.source_type!==item.source_type||prior.source!==item.source))
+        throw new Error('Ruleset ownership changed during inventory collection: '+item.id);
+      inventory.set(item.id,item);
     }
+    if (batch.length<RULESET_PAGE_SIZE) return [...inventory.values()];
+  }
+  throw new Error('Ruleset inventory pagination exceeded safe limit');
+}
+
+export async function getRulesEvidence({repo,token,request=fetch}) {
+  if (!/^[A-Za-z0-9_.-]+\\/[A-Za-z0-9_.-]+$/.test(repo||'') || !token)
+    throw new Error('Missing base repository or scoped read token');
+  const base='https://api.github.com/repos/'+repo+'/rulesets';
+  const inventory=await listRulesetInventory(base,token,request);
+  const details=[];
+  for (const item of inventory) {
+    if (item?.enforcement!=='active'||item?.target!=='branch') continue;
+    const url=rulesetDetailUrl(item,base);
+    let detail;
+    try {
+      detail=await apiGet(url,token,request);
+    } catch (error) {
+      if (error.status===404 && (item.source_type==='Organization'||item.source_type==='Enterprise')) {
+        // Only tolerate a vanished inherited rule after a fresh COMPLETE inventory
+        // proves it is gone. Never silently omit a still-active protection.
+        const fresh=await listRulesetInventory(base,token,request);
+        if (!fresh.some(x=>x.id===item.id)) continue;
+        throw new Error('Inherited ruleset detail still unavailable after readback: '+item.id);
+      }
+      throw error;
+    }
+    if (detail?.id!==item.id||!Array.isArray(detail?.rules)||
+        detail.target!=='branch'||detail.enforcement!=='active')
+      throw new Error('Incomplete ruleset evidence: '+item.id);
+    details.push(detail);
   }
   return details;
 }
@@ -161,12 +227,14 @@ export async function runReviewGate(env=process.env,request=fetch){
   if (repo!=='jussray/jussray' || !env.GITHUB_TOKEN || !Number.isSafeInteger(number)||number<1)
     throw new Error('Missing authorized repository, PR number or read token');
   const evidence=await getReviewEvidence({repo,number,token:env.GITHUB_TOKEN,request});
+  if (evidence.pull?.base?.repo?.full_name && evidence.pull.base.repo.full_name!==repo)
+    throw new Error('PR base repository differs from authorized target repository');
   const founder=await getFounderEvidence({repo,number,sha,token:env.GITHUB_TOKEN,request});
   const result=reviewDecision({pull:evidence.pull,reviews:evidence.reviews,expectedHead:sha,founder});
   const rules=rulesetDecision(await getRulesEvidence({repo,token:env.GITHUB_TOKEN,request}));
   // Guard against concurrent pushes between first PR readback and final witness.
   const latest=await apiGet('https://api.github.com/repos/'+repo+'/pulls/'+number,env.GITHUB_TOKEN,request);
-  if (latest?.head?.sha!==sha || latest?.state!=='open' || latest?.draft || latest?.base?.ref!=='main') {
+  if (latest?.head?.sha!==sha || latest?.state!=='open' || latest?.draft || latest?.base?.ref!=='main' || (latest?.base?.repo?.full_name && latest.base.repo.full_name!==repo)) {
     throw new Error('PR head or review authority changed during evaluation; evidence is stale');
   }
   if (!result.ok || !rules.ok) throw new Error('GitHub merge authority not verified: '+[...result.errors,...rules.errors].join('; '));
