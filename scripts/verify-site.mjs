@@ -84,6 +84,24 @@ for (const vp of [{n:'desktop',w:1440,h:900},{n:'mobile',w:390,h:844}]) {
   say(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`${vp.n}: homepage has no horizontal overflow`);
   say(await page.evaluate(()=>document.documentElement.scrollHeight<innerHeight*3.8),`${vp.n}: homepage scroll is bounded`);
   say(await page.evaluate(()=>getComputedStyle(document.querySelector('.cinematic'),'::before').backgroundImage.includes('home-scene.webp')),`${vp.n}: cinematic background retained`);
+  // Homepage glass polish: verify computed styles in both motion modes.
+  await page.emulateMedia({reducedMotion:'no-preference'});
+  say(await page.locator('.eco-band').evaluate(el => {
+    const shine = getComputedStyle(el, '::before');
+    return getComputedStyle(el).backdropFilter === 'blur(8px)' &&
+      shine.display === 'block' && shine.animationName === 'glass-reflection';
+  }), `${vp.n}: ecosystem glass depth and reflection restored`);
+  await page.emulateMedia({reducedMotion:'reduce'});
+  say(await page.locator('.eco-band').evaluate(el => {
+    const shine = getComputedStyle(el, '::before');
+    return shine.display === 'none' && shine.animationName === 'none';
+  }), `${vp.n}: glass reflection respects reduced motion`);
+  await page.emulateMedia({reducedMotion:'no-preference'});
+  if (vp.n === 'mobile') {
+    say(await page.locator('.subline').evaluate(el => getComputedStyle(el).fontSize === '11px'), 'mobile: hero subtitle readability');
+    say(await page.locator('.eco-foot a').evaluate(el => el.getBoundingClientRect().height >= 44), 'mobile: portfolio touch target');
+  }
+
   // Founder mockup world stage (2026-11-08): crown, headline, ecosystem band from worlds.json, ambience controls.
   await page.waitForFunction(()=>document.querySelectorAll('#ecoTrack .eco-tile').length>0,null,{timeout:5000});
   const worldsData=JSON.parse(readFileSync(join(ROOT,'data/worlds.json'),'utf8')).worlds;

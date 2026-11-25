@@ -46,3 +46,26 @@ html.ws-on body.studio-world { background: #151023 url('/assets/home-scene.webp'
 @media (prefers-reduced-motion: reduce) {
   .studio-world .world-atmosphere { display: none; }
 }
+
+/* Homepage polish: keep the landscape visible while restoring restrained glass depth. */
+.studio-world.home-world :is(.founder-quote, .eco-panel, .eco-band, .ctl-card, .atmo-btn) {
+  background: linear-gradient(155deg, rgba(32, 20, 63, .62), rgba(16, 9, 30, .48));
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-color: rgba(255, 223, 174, .42);
+  box-shadow: 0 12px 36px rgba(8, 4, 24, .24), inset 0 1px rgba(255, 238, 210, .10);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .studio-world.home-world :is(.founder-quote, .eco-panel, .eco-band, .ctl-card, .atmo-btn).glass::before {
+    display: block;
+    opacity: .65;
+  }
+}
+.studio-world.home-world :is(.eco-panel a, .eco-tile a, .eco-nav, .hdr-btn, .menu-toggle, .switch, .atmo-btn, .eco-foot a):focus-visible {
+  outline: 2px solid #ffd98a;
+  outline-offset: -3px;
+}
+@media (max-width: 760px) {
+  .studio-world.home-world .subline { font-size: 11px; letter-spacing: .10em; }
+  .studio-world.home-world .eco-foot a { min-height: 44px; }
+}
