@@ -57,6 +57,27 @@ for (const vp of [{n:'desktop',w:1440,h:900},{n:'mobile',w:390,h:844}]) {
   say(response?.status()===200, `${vp.n}: homepage status 200`);
   say((await page.locator('main > section').count())===2,`${vp.n}: home has only introduction and navigation choices`);
   say((await page.locator('.site-header a[href="/products.html"]').count())===1,`${vp.n}: products has a proper page route`);
+  say((await page.locator('.stage-center a[href="/products.html"], .stage-center a[href="/work.html"]').count())===0,`${vp.n}: redundant hero destination buttons are absent`);
+  say((await page.locator('.site-header a[href="/work.html"]').count())===1,`${vp.n}: Our Work remains in primary navigation`);
+  for (const [href,label] of [['/products.html','Our Products'],['/work.html','Our Work']]) {
+    const link=page.locator(`main a[href="${href}"]`).filter({has:page.locator('strong',{hasText:new RegExp('^'+label+'$')})});
+    say((await link.count())===1,`${vp.n}: ${label} destination remains in the ecosystem panel`);
+    if (vp.n==='mobile') {
+      const menu=page.locator('#site-navigation');
+      const button=page.locator('.menu-toggle');
+      say(!(await menu.isVisible()) && !(await link.isVisible()),`mobile: ${label} uses collapsed primary navigation rather than the desktop panel`);
+      await button.click();
+      const mobileLink=menu.locator(`a[href="${href}"]`);
+      say(await button.getAttribute('aria-expanded')==='true' && await mobileLink.isVisible(),`mobile: ${label} is visible after opening the menu`);
+      const destination=new URL(href,url).href;
+      await Promise.all([page.waitForURL(destination),mobileLink.click()]);
+      say(page.url()===destination,`mobile: ${label} navigates to the correct page`);
+      await page.goto(url,{waitUntil:'load'});
+    } else {
+      say(await link.isVisible(),`desktop: ${label} remains accessible in the homepage ecosystem panel`);
+    }
+  }
+  say((await page.locator('.home-bottom-nav').count())===0,`${vp.n}: bottom navigation stays removed`);
   say((await page.locator('.site-header a[href="/portfolio.html"]').count())===1,`${vp.n}: portfolio has a proper page route`);
   say((await page.locator('a[href="https://games.jussco.company/"]').count())>=2,`${vp.n}: game hub remains independent`);
   { const cta=page.locator('.site-header .work-cta'); const shown=await cta.isVisible(); say(!shown||(await cta.boundingBox()).height<=48,`${vp.n}: Work with Juss stays a compact header button (founder mockup), never oversized`); }
@@ -112,7 +133,9 @@ for (const vp of [{n:'desktop',w:1440,h:900},{n:'mobile',w:390,h:844}]) {
   say((await page.locator('.feature-card').count())===6,`${vp.n}: all six featured products on product page`);
    say((await page.locator('.feature-card a[href="/opportunity-engine.html"]').count())===1,`${vp.n}: Opportunity Engine is a discoverable product route`);
   await page.goto(url+'sites.html',{waitUntil:'load'});
-  say((await page.locator('.directory-card').count())===11,`${vp.n}: eleven public destination cards on sites page`);
+  const expectedDestinations=["https://github.com/jussray","https://www.jussco.company/","https://chief.foundercontrolroom.org","https://sync.jussco.company/","https://compass.jussco.company/","https://exactmatch.jussco.company/","https://jussbeautifulhair.com/","https://games.jussco.company/","https://protect.jussco.company/","https://protect2.jussco.company/","https://makevideo.jussco.company/","https://junglejinx.jussco.company/","https://lumora.jussco.company/"];
+  const actualDestinations=await page.locator('.directory-card').evaluateAll(cards=>cards.map(a=>a.getAttribute('href')));
+  say(JSON.stringify(actualDestinations.sort())===JSON.stringify(expectedDestinations.sort()),`${vp.n}: all thirteen exact public destinations, including GitHub and the canonical company site`);
   say(errors.length===0,`${vp.n}: no JS exceptions on new routed pages${errors.length?' — '+errors.join(' | '):''}`);
   await ctx.close();
 }
@@ -517,6 +540,53 @@ for (const vp of [{ n: 'ideas-desktop', w: 1440, h: 900 }, { n: 'ideas-tablet', 
   say(!/jussco-signature-world/.test(readFileSync(join(ROOT, 'assets/flagship.css'), 'utf8')) && !existsSync(join(ROOT, 'assets/jussco-signature-world.jpg')), `${vp.n}: founder-rejected living-room artwork stays retired`);
   say(errors.length === 0, `${vp.n}: no console errors${errors.length ? ' — ' + errors.join(' | ') : ''}`);
   await page.screenshot({ path: `proof/site/${vp.n}.png`, fullPage: true }); await ctx.close();
+}
+
+// Ambience (2026-11-10): one generated soundscape per atmosphere and a matching motion layer on every world page.
+for (const vp of [{ n: 'ambience-desktop', w: 1440, h: 900 }, { n: 'ambience-mobile', w: 390, h: 844 }]) {
+  const ctx = await browser.newContext({ viewport: { width: vp.w, height: vp.h } }); const page = await ctx.newPage();
+  const errors = []; page.on('pageerror', (e) => errors.push(String(e))); page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
+  for (const route of ['services.html', 'builds.html', 'contact.html']) {
+    await page.goto(url + route, { waitUntil: 'load' });
+    const ctl = page.locator('.amb-float'); await ctl.waitFor({ timeout: 5000 });
+    say((await ctl.count()) === 1 && (await ctl.getAttribute('aria-pressed')) === 'false', `${vp.n}: ${route} has one ambient control, off by default`);
+    say((await page.locator('canvas.world-atmosphere').count()) === 1, `${vp.n}: ${route} has the atmosphere motion layer`);
+    const box = await ctl.boundingBox();
+    say(box && box.y + box.height <= vp.h && box.x >= 0 && (await ctl.evaluate((e) => getComputedStyle(e).position)) === 'fixed', `${vp.n}: ${route} ambient control is styled, fixed and on screen`);
+  }
+  await page.click('.amb-float');
+  await page.waitForFunction(() => document.querySelector('.amb-float').getAttribute('aria-pressed') === 'true', null, { timeout: 5000 }).catch(() => {});
+  const engine = () => page.evaluate(() => import('/assets/ambience.mjs').then((m) => m.ambienceState()));
+  let st = await engine();
+  say((await page.getAttribute('.amb-float', 'aria-pressed')) === 'true' && st.on && st.context === 'running', `${vp.n}: ambient control turns on with a user gesture and the audio context runs (${st.context})`);
+  await page.evaluate(() => document.body.setAttribute('data-atmo', 'night')); await page.waitForTimeout(300);
+  st = await engine(); say(st.scene === 'night', `${vp.n}: soundscape follows the atmosphere to night (${st.scene})`);
+  await page.click('.amb-float');
+  st = await engine(); say((await page.getAttribute('.amb-float', 'aria-pressed')) === 'false' && !st.on, `${vp.n}: ambient control turns off`);
+  // Remembered "on": a returning visitor whose first gesture is the switch itself turns sound off; it must stay off.
+  await page.evaluate(() => localStorage.setItem('jc-ambience', JSON.stringify({ on: true, vol: 0.4 })));
+  await page.goto(url + 'services.html', { waitUntil: 'load' }); await page.locator('.amb-float').waitFor();
+  await page.click('.amb-float'); await page.click('.amb-float'); await page.click('h1'); await page.keyboard.press('Tab'); await page.waitForTimeout(200);
+  st = await engine(); say(!st.on && (await page.getAttribute('.amb-float', 'aria-pressed')) === 'false', `${vp.n}: sound turned off stays off after later taps`);
+  await page.evaluate(() => localStorage.setItem('jc-ambience', JSON.stringify({ on: true, vol: 0.4 })));
+  await page.goto(url + 'services.html', { waitUntil: 'load' }); await page.locator('.amb-float').waitFor();
+  st = await engine(); say(!st.on && (await page.getAttribute('.amb-float', 'aria-pressed')) === 'false', `${vp.n}: remembered sound never autoplays on load`);
+  await page.click('h1'); await page.waitForFunction(() => document.querySelector('.amb-float').getAttribute('aria-pressed') === 'true', null, { timeout: 3000 }).catch(() => {});
+  st = await engine(); say(st.on && (await page.getAttribute('.amb-float', 'aria-pressed')) === 'true', `${vp.n}: remembered sound resumes on the next tap, not before`);
+  await page.goto(url + 'games/index.html', { waitUntil: 'load' }); await page.waitForTimeout(300); await page.click('body', { position: { x: 5, y: 5 } }); await page.waitForTimeout(200);
+  st = await engine(); say(!st.on && (await page.locator('.amb-float').count()) === 0, `${vp.n}: Game Hub keeps its own sound; the shared engine never starts there`);
+  await page.goto(url + 'opportunity-engine.html', { waitUntil: 'load' }); await page.waitForTimeout(300); await page.click('#ambience-toggle'); await page.waitForTimeout(200);
+  st = await engine(); say(!st.on && (await page.locator('.amb-float').count()) === 0, `${vp.n}: Opportunity Engine keeps its own ambience; no second soundscape`);
+  await page.evaluate(() => localStorage.removeItem('jc-ambience'));
+  await page.goto(url + 'ideas.html', { waitUntil: 'load' }); await page.waitForTimeout(300);
+  say((await page.locator('.amb-float').count()) === 0, `${vp.n}: Ideas keeps its own ambience panel, no duplicate control`);
+  await page.goto(url, { waitUntil: 'load' }); await page.waitForTimeout(300);
+  say((await page.locator('.amb-float').count()) === 0, `${vp.n}: homepage keeps its own ambience panel, no duplicate control`);
+  await page.click('#sound'); await page.click('#atmo'); await page.click('#atmo'); await page.waitForTimeout(300);
+  st = await engine(); const tod = await page.evaluate(() => document.documentElement.dataset.tod);
+  say((await page.getAttribute('#sound', 'aria-checked')) === 'true' && st.on && st.scene === tod, `${vp.n}: homepage sound stays on and crossfades as the atmosphere cycles (${st.scene}/${tod})`);
+  say(errors.length === 0, `${vp.n}: no console errors${errors.length ? ' — ' + errors.join(' | ') : ''}`);
+  await ctx.close();
 }
 
 await browser.close(); srv.close();

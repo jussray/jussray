@@ -1,5 +1,6 @@
 ---
 name: devil
+description: "Disciplined adversary to the current premise and plan: find the strongest reason the work should not proceed, then require evidence or controls that answer it."
 version: 1.0.0
 status: active
 scope: founder-control-room

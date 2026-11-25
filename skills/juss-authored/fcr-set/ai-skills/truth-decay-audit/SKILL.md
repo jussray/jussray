@@ -9,8 +9,7 @@ version: 1.0
 visibility: private
 owner: Juss
 triggers:
-  - /truth-decay
-  - /truthdecay
+  - /truth-decay-audit
   - once true now false
   - audit what made this stale
 ---

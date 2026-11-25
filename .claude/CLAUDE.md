@@ -2,6 +2,8 @@
 
 Founder-studio configuration for Claude Code. Sets operating stack, skill discovery, and authority routing.
 
+**Platform-specific configs:** `Codex.md` (code generation, Claude Code), `ChatGPT.md` (reasoning partner), `Gemini.md` (analysis partner), `Muse.md` (design partner).
+
 ## Runtime Identity
 
 **Project**: jussray/jussray — Juss & Co public profile and founder studio runtime
@@ -19,10 +21,10 @@ When working in this project, **coordinate through founder**:
 
 ## Skill Discovery
 
-Claude Code uses its configured Claude skills and project instructions. Codex discovers repository skills from `.agents/skills/*/SKILL.md`, not from the curated export directory alone. Each skill declares:
-- `trigger`: slash commands (e.g., `/goalfix`, `/confess`)
-- `description`: one-line capability statement
-- `requirements`: prerequisites (e.g., repo scope, founder approval)
+Claude Code uses its configured Claude skills and project instructions. Codex discovers repository skills from `.agents/skills/*/SKILL.md`, not from the curated export directory alone. Each skill in `skills/juss-authored/*/SKILL.md` declares:
+- `description`: one-line capability statement (every skill)
+- `triggers`: the slash commands it owns (e.g., `/goalfix`, `/confess`), only when it owns one. Each command has exactly one owner; see "Trigger ownership" in `skills/juss-authored/README.md`
+- Prerequisites such as repo scope or founder approval are stated in the skill body; there is no `requirements` field
 
 ## Standing Rules (from root CLAUDE.md)
 
@@ -35,6 +37,7 @@ Claude Code uses its configured Claude skills and project instructions. Codex di
 ## Codex-Specific Shortcuts
 
 - `/goalfix` — enter repair mode (auto-loads /godmode-devil-ultrathink)
+- `/medusa` — security assessment validation (gate/protect/snapshot/verify-ledger)
 - `/confess` — declare real state and real risks
 - `/truthmode` — enter proof-only mode (exact-head gates)
 - `/juss-os` — access full command tree

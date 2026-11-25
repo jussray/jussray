@@ -1,5 +1,6 @@
 ---
 name: fact-check-every-claim
+description: "Line-by-line fact check of every factual claim before content is published, sent, presented or automated, against inspected primary and reputable secondary sources."
 version: 1.0.0
 status: active
 scope: founder-control-room

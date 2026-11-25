@@ -1,0 +1,48 @@
+/* Shared Juss & Co landscape and readable glass across studio pages. */
+body.studio-world {
+  position: relative;
+  min-height: 100svh;
+  background: #151023 url('/assets/home-scene.webp') center top / max(100vw, 178svh) auto no-repeat;
+}
+html.ws-on body.studio-world { background: #151023 url('/assets/home-scene.webp') center top / max(100vw, 178svh) auto no-repeat !important; }
+.studio-world .ws-scene,
+.studio-world :is(.scene, .page-scene) {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 100svh;
+}
+.studio-world .ws-scene { background: transparent; }
+.studio-world .ws-scene .tint { background: linear-gradient(transparent 55%, #151023); }
+.studio-world .page-main,
+.studio-world .routes,
+.studio-world .page-footer { background: transparent; }
+.studio-world :is(.site-header, .ws-top) { border-bottom-color: #ffdba65c; }
+.studio-world :is(.site-logo, .brand, h1, h2) { font-family: "Playfair Display", Georgia, serif; }
+.studio-world :is(.site-logo, .brand) { color: #fff0d1; }
+.studio-world :is(.site-logo b, .brand b, .kicker, .eyebrow) { color: #ffd98a; }
+.studio-world :is(.glass, .glass-intro, .text-panel, .route-card, .feature-card, .directory-card, .eco-tile > a, .eco-tile > div, .eco-panel a) {
+  background: #10091e36;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border-color: #ffdfae61;
+  box-shadow: 0 1px 12px #08041824;
+}
+.studio-world :is(.page-head, .hero, .stage-center, .glass, .text-panel, .route-card, .feature-card, .directory-card) {
+  text-shadow: 0 1px 4px #100a22, 0 2px 12px #100a22;
+}
+.studio-world .home-search, .studio-world .site-nav.is-open { background: #140c2cf0; }
+.studio-world.home-world .world-stage.cinematic { background: transparent; }
+.studio-world.home-world .world-stage.cinematic::after {
+  background: radial-gradient(ellipse at center, #10091e40, transparent 72%);
+}
+.studio-world.home-world .glass::before { display: none; }
+.studio-world .world-atmosphere {
+  position: absolute;
+  inset: 0 0 auto;
+  max-width: 100%;
+}
+.studio-world.home-world .world-stage > .world-atmosphere { z-index: 0; }
+.studio-world .world-stage:not(.cinematic)[aria-hidden="true"] { position: absolute; height: 100svh; bottom: auto; }
+@media (prefers-reduced-motion: reduce) {
+  .studio-world .world-atmosphere { display: none; }
+}

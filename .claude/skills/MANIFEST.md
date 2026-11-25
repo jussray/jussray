@@ -1,11 +1,11 @@
 # Juss & Co Founder Studio Skills
 
-Curated Juss-authored skills for Codex runtime. Updated 2026-11-07.
+Curated Juss-authored skills for Codex runtime. Updated 2026-11-12.
 
 ## Core Frameworks
 
 - **godmode-devil-ultrathink** — Founder operating system: godmode + Devil's Advocate + ULTRATHINK (redteam, OODA, L99)
-- **godmode** — Founder authority routing and decision framework
+- **godmode** — Founder authority routing and decision framework (reference only; `/godmode` is owned by godmode-devil-ultrathink)
 - **l99-v21-transactional-authority** — Authority layer (state, evidence, rollback, compounding value)
 
 ## Repair & Delivery
@@ -23,6 +23,7 @@ Curated Juss-authored skills for Codex runtime. Updated 2026-11-07.
 
 ## Operations & Scale
 
+- **medusa** — Offline security assessment validator: evidence-native findings, redacted export, immutable ledger
 - **juss-os** — Juss Operating System (v3.1.1): full command tree and workflows
 - **runtime-kernel** — Runtime execution layer
 - **juss-command-codex** — Codex runtime commands for founder workflow
