@@ -84,6 +84,7 @@ try {
     assert.equal(await page.locator('#games .cards').isVisible(),false,'every width lands on the one-screen hub');
     assert.equal(await page.locator('html').getAttribute('data-hub-view'),'home','hub lands on its one-screen view at every width');
     assert.equal(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight+1),true,'hub landing has no vertical scrolling at '+label);
+    assert.equal(await page.locator('.local-environment').isVisible(),false,'regional controls do not add a row to the one-screen landing');
     assert.deepEqual(errors,[],'no page script errors');
     if(width<=800){
       assert.equal(await page.locator('html').getAttribute('data-hub-view'),'home','mobile lands on the one-screen hub');
@@ -121,6 +122,7 @@ try {
       await page.locator('#game-hub-center a[href="#games"]').click();
       await page.locator('#games .cards').waitFor({state:'visible'});
       assert.equal(await page.locator('html').getAttribute('data-hub-view'),'details','All Games has its own detail view');
+      assert.equal(await page.locator('.local-environment').isVisible(),true,'local clock and daylight controls remain available in Games details');
       assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,'game details have no horizontal overflow');
       await page.locator('#details-back').click();
       await page.waitForFunction(()=>document.documentElement.dataset.hubView==='home');

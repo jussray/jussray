@@ -124,3 +124,7 @@ html[data-interface-locale=ar] .studio-world [lang=ar] {letter-spacing:normal;}
 html:not(.studio-sky-ready) .studio-sky {visibility:hidden;}
 html.studio-sky-ready .studio-world .cinematic::before {background:none !important;}
 html.studio-sky-ready .studio-world .cinematic {background:transparent;}
+
+/* Games landing is a fixed one-screen composition. Keep regional controls in
+   the existing details view; the automatic local clock and sky continue everywhere. */
+html[data-hub-view="home"] .local-environment { display: none; }
