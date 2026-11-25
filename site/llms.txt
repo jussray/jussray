@@ -32,3 +32,12 @@ Public visibility is not a license grant.
 Private user or customer records; child, teen, guardian, family, or private-message data; authentication or payment records; credentials; private analytics; internal prompts; safety thresholds; internal receipts; and unreleased architecture.
 
 For the repository license and source-code restrictions, see https://github.com/jussray/jussray/blob/main/LICENSE
+
+## Independent product public definitions
+
+- [Founder Control Room](https://www.foundercontrolroom.org/) — Standalone founder operating environment for governance and evidence.
+- [Chief AI](https://chief.foundercontrolroom.org/) — Standalone founder intelligence and bounded capability planning.
+- [SolContinuity](https://sol.foundercontrolroom.org/evidence.html) — Application-layer infrastructure continuity and resilience tooling.
+- [PromptOS](https://promptos.jussco.company/) — Standalone human-AI instruction governance product.
+
+These are product definitions, not live capability or deployment attestations. Existing public-use and licensing terms remain in force.
