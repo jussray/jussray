@@ -61,7 +61,21 @@ for (const vp of [{n:'desktop',w:1440,h:900},{n:'mobile',w:390,h:844}]) {
   say((await page.locator('.site-header a[href="/work.html"]').count())===1,`${vp.n}: Our Work remains in primary navigation`);
   for (const [href,label] of [['/products.html','Our Products'],['/work.html','Our Work']]) {
     const link=page.locator(`main a[href="${href}"]`).filter({has:page.locator('strong',{hasText:new RegExp('^'+label+'$')})});
-    say((await link.count())===1 && await link.isVisible(),`${vp.n}: ${label} remains accessible in the homepage ecosystem panel`);
+    say((await link.count())===1,`${vp.n}: ${label} destination remains in the ecosystem panel`);
+    if (vp.n==='mobile') {
+      const menu=page.locator('#site-navigation');
+      const button=page.locator('.menu-toggle');
+      say(!(await menu.isVisible()) && !(await link.isVisible()),`mobile: ${label} uses collapsed primary navigation rather than the desktop panel`);
+      await button.click();
+      const mobileLink=menu.locator(`a[href="${href}"]`);
+      say(await button.getAttribute('aria-expanded')==='true' && await mobileLink.isVisible(),`mobile: ${label} is visible after opening the menu`);
+      const destination=new URL(href,url).href;
+      await Promise.all([page.waitForURL(destination),mobileLink.click()]);
+      say(page.url()===destination,`mobile: ${label} navigates to the correct page`);
+      await page.goto(url,{waitUntil:'load'});
+    } else {
+      say(await link.isVisible(),`desktop: ${label} remains accessible in the homepage ecosystem panel`);
+    }
   }
   say((await page.locator('.home-bottom-nav').count())===0,`${vp.n}: bottom navigation stays removed`);
   say((await page.locator('.site-header a[href="/portfolio.html"]').count())===1,`${vp.n}: portfolio has a proper page route`);
