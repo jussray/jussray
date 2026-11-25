@@ -1,0 +1,15 @@
+{
+  "protocol": "JSC-ADRP",
+  "version": "1.0.0-draft",
+  "project": "jussray",
+  "name": "Juss & Co",
+  "url": "https://www.jussco.company/",
+  "description": "Technology product development and engineering",
+  "useCases": [
+    "Explore independently branded technology products",
+    "Find public product information"
+  ],
+  "publicationStatus": "draft",
+  "verifiedCapabilities": [],
+  "evidence": []
+}

@@ -166,9 +166,12 @@ export async function runReviewGate(env=process.env,request=fetch){
   const rules=rulesetDecision(await getRulesEvidence({repo,token:env.GITHUB_TOKEN,request}));
   // Guard against concurrent pushes between first PR readback and final witness.
   const latest=await apiGet('https://api.github.com/repos/'+repo+'/pulls/'+number,env.GITHUB_TOKEN,request);
-  if (latest?.head?.sha!==sha || latest?.state!=='open' || latest?.draft || latest?.base?.ref!=='main') {
+  if (latest?.head?.sha!==sha || latest?.state!=='open' || latest?.base?.ref!=='main') {
     throw new Error('PR head or review authority changed during evaluation; evidence is stale');
   }
+  // A draft is not a mid-run change: report the true reason, still fail closed
+  // (also when the PR was converted to draft during evaluation).
+  if (latest?.draft!==false) throw new Error('GitHub merge authority not verified: PR must be open and ready for review');
   if (!result.ok || !rules.ok) throw new Error('GitHub merge authority not verified: '+[...result.errors,...rules.errors].join('; '));
   console.log('SYSTEMATIC REVIEW POLICY READBACK VERIFIED: '+sha.slice(0,12)+' via '+result.reviewMode+(result.founderReview?' ('+result.founderReview+')':''));
   return {...result,nativeRulesetEnforced:true,releaseAuthorized:false};
