@@ -62,20 +62,20 @@ for (const vp of [{n:'desktop',w:1440,h:900},{n:'mobile',w:390,h:844}]) {
   for (const [href,label] of [['/products.html','Our Products'],['/work.html','Our Work']]) {
     const link=page.locator(`main a[href="${href}"]`).filter({has:page.locator('strong',{hasText:new RegExp('^'+label+'$')})});
     say((await link.count())===1,`${vp.n}: ${label} destination remains in the ecosystem panel`);
+    const menu=page.locator('#site-navigation');
+    const button=page.locator('.menu-toggle');
+    say(!(await link.isVisible()),`${vp.n}: duplicate side panel stays out of the reference composition`);
     if (vp.n==='mobile') {
-      const menu=page.locator('#site-navigation');
-      const button=page.locator('.menu-toggle');
-      say(!(await menu.isVisible()) && !(await link.isVisible()),`mobile: ${label} uses collapsed primary navigation rather than the desktop panel`);
+      say(!(await menu.isVisible()),'mobile: primary navigation starts collapsed');
       await button.click();
-      const mobileLink=menu.locator(`a[href="${href}"]`);
-      say(await button.getAttribute('aria-expanded')==='true' && await mobileLink.isVisible(),`mobile: ${label} is visible after opening the menu`);
-      const destination=new URL(href,url).href;
-      await Promise.all([page.waitForURL(destination),mobileLink.click()]);
-      say(page.url()===destination,`mobile: ${label} navigates to the correct page`);
-      await page.goto(url,{waitUntil:'load'});
-    } else {
-      say(await link.isVisible(),`desktop: ${label} remains accessible in the homepage ecosystem panel`);
+      say(await button.getAttribute('aria-expanded')==='true','mobile: navigation opens');
     }
+    const navLink=menu.locator(`a[href="${href}"]`);
+    say(await navLink.isVisible(),`${vp.n}: ${label} remains visible in primary navigation`);
+    const destination=new URL(href,url).href;
+    await Promise.all([page.waitForURL(destination),navLink.click()]);
+    say(page.url()===destination,`${vp.n}: ${label} navigates to its exact destination`);
+    await page.goto(url,{waitUntil:'load'});
   }
   say((await page.locator('.home-bottom-nav').count())===0,`${vp.n}: bottom navigation stays removed`);
   say((await page.locator('.site-header a[href="/portfolio.html"]').count())===1,`${vp.n}: portfolio has a proper page route`);
@@ -95,7 +95,15 @@ for (const vp of [{n:'desktop',w:1440,h:900},{n:'mobile',w:390,h:844}]) {
   const bandBox=await page.locator('.eco-band').boundingBox();
   say(bandBox&&bandBox.y+bandBox.height<=vp.h+1,`${vp.n}: Our Ecosystem band is fully visible on the first screen`);
   const perView=await page.evaluate(()=>{const t=document.querySelector('#ecoTrack');const r=t.getBoundingClientRect();return [...t.querySelectorAll('.eco-tile')].filter(e=>{const b=e.getBoundingClientRect();return b.left>=r.left-1&&b.right<=r.right+1}).length});
-  say(vp.n==='mobile'?perView===3:perView>=6,`${vp.n}: ${vp.n==='mobile'?'three':'six or more'} ecosystem tiles per view (${perView})`);
+  say(vp.n==='mobile'?perView===3:perView===9,`${vp.n}: ${vp.n==='mobile'?'three':'nine'} ecosystem tiles per view (${perView})`);
+  if(vp.n==='desktop') {
+    const quote=await page.locator('.founder-quote').boundingBox();
+    const headline=await page.locator('.stage-center').boundingBox();
+    const controls=await page.locator('.stage-controls').boundingBox();
+    say(quote&&headline&&quote.x>=headline.x+headline.width,`desktop: founder quote is on the right of the centered headline`);
+    say(bandBox&&controls&&controls.x+controls.width<=bandBox.x+1,`desktop: ambience is left of the ecosystem platform`);
+    say(bandBox&&Math.abs(bandBox.x+bandBox.width/2-vp.w/2)<=2,`desktop: ecosystem platform centered`);
+  }
   await page.click('#sound');
   say((await page.getAttribute('#sound','aria-checked'))==='true',`${vp.n}: ambient sound toggles on a user gesture`);
   say((await page.textContent('#atmoName'))==='Sunset'&&/\w{3} \d+ – \w{3} \d+/.test(await page.textContent('#seasonWindow')),`${vp.n}: opens on Sunset with the live season window (founder v3)`);

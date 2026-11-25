@@ -46,3 +46,74 @@ html.ws-on body.studio-world { background: #151023 url('/assets/home-scene.webp'
 @media (prefers-reduced-motion: reduce) {
   .studio-world .world-atmosphere { display: none; }
 }
+
+/* Reference composition 2026-11-24: a single scenic stage, not a dashboard.
+   Scope to home so routed pages and the game keep their existing layouts. */
+.home-world.studio-world { background: #151023; }
+.home-world.studio-world .world-stage.cinematic::after {
+  background: radial-gradient(ellipse at 50% 23%, #10091e22, transparent 49%);
+}
+.home-world.studio-world .eco-panel { display: none; } /* All six routes remain in primary navigation. */
+.home-world.studio-world :is(.founder-quote,.eco-band,.ctl-card,.atmo-btn) {
+  border: 1px solid #ffda9c;
+  background: linear-gradient(150deg, #34234376, #17122688);
+  box-shadow: 0 0 14px #ffbf6577, inset 0 0 12px #ffdda344, 0 8px 28px #17091b55;
+  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+}
+.home-world.studio-world .eco-band {
+  border-radius: 34px;
+  background: linear-gradient(180deg,#37264988,#22132b66 65%,#b4762b55);
+  box-shadow: 0 0 22px #ffb95a99, inset 0 0 16px #ffd58c77, 0 5px 0 #8e522d, 0 11px 0 #ffcb75, 0 18px 24px #15102388;
+}
+.home-world.studio-world .eco-tile > :is(a,div) {
+  border: 1px solid #ffdc9b;
+  background: linear-gradient(170deg,#48256cbb,#161328b3);
+  border-radius: 16px;
+  box-shadow: inset 0 0 12px #ffcc7755, 0 0 9px #ffb85e88;
+}
+.home-world.studio-world .eco-badge { border-radius: 12px; box-shadow: 0 0 15px #c995ff77; }
+.home-world.studio-world .eco-nav { border-color:#ffda9c; background:#24152d88; }
+.home-world.studio-world .world-stage h1 {
+  color:#fff3e3; background:none; -webkit-text-fill-color:currentColor;
+  font-weight:500; filter:none; text-shadow:0 2px 12px #1c103b99;
+}
+@media(min-width:1181px) {
+  .home-world.studio-world .site-header {
+    min-height:0; padding: 16px 2.5%; gap: 16px; background:none; border:0;
+    backdrop-filter:none; -webkit-backdrop-filter:none;
+  }
+  .home-world.studio-world .site-header > :is(.brand-v3,.site-nav,.header-tools) {
+    border:1px solid #ffdb9c; border-radius:999px; background:#20142b66;
+    box-shadow:0 0 12px #ffca7866,inset 0 0 10px #ffda9c33;
+    backdrop-filter:blur(5px); -webkit-backdrop-filter:blur(5px);
+  }
+  .home-world.studio-world .brand-v3 { padding: 7px 18px; flex:none; }
+  .home-world.studio-world .brand-name { font-size:clamp(23px,2.2vw,34px); }
+  .home-world.studio-world .site-nav { flex:0 1 auto; min-width:0; gap:0; padding:4px 6px; }
+  .home-world.studio-world .site-nav a { padding:7px clamp(5px,.65vw,12px); font-size:clamp(11px,.9vw,14px); min-height:36px; }
+  .home-world.studio-world .header-tools { padding:3px 9px; gap:2px; flex:none; }
+  .home-world.studio-world .hdr-btn { background:none; border:0; width:40px; height:40px; }
+  .home-world.studio-world .hdr-btn.account { width:auto; padding:0 8px; }
+  .home-world.studio-world .hdr-btn.account .account-label { display:inline; }
+  .home-world.studio-world .stage-center { left:50%; top:9.2%; width: min(680px,55%); }
+  .home-world.studio-world .world-stage h1 { font-size:clamp(38px,3.35vw,55px); line-height:1.03; }
+  .home-world.studio-world .founder-quote { left:auto; right:2.8%; top:23%; width:clamp(170px,13vw,210px); padding:17px; }
+  .home-world.studio-world .stage-controls { left:1.7%; bottom:13.5%; width:14%; gap:0; }
+  .home-world.studio-world .eco-band { width:65%; left:50%; transform:translateX(-50%); bottom:11%; padding:12px 12px 8px; }
+  .home-world.studio-world .eco-track { gap:5px; padding:0; }
+  .home-world.studio-world .eco-tile { flex:0 0 calc((100% - 40px)/9); min-width:0; }
+  .home-world.studio-world .eco-tile > :is(a,div) { min-height:clamp(116px,16vh,150px); padding:6px 3px; gap:4px; }
+  .home-world.studio-world .eco-badge { width:clamp(40px,4.2vw,66px); height:clamp(40px,4.2vw,66px); }
+  .home-world.studio-world .eco-tile strong { font-size:clamp(11px,.9vw,14px); overflow-wrap:anywhere; }
+  .home-world.studio-world .eco-tile small { font-size:10px; overflow-wrap:anywhere; }
+  .home-world.studio-world .eco-nav { width:34px; height:44px; }
+}
+@media(min-width:761px) and (max-width:1180px) {
+  .home-world.studio-world .stage-center { left:50%; width:80%; }
+  .home-world.studio-world .eco-band { left:50%; transform:translateX(-50%); width:90%; }
+}
+@media(max-width:760px) {
+  .home-world.studio-world { background:#151023 url('/assets/home-scene.webp') center top / auto 100svh no-repeat; }
+  .home-world.studio-world .world-stage.cinematic::before { background: url('/assets/home-scene.webp') center center / cover no-repeat; }
+  .home-world.studio-world .eco-band { border-radius:22px; }
+}
