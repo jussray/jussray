@@ -116,7 +116,7 @@ for (const vp of [{n:'desktop',w:1440,h:900},{n:'mobile',w:390,h:844}]) {
   say(vp.n==='mobile'?perView===3:perView>=6,`${vp.n}: ${vp.n==='mobile'?'three':'six or more'} ecosystem tiles per view (${perView})`);
   await page.click('#sound');
   say((await page.getAttribute('#sound','aria-checked'))==='true',`${vp.n}: ambient sound toggles on a user gesture`);
-  say((await page.textContent('#atmoName'))==='Sunset'&&/\w{3} \d+ – \w{3} \d+/.test(await page.textContent('#seasonWindow')),`${vp.n}: opens on Sunset with the live season window (founder v3)`);
+  say((await page.textContent('#atmoName'))===await page.evaluate(() => { const h=new Date().getHours(); return h>=5&&h<8?'Dawn':h>=8&&h<17?'Daylight':h>=17&&h<20?'Sunset':'Night'; })&&/\w{3} \d+ – \w{3} \d+/.test(await page.textContent('#seasonWindow')),`${vp.n}: opens on visitor local time with the live season window`);
   await page.click('#home-search-toggle');await page.fill('#home-search-input','PromptOS');
   await page.waitForFunction(()=>document.querySelectorAll('#home-search-results a').length>0,null,{timeout:5000});
   say((await page.locator('#ecoTrack .eco-tile:not([hidden])').count())===1&&/1 in Our Ecosystem/.test(await page.textContent('#home-search-status')),`${vp.n}: header search filters Our Ecosystem`);
@@ -577,7 +577,7 @@ for (const vp of [{ n: 'ambience-desktop', w: 1440, h: 900 }, { n: 'ambience-mob
   const engine = () => page.evaluate(() => import('/assets/ambience.mjs').then((m) => m.ambienceState()));
   let st = await engine();
   say((await page.getAttribute('.amb-float', 'aria-pressed')) === 'true' && st.on && st.context === 'running', `${vp.n}: ambient control turns on with a user gesture and the audio context runs (${st.context})`);
-  await page.evaluate(() => document.body.setAttribute('data-atmo', 'night')); await page.waitForTimeout(300);
+  await page.evaluate(() => document.documentElement.setAttribute('data-tod', 'night')); await page.waitForTimeout(300);
   st = await engine(); say(st.scene === 'night', `${vp.n}: soundscape follows the atmosphere to night (${st.scene})`);
   await page.click('.amb-float');
   st = await engine(); say((await page.getAttribute('.amb-float', 'aria-pressed')) === 'false' && !st.on, `${vp.n}: ambient control turns off`);
@@ -607,5 +607,21 @@ for (const vp of [{ n: 'ambience-desktop', w: 1440, h: 900 }, { n: 'ambience-mob
   await ctx.close();
 }
 
+// Real local time changes while the page stays open, even with reduced motion.
+for (const timezoneId of ['America/New_York','Asia/Tokyo']) {
+  const ctx = await browser.newContext({timezoneId, reducedMotion:'reduce'});
+  const page = await ctx.newPage();
+  await page.clock.install({time:new Date(timezoneId==='America/New_York'?'2026-11-25T21:59:59Z':'2026-11-25T22:59:59Z')});
+  for (const route of ['', 'ideas.html', 'services.html', 'games/index.html']) {
+    await page.clock.setSystemTime(new Date(timezoneId==='America/New_York'?'2026-11-25T21:59:59Z':'2026-11-25T22:59:59Z'));
+    await page.goto(url+route, {waitUntil:'load'});
+    const expected = timezoneId==='America/New_York'?'day':'dawn';
+    await page.waitForFunction(e=>document.documentElement.dataset.tod===e,expected);
+    await page.clock.fastForward(2000);
+    const next = timezoneId==='America/New_York'?'sunset':'day';
+    say(await page.evaluate(e=>document.documentElement.dataset.tod===e && document.body.dataset.atmo===e,next),`local clock: ${timezoneId} ${route||'/'} switches without reload`);
+  }
+  await ctx.close();
+}
 await browser.close(); srv.close();
 console.log(failed ? `\n${failed} check(s) FAILED` : '\nall checks passed'); process.exit(failed ? 1 : 0);

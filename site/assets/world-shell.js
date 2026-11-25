@@ -60,8 +60,8 @@ function wireMenu(header, btn, nav){
       if (m) { el.textContent = 'Pending: ' + m[1].toLowerCase(); el.setAttribute('data-placeholder', t); }
     });
     // Same living world everywhere: atmosphere motion plus matched ambient sound.
-    // Pages with their own ambience panel (Ideas) keep theirs.
-    if (!document.querySelector('script[src$="/assets/atmosphere.mjs"], #sound')) {
+    // The shared module keeps existing audio controls and owns the local clock.
+    if (!document.querySelector('script[src$="/assets/atmosphere.mjs"]')) {
       var css = document.createElement('link'); css.rel = 'stylesheet'; css.href = '/assets/atmosphere.css'; document.head.appendChild(css);
       var mod = document.createElement('script'); mod.type = 'module'; mod.src = '/assets/atmosphere.mjs'; document.head.appendChild(mod);
     }

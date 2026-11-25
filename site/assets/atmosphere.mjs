@@ -12,6 +12,48 @@ export function holidayFor(date = new Date()) {
   if (m === 12 && d >= 31 || m === 1 && d === 1) return 'new-year';
   return '';
 }
+
+export function timePhase(date = new Date(), zone) {
+  const h = zone ? Number(new Intl.DateTimeFormat('en-GB', {timeZone:zone,hour:'numeric',hourCycle:'h23'}).format(date)) : date.getHours();
+  return h >= 5 && h < 8 ? 'dawn' : h >= 8 && h < 17 ? 'day' : h >= 17 && h < 20 ? 'sunset' : 'night';
+}
+export function createTimeState() {
+  const phases = ['dawn','day','sunset','night'];
+  let preview = null;
+  function read(date = new Date()) {
+    const actual = timePhase(date);
+    if (preview && (preview.actual !== actual || +date >= preview.until || +date < preview.from)) preview = null;
+    return preview ? preview.phase : actual;
+  }
+  return {read, cycle(date = new Date()) {
+    const next = phases[(phases.indexOf(read(date))+1)%phases.length];
+    preview = {phase:next,actual:timePhase(date),from:+date,until:+date+60000};
+    return next;
+  }};
+}
+// The browser clock is the source of truth; no location permission or tracking.
+function startLocalTime() {
+  const root = document.documentElement, state = createTimeState();
+  const names = {dawn:'Dawn',day:'Daylight',sunset:'Sunset',night:'Night'};
+  function apply(phase) {
+    if (root.dataset.tod !== phase) root.dataset.tod = phase;
+    if (document.body.dataset.atmo !== phase) document.body.dataset.atmo = phase;
+    for (const el of document.querySelectorAll('#atmoName, #current-season')) if (el.textContent !== names[phase]) el.textContent = names[phase];
+  }
+  const sync = () => apply(state.read());
+  for (const button of document.querySelectorAll('#atmo, #atmo-cycle')) {
+    button.title = 'Preview another atmosphere for up to one minute; automatic local time resumes.';
+    button.addEventListener('click', () => apply(state.cycle()));
+  }
+  const hint = document.querySelector('#atmoHint');
+  if (hint) hint.textContent = 'Local time · tap for a temporary preview';
+  sync();
+  setInterval(sync, 1000);
+  document.addEventListener('visibilitychange', sync);
+  addEventListener('pageshow', sync);
+  addEventListener('focus', sync);
+}
+
 export function startAtmosphere() {
   const root = document.documentElement;
   const zone = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
@@ -119,6 +161,6 @@ export function startAtmosphere() {
   if (reduced.addEventListener) reduced.addEventListener('change',sync); else reduced.addListener(sync);
 }
 if (typeof document !== 'undefined') {
-  const start = () => { startAtmosphere(); import('./ambience.mjs').then((m) => m.mountAmbienceControl()).catch(() => {}); };
+  const start = () => { startLocalTime(); startAtmosphere(); import('./ambience.mjs').then((m) => m.mountAmbienceControl()).catch(() => {}); };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded',start,{once:true}); else start();
 }

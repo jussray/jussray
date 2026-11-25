@@ -1,10 +1,19 @@
 /* Shared Juss & Co landscape and readable glass across studio pages. */
+:root { --studio-scene: url('/assets/home-scene.webp'); }
+:root[data-tod=day] { --studio-scene: url('/assets/ideas-day.webp'); }
+:root[data-tod=dawn] { --studio-scene: url('/assets/ideas-sunset.webp'); }
+:root[data-tod=night] { --studio-scene: url('/assets/ideas-night.webp'); }
+@media (max-width: 700px) {
+  :root[data-tod=day] { --studio-scene: url('/assets/ideas-day-sm.webp'); }
+  :root[data-tod=dawn] { --studio-scene: url('/assets/ideas-sunset-sm.webp'); }
+  :root[data-tod=night] { --studio-scene: url('/assets/ideas-night-sm.webp'); }
+}
 body.studio-world {
   position: relative;
   min-height: 100svh;
-  background: #151023 url('/assets/home-scene.webp') center top / max(100vw, 178svh) auto no-repeat;
+  background: #151023 var(--studio-scene) center top / max(100vw, 178svh) auto no-repeat;
 }
-html.ws-on body.studio-world { background: #151023 url('/assets/home-scene.webp') center top / max(100vw, 178svh) auto no-repeat !important; }
+html.ws-on body.studio-world { background: #151023 var(--studio-scene) center top / max(100vw, 178svh) auto no-repeat !important; }
 .studio-world .ws-scene,
 .studio-world :is(.scene, .page-scene) {
   position: absolute;
@@ -69,3 +78,6 @@ html.ws-on body.studio-world { background: #151023 url('/assets/home-scene.webp'
   .studio-world.home-world .subline { font-size: 11px; letter-spacing: .10em; }
   .studio-world.home-world .eco-foot a { min-height: 44px; }
 }
+
+/* A cooler dawn treatment reuses the existing sunrise/sunset plate. */
+html[data-tod=dawn] .studio-world :is(.tod-art,.ws-scene .sunset,.scene .sunset) { filter: hue-rotate(-12deg) saturate(.85) brightness(1.08); }

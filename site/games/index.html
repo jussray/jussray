@@ -834,13 +834,7 @@ header nav a[aria-current="page"]{background:linear-gradient(180deg,#ffe2a3,#f5b
   if(mobile.addEventListener)mobile.addEventListener('change',syncMobile);
   else mobile.addListener(syncMobile);
   syncMobile();
-  const season=document.getElementById('current-season');
-  // The parent company's atmosphere module determines seasons automatically.
-  // Opens on Sunset (founder mockup); tap cycles dawn / day / sunset / night. The date window is the live season.
-  const ATMOS=['dawn','day','sunset','night'],NAMES={dawn:'Dawn',day:'Daylight',sunset:'Sunset',night:'Night'};
-  let atmo='sunset';
-  const setAtmo=a=>{atmo=a;document.documentElement.dataset.tod=a;season.textContent=NAMES[a];};
-  setAtmo(atmo);
+  // Time-of-day is owned by atmosphere.mjs; keep the local season window.
   {const d=new Date(),y=d.getFullYear(),m=d.getMonth(),fmt=x=>x.toLocaleDateString('en-US',{month:'short',day:'numeric'});
    const starts=[[11,1],[2,1],[5,1],[8,1]],i=m===11||m<2?0:m<5?1:m<8?2:3,s0=new Date(m<2&&i===0?y-1:y,starts[i][0],1),s1=new Date(s0.getFullYear(),s0.getMonth()+3,0);
    document.getElementById('season-window').textContent=fmt(s0)+' – '+fmt(s1);}
@@ -848,7 +842,6 @@ header nav a[aria-current="page"]{background:linear-gradient(180deg,#ffe2a3,#f5b
   document.addEventListener('click',e=>{const b=e.target.closest('.soon');if(!b)return;toast.textContent=b.dataset.soon||'Coming soon.';toast.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.hidden=true,2600);});
   {const dots=document.getElementById('featured-dots'),tr=document.getElementById('featured-track');for(let i=0;i<4;i++)dots.append(document.createElement('i'));
    const upd=()=>{const max=tr.scrollWidth-tr.clientWidth,k=max>0?Math.round(tr.scrollLeft/max*3):0;[...dots.children].forEach((d,j)=>d.classList.toggle('on',j===k));};tr.addEventListener('scroll',upd,{passive:true});upd();}
-  document.getElementById('atmo-cycle').addEventListener('click',()=>setAtmo(ATMOS[(ATMOS.indexOf(atmo)+1)%ATMOS.length]));
   const vol=document.getElementById('ambient-volume');let gainNode=null;
   const level=()=>.02*(+vol.value/40);
   vol.addEventListener('input',()=>{if(gainNode)gainNode.gain.value=level();});
