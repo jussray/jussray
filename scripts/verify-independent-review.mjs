@@ -191,7 +191,7 @@ async function listRulesetInventory(base,token,request) {
 }
 
 export async function getRulesEvidence({repo,token,request=fetch}) {
-  if (!/^[A-Za-z0-9_.-]+\\/[A-Za-z0-9_.-]+$/.test(repo||'') || !token)
+  if (!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(repo||'') || !token)
     throw new Error('Missing base repository or scoped read token');
   const base='https://api.github.com/repos/'+repo+'/rulesets';
   const inventory=await listRulesetInventory(base,token,request);
