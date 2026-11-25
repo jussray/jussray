@@ -650,5 +650,22 @@ for(const locale of ['ja-JP','ar','es-ES']){
   say(await page.locator('h1').getAttribute('lang')===locale.split('-')[0],`${locale}: contact page heading localized`);
   await ctx.close();
 }
+// Delayed night image must not replace a successfully loaded day painting prematurely.
+{
+  const ctx=await browser.newContext({timezoneId:'America/New_York',reducedMotion:'reduce'});
+  const page=await ctx.newPage();
+  let release; const blocked=new Promise(resolve=>{release=resolve;});
+  await page.route('**/assets/ideas-night*.webp',async route=>{await blocked;await route.continue();});
+  await page.clock.install({time:new Date('2026-11-25T20:00:00Z')});
+  await page.goto(url,{waitUntil:'domcontentloaded'});
+  await page.waitForFunction(()=>document.documentElement.dataset.renderedTod==='day');
+  await page.clock.setSystemTime(new Date('2026-11-26T02:00:00Z'));
+  await page.clock.fastForward(2000);
+  say(await page.evaluate(()=>document.documentElement.dataset.tod==='night'&&document.documentElement.dataset.renderedTod==='day'),'delayed night image retains daylight until available');
+  release();
+  await page.waitForFunction(()=>document.documentElement.dataset.renderedTod==='night');
+  say(true,'night painting switches after successful load');
+  await ctx.close();
+}
 await browser.close(); srv.close();
 console.log(failed ? `\n${failed} check(s) FAILED` : '\nall checks passed'); process.exit(failed ? 1 : 0);

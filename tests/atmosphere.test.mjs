@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { seasonFor, holidayFor, timePhase, createTimeState, solarPhase, regionalEvent, formatLocalDateTime, localizedPhrase } from '../site/assets/atmosphere.mjs';
+import { seasonFor, holidayFor, timePhase, createTimeState, solarPhase, regionalEvent, formatLocalDateTime, localizedPhrase, resolveVisitorLocale, regionForZone, createSkyState } from '../site/assets/atmosphere.mjs';
 const day = (month, date = 15) => new Date(2026, month - 1, date, 12);
 test('seasons change by local calendar month and southern hemisphere', () => {
   assert.deepEqual([1,4,7,10].map(m => seasonFor(day(m), 'America/New_York')), ['winter','spring','summer','autumn']);
@@ -59,4 +59,24 @@ test('regional events include local national dates and US Thanksgiving',()=>{
   assert.equal(regionalEvent(new Date(2026,10,26),'JP'),'');
   assert.equal(regionalEvent(new Date(2026,7,15),'IN'),'national-day');
   assert.equal(regionalEvent(new Date(2026,7,15),'US'),'');
+});
+
+test('regional preference follows supported browser languages and known location zones',()=>{
+  assert.equal(resolveVisitorLocale(['it-IT','fr-CA']).language,'fr');
+  assert.equal(resolveVisitorLocale(['it-IT']).language,'en');
+  assert.equal(regionForZone('Asia/Tokyo','US'),'JP');
+  assert.equal(regionForZone('Australia/Darwin','GB'),'AU');
+  assert.equal(regionForZone('UTC','CA'),'CA');
+  assert.equal(seasonFor(new Date('2026-12-15T12:00:00Z'),'Australia/Darwin'),'summer');
+  assert.equal(seasonFor(new Date('2026-02-28T23:30:00Z'),'Asia/Tokyo'),'spring');
+});
+test('sky holds the prior painting until the requested replacement loads',()=>{
+  const displayed=[], sky=createSkyState(phase=>displayed.push(phase));
+  sky.request('day'); sky.loaded('day');
+  sky.request('night'); sky.loaded('sunset');
+  assert.deepEqual(displayed,['day']);
+  sky.request('dawn'); sky.loaded('night');
+  assert.deepEqual(displayed,['day']);
+  sky.loaded('dawn'); assert.deepEqual(displayed,['day','dawn']);
+  sky.request('night'); assert.deepEqual(displayed,['day','dawn','night']);
 });

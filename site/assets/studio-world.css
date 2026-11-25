@@ -91,7 +91,7 @@ html[data-tod=dawn] .studio-world :is(.tod-art,.ws-scene .sunset,.scene .sunset)
 .studio-sky-layer.sky-day { background-image:url('/assets/ideas-day.webp'); }
 .studio-sky-layer.sky-sunset { background-image:url('/assets/home-scene.webp'); }
 .studio-sky-layer.sky-night { background-image:url('/assets/ideas-night.webp'); }
-html[data-tod=dawn] .sky-dawn, html[data-tod=day] .sky-day, html[data-tod=sunset] .sky-sunset, html[data-tod=night] .sky-night { opacity:1; }
+html[data-rendered-tod=dawn] .sky-dawn, html[data-rendered-tod=day] .sky-day, html[data-rendered-tod=sunset] .sky-sunset, html[data-rendered-tod=night] .sky-night { opacity:1; }
 html.studio-sky-ready .studio-world :is(.tod-art,.ws-scene .art,.scene .art) { opacity:0 !important; }
 html.studio-sky-ready .studio-sky-host:not(body) { background:transparent !important; }
 .local-environment { display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:.6rem 1rem; padding:.65rem 1rem; color:#f5e7d6; font:500 .82rem/1.5 system-ui,sans-serif; }
@@ -119,3 +119,8 @@ html[data-holiday] .studio-sky::after {content:"";position:absolute;inset:0;poin
 html[data-interface-locale]:not([data-interface-locale=en]) .studio-world .site-nav a {white-space:normal;text-align:center;overflow-wrap:anywhere;}
 html[data-interface-locale=ar] .studio-world [lang=ar] {letter-spacing:normal;}
 @media(prefers-reduced-motion:reduce){.studio-sky-layer{transition:none;}}
+
+/* Keep the decoded sky behind content; do not hide fallback before first load. */
+html:not(.studio-sky-ready) .studio-sky {visibility:hidden;}
+html.studio-sky-ready .studio-world .cinematic::before {background:none !important;}
+html.studio-sky-ready .studio-world .cinematic {background:transparent;}
