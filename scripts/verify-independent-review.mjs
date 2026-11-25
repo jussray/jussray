@@ -59,7 +59,22 @@ export function reviewDecision({pull, reviews, expectedHead, founder}) {
     reviewMode:fd.ok&&approved.length<1?'founder-review-exact-head':'independent-human-exact-head'};
 }
 
-export function rulesetDecision(rulesets) {
+// Trust pin: change only after authenticated provider evidence ties the numeric App ID to FCR.
+export const FCR_BYPASS_APP_ID = null;
+export const FOUNDER_BYPASS_USER_ID = 286642846;
+
+export function authorityLayerValid(r, fcrAppId) {
+  if (!Number.isSafeInteger(fcrAppId) || fcrAppId <= 0 || r.name !== 'Main Authority Contract') return false;
+  const ref = r.conditions?.ref_name;
+  if (!Array.isArray(ref?.include) || ref.include.length !== 1 || ref.include[0] !== '~DEFAULT_BRANCH' || !Array.isArray(ref.exclude) || ref.exclude.length !== 0) return false;
+  if (!Array.isArray(r.bypass_actors) || r.bypass_actors.length !== 2 || !Array.isArray(r.rules) || r.rules.length !== 1) return false;
+  const keys = new Set(r.bypass_actors.map(a => a.actor_type + ':' + a.actor_id + ':' + a.bypass_mode));
+  if (!keys.has('User:' + FOUNDER_BYPASS_USER_ID + ':pull_request') || !keys.has('Integration:' + fcrAppId + ':pull_request')) return false;
+  const rule = r.rules[0], p = rule.parameters;
+  return rule.type === 'pull_request' && p?.required_approving_review_count === 0 && p?.require_code_owner_review === false && p?.require_last_push_approval === false && p?.dismiss_stale_reviews_on_push === true && p?.required_review_thread_resolution === true && Array.isArray(p.allowed_merge_methods) && p.allowed_merge_methods.length === 1 && p.allowed_merge_methods[0] === 'squash';
+}
+
+export function rulesetDecision(rulesets, {fcrAppId=FCR_BYPASS_APP_ID}={}) {
   const errors=[];
   if (!Array.isArray(rulesets)) return {ok:false,errors:['Missing repository ruleset evidence']};
   const protectsMain=r=>r?.enforcement==='active' && r?.target==='branch' &&
@@ -67,9 +82,21 @@ export function rulesetDecision(rulesets) {
     !(r?.conditions?.ref_name?.exclude||[]).some(n=>n==='~DEFAULT_BRANCH'||n==='~ALL'||n==='refs/heads/main');
   const active=rulesets.filter(protectsMain);
   if (!active.length) errors.push('No active ruleset actually protects main');
-  if (active.some(r=>Array.isArray(r.bypass_actors) && r.bypass_actors.length>0))
-    errors.push('Main ruleset has configured bypass actors requiring authority review');
-  const allRules=active.flatMap(r=>r.rules||[]);
+  if (active.some(r=>!Array.isArray(r.bypass_actors))) errors.push('Missing bypass actor readback');
+  const delegated = active.filter(r=>Array.isArray(r.bypass_actors) && r.bypass_actors.length>0);
+  if (delegated.length>1 || delegated.some(r=>!authorityLayerValid(r,fcrAppId)))
+    errors.push('Main ruleset has unverified or overbroad bypass actors requiring authority review');
+  // Mandatory protections must be effective even for the delegated actors.
+  const security=active.filter(r=>Array.isArray(r.bypass_actors) && r.bypass_actors.length===0);
+  const allRules=security.flatMap(r=>r.rules||[]);
+  if (delegated.length) {
+    const pr=allRules.filter(r=>r.type==='pull_request');
+    if (!pr.some(r=>r.parameters?.required_approving_review_count===0 && r.parameters?.require_code_owner_review===false && r.parameters?.require_last_push_approval===false && r.parameters?.dismiss_stale_reviews_on_push===true && r.parameters?.required_review_thread_resolution===true) || pr.some(r=>r.parameters?.required_approving_review_count!==0 || r.parameters?.require_code_owner_review!==false || r.parameters?.require_last_push_approval!==false))
+      errors.push('Delegated authority needs an independent non-bypassable founder PR rule');
+    const strict=allRules.filter(r=>r.type==='required_status_checks' && r.parameters?.strict_required_status_checks_policy===true).flatMap(r=>r.parameters.required_status_checks||[]);
+    for(const context of ['Independent Review Evidence','Review Gate Unit Tests','Juss & Co Site Browser Proof','Repo Reality / exact-head'])
+      if(!strict.some(c=>c.context===context && c.integration_id===15368)) errors.push('Non-bypassable strict GitHub Actions check missing: '+context);
+  }
   const prRules=allRules.filter(r=>r.type==='pull_request');
   if (!prRules.length || !prRules.some(r=>r.parameters?.required_review_thread_resolution===true))
     errors.push('Missing protected PR rule with resolved review threads');

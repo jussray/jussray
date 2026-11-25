@@ -26,3 +26,7 @@ Why the old two do not work (observed 2026-11-13 to 2026-11-15):
 - "Governance" requires 4 checks that never run on PRs here.
 - "Production" requires signed commits.
 - Both list integration `4047066` as an `always` bypass actor.
+
+## Proposed two-layer founder/FCR authority (2026-11-25)
+
+Founder-selected native auto-merge remains the human authorization for the exact head; no separate native reviewer is required. Main contract remains the independent security floor with zero bypass actors and strict GitHub Actions checks. A separate Main Authority Contract may contain only the squash-only PR rule, with two PR-only actors: the founder User ID and the verified FCR GitHub App ID. The duplicate PR requirement in the security layer remains binding, including thread resolution. This gives no permission to skip mandatory checks, push directly, force-push, delete, merge without authorization, or deploy. The separate authority layer is intentionally not an importable artifact until the FCR App identity is verified and pinned in trusted main. The checker defaults to no delegated authority. Do not infer the FCR identity from integration 4047066. Do not install the proposed authority layer before trusted-main checker integration; current main rejects bypass actors. No live ruleset mutation is supplied by this patch. Preserve the Production ruleset outside main; activate and verify the security floor before reconciling overlapping Production rules. Existing FCR in-app founder-final receipt requirements remain separate.

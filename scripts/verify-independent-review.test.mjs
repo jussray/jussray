@@ -295,3 +295,28 @@ test('a draft PR reports its true reason, not a false mid-run change, and still 
     });
   }
 });
+
+// Two-layer delegation: numeric App ID below is a test fixture, never a production identity.
+const delegatedFixtureApp=123456;
+const delegatedSecurity=()=>({"id":123,"name":"Main contract","target":"branch","enforcement":"active","conditions":{"ref_name":{"include":["~DEFAULT_BRANCH"],"exclude":[]}},"bypass_actors":[],"rules":[{"type":"deletion"},{"type":"non_fast_forward"},{"type":"pull_request","parameters":{"required_approving_review_count":0,"require_code_owner_review":false,"require_last_push_approval":false,"dismiss_stale_reviews_on_push":true,"required_review_thread_resolution":true,"allowed_merge_methods":["merge","squash","rebase"]}},{"type":"required_status_checks","parameters":{"strict_required_status_checks_policy":true,"required_status_checks":[{"context":"Independent Review Evidence","integration_id":15368},{"context":"Review Gate Unit Tests","integration_id":15368},{"context":"Juss & Co Site Browser Proof","integration_id":15368},{"context":"Repo Reality / exact-head","integration_id":15368}]}}]});
+const delegatedAuthority=()=>({"id":456,"name":"Main Authority Contract","target":"branch","enforcement":"active","conditions":{"ref_name":{"include":["~DEFAULT_BRANCH"],"exclude":[]}},"bypass_actors":[{"actor_type":"User","actor_id":286642846,"bypass_mode":"pull_request"},{"actor_type":"Integration","actor_id":123456,"bypass_mode":"pull_request"}],"rules":[{"type":"pull_request","parameters":{"required_approving_review_count":0,"require_code_owner_review":false,"require_last_push_approval":false,"dismiss_stale_reviews_on_push":true,"required_review_thread_resolution":true,"allowed_merge_methods":["squash"]}}]});
+test('isolated founder and FCR PR-only authority preserves independent mandatory checks',()=>{
+  assert.equal(rulesetDecision([delegatedSecurity(),delegatedAuthority()],{fcrAppId:delegatedFixtureApp}).ok,true);
+  assert.equal(rulesetDecision([delegatedSecurity(),delegatedAuthority()]).ok,false);
+  assert.equal(rulesetDecision([delegatedAuthority()],{fcrAppId:delegatedFixtureApp}).ok,false);
+  assert.equal(rulesetDecision([delegatedSecurity()]).ok,true);
+});
+test('delegation rejects unknown actors, always bypass and critical rules in the delegated layer',()=>{
+  for(const change of [
+    a=>{a.bypass_actors[1].actor_id++;},
+    a=>{a.bypass_actors[1].bypass_mode='always';},
+    a=>{a.bypass_actors.push({actor_type:'RepositoryRole',actor_id:5,bypass_mode:'pull_request'});},
+    a=>{a.rules.push({type:'deletion'});},
+  ]){const a=delegatedAuthority();change(a);assert.equal(rulesetDecision([delegatedSecurity(),a],{fcrAppId:delegatedFixtureApp}).ok,false);}
+});
+test('delegated authority cannot count checks from an untrusted producer or skip thread resolution',()=>{
+  const s=delegatedSecurity();s.rules[3].parameters.required_status_checks[0].integration_id=1;
+  assert.equal(rulesetDecision([s,delegatedAuthority()],{fcrAppId:delegatedFixtureApp}).ok,false);
+  const t=delegatedSecurity();t.rules[2].parameters.required_review_thread_resolution=false;
+  assert.equal(rulesetDecision([t,delegatedAuthority()],{fcrAppId:delegatedFixtureApp}).ok,false);
+});
