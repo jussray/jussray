@@ -274,3 +274,24 @@ test('docs/rulesets/main-contract.json satisfies the gate ruleset contract on it
   assert.deepEqual(contract.conditions.ref_name.include,['~DEFAULT_BRANCH']);
   assert.equal(contract.bypass_actors.length,0);
 });
+
+test('a draft PR reports its true reason, not a false mid-run change, and still fails closed',async()=>{
+  for (const convertedMidRun of [false,true]) {
+    let prReads=0;
+    const api=async url=>({ok:true,json:async()=>{
+      if(url.includes('/rulesets?')) return [{id:123,enforcement:'active',target:'branch'}];
+      if(url.endsWith('/rulesets/123')) return enforcedRule;
+      if(url.includes('/reviews?')) return [approval('independent')];
+      if(url.includes('/timeline?')) return [];
+      if(url.includes('/actions/runs?')) return {workflow_runs:[]};
+      prReads++;
+      return convertedMidRun&&prReads===1?pr():{...pr(),draft:true};
+    }});
+    const env={GITHUB_REPOSITORY:'jussray/jussray',PR_NUMBER:'88',PR_HEAD_SHA:H,GITHUB_TOKEN:'fake'};
+    await assert.rejects(()=>runReviewGate(env,api),(error)=>{
+      assert.match(error.message,/PR must be open and ready for review/);
+      assert.doesNotMatch(error.message,/changed during evaluation/);
+      return true;
+    });
+  }
+});

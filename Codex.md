@@ -11,6 +11,7 @@ Codex is an AI coding agent. Available model features, tools, repository access,
 - `.codex/config.toml` sets project-scoped reasoning and multi-agent defaults; credentials and account-specific settings stay outside the repository.
 - Codex discovers repository skills from `.agents/skills/*/SKILL.md`. The export under `skills/juss-authored/` is source material, not by itself the Codex discovery directory.
 - Installed project skills include `godmode-devil-ultrathink`, `goalfix`, `portfolio-bottleneck-finder`, `juss-os` and `futureyou-me-v10`. Read each skill only when relevant and preserve stronger repository rules.
+- `medusa` (security assessment validation, analysis only, no authorization) lives at `.claude/skills/juss-authored/medusa/`. It is not under `.agents/skills/`, so Codex does not discover it automatically.
 - The same-name/overlapping command definitions are **not** separate authorization paths. `/godmode`, `/devil`, `/goalfix`, `/truthmode`, and `/confess` are governed workflows, not capabilities or permissions granted by writing slash commands.
 - Model reasoning effort, delegation and skill descriptions cannot expand founder authorization.
 

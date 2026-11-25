@@ -12,7 +12,12 @@ const CONNECTOR_REGISTRY = JSON.parse(readFileSync(join(ROOT, 'data/connectors.j
 const srv = createServer((q, r) => { let p = decodeURIComponent(q.url.split('?')[0]); if (p === '/') p = '/index.html'; const f = join(ROOT, p); if (!existsSync(f)) { r.writeHead(404); return r.end(); } r.writeHead(200, { 'content-type': MIME[extname(f)] || 'application/octet-stream' }); r.end(readFileSync(f)); });
 await new Promise((res) => srv.listen(0, '127.0.0.1', res)); const url = `http://127.0.0.1:${srv.address().port}/`; const universeUrl = url + 'universe.html';
 mkdirSync('proof/site', { recursive: true });
-const browser = await chromium.launch(); let failed = 0; const say = (ok, m) => { console.log(`${ok ? 'ok ' : 'FAIL'} ${m}`); if (!ok) failed++; };
+const browser = await chromium.launch(); let failed = 0;
+// PR checks never call production. Every context gets an empty SYNC leaderboard
+// fixture; the leaderboard checks override it per page (page routes win).
+const SYNC_BOARD_URL = 'https://sync.jussco.company/api/leaderboard';
+const rawNewContext = browser.newContext.bind(browser);
+browser.newContext = async (...args) => { const c = await rawNewContext(...args); await c.route(SYNC_BOARD_URL, (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ version: 'sync-leaderboard-v2', brackets: ['2', '3', '4+'], size: 25, boards: { '2': [], '3': [], '4+': [] }, entries: [] }) })); return c; }; const say = (ok, m) => { console.log(`${ok ? 'ok ' : 'FAIL'} ${m}`); if (!ok) failed++; };
 
 const projectSlugs = portfolio.projects.map((project) => project.slug);
 const featuredSlugs = portfolio.projects.filter((project) => project.featured).map((project) => project.slug).sort();
@@ -57,6 +62,27 @@ for (const vp of [{n:'desktop',w:1440,h:900},{n:'mobile',w:390,h:844}]) {
   say(response?.status()===200, `${vp.n}: homepage status 200`);
   say((await page.locator('main > section').count())===2,`${vp.n}: home has only introduction and navigation choices`);
   say((await page.locator('.site-header a[href="/products.html"]').count())===1,`${vp.n}: products has a proper page route`);
+  say((await page.locator('.stage-center a[href="/products.html"], .stage-center a[href="/work.html"]').count())===0,`${vp.n}: redundant hero destination buttons are absent`);
+  say((await page.locator('.site-header a[href="/work.html"]').count())===1,`${vp.n}: Our Work remains in primary navigation`);
+  for (const [href,label] of [['/products.html','Our Products'],['/work.html','Our Work']]) {
+    const link=page.locator(`main a[href="${href}"]`).filter({has:page.locator('strong',{hasText:new RegExp('^'+label+'$')})});
+    say((await link.count())===1,`${vp.n}: ${label} destination remains in the ecosystem panel`);
+    if (vp.n==='mobile') {
+      const menu=page.locator('#site-navigation');
+      const button=page.locator('.menu-toggle');
+      say(!(await menu.isVisible()) && !(await link.isVisible()),`mobile: ${label} uses collapsed primary navigation rather than the desktop panel`);
+      await button.click();
+      const mobileLink=menu.locator(`a[href="${href}"]`);
+      say(await button.getAttribute('aria-expanded')==='true' && await mobileLink.isVisible(),`mobile: ${label} is visible after opening the menu`);
+      const destination=new URL(href,url).href;
+      await Promise.all([page.waitForURL(destination),mobileLink.click()]);
+      say(page.url()===destination,`mobile: ${label} navigates to the correct page`);
+      await page.goto(url,{waitUntil:'load'});
+    } else {
+      say(await link.isVisible(),`desktop: ${label} remains accessible in the homepage ecosystem panel`);
+    }
+  }
+  say((await page.locator('.home-bottom-nav').count())===0,`${vp.n}: bottom navigation stays removed`);
   say((await page.locator('.site-header a[href="/portfolio.html"]').count())===1,`${vp.n}: portfolio has a proper page route`);
   say((await page.locator('a[href="https://games.jussco.company/"]').count())>=2,`${vp.n}: game hub remains independent`);
   { const cta=page.locator('.site-header .work-cta'); const shown=await cta.isVisible(); say(!shown||(await cta.boundingBox()).height<=48,`${vp.n}: Work with Juss stays a compact header button (founder mockup), never oversized`); }
@@ -112,7 +138,9 @@ for (const vp of [{n:'desktop',w:1440,h:900},{n:'mobile',w:390,h:844}]) {
   say((await page.locator('.feature-card').count())===6,`${vp.n}: all six featured products on product page`);
    say((await page.locator('.feature-card a[href="/opportunity-engine.html"]').count())===1,`${vp.n}: Opportunity Engine is a discoverable product route`);
   await page.goto(url+'sites.html',{waitUntil:'load'});
-  say((await page.locator('.directory-card').count())===11,`${vp.n}: eleven public destination cards on sites page`);
+  const expectedDestinations=["https://github.com/jussray","https://www.jussco.company/","https://chief.foundercontrolroom.org","https://sync.jussco.company/","https://compass.jussco.company/","https://exactmatch.jussco.company/","https://jussbeautifulhair.com/","https://games.jussco.company/","https://protect.jussco.company/","https://protect2.jussco.company/","https://makevideo.jussco.company/","https://junglejinx.jussco.company/","https://lumora.jussco.company/"];
+  const actualDestinations=await page.locator('.directory-card').evaluateAll(cards=>cards.map(a=>a.getAttribute('href')));
+  say(JSON.stringify(actualDestinations.sort())===JSON.stringify(expectedDestinations.sort()),`${vp.n}: all thirteen exact public destinations, including GitHub and the canonical company site`);
   say(errors.length===0,`${vp.n}: no JS exceptions on new routed pages${errors.length?' — '+errors.join(' | '):''}`);
   await ctx.close();
 }
@@ -563,6 +591,53 @@ for (const vp of [{ n: 'ambience-desktop', w: 1440, h: 900 }, { n: 'ambience-mob
   st = await engine(); const tod = await page.evaluate(() => document.documentElement.dataset.tod);
   say((await page.getAttribute('#sound', 'aria-checked')) === 'true' && st.on && st.scene === tod, `${vp.n}: homepage sound stays on and crossfades as the atmosphere cycles (${st.scene}/${tod})`);
   say(errors.length === 0, `${vp.n}: no console errors${errors.length ? ' — ' + errors.join(' | ') : ''}`);
+  await ctx.close();
+}
+
+/* ---------- Games hub leaderboards: SYNC board states, no fake boards ---------- */
+const LB_URL = SYNC_BOARD_URL;
+const lbRows = {
+  '2': [{ bracket: '2', rank: 1, sync: 100, players: 2, rounds: 5, day: '2026-11-21' }],
+  '3': [],
+  '4+': [
+    { bracket: '4+', rank: 1, sync: 80, players: 4, rounds: 5, day: '2026-11-21' },
+    { bracket: '4+', rank: 2, sync: '<img src=x onerror=alert(1)>', players: 5, rounds: 5, day: '<b>x</b>' }
+  ]
+};
+const lbFixture = { version: 'sync-leaderboard-v2', brackets: ['2', '3', '4+'], size: 25, boards: lbRows, entries: [...lbRows['2'], ...lbRows['4+']] };
+for (const [mode, vp] of [['loaded', { width: 1440, height: 900 }], ['loaded', { width: 390, height: 844 }], ['empty', { width: 390, height: 844 }], ['outage', { width: 1440, height: 900 }]]) {
+  const ctx = await browser.newContext({ viewport: vp });
+  const page = await ctx.newPage();
+  await page.route('**/_telemetry/v1', (route) => route.fulfill({ status: 204, body: '' }));
+  // PR checks must not call production: the SYNC board is a deterministic fixture.
+  await page.route(LB_URL, (route) => mode === 'outage' ? route.abort()
+    : route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(mode === 'empty' ? { ...lbFixture, boards: { '2': [], '3': [], '4+': [] }, entries: [] } : lbFixture) }));
+  const errors = [];
+  page.on('pageerror', e => errors.push(String(e)));
+  await page.goto(url + 'games/index.html#leaderboards', { waitUntil: 'load' });
+  const tag = `games leaderboards (${mode}, ${vp.width})`;
+  await page.waitForFunction(() => !/Loading/.test(document.getElementById('sync-lb-status').textContent), null, { timeout: 5000 });
+  const rows = page.locator('#sync-lb-list .lb-board ol li:not(.lb-empty)');
+  const status = await page.textContent('#sync-lb-status');
+  if (mode === 'loaded') {
+    const heads = await page.locator('#sync-lb-list .lb-board h4').allTextContents();
+    say(heads.join('|') === '2 players|3 players|4+ players', `${tag}: three room-size boards in order (2, 3, 4+)`);
+    say(await rows.count() === 3 && /100%/.test(await page.locator('.lb-board[data-bracket="2"] ol li').first().innerText()) && /4 players · 5 rounds/.test(await page.locator('.lb-board[data-bracket="4+"] ol li').first().innerText()), `${tag}: SYNC rows render on their own room-size board`);
+    say(/No rooms yet/.test(await page.locator('.lb-board[data-bracket="3"]').innerText()), `${tag}: an empty room-size board says so`);
+    say(await page.locator('#sync-lb-list img, #sync-lb-list b b').count() === 0 && /\?%/.test(await page.locator('.lb-board[data-bracket="4+"] ol li').nth(1).innerText()), `${tag}: hostile board values render as text, never markup`);
+  } else if (mode === 'empty') {
+    say(await rows.count() === 0 && /No rooms on the board yet/.test(status), `${tag}: empty board says so honestly`);
+  } else {
+    say(await rows.count() === 0 && /unavailable/.test(status), `${tag}: outage shows unavailable, no stale or fake rows`);
+  }
+  const pendingLinks = await page.locator('#leaderboards .lb-pending a').evaluateAll(a => a.map(x => x.getAttribute('href')));
+  say(pendingLinks.length === 5 && pendingLinks.every(h => /^#[a-z]+-world$/.test(h)), `${tag}: unreleased games get no board and no external link`);
+  say(!/<img|onerror/.test(await page.locator('#leaderboards').innerHTML()), `${tag}: no injected markup in leaderboards`);
+  say(await page.locator('#leaderboards').isVisible() && (await page.evaluate(() => document.documentElement.dataset.hubView)) === 'details', `${tag}: board opens in the details view`);
+  say((await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)) <= 0, `${tag}: no horizontal overflow`);
+  say(errors.length === 0, `${tag}: no JS errors`);
+  if (mode === 'loaded') { await page.goto(url + 'games/index.html', { waitUntil: 'load' }); say(!(await page.locator('#leaderboards').isVisible()), `${tag}: home stage stays as drawn, board hidden until opened`); await page.goto(url + 'games/index.html#leaderboards', { waitUntil: 'load' }); await page.waitForFunction(() => !/Loading/.test(document.getElementById('sync-lb-status').textContent), null, { timeout: 5000 }); }
+  if (mode === 'loaded') await page.locator('#leaderboards').screenshot({ path: `proof/site/games-leaderboards-${vp.width}.png` });
   await ctx.close();
 }
 
