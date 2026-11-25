@@ -83,7 +83,8 @@ for (const vp of [{n:'desktop',w:1440,h:900},{n:'mobile',w:390,h:844}]) {
   { const cta=page.locator('.site-header .work-cta'); const shown=await cta.isVisible(); say(!shown||(await cta.boundingBox()).height<=48,`${vp.n}: Work with Juss stays a compact header button (founder mockup), never oversized`); }
   say(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`${vp.n}: homepage has no horizontal overflow`);
   say(await page.evaluate(()=>document.documentElement.scrollHeight<innerHeight*3.8),`${vp.n}: homepage scroll is bounded`);
-  say(await page.evaluate(()=>getComputedStyle(document.querySelector('.cinematic'),'::before').backgroundImage.includes('home-scene.webp')),`${vp.n}: cinematic background retained`);
+  await page.waitForFunction(()=>!!document.documentElement.dataset.renderedTod);
+  say(await page.evaluate(()=>{const phase=document.documentElement.dataset.renderedTod;const layer=document.querySelector('.studio-sky-layer.sky-'+phase);return !!layer&&getComputedStyle(layer).backgroundImage.includes('.webp')&&getComputedStyle(layer).visibility!=='hidden';}),`${vp.n}: cinematic background retained with the decoded local phase`);
   // Homepage glass polish: verify computed styles in both motion modes.
   await page.emulateMedia({reducedMotion:'no-preference'});
   say(await page.locator('.eco-band').evaluate(el => {

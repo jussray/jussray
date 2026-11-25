@@ -24,7 +24,8 @@ const browser=await chromium.launch({headless:true});
 await mkdir('proof/site',{recursive:true});
 try {
   for(const [label,width,height] of [['desktop',1440,900],['laptop',1280,720],['mobile',390,844],['compact',360,667]]) {
-    const page=await browser.newPage({viewport:{width,height},reducedMotion:'reduce'});
+    const page=await browser.newPage({viewport:{width,height},reducedMotion:'reduce',locale:'en-US',timezoneId:'America/New_York'});
+    await page.clock.setFixedTime(new Date('2026-11-25T20:00:00Z'));
     const errors=[];
     page.on('pageerror',error=>errors.push(String(error)));
     const response=await page.goto('http://127.0.0.1:'+address.port+'/',{waitUntil:'load'});
@@ -45,10 +46,13 @@ try {
     assert.equal(await page.locator('#game-hub-center button.soon').count(),4,'Tournaments, Events, Creator Zone and Rewards are shown as coming soon, not as live features');
     assert.equal(await page.locator('#featured .tile-storyengine a, a.tile-storyengine').count(),0,'StoryEngine has no public product link until its front door is live');
     assert.deepEqual(await page.locator('a.tile-fcr, a.tile-promptos').evaluateAll(a=>a.map(x=>x.getAttribute('href'))),['https://foundercontrolroom.org','https://github.com/jussray/promptos'],'FCR and PromptOS use their founder-declared links from worlds.json');
-    assert.equal(await page.locator('#current-season').textContent(),'Sunset','hub opens on the mockup Sunset atmosphere');
+    await page.waitForFunction(()=>document.documentElement.dataset.renderedTod==='day');
+    assert.equal(await page.locator('#current-season').textContent(),'Daylight','standalone hub opens on visitor-local daylight');
     await page.locator('#library-btn').click();
     assert.match(await page.locator('#hub-toast').innerText(),/coming soon/i,'My Library honestly reports coming soon');
-    assert.match(await page.locator('#living-world-scene').evaluate(el=>getComputedStyle(el).backgroundImage),/home-scene\.webp/);
+    assert.equal(await page.locator('#living-world-scene .studio-sky-layer').count(),4,'standalone Games has the shared four-phase sky');
+    assert.match(await page.locator('#living-world-scene .sky-day').evaluate(el=>getComputedStyle(el).backgroundImage),/ideas-day(?:-sm)?\.webp/);
+    assert.equal(await page.locator('#living-world-scene .sky-day').evaluate(el=>getComputedStyle(el).opacity),'1','the decoded local day painting is displayed');
     const imageResponse=await page.request.get('http://127.0.0.1:'+address.port+'/assets/home-scene.webp');
     assert.equal(imageResponse.status(),200,'cinematic scene is packaged with Games Worker assets');
     assert.match(imageResponse.headers()['content-type']||'',/image\/webp/);
