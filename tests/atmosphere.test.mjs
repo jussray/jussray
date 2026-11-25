@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { seasonFor, holidayFor, timePhase, createTimeState, solarPhase, regionalEvent, formatLocalDateTime } from '../site/assets/atmosphere.mjs';
+import { seasonFor, holidayFor, timePhase, createTimeState, solarPhase, regionalEvent, formatLocalDateTime, localizedPhrase } from '../site/assets/atmosphere.mjs';
 const day = (month, date = 15) => new Date(2026, month - 1, date, 12);
 test('seasons change by local calendar month and southern hemisphere', () => {
   assert.deepEqual([1,4,7,10].map(m => seasonFor(day(m), 'America/New_York')), ['winter','spring','summer','autumn']);
@@ -45,4 +45,18 @@ test('regional dates do not assume every visitor celebrates the same holiday', (
 test('regional date format observes locale and timezone', () => {
   const d=new Date('2026-11-25T20:00:00Z');
   assert.notEqual(formatLocalDateTime(d,'ja-JP','Asia/Tokyo'),formatLocalDateTime(d,'en-US','America/New_York'));
+});
+
+test('authored translations preserve untranslated brand and unsupported locale fallback',()=>{
+  assert.equal(localizedPhrase('Creative Technology','ja'),'クリエイティブテクノロジー');
+  assert.equal(localizedPhrase('Returns policy','ar'),'سياسة الإرجاع');
+  assert.equal(localizedPhrase('Juss & Co','ja'),'Juss & Co');
+  assert.equal(localizedPhrase('Public','xx'),'Public');
+  assert.equal(localizedPhrase('constructor','es'),'constructor');
+});
+test('regional events include local national dates and US Thanksgiving',()=>{
+  assert.equal(regionalEvent(new Date(2026,10,26),'US'),'thanksgiving');
+  assert.equal(regionalEvent(new Date(2026,10,26),'JP'),'');
+  assert.equal(regionalEvent(new Date(2026,7,15),'IN'),'national-day');
+  assert.equal(regionalEvent(new Date(2026,7,15),'US'),'');
 });

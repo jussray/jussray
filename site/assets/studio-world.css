@@ -99,3 +99,23 @@ html.studio-sky-ready .studio-sky-host:not(body) { background:transparent !impor
 .local-environment button:focus-visible { outline:2px solid #ffd98a; outline-offset:3px; }
 @media(max-width:700px) { .studio-sky-layer.sky-dawn {background-image:url('/assets/ideas-sunset-sm.webp')} .studio-sky-layer.sky-day {background-image:url('/assets/ideas-day-sm.webp')} .studio-sky-layer.sky-night {background-image:url('/assets/ideas-night-sm.webp')} }
 @media(prefers-reduced-motion:reduce) { .studio-sky-layer {transition:none} }
+
+/* Keep one scene composition: once the plate is decoded, no fixed fallback
+   should cover or instantly replace the opacity transition. */
+html.studio-sky-ready body.studio-world,
+html.studio-sky-ready.ws-on body.studio-world { background:#151023 !important; }
+html.studio-sky-ready .studio-world .world-stage.cinematic::before { background:none !important; }
+html.studio-sky-ready .studio-sky-layer { background-size: max(100vw, 178svh) auto; background-position:center top; }
+html.studio-sky-ready .studio-sky-host:not(body) > .studio-sky .studio-sky-layer {background-size:cover;}
+/* Seasonal treatments preserve the existing lake and architecture. */
+.studio-sky-layer { transition:opacity 1.2s ease, filter 2s ease; --season-hue:0deg; --season-saturation:1; --season-brightness:1; }
+html[data-season=winter] .studio-sky-layer { --season-hue:-8deg; --season-saturation:.72; --season-brightness:1.08; }
+html[data-season=spring] .studio-sky-layer { --season-hue:7deg; --season-saturation:1.12; --season-brightness:1.04; }
+html[data-season=summer] .studio-sky-layer { --season-hue:0deg; --season-saturation:1.14; --season-brightness:1.04; }
+html[data-season=autumn] .studio-sky-layer { --season-hue:-13deg; --season-saturation:1.15; --season-brightness:.96; }
+.studio-sky-layer { filter:hue-rotate(var(--season-hue)) saturate(var(--season-saturation)) brightness(var(--season-brightness)); }
+.studio-sky-layer.sky-dawn {filter:hue-rotate(calc(var(--season-hue) - 12deg)) saturate(calc(var(--season-saturation) * .85)) brightness(calc(var(--season-brightness) * 1.08));}
+html[data-holiday] .studio-sky::after {content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 68%,#ffd98a22,transparent 55%);}
+html[data-interface-locale]:not([data-interface-locale=en]) .studio-world .site-nav a {white-space:normal;text-align:center;overflow-wrap:anywhere;}
+html[data-interface-locale=ar] .studio-world [lang=ar] {letter-spacing:normal;}
+@media(prefers-reduced-motion:reduce){.studio-sky-layer{transition:none;}}

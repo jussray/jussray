@@ -39,6 +39,10 @@ export function regionalEvent(date, region) {
   if (region==='FR'&&m===7&&d===14) return 'national-day';
   if (region==='DE'&&m===10&&d===3) return 'unity-day';
   if (region==='JP'&&m===2&&d===11) return 'foundation-day';
+  if (region==='US'&&m===11&&date.getDay()===4&&d>=22&&d<=28) return 'thanksgiving';
+  if (region==='MX'&&m===9&&d===16 || region==='BR'&&m===9&&d===7 || region==='IN'&&m===8&&d===15 || region==='ID'&&m===8&&d===17 || region==='KR'&&m===8&&d===15 || region==='NG'&&m===10&&d===1) return 'national-day';
+  if (region==='SG'&&m===8&&d===9 || region==='ZA'&&m===4&&d===27 || region==='AU'&&m===1&&d===26 || region==='NZ'&&m===2&&d===6) return 'national-day';
+  if (region==='CN'&&m===10&&d===1 || region==='TR'&&m===10&&d===29 || region==='PT'&&m===6&&d===10 || region==='ES'&&m===10&&d===12 || region==='IT'&&m===6&&d===2) return 'national-day';
   if (['US','CA','GB','FR','DE','AU','NZ','ES','PT','BR','MX'].includes(region)&&m===12&&d>=20&&d<=26) return 'winter-lights';
   return '';
 }
@@ -46,6 +50,8 @@ export function formatLocalDateTime(date, locale, timeZone) {
   return new Intl.DateTimeFormat(locale,{dateStyle:'medium',timeStyle:'short',...(timeZone?{timeZone}:{})}).format(date);
 }
 const localeLabels = {"en":["Dawn","Daylight","Sunset","Night","Local time","Use local daylight","Use clock only","Location unavailable; using clock","Preview for one minute","Current Atmosphere","Home","Portfolio","Products","Games","Solutions","Our Work","Ideas","Founder","Contact"],"es":["Amanecer","Luz del día","Atardecer","Noche","Hora local","Usar luz solar local","Usar solo el reloj","Ubicación no disponible; se usa el reloj","Vista previa durante un minuto","Atmósfera actual","Inicio","Portafolio","Productos","Juegos","Soluciones","Nuestro trabajo","Ideas","Fundador","Contacto"],"fr":["Aube","Jour","Crépuscule","Nuit","Heure locale","Utiliser la lumière solaire locale","Utiliser l’horloge uniquement","Position indisponible ; horloge utilisée","Aperçu pendant une minute","Atmosphère actuelle","Accueil","Portfolio","Produits","Jeux","Solutions","Nos réalisations","Idées","Fondateur","Contact"],"de":["Morgendämmerung","Tageslicht","Abenddämmerung","Nacht","Ortszeit","Lokales Sonnenlicht verwenden","Nur Uhr verwenden","Standort nicht verfügbar; Uhr wird verwendet","Eine Minute Vorschau","Aktuelle Atmosphäre","Startseite","Portfolio","Produkte","Spiele","Lösungen","Unsere Arbeit","Ideen","Gründer","Kontakt"],"pt":["Amanhecer","Luz do dia","Anoitecer","Noite","Hora local","Usar luz solar local","Usar apenas o relógio","Localização indisponível; usando o relógio","Prévia por um minuto","Atmosfera atual","Início","Portfólio","Produtos","Jogos","Soluções","Nosso trabalho","Ideias","Fundador","Contato"],"ja":["夜明け","昼","夕暮れ","夜","現地時刻","現地の日照を使用","時計のみ使用","位置情報なし・時計を使用","1分間のプレビュー","現在の雰囲気","ホーム","ポートフォリオ","製品","ゲーム","ソリューション","実績","アイデア","創業者","お問い合わせ"],"ar":["الفجر","النهار","الغروب","الليل","الوقت المحلي","استخدام ضوء الشمس المحلي","استخدام الساعة فقط","الموقع غير متاح؛ تُستخدم الساعة","معاينة لمدة دقيقة","الأجواء الحالية","الرئيسية","الأعمال","المنتجات","الألعاب","الحلول","أعمالنا","الأفكار","المؤسس","اتصل بنا"]};
+const translations = {"Creative Technology":{"es":"Tecnología creativa","fr":"Technologie créative","de":"Kreative Technologie","pt":"Tecnologia criativa","ja":"クリエイティブテクノロジー","ar":"التكنولوجيا الإبداعية"},"for a More Beautiful Life":{"es":"para una vida más bella","fr":"pour une vie plus belle","de":"für ein schöneres Leben","pt":"para uma vida mais bonita","ja":"より美しい暮らしのために","ar":"من أجل حياة أجمل"},"AI-powered product creation, systems, brands, and experiences":{"es":"Creación de productos, sistemas, marcas y experiencias con IA","fr":"Création de produits, de systèmes, de marques et d’expériences grâce à l’IA","de":"KI-gestützte Entwicklung von Produkten, Systemen, Marken und Erlebnissen","pt":"Criação de produtos, sistemas, marcas e experiências com IA","ja":"AIを活用した製品、システム、ブランド、体験の創造","ar":"ابتكار المنتجات والأنظمة والعلامات التجارية والتجارب بالذكاء الاصطناعي"},"Create · Build · Launch · Grow · Protect":{"es":"Crear · Construir · Lanzar · Crecer · Proteger","fr":"Créer · Construire · Lancer · Grandir · Protéger","de":"Gestalten · Bauen · Starten · Wachsen · Schützen","pt":"Criar · Construir · Lançar · Crescer · Proteger","ja":"創造 · 構築 · 公開 · 成長 · 保護","ar":"ابتكر · ابنِ · أطلق · انمُ · احمِ"},"Building intelligent products and beautiful experiences for a more creative, free, and abundant life.":{"es":"Creamos productos inteligentes y experiencias hermosas para una vida más creativa, libre y abundante.","fr":"Créer des produits intelligents et de belles expériences pour une vie plus créative, libre et abondante.","de":"Intelligente Produkte und schöne Erlebnisse für ein kreativeres, freieres und erfüllteres Leben entwickeln.","pt":"Criamos produtos inteligentes e belas experiências para uma vida mais criativa, livre e abundante.","ja":"より創造的で自由で豊かな暮らしのために、賢い製品と美しい体験をつくります。","ar":"نبني منتجات ذكية وتجارب جميلة لحياة أكثر إبداعًا وحرية ووفرة."},"The Juss & Co Ecosystem":{"es":"El ecosistema de Juss & Co","fr":"L’écosystème Juss & Co","de":"Das Juss & Co Ökosystem","pt":"O ecossistema Juss & Co","ja":"Juss & Co エコシステム","ar":"منظومة Juss & Co"},"Our Ecosystem":{"es":"Nuestro ecosistema","fr":"Notre écosystème","de":"Unser Ökosystem","pt":"Nosso ecossistema","ja":"私たちのエコシステム","ar":"منظومتنا"},"Our Products":{"es":"Nuestros productos","fr":"Nos produits","de":"Unsere Produkte","pt":"Nossos produtos","ja":"私たちの製品","ar":"منتجاتنا"},"Flagship solutions, real impact.":{"es":"Soluciones emblemáticas, impacto real.","fr":"Des solutions phares, un impact réel.","de":"Wegweisende Lösungen mit echter Wirkung.","pt":"Soluções de destaque, impacto real.","ja":"主力ソリューション、確かな価値。","ar":"حلول رائدة وأثر حقيقي."},"See what we've built.":{"es":"Descubre lo que hemos creado.","fr":"Découvrez nos réalisations.","de":"Entdecken Sie, was wir entwickelt haben.","pt":"Veja o que construímos.","ja":"これまでの制作実績をご覧ください。","ar":"اكتشف ما بنيناه."},"Custom for your goals.":{"es":"Adaptadas a tus objetivos.","fr":"Adaptées à vos objectifs.","de":"Auf Ihre Ziele zugeschnitten.","pt":"Personalizadas para seus objetivos.","ja":"あなたの目標に合わせて。","ar":"مصممة وفق أهدافك."},"Results, case studies, and proof.":{"es":"Resultados, casos de estudio y pruebas.","fr":"Résultats, études de cas et preuves.","de":"Ergebnisse, Fallstudien und Nachweise.","pt":"Resultados, estudos de caso e evidências.","ja":"成果、事例、検証結果。","ar":"نتائج ودراسات حالة وأدلة."},"The vision behind it all.":{"es":"La visión que lo impulsa todo.","fr":"La vision qui anime l’ensemble.","de":"Die Vision hinter allem.","pt":"A visão por trás de tudo.","ja":"すべての原動力となるビジョン。","ar":"الرؤية التي تقف وراء كل ذلك."},"Let's create together.":{"es":"Creemos juntos.","fr":"Créons ensemble.","de":"Gemeinsam etwas erschaffen.","pt":"Vamos criar juntos.","ja":"一緒に創造しましょう。","ar":"لنبتكر معًا."},"Ambient Sound":{"es":"Sonido ambiental","fr":"Ambiance sonore","de":"Umgebungsgeräusche","pt":"Som ambiente","ja":"環境音","ar":"الصوت المحيطي"},"See the complete portfolio →":{"es":"Ver el portafolio completo →","fr":"Voir le portfolio complet →","de":"Das gesamte Portfolio ansehen →","pt":"Ver o portfólio completo →","ja":"ポートフォリオをすべて見る →","ar":"عرض جميع الأعمال ←"},"Skip to content":{"es":"Ir al contenido","fr":"Aller au contenu","de":"Zum Inhalt springen","pt":"Ir para o conteúdo","ja":"本文へ移動","ar":"انتقل إلى المحتوى"},"Public destinations":{"es":"Destinos públicos","fr":"Destinations publiques","de":"Öffentliche Angebote","pt":"Destinos públicos","ja":"公開サイト一覧","ar":"الوجهات العامة"},"Licensing":{"es":"Licencias","fr":"Licences","de":"Lizenzierung","pt":"Licenciamento","ja":"ライセンス","ar":"التراخيص"},"Returns policy (draft)":{"es":"Política de devoluciones (borrador)","fr":"Politique de retour (brouillon)","de":"Rückgaberichtlinie (Entwurf)","pt":"Política de devoluções (rascunho)","ja":"返品ポリシー（草案）","ar":"سياسة الإرجاع (مسودة)"},"Game Hub":{"es":"Centro de juegos","fr":"Espace jeux","de":"Spiele-Hub","pt":"Central de jogos","ja":"ゲームハブ","ar":"مركز الألعاب"},"Built for others.":{"es":"Creado para otros.","fr":"Conçu pour les autres.","de":"Für andere entwickelt.","pt":"Criado para outras pessoas.","ja":"誰かのために。","ar":"صُمم من أجل الآخرين."},"Start with":{"es":"Empieza con","fr":"Commencez par","de":"Beginnen Sie mit","pt":"Comece com","ja":"まずは","ar":"ابدأ بـ"},"an idea.":{"es":"una idea.","fr":"une idée.","de":"einer Idee.","pt":"uma ideia.","ja":"アイデアから。","ar":"فكرة."},"Built with intention. Documented with proof.":{"es":"Creado con intención. Documentado con pruebas.","fr":"Conçu avec intention. Documenté par des preuves.","de":"Mit Absicht entwickelt. Durch Nachweise dokumentiert.","pt":"Criado com intenção. Documentado com evidências.","ja":"意図を持って構築し、証拠とともに記録する。","ar":"بُني بهدف ووُثّق بالأدلة."},"One vision.":{"es":"Una visión.","fr":"Une vision.","de":"Eine Vision.","pt":"Uma visão.","ja":"ひとつのビジョン。","ar":"رؤية واحدة."},"Many living works.":{"es":"Muchas obras vivas.","fr":"De nombreuses œuvres vivantes.","de":"Viele lebendige Werke.","pt":"Muitas obras vivas.","ja":"数多くの生きた作品。","ar":"أعمال حية كثيرة."},"AI Business Idea Generator":{"es":"Generador de ideas de negocio con IA","fr":"Générateur d’idées d’entreprise par IA","de":"KI-Generator für Geschäftsideen","pt":"Gerador de ideias de negócio com IA","ja":"AIビジネスアイデア生成ツール","ar":"مولّد أفكار الأعمال بالذكاء الاصطناعي"},"Original work can create value without giving away the people behind it.":{"es":"El trabajo original puede crear valor sin exponer a las personas que lo hacen posible.","fr":"Une œuvre originale peut créer de la valeur sans exposer les personnes qui en sont à l’origine.","de":"Originelle Arbeit kann Werte schaffen, ohne die Menschen dahinter preiszugeben.","pt":"O trabalho original pode criar valor sem expor as pessoas por trás dele.","ja":"独自の作品は、関わる人々をさらすことなく価値を生み出せます。","ar":"يمكن للعمل الأصلي أن يخلق قيمة دون كشف الأشخاص الذين يقفون وراءه."},"Universe":{"es":"Universo","fr":"Univers","de":"Universum","pt":"Universo","ja":"ユニバース","ar":"عالم"},"Living works.":{"es":"Obras vivas.","fr":"Œuvres vivantes.","de":"Lebendige Werke.","pt":"Obras vivas.","ja":"生きた作品。","ar":"أعمال حية."},"Independent worlds.":{"es":"Mundos independientes.","fr":"Des univers indépendants.","de":"Eigenständige Welten.","pt":"Mundos independentes.","ja":"独立した世界。","ar":"عوالم مستقلة."},"Returns policy":{"es":"Política de devoluciones","fr":"Politique de retour","de":"Rückgaberichtlinie","pt":"Política de devoluções","ja":"返品ポリシー","ar":"سياسة الإرجاع"},"Stop guessing what’s broken.":{"es":"Deja de adivinar qué falla.","fr":"Ne devinez plus ce qui ne fonctionne pas.","de":"Raten Sie nicht länger, was nicht funktioniert.","pt":"Pare de adivinhar o que está falhando.","ja":"何が壊れているか、推測するのはもうやめましょう。","ar":"توقف عن التخمين بشأن ما لا يعمل."},"Ideas made":{"es":"Ideas hechas","fr":"Des idées devenues","de":"Ideen werden","pt":"Ideias tornadas","ja":"アイデアを","ar":"أفكار أصبحت"},"real.":{"es":"realidad.","fr":"réalité.","de":"Wirklichkeit.","pt":"realidade.","ja":"現実に。","ar":"واقعًا."},"Game":{"es":"Centro de","fr":"Espace","de":"Spiele","pt":"Central de","ja":"ゲーム","ar":"مركز"},"Hub":{"es":"juegos","fr":"jeux","de":"Hub","pt":"jogos","ja":"ハブ","ar":"الألعاب"},"Public":{"es":"Destinos","fr":"Destinations","de":"Öffentliche","pt":"Destinos","ja":"公開","ar":"الوجهات"},"destinations.":{"es":"públicos.","fr":"publiques.","de":"Angebote.","pt":"públicos.","ja":"サイト一覧。","ar":"العامة."},"Explore the studio":{"es":"Explora el estudio","fr":"Explorez le studio","de":"Das Studio entdecken","pt":"Explore o estúdio","ja":"スタジオを探索する","ar":"استكشف الاستوديو"},"Public repositories and source code":{"es":"Repositorios públicos y código fuente","fr":"Dépôts publics et code source","de":"Öffentliche Repositories und Quellcode","pt":"Repositórios públicos e código-fonte","ja":"公開リポジトリとソースコード","ar":"المستودعات العامة والشيفرة المصدرية"},"Official company website":{"es":"Sitio web oficial de la empresa","fr":"Site officiel de l’entreprise","de":"Offizielle Unternehmenswebsite","pt":"Site oficial da empresa","ja":"公式企業サイト","ar":"الموقع الرسمي للشركة"},"Open destination ↗":{"es":"Abrir destino ↗","fr":"Ouvrir la destination ↗","de":"Angebot öffnen ↗","pt":"Abrir destino ↗","ja":"サイトを開く ↗","ar":"فتح الوجهة ↗"},"Menu":{"es":"Menú","fr":"Menu","de":"Menü","pt":"Menu","ja":"メニュー","ar":"القائمة"},"Menu ☰":{"es":"Menú ☰","fr":"Menu ☰","de":"Menü ☰","pt":"Menu ☰","ja":"メニュー ☰","ar":"القائمة ☰"},"Open navigation menu":{"es":"Abrir menú de navegación","fr":"Ouvrir le menu de navigation","de":"Navigationsmenü öffnen","pt":"Abrir menu de navegação","ja":"ナビゲーションメニューを開く","ar":"افتح قائمة التنقل"},"Search the ecosystem":{"es":"Buscar en el ecosistema","fr":"Rechercher dans l’écosystème","de":"Ökosystem durchsuchen","pt":"Pesquisar no ecossistema","ja":"エコシステムを検索","ar":"ابحث في المنظومة"},"Ambient volume":{"es":"Volumen ambiental","fr":"Volume ambiant","de":"Umgebungslautstärke","pt":"Volume ambiente","ja":"環境音の音量","ar":"مستوى الصوت المحيطي"},"Previous projects":{"es":"Proyectos anteriores","fr":"Projets précédents","de":"Vorherige Projekte","pt":"Projetos anteriores","ja":"前のプロジェクト","ar":"المشاريع السابقة"},"Next projects":{"es":"Proyectos siguientes","fr":"Projets suivants","de":"Nächste Projekte","pt":"Próximos projetos","ja":"次のプロジェクト","ar":"المشاريع التالية"}};
+export function localizedPhrase(phrase, language) { return Object.hasOwn(translations,phrase)&&Object.hasOwn(translations[phrase],language)?translations[phrase][language]:phrase; }
 export function createTimeState(resolve = timePhase) {
   const phases = ['dawn','day','sunset','night'];
   let preview = null;
@@ -70,6 +76,10 @@ function startLocalTime() {
   if (!localeLabels[language]) language = 'en';
   const labels = localeLabels[language], phases = ['dawn','day','sunset','night'];
   let coords = null, pending = false, request = 0, unavailable = false, lastMinute = '';
+  // Remember consent to daylight mode, never the location itself.
+  const preferenceKey='jc-solar-daylight';
+  const remember = value => { try { sessionStorage.setItem(preferenceKey,value?'on':'off'); } catch {} };
+  const preferred = () => { try { return sessionStorage.getItem(preferenceKey)==='on'; } catch { return false; } };
   const state = createTimeState(date => solarPhase(date, coords) || timePhase(date));
   // Preserve English page language for untranslated editorial copy.
   const localize = (el, text) => { if (el.textContent !== text) el.textContent = text; el.lang = language; el.dir = 'auto'; };
@@ -81,6 +91,26 @@ function startLocalTime() {
     }
   }
   localizeNavigation();
+  // Translate only explicitly authored strings. Preserve icons, styled spans, links,
+  // input values, legal terms and product names. Untranslated copy stays in English.
+  function localizeContent() {
+    const selectors='h1,h2,.subline,.pillars,.founder-quote blockquote p,.ep-txt strong,.ep-txt span,.eco-foot a,.skip,#sound-label,.page-footer a,.menu-word,.menu-toggle,.menu-btn,.directory-card span,.directory-card small,.kicker';
+    for(const el of document.querySelectorAll(selectors)) {
+      const walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);
+      let node,changed=false;
+      while((node=walker.nextNode())) {
+        const raw=node.nodeValue, key=raw.trim(), next=localizedPhrase(key,language);
+        if(next!==key){node.nodeValue=raw.replace(key,next);changed=true;}
+      }
+      if(changed){el.lang=language;el.dir='auto';}
+    }
+    for(const el of document.querySelectorAll('[aria-label]')){
+      const raw=el.getAttribute('aria-label'),next=localizedPhrase(raw,language);
+      if(next!==raw)el.setAttribute('aria-label',next);
+    }
+    root.dataset.interfaceLocale=language;
+  }
+  localizeContent();
   const footer = document.querySelector('footer');
   const status = document.createElement('div'); status.className = 'local-environment';
   const clock = document.createElement('time'); clock.lang = locale; clock.dir = 'auto';
@@ -122,26 +152,40 @@ function startLocalTime() {
     button.addEventListener('click', () => apply(state.cycle()));
   }
   const hint = document.querySelector('#atmoHint'); if (hint) localize(hint, labels[8]);
-  toggle.addEventListener('click', () => {
-    if (coords) { coords=null; request++; unavailable=false; lastMinute=''; sync(); return; }
+  function requestDaylight() {
+    if(pending||coords)return;
     if (!navigator.geolocation) { unavailable=true; sync(); return; }
     pending=true; const id=++request; sync();
     navigator.geolocation.getCurrentPosition(position => {
       if(id!==request)return;
       const c=position.coords; coords={latitude:Math.round(c.latitude*10)/10,longitude:Math.round(c.longitude*10)/10};
-      pending=false; unavailable=false; lastMinute=''; sync();
-    }, () => { if(id!==request)return; pending=false; unavailable=true; sync(); }, {enableHighAccuracy:false,timeout:8000,maximumAge:300000});
+      pending=false; unavailable=false; remember(true); lastMinute=''; sync();
+    }, () => { if(id!==request)return; pending=false; unavailable=true; remember(false); sync(); }, {enableHighAccuracy:false,timeout:8000,maximumAge:300000});
+  }
+  toggle.addEventListener('click', () => {
+    if(coords){coords=null;request++;unavailable=false;remember(false);lastMinute='';sync();return;}
+    requestDaylight();
   });
   // Revoke in-memory coordinates if permission is withdrawn.
   navigator.permissions?.query({name:'geolocation'}).then(permission => {
-    permission.addEventListener('change',()=>{if(permission.state!=='granted'){coords=null;pending=false;request++;lastMinute='';sync();}});
+    if(permission.state==='granted'&&preferred())requestDaylight();
+    permission.addEventListener('change',()=>{if(permission.state!=='granted'&&coords){coords=null;pending=false;request++;remember(false);lastMinute='';sync();}});
   }).catch(()=>{});
   // Use four opacity layers, with existing artwork as a no-JS fallback.
   if (document.body.classList.contains('studio-world')) {
     const host = document.querySelector('#living-world-scene, .ws-scene, .scene, .page-scene') || document.body;
     const sky = document.createElement('div'); sky.className='studio-sky'; sky.setAttribute('aria-hidden','true');
     for(const phase of phases){const layer=document.createElement('div');layer.className='studio-sky-layer sky-'+phase;sky.append(layer);}
-    host.prepend(sky); host.classList.add('studio-sky-host'); root.classList.add('studio-sky-ready');
+    host.prepend(sky); host.classList.add('studio-sky-host');
+    // Retain fallback painting until the first active image actually loads.
+    const ready = () => {
+      const layer=sky.querySelector('.sky-'+root.dataset.tod);
+      if(!layer)return;
+      const match=getComputedStyle(layer).backgroundImage.match(/^url\(["']?(.*?)["']?\)$/);
+      if(!match)return;
+      const image=new Image(); image.onload=()=>root.classList.add('studio-sky-ready'); image.src=match[1];
+    };
+    sync(); ready();
   }
   sync();
   setInterval(sync, 1000);

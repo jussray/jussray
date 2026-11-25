@@ -637,5 +637,18 @@ for (const timezoneId of ['America/New_York','Asia/Tokyo']) {
   say(await page.locator('html').getAttribute('data-daylight-source')==='clock','location mode can be disabled');
   await ctx.close();
 }
+// Authored localization preserves branded text and heading markup.
+for(const locale of ['ja-JP','ar','es-ES']){
+  const ctx=await browser.newContext({locale,viewport:{width:390,height:844},reducedMotion:'reduce'});
+  const page=await ctx.newPage();
+  await page.goto(url,{waitUntil:'load'});
+  await page.waitForFunction(()=>!!document.documentElement.dataset.interfaceLocale);
+  say(await page.locator('#landing-title .br').count()===1 && (await page.locator('#landing-title').getAttribute('lang'))===locale.split('-')[0],`${locale}: localized title retains styled span`);
+  say(await page.locator('.studio-sky-layer').count()===4,`${locale}: shared landscape has four plates`);
+  await page.goto(url+'contact.html',{waitUntil:'load'});
+  await page.waitForFunction(()=>!!document.documentElement.dataset.interfaceLocale);
+  say(await page.locator('h1').getAttribute('lang')===locale.split('-')[0],`${locale}: contact page heading localized`);
+  await ctx.close();
+}
 await browser.close(); srv.close();
 console.log(failed ? `\n${failed} check(s) FAILED` : '\nall checks passed'); process.exit(failed ? 1 : 0);
