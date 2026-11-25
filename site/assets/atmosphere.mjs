@@ -17,36 +17,132 @@ export function timePhase(date = new Date(), zone) {
   const h = zone ? Number(new Intl.DateTimeFormat('en-GB', {timeZone:zone,hour:'numeric',hourCycle:'h23'}).format(date)) : date.getHours();
   return h >= 5 && h < 8 ? 'dawn' : h >= 8 && h < 17 ? 'day' : h >= 17 && h < 20 ? 'sunset' : 'night';
 }
-export function createTimeState() {
+// Approximate solar elevation: NOAA GML solar position equations; no remote request.
+// https://gml.noaa.gov/grad/solcalc/solareqns.PDF
+export function solarPhase(date, coords) {
+  if (!coords || !Number.isFinite(coords.latitude) || !Number.isFinite(coords.longitude) || Math.abs(coords.latitude)>90 || Math.abs(coords.longitude)>180) return null;
+  const rad=Math.PI/180, year=date.getUTCFullYear(), start=Date.UTC(year,0,1), days=(Date.UTC(year+1,0,1)-start)/86400000;
+  const gamma=2*Math.PI/days*((+date-start)/86400000-.5);
+  const e=229.18*(.000075+.001868*Math.cos(gamma)-.032077*Math.sin(gamma)-.014615*Math.cos(2*gamma)-.040849*Math.sin(2*gamma));
+  const dec=.006918-.399912*Math.cos(gamma)+.070257*Math.sin(gamma)-.006758*Math.cos(2*gamma)+.000907*Math.sin(2*gamma)-.002697*Math.cos(3*gamma)+.00148*Math.sin(3*gamma);
+  const minutes=date.getUTCHours()*60+date.getUTCMinutes()+date.getUTCSeconds()/60;
+  const hour=(((minutes+e+4*coords.longitude)%1440+1440)%1440)/4-180;
+  const lat=coords.latitude*rad;
+  const elevation=Math.asin(Math.max(-1,Math.min(1,Math.sin(lat)*Math.sin(dec)+Math.cos(lat)*Math.cos(dec)*Math.cos(hour*rad))))/rad;
+  return elevation>6?'day':elevation>=-6?(hour<0?'dawn':'sunset'):'night';
+}
+export function regionalEvent(date, region) {
+  const m=date.getMonth()+1,d=date.getDate();
+  if(m===1&&d===1||m===12&&d===31)return 'new-year';
+  if (region==='US'&&m===7&&d===4) return 'independence-day';
+  if (region==='CA'&&m===7&&d===1) return 'canada-day';
+  if (region==='FR'&&m===7&&d===14) return 'national-day';
+  if (region==='DE'&&m===10&&d===3) return 'unity-day';
+  if (region==='JP'&&m===2&&d===11) return 'foundation-day';
+  if (['US','CA','GB','FR','DE','AU','NZ','ES','PT','BR','MX'].includes(region)&&m===12&&d>=20&&d<=26) return 'winter-lights';
+  return '';
+}
+export function formatLocalDateTime(date, locale, timeZone) {
+  return new Intl.DateTimeFormat(locale,{dateStyle:'medium',timeStyle:'short',...(timeZone?{timeZone}:{})}).format(date);
+}
+const localeLabels = {"en":["Dawn","Daylight","Sunset","Night","Local time","Use local daylight","Use clock only","Location unavailable; using clock","Preview for one minute","Current Atmosphere","Home","Portfolio","Products","Games","Solutions","Our Work","Ideas","Founder","Contact"],"es":["Amanecer","Luz del día","Atardecer","Noche","Hora local","Usar luz solar local","Usar solo el reloj","Ubicación no disponible; se usa el reloj","Vista previa durante un minuto","Atmósfera actual","Inicio","Portafolio","Productos","Juegos","Soluciones","Nuestro trabajo","Ideas","Fundador","Contacto"],"fr":["Aube","Jour","Crépuscule","Nuit","Heure locale","Utiliser la lumière solaire locale","Utiliser l’horloge uniquement","Position indisponible ; horloge utilisée","Aperçu pendant une minute","Atmosphère actuelle","Accueil","Portfolio","Produits","Jeux","Solutions","Nos réalisations","Idées","Fondateur","Contact"],"de":["Morgendämmerung","Tageslicht","Abenddämmerung","Nacht","Ortszeit","Lokales Sonnenlicht verwenden","Nur Uhr verwenden","Standort nicht verfügbar; Uhr wird verwendet","Eine Minute Vorschau","Aktuelle Atmosphäre","Startseite","Portfolio","Produkte","Spiele","Lösungen","Unsere Arbeit","Ideen","Gründer","Kontakt"],"pt":["Amanhecer","Luz do dia","Anoitecer","Noite","Hora local","Usar luz solar local","Usar apenas o relógio","Localização indisponível; usando o relógio","Prévia por um minuto","Atmosfera atual","Início","Portfólio","Produtos","Jogos","Soluções","Nosso trabalho","Ideias","Fundador","Contato"],"ja":["夜明け","昼","夕暮れ","夜","現地時刻","現地の日照を使用","時計のみ使用","位置情報なし・時計を使用","1分間のプレビュー","現在の雰囲気","ホーム","ポートフォリオ","製品","ゲーム","ソリューション","実績","アイデア","創業者","お問い合わせ"],"ar":["الفجر","النهار","الغروب","الليل","الوقت المحلي","استخدام ضوء الشمس المحلي","استخدام الساعة فقط","الموقع غير متاح؛ تُستخدم الساعة","معاينة لمدة دقيقة","الأجواء الحالية","الرئيسية","الأعمال","المنتجات","الألعاب","الحلول","أعمالنا","الأفكار","المؤسس","اتصل بنا"]};
+export function createTimeState(resolve = timePhase) {
   const phases = ['dawn','day','sunset','night'];
   let preview = null;
   function read(date = new Date()) {
-    const actual = timePhase(date);
+    const actual = resolve(date);
     if (preview && (preview.actual !== actual || +date >= preview.until || +date < preview.from)) preview = null;
     return preview ? preview.phase : actual;
   }
   return {read, cycle(date = new Date()) {
     const next = phases[(phases.indexOf(read(date))+1)%phases.length];
-    preview = {phase:next,actual:timePhase(date),from:+date,until:+date+60000};
+    preview = {phase:next,actual:resolve(date),from:+date,until:+date+60000};
     return next;
   }};
 }
-// The browser clock is the source of truth; no location permission or tracking.
+// Device locale is a preference, not proof of a country. Coordinates are optional,
+// retained in memory only, and never transmitted or persisted by this module.
 function startLocalTime() {
-  const root = document.documentElement, state = createTimeState();
-  const names = {dawn:'Dawn',day:'Daylight',sunset:'Sunset',night:'Night'};
+  const root = document.documentElement;
+  const locale = navigator.languages?.[0] || navigator.language || 'en';
+  let language = 'en', region = '';
+  try { const l = new Intl.Locale(locale); language = l.language; region = l.region || ''; } catch {}
+  if (!localeLabels[language]) language = 'en';
+  const labels = localeLabels[language], phases = ['dawn','day','sunset','night'];
+  let coords = null, pending = false, request = 0, unavailable = false, lastMinute = '';
+  const state = createTimeState(date => solarPhase(date, coords) || timePhase(date));
+  // Preserve English page language for untranslated editorial copy.
+  const localize = (el, text) => { if (el.textContent !== text) el.textContent = text; el.lang = language; el.dir = 'auto'; };
+  const navNames = localeLabels.en.slice(10);
+  function localizeNavigation() {
+    for (const el of document.querySelectorAll('header nav a, .ws-nav a')) {
+      const i = navNames.indexOf(el.textContent.trim());
+      if (i >= 0) localize(el, labels[i+10]);
+    }
+  }
+  localizeNavigation();
+  const footer = document.querySelector('footer');
+  const status = document.createElement('div'); status.className = 'local-environment';
+  const clock = document.createElement('time'); clock.lang = locale; clock.dir = 'auto';
+  const toggle = document.createElement('button'); toggle.type = 'button'; toggle.lang = language; toggle.dir = 'auto';
+  status.append(clock, toggle);
+  if (footer) footer.before(status); else document.body.append(status);
+  function updateEnvironment(date) {
+    const minute = Math.floor(+date/60000);
+    const signature = [minute, coords?.latitude, region, Intl.DateTimeFormat().resolvedOptions().timeZone].join('|');
+    if (signature === lastMinute) return;
+    lastMinute = signature;
+    const zone = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+    let season = seasonFor(date, zone);
+    if (coords) { const m = date.getMonth(), idx = m===11||m<2?0:m<5?1:m<8?2:3; season = ['winter','spring','summer','autumn'][(idx+(coords.latitude<0?2:0))%4]; }
+    root.dataset.season = season;
+    const event = regionalEvent(date, region);
+    if (event) root.dataset.holiday = event; else delete root.dataset.holiday;
+    clock.dateTime = date.toISOString();
+    clock.textContent = formatLocalDateTime(date, locale);
+    const m=date.getMonth(), sm=m===11||m<2?11:m-(m+1)%3;
+    const from=new Date(date.getFullYear()-(m<2?1:0),sm,1), to=new Date(from.getFullYear(),from.getMonth()+3,0);
+    const fmt = new Intl.DateTimeFormat(locale,{month:'short',day:'numeric'});
+    for (const el of document.querySelectorAll('#seasonWindow,#season-window')) { el.textContent=fmt.format(from)+' – '+fmt.format(to); el.lang=locale; }
+  }
   function apply(phase) {
     if (root.dataset.tod !== phase) root.dataset.tod = phase;
     if (document.body.dataset.atmo !== phase) document.body.dataset.atmo = phase;
-    for (const el of document.querySelectorAll('#atmoName, #current-season')) if (el.textContent !== names[phase]) el.textContent = names[phase];
+    for (const el of document.querySelectorAll('#atmoName, #current-season')) localize(el, labels[phases.indexOf(phase)]);
+    root.dataset.daylightSource = coords ? 'solar' : 'clock';
+    toggle.disabled = pending;
+    localize(toggle, coords ? labels[6] : labels[5]);
+    toggle.setAttribute('aria-pressed',String(!!coords));
+    toggle.title = unavailable ? labels[7] : labels[4];
   }
-  const sync = () => apply(state.read());
+  const sync = () => { const date = new Date(); updateEnvironment(date); apply(state.read(date)); };
   for (const button of document.querySelectorAll('#atmo, #atmo-cycle')) {
-    button.title = 'Preview another atmosphere for up to one minute; automatic local time resumes.';
+    button.title = labels[8];
+    for (const el of button.querySelectorAll('small')) if (el.textContent.trim().toLowerCase()==='current atmosphere') localize(el, labels[9]);
     button.addEventListener('click', () => apply(state.cycle()));
   }
-  const hint = document.querySelector('#atmoHint');
-  if (hint) hint.textContent = 'Local time · tap for a temporary preview';
+  const hint = document.querySelector('#atmoHint'); if (hint) localize(hint, labels[8]);
+  toggle.addEventListener('click', () => {
+    if (coords) { coords=null; request++; unavailable=false; lastMinute=''; sync(); return; }
+    if (!navigator.geolocation) { unavailable=true; sync(); return; }
+    pending=true; const id=++request; sync();
+    navigator.geolocation.getCurrentPosition(position => {
+      if(id!==request)return;
+      const c=position.coords; coords={latitude:Math.round(c.latitude*10)/10,longitude:Math.round(c.longitude*10)/10};
+      pending=false; unavailable=false; lastMinute=''; sync();
+    }, () => { if(id!==request)return; pending=false; unavailable=true; sync(); }, {enableHighAccuracy:false,timeout:8000,maximumAge:300000});
+  });
+  // Revoke in-memory coordinates if permission is withdrawn.
+  navigator.permissions?.query({name:'geolocation'}).then(permission => {
+    permission.addEventListener('change',()=>{if(permission.state!=='granted'){coords=null;pending=false;request++;lastMinute='';sync();}});
+  }).catch(()=>{});
+  // Use four opacity layers, with existing artwork as a no-JS fallback.
+  if (document.body.classList.contains('studio-world')) {
+    const host = document.querySelector('#living-world-scene, .ws-scene, .scene, .page-scene') || document.body;
+    const sky = document.createElement('div'); sky.className='studio-sky'; sky.setAttribute('aria-hidden','true');
+    for(const phase of phases){const layer=document.createElement('div');layer.className='studio-sky-layer sky-'+phase;sky.append(layer);}
+    host.prepend(sky); host.classList.add('studio-sky-host'); root.classList.add('studio-sky-ready');
+  }
   sync();
   setInterval(sync, 1000);
   document.addEventListener('visibilitychange', sync);
@@ -56,7 +152,6 @@ function startLocalTime() {
 
 export function startAtmosphere() {
   const root = document.documentElement;
-  const zone = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
   const canvas = document.createElement('canvas');
   canvas.className = 'world-atmosphere';
   canvas.setAttribute('aria-hidden', 'true');
@@ -66,7 +161,7 @@ export function startAtmosphere() {
   const scene = homeStage || document.body;
   scene.append(canvas);
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-  let width = 0, height = 0, particles = [], lights = [], frame = 0, last = 0, day = '';
+  let width = 0, height = 0, particles = [], lights = [], frame = 0, last = 0;
   function resize() {
     width = scene.clientWidth;
     height = homeStage ? homeStage.clientHeight : innerHeight;
@@ -124,13 +219,7 @@ export function startAtmosphere() {
       }
     });
   }
-  function environment() {
-    const date = new Date(), nextDay = date.toDateString();
-    if (nextDay === day) return;
-    day = nextDay; root.dataset.season = seasonFor(date, zone);
-    const holiday = holidayFor(date);
-    if (holiday) root.dataset.holiday = holiday; else delete root.dataset.holiday;
-  }
+  function environment() { /* Local clock owns the environment state independently of animation. */ }
   function tick(time) {
     frame = 0;
     if (document.hidden || reduced.matches) return;

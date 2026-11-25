@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { seasonFor, holidayFor, timePhase, createTimeState } from '../site/assets/atmosphere.mjs';
+import { seasonFor, holidayFor, timePhase, createTimeState, solarPhase, regionalEvent, formatLocalDateTime } from '../site/assets/atmosphere.mjs';
 const day = (month, date = 15) => new Date(2026, month - 1, date, 12);
 test('seasons change by local calendar month and southern hemisphere', () => {
   assert.deepEqual([1,4,7,10].map(m => seasonFor(day(m), 'America/New_York')), ['winter','spring','summer','autumn']);
@@ -32,4 +32,17 @@ test('local boundaries and temporary preview return to automatic time', () => {
   assert.equal(state.read(at(17,0)), 'sunset');
   assert.equal(state.cycle(at(17,1)), 'night');
   assert.equal(state.read(at(17,2)), 'sunset');
+});
+
+test('solar phases follow geography and polar daylight', () => {
+  for(const [d,c,phase] of [["2026-06-21T12:00:00Z",{"latitude":51.5,"longitude":0},"day"],["2026-06-21T00:00:00Z",{"latitude":51.5,"longitude":0},"night"],["2026-03-20T06:00:00Z",{"latitude":0,"longitude":0},"dawn"],["2026-03-20T18:00:00Z",{"latitude":0,"longitude":0},"sunset"],["2026-06-21T00:00:00Z",{"latitude":78.2,"longitude":15.6},"day"],["2026-12-21T12:00:00Z",{"latitude":78.2,"longitude":15.6},"night"]]) assert.equal(solarPhase(new Date(d),c),phase);
+  assert.equal(solarPhase(new Date(),{latitude:91,longitude:0}),null);
+});
+test('regional dates do not assume every visitor celebrates the same holiday', () => {
+  assert.equal(regionalEvent(new Date(2026,6,4),'US'),'independence-day');
+  assert.equal(regionalEvent(new Date(2026,6,4),'JP'),'');
+});
+test('regional date format observes locale and timezone', () => {
+  const d=new Date('2026-11-25T20:00:00Z');
+  assert.notEqual(formatLocalDateTime(d,'ja-JP','Asia/Tokyo'),formatLocalDateTime(d,'en-US','America/New_York'));
 });

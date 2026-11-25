@@ -81,3 +81,21 @@ html.ws-on body.studio-world { background: #151023 var(--studio-scene) center to
 
 /* A cooler dawn treatment reuses the existing sunrise/sunset plate. */
 html[data-tod=dawn] .studio-world :is(.tod-art,.ws-scene .sunset,.scene .sunset) { filter: hue-rotate(-12deg) saturate(.85) brightness(1.08); }
+
+/* Visitor-local sky: preloaded CSS layers crossfade without moving page content. */
+.studio-world { isolation: isolate; }
+.studio-sky { position:absolute; inset:0 0 auto; height:100svh; pointer-events:none; overflow:hidden; z-index:-1; background:#151023; }
+.studio-sky-host:not(body) > .studio-sky { z-index:0; height:100%; }
+.studio-sky-layer { position:absolute; inset:0; opacity:0; background-position:center; background-size:cover; transition:opacity 1.2s ease; }
+.studio-sky-layer.sky-dawn { background-image:url('/assets/ideas-sunset.webp'); filter:hue-rotate(-12deg) saturate(.85) brightness(1.08); }
+.studio-sky-layer.sky-day { background-image:url('/assets/ideas-day.webp'); }
+.studio-sky-layer.sky-sunset { background-image:url('/assets/home-scene.webp'); }
+.studio-sky-layer.sky-night { background-image:url('/assets/ideas-night.webp'); }
+html[data-tod=dawn] .sky-dawn, html[data-tod=day] .sky-day, html[data-tod=sunset] .sky-sunset, html[data-tod=night] .sky-night { opacity:1; }
+html.studio-sky-ready .studio-world :is(.tod-art,.ws-scene .art,.scene .art) { opacity:0 !important; }
+html.studio-sky-ready .studio-sky-host:not(body) { background:transparent !important; }
+.local-environment { display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:.6rem 1rem; padding:.65rem 1rem; color:#f5e7d6; font:500 .82rem/1.5 system-ui,sans-serif; }
+.local-environment button { min-height:44px; padding:.4rem .8rem; border:1px solid #ffdfae61; border-radius:10px; background:#151023; color:inherit; font:inherit; cursor:pointer; }
+.local-environment button:focus-visible { outline:2px solid #ffd98a; outline-offset:3px; }
+@media(max-width:700px) { .studio-sky-layer.sky-dawn {background-image:url('/assets/ideas-sunset-sm.webp')} .studio-sky-layer.sky-day {background-image:url('/assets/ideas-day-sm.webp')} .studio-sky-layer.sky-night {background-image:url('/assets/ideas-night-sm.webp')} }
+@media(prefers-reduced-motion:reduce) { .studio-sky-layer {transition:none} }

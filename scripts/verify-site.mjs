@@ -611,16 +611,30 @@ for (const vp of [{ n: 'ambience-desktop', w: 1440, h: 900 }, { n: 'ambience-mob
 for (const timezoneId of ['America/New_York','Asia/Tokyo']) {
   const ctx = await browser.newContext({timezoneId, reducedMotion:'reduce'});
   const page = await ctx.newPage();
-  await page.clock.install({time:new Date(timezoneId==='America/New_York'?'2026-11-25T21:59:59Z':'2026-11-25T22:59:59Z')});
+  await page.clock.install({time:new Date(timezoneId==='America/New_York'?'2026-11-25T21:59:00Z':'2026-11-25T22:59:00Z')});
   for (const route of ['', 'ideas.html', 'services.html', 'games/index.html']) {
-    await page.clock.setSystemTime(new Date(timezoneId==='America/New_York'?'2026-11-25T21:59:59Z':'2026-11-25T22:59:59Z'));
+    await page.clock.setSystemTime(new Date(timezoneId==='America/New_York'?'2026-11-25T21:59:00Z':'2026-11-25T22:59:00Z'));
     await page.goto(url+route, {waitUntil:'load'});
     const expected = timezoneId==='America/New_York'?'day':'dawn';
     await page.waitForFunction(e=>document.documentElement.dataset.tod===e,expected);
-    await page.clock.fastForward(2000);
+    await page.clock.fastForward(61000);
     const next = timezoneId==='America/New_York'?'sunset':'day';
     say(await page.evaluate(e=>document.documentElement.dataset.tod===e && document.body.dataset.atmo===e,next),`local clock: ${timezoneId} ${route||'/'} switches without reload`);
   }
+  await ctx.close();
+}
+// Optional location mode and localized date/phase labels, using browser test fixtures only.
+{
+  const ctx = await browser.newContext({locale:'ja-JP',timezoneId:'Asia/Tokyo',geolocation:{latitude:35.68,longitude:139.69},permissions:['geolocation'],reducedMotion:'reduce'});
+  const page = await ctx.newPage();
+  await page.goto(url,{waitUntil:'load'});
+  await page.locator('.local-environment button').waitFor();
+  say(await page.locator('.local-environment time').getAttribute('lang')==='ja-JP' && await page.locator('#atmoName').getAttribute('lang')==='ja','regional clock and phase labels use visitor language');
+  await page.locator('.local-environment button').click();
+  await page.waitForFunction(()=>document.documentElement.dataset.daylightSource==='solar');
+  say(await page.locator('.studio-sky-layer').count()===4,'location mode uses four crossfade scene layers');
+  await page.locator('.local-environment button').click();
+  say(await page.locator('html').getAttribute('data-daylight-source')==='clock','location mode can be disabled');
   await ctx.close();
 }
 await browser.close(); srv.close();
