@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { inspectPublicEntrance, validatePublicUrl } from './verify-public-entrances.mjs';
 
 const html = '<!doctype html><html><head><title>Juss &amp; Co | Turn thoughts into living works</title></head><body>Juss &amp; Co</body></html>';
@@ -49,4 +50,18 @@ test('network failure and unexpected content type are not green', async () => {
   assert.equal(errored.state, 'UNKNOWN');
   const nonHtml = await inspectPublicEntrance('https://www.jussco.company/', { request: async () => response(200, html, {'content-type':'application/json'}) });
   assert.equal(nonHtml.state,'FAIL');
+});
+
+test('provider browser evidence runs despite an earlier anonymous HTTP 403', () => {
+  // The anonymous Node fetch may be blocked by WAF/bot policy. It must still fail
+  // the job, but must not prevent the separate browser-based witness from running.
+  const workflow = readFileSync(new URL('../.github/workflows/provider-site-proof.yml', import.meta.url), 'utf8');
+  const section = workflow.split('      - name: Verify public production via Cloudflare Browser Rendering\n')[1]
+    ?.split('\n      - name: Upload partial readback receipt')[0] || '';
+  assert.match(section, /if: \$\{\{ !cancelled\(\) && github\.event_name != 'pull_request' && github\.ref == 'refs\/heads\/main' \}\}/);
+  assert.doesNotMatch(section, /continue-on-error:\s*true/, 'do not hide failed browser proof');
+  const probe = workflow.split('      - name: Verify anonymous public homepage access (read-only)\n')[1]
+    ?.split('\n      # Main push and explicit main dispatch')[0] || '';
+  assert.match(probe, /node scripts\/verify-public-entrances\.mjs --live/);
+  assert.doesNotMatch(probe, /continue-on-error:\s*true/, 'do not hide a 403 from the anonymous probe');
 });
