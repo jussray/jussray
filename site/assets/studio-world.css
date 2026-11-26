@@ -1,10 +1,19 @@
 /* Shared Juss & Co landscape and readable glass across studio pages. */
+:root { --studio-scene: url('/assets/home-scene.webp'); }
+:root[data-tod=day] { --studio-scene: url('/assets/ideas-day.webp'); }
+:root[data-tod=dawn] { --studio-scene: url('/assets/ideas-sunset.webp'); }
+:root[data-tod=night] { --studio-scene: url('/assets/ideas-night.webp'); }
+@media (max-width: 700px) {
+  :root[data-tod=day] { --studio-scene: url('/assets/ideas-day-sm.webp'); }
+  :root[data-tod=dawn] { --studio-scene: url('/assets/ideas-sunset-sm.webp'); }
+  :root[data-tod=night] { --studio-scene: url('/assets/ideas-night-sm.webp'); }
+}
 body.studio-world {
   position: relative;
   min-height: 100svh;
-  background: #151023 url('/assets/home-scene.webp') center top / max(100vw, 178svh) auto no-repeat;
+  background: #151023 var(--studio-scene) center top / max(100vw, 178svh) auto no-repeat;
 }
-html.ws-on body.studio-world { background: #151023 url('/assets/home-scene.webp') center top / max(100vw, 178svh) auto no-repeat !important; }
+html.ws-on body.studio-world { background: #151023 var(--studio-scene) center top / max(100vw, 178svh) auto no-repeat !important; }
 .studio-world .ws-scene,
 .studio-world :is(.scene, .page-scene) {
   position: absolute;
@@ -46,3 +55,76 @@ html.ws-on body.studio-world { background: #151023 url('/assets/home-scene.webp'
 @media (prefers-reduced-motion: reduce) {
   .studio-world .world-atmosphere { display: none; }
 }
+
+/* Homepage polish: keep the landscape visible while restoring restrained glass depth. */
+.studio-world.home-world :is(.founder-quote, .eco-panel, .eco-band, .ctl-card, .atmo-btn) {
+  background: linear-gradient(155deg, rgba(32, 20, 63, .62), rgba(16, 9, 30, .48));
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-color: rgba(255, 223, 174, .42);
+  box-shadow: 0 12px 36px rgba(8, 4, 24, .24), inset 0 1px rgba(255, 238, 210, .10);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .studio-world.home-world :is(.founder-quote, .eco-panel, .eco-band, .ctl-card, .atmo-btn).glass::before {
+    display: block;
+    opacity: .65;
+  }
+}
+.studio-world.home-world :is(.eco-panel a, .eco-tile a, .eco-nav, .hdr-btn, .menu-toggle, .switch, .atmo-btn, .eco-foot a):focus-visible {
+  outline: 2px solid #ffd98a;
+  outline-offset: -3px;
+}
+@media (max-width: 760px) {
+  .studio-world.home-world .subline { font-size: 11px; letter-spacing: .10em; }
+  .studio-world.home-world .eco-foot a { min-height: 44px; }
+}
+
+/* A cooler dawn treatment reuses the existing sunrise/sunset plate. */
+html[data-tod=dawn] .studio-world :is(.tod-art,.ws-scene .sunset,.scene .sunset) { filter: hue-rotate(-12deg) saturate(.85) brightness(1.08); }
+
+/* Visitor-local sky: preloaded CSS layers crossfade without moving page content. */
+.studio-world { isolation: isolate; }
+.studio-sky { position:absolute; inset:0 0 auto; height:100svh; pointer-events:none; overflow:hidden; z-index:-1; background:#151023; }
+.studio-sky-host:not(body) > .studio-sky { z-index:0; height:100%; }
+.studio-sky-layer { position:absolute; inset:0; opacity:0; background-position:center; background-size:cover; transition:opacity 1.2s ease; }
+.studio-sky-layer.sky-dawn { background-image:url('/assets/ideas-sunset.webp'); filter:hue-rotate(-12deg) saturate(.85) brightness(1.08); }
+.studio-sky-layer.sky-day { background-image:url('/assets/ideas-day.webp'); }
+.studio-sky-layer.sky-sunset { background-image:url('/assets/home-scene.webp'); }
+.studio-sky-layer.sky-night { background-image:url('/assets/ideas-night.webp'); }
+html[data-rendered-tod=dawn] .sky-dawn, html[data-rendered-tod=day] .sky-day, html[data-rendered-tod=sunset] .sky-sunset, html[data-rendered-tod=night] .sky-night { opacity:1; }
+html.studio-sky-ready .studio-world :is(.tod-art,.ws-scene .art,.scene .art) { opacity:0 !important; }
+html.studio-sky-ready .studio-sky-host:not(body) { background:transparent !important; }
+.local-environment { display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:.6rem 1rem; padding:.65rem 1rem; color:#f5e7d6; font:500 .82rem/1.5 system-ui,sans-serif; }
+.local-environment button { min-height:44px; padding:.4rem .8rem; border:1px solid #ffdfae61; border-radius:10px; background:#151023; color:inherit; font:inherit; cursor:pointer; }
+.local-environment button:focus-visible { outline:2px solid #ffd98a; outline-offset:3px; }
+@media(max-width:700px) { .studio-sky-layer.sky-dawn {background-image:url('/assets/ideas-sunset-sm.webp')} .studio-sky-layer.sky-day {background-image:url('/assets/ideas-day-sm.webp')} .studio-sky-layer.sky-night {background-image:url('/assets/ideas-night-sm.webp')} }
+@media(prefers-reduced-motion:reduce) { .studio-sky-layer {transition:none} }
+
+/* Keep one scene composition: once the plate is decoded, no fixed fallback
+   should cover or instantly replace the opacity transition. */
+html.studio-sky-ready body.studio-world,
+html.studio-sky-ready.ws-on body.studio-world { background:#151023 !important; }
+html.studio-sky-ready .studio-world .world-stage.cinematic::before { background:none !important; }
+html.studio-sky-ready .studio-sky-layer { background-size: max(100vw, 178svh) auto; background-position:center top; }
+html.studio-sky-ready .studio-sky-host:not(body) > .studio-sky .studio-sky-layer {background-size:cover;}
+/* Seasonal treatments preserve the existing lake and architecture. */
+.studio-sky-layer { transition:opacity 1.2s ease, filter 2s ease; --season-hue:0deg; --season-saturation:1; --season-brightness:1; }
+html[data-season=winter] .studio-sky-layer { --season-hue:-8deg; --season-saturation:.72; --season-brightness:1.08; }
+html[data-season=spring] .studio-sky-layer { --season-hue:7deg; --season-saturation:1.12; --season-brightness:1.04; }
+html[data-season=summer] .studio-sky-layer { --season-hue:0deg; --season-saturation:1.14; --season-brightness:1.04; }
+html[data-season=autumn] .studio-sky-layer { --season-hue:-13deg; --season-saturation:1.15; --season-brightness:.96; }
+.studio-sky-layer { filter:hue-rotate(var(--season-hue)) saturate(var(--season-saturation)) brightness(var(--season-brightness)); }
+.studio-sky-layer.sky-dawn {filter:hue-rotate(calc(var(--season-hue) - 12deg)) saturate(calc(var(--season-saturation) * .85)) brightness(calc(var(--season-brightness) * 1.08));}
+html[data-holiday] .studio-sky::after {content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 68%,#ffd98a22,transparent 55%);}
+html[data-interface-locale]:not([data-interface-locale=en]) .studio-world .site-nav a {white-space:normal;text-align:center;overflow-wrap:anywhere;}
+html[data-interface-locale=ar] .studio-world [lang=ar] {letter-spacing:normal;}
+@media(prefers-reduced-motion:reduce){.studio-sky-layer{transition:none;}}
+
+/* Keep the decoded sky behind content; do not hide fallback before first load. */
+html:not(.studio-sky-ready) .studio-sky {visibility:hidden;}
+html.studio-sky-ready .studio-world .cinematic::before {background:none !important;}
+html.studio-sky-ready .studio-world .cinematic {background:transparent;}
+
+/* Games landing is a fixed one-screen composition. Keep regional controls in
+   the existing details view; the automatic local clock and sky continue everywhere. */
+html[data-hub-view="home"] .local-environment { display: none; }
