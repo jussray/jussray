@@ -1,3 +1,27 @@
+## 2026-11-15 — Standing rule: Claude reviews when Codex stops (Juss: "When ever codex reviews run out you begin reviewing where it left out automatically implement")
+
+- RULE: written into CLAUDE.md "Working with Juss". It changes no merge gate.
+- OBSERVED: the Codex usage limit hit #74 (2026-11-09) and #76 (2026-11-10). Search also matches #67 and #77. Codex never ran on #75 or #79 (#79 is a draft). Codex's last finished review was #78 @37f9251 (2026-11-12).
+- RESULTS (local proof; provider CI on the new heads not yet read back):
+  - #67 → `6419bc7`: the release proof now fails when a `.agents/skills` export drifts from `skills/juss-authored`. Codex-only files are allowed. Tests 6/6; the real repo passes; a deliberate edit fails. Not fixed (low): the config check is self-referential, the dependency check is existence-only, a regex CSS test, and `.claude/CLAUDE.md` is not in the push paths.
+  - #74: no defects; gate and provider tests 48/48. #74 and #77 both append to the end of STATE.md, so whichever merges second needs a one-file conflict fix.
+  - #75 → `ac8c125` (rebased on `f7d63c8`): pages with `#ambience-toggle` (the Opportunity Engine) no longer get a second floating soundscape. The test that locked the duplicate in now asserts against it. truth-decay no longer claims `/TRUTHMODE`; SHA256SUMS updated. verify-site all pass; INVENTORY_OK. Open (PLAUSIBLE): iOS `ctx.resume()` hang or `busy` latch in `ambience.mjs:113-123`.
+  - #76: NOT pushed. Head `a696ac4` carries Juss's `/approve`, and a push would void it. Findings for Juss:
+    - CONFIRMED: Game Hub nav marks Products as `aria-current` and has no Games self-link (`site/games/index.html:603,682`).
+    - Truth copy: "Earn" in the lead with nothing earnable live (`:616`); an always-on unread dot on Notifications, which is "coming soon".
+    - Cosmetic: 3 featured tiles lack `noreferrer`.
+  - #77: docs only; StoryEngine is public, so the content is allowed. Clean merge into main.
+  - #79 → `48e2b64`:
+    - JSON shape is validated before cards are replaced, so a malformed payload keeps the snapshot.
+    - The overlay Source link renders only for an `owner/repo` slug.
+    - site-proof push paths now include `portfolio-snapshot.mjs`.
+    - Snapshot check passes; verify-site 446 ok, including no-JS and outage.
+  - "Cont" round:
+    - #67 → `1abedad`: the release proof now parses imports. A non-stdlib import that doesn't resolve to a shipped sibling fails it, and so does a relative import. The conformance push also triggers on `.claude/CLAUDE.md`. Tests 7/7; a deliberate `import nope` fails.
+    - #75 head is now `05e1739` (another Claude session, on top of my `ac8c125`). It adds `docs/rulesets/main-contract.json`. Reviewed: it matches the CLAUDE.md native contract (main only, 0 approvals, 4 strict checks with Actions integration 15368, thread resolution, no force push or deletion, no bypass). No defects.
+    - Live Production ruleset 26428639 still has bypass actors and covers main, so `rulesetDecision` fails until Juss deletes it or imports the contract.
+  - CONFLICT FOR JUSS: #75 `f7d63c8` (another Claude session, citing Juss "Begin") makes the founder review a `/approve` comment only, with auto-merge removed. #74 still adds squash/rebase auto-merge counting and the CLAUDE.md "auto-merge is review and merge authority, always" rule. Both cannot merge as they are. Also: a `/approve` comment posted through an agent's user token is just as unattributed as an auto-merge event, so comment-only does not close the hole it cites.
+
 ## 2026-11-18 — PR #75 merged with main again (335de6e)
 
 - `main` gained #84 (she/her), #85, #87 and MANIFEST.md, and PR #75 conflicted again. Juss's auto-merge toggle at 23:54 UTC could not run the gate on a conflicted PR.
