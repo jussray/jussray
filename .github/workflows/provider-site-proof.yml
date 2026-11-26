@@ -6,11 +6,15 @@ on:
       - 'site/**'
       - 'scripts/verify-provider-site.mjs'
       - 'scripts/verify-provider-site.test.mjs'
+      - 'scripts/verify-public-entrances.mjs'
+      - 'scripts/verify-public-entrances.test.mjs'
       - '.github/workflows/provider-site-proof.yml'
   pull_request:
     paths:
       - scripts/verify-provider-site.mjs
       - scripts/verify-provider-site.test.mjs
+      - scripts/verify-public-entrances.mjs
+      - scripts/verify-public-entrances.test.mjs
       - .github/workflows/provider-site-proof.yml
   workflow_dispatch:
 permissions:
@@ -31,6 +35,13 @@ jobs:
           node-version: '24'
       - name: Test independent provider proof guards (offline)
         run: node --test scripts/verify-provider-site.test.mjs
+      - name: Test anonymous public entrance probe (offline)
+        run: node --test scripts/verify-public-entrances.test.mjs
+      # Only main runs a public anonymous GET; PRs stay offline.
+      # This checks transport/challenge visibility, not application functionality.
+      - name: Verify anonymous public homepage access (read-only)
+        if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
+        run: node scripts/verify-public-entrances.mjs --live
       # Main push and explicit main dispatch validate public readback, NOT full
       # release or deployed-SHA attestation. Pull request jobs test source guards only.
       - name: Reject production jobs outside main
