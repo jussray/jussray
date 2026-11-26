@@ -88,10 +88,35 @@ test('a missing or misconfigured native GitHub ruleset blocks release regardless
   assert.equal(rulesetDecision([enforcedRule]).ok,true);
 });
 test('native ruleset readback rejects unlisted or denied admin evidence',async()=>{
-  const fake=async url=>({ok:true,json:async()=>url.endsWith('includes_parents=true')?[{id:123,enforcement:'active',target:'branch'}]:enforcedRule});
+  const fake=async url=>({ok:true,json:async()=>url.includes('includes_parents=true')?[{id:123,enforcement:'active',target:'branch'}]:enforcedRule});
   const data=await getRulesEvidence({repo:'jussray/jussray',token:'fake',request:fake});
   assert.equal(rulesetDecision(data).ok,true);
   await assert.rejects(()=>getRulesEvidence({repo:'jussray/jussray',token:'fake',request:async()=>({ok:false,status:403})}),/HTTP 403/);
+  // Extend the existing readback test rather than duplicate it: inherited ownership and pagination.
+  const seen=[];
+  const inherited={...enforcedRule,id:201,source_type:'Organization',source:'exampleorg'};
+  const request=async url=>{
+    seen.push(url);
+    let payload;
+    if(url.includes('rulesets?')){
+      const page=Number(new URL(url).searchParams.get('page'));
+      payload=page===1?Array.from({length:100},(_,i)=>({
+        id:i+1,source_type:'Repository',target:'branch',enforcement:'evaluate'
+      })):page===2?[{id:201,source_type:'Organization',source:'exampleorg',target:'branch',enforcement:'active'}]:[];
+    } else if(url==='https://api.github.com/orgs/exampleorg/rulesets/201') payload=inherited;
+    else throw Error('Unexpected detail URL '+url);
+    return {ok:true,json:async()=>payload};
+  };
+  const details=await getRulesEvidence({repo:'jussray/jussray',token:'fake',request});
+  assert.equal(details.length,1);
+  assert.equal(details[0].id,201);
+  assert.ok(seen.some(u=>u.includes('page=2')));
+  assert.ok(seen.includes('https://api.github.com/orgs/exampleorg/rulesets/201'));
+  // A parent ruleset disappearing between list and detail must not be silently dropped.
+  const disappearing=async url=>url.includes('rulesets?')
+    ? {ok:true,json:async()=>[{id:201,source_type:'Organization',source:'exampleorg',target:'branch',enforcement:'active'}]}
+    : {ok:false,status:404};
+  await assert.rejects(()=>getRulesEvidence({repo:'jussray/jussray',token:'fake',request:disappearing}),/404|incomplete|disappeared/i);
 });
 test('end-to-end systematic review verifies policy but never founder authorization',async()=>{
   const api=async url=>({ok:true,json:async()=>{
@@ -125,6 +150,15 @@ test('concurrent PR head movement invalidates a previously approved exact-head r
   const env={GITHUB_REPOSITORY:'jussray/jussray',PR_NUMBER:'28',PR_HEAD_SHA:H,GITHUB_TOKEN:'fake'};
   await assert.rejects(()=>runReviewGate(env,api),/changed during evaluation/);
   assert.equal(prReads,2);
+  const wrongBase=async url=>({ok:true,json:async()=>{
+    if(url.includes('/rulesets?'))return [{id:123,target:'branch',enforcement:'active'}];
+    if(url.endsWith('/rulesets/123'))return enforcedRule;
+    if(url.includes('/reviews?'))return [approval('independent')];
+    if(url.includes('/timeline?'))return [];
+    if(url.includes('/actions/runs?'))return {workflow_runs:[]};
+    return {...pr(),base:{ref:'main',repo:{full_name:'other/repo'}}};
+  }});
+  await assert.rejects(()=>runReviewGate(env,wrongBase),/base repository|target repository/i);
 });
 
 test('native approval count 0 is allowed (founder review is enforced by the required check); other counts fail',()=>{
@@ -151,6 +185,13 @@ test('multiple active main rulesets cannot hide an unsupported approval rule',()
     {type:'pull_request',parameters:{required_approving_review_count:3,required_review_thread_resolution:true}}
   ]};
   assert.equal(rulesetDecision([enforcedRule,conflicting]).ok,false);
+  // A split protection must preserve BOTH force-push and deletion prohibitions.
+  const gov={...enforcedRule,rules:enforcedRule.rules.filter(r=>r.type!=='deletion')};
+  const prod={...enforcedRule,id:789,rules:[{type:'deletion'}]};
+  assert.equal(rulesetDecision([gov,prod]).ok,true);
+  assert.equal(rulesetDecision([gov]).ok,false);
+  // A weaker rule in one ruleset does not weaken a stricter approval policy elsewhere.
+  assert.equal(rulesetDecision([gov,{...prod,rules:[{type:'pull_request',parameters:{required_approving_review_count:2,required_review_thread_resolution:true}},{type:'deletion'}]}]).ok,false);
 });
 
 test('missing resolved-conversation requirement is blocked even with required human approval',()=>{
@@ -204,6 +245,7 @@ test('timeline reader keeps app attribution and takes the head push time from it
   const e=await getFounderEvidence({repo:'jussray/jussray',number:9,sha:H,token:'t',request:api});
   assert.deepEqual(e.signals.map(x=>[x.kind,x.viaApp]),[['comment',null],['comment','claude'],['auto_merge_enabled',undefined]]);
   assert.equal(e.headPushedAt,'2026-11-09T12:00:00.000Z');
+  assert.ok(e.unknownEvents.includes('labeled'));
 });
 
 test('squash and rebase auto-merge events count as enabling auto-merge (observed on PR #74)',async()=>{
@@ -214,6 +256,13 @@ test('squash and rebase auto-merge events count as enabling auto-merge (observed
   const e=await getFounderEvidence({repo:'jussray/jussray',number:74,sha:H,token:'t',request:api});
   assert.deepEqual(e.signals.map(x=>x.kind),['auto_merge_enabled','auto_merge_enabled']);
   assert.equal(founderDecision({...e,expectedHead:H}).via,'founder-auto-merge');
+  const disabled=async url=>({ok:true,json:async()=>url.includes('/timeline?')?[
+    {event:'AUTO_SQUASH_ENABLED',actor:{login:'jussray'},performed_via_github_app:null,created_at:'2026-11-09T12:05:00Z'},
+    {event:'AUTO_REBASE_DISABLED',actor:{login:'jussray'},performed_via_github_app:null,created_at:'2026-11-09T12:06:00Z'},
+  ]:{workflow_runs:[{created_at:PUSH}]}});
+  const withdrawn=await getFounderEvidence({repo:'jussray/jussray',number:74,sha:H,token:'t',request:disabled});
+  assert.deepEqual(withdrawn.signals.map(x=>x.kind),['auto_merge_enabled','auto_merge_disabled']);
+  assert.equal(founderDecision({...withdrawn,expectedHead:H}).ok,false);
 });
 
 // docs/rulesets/main-contract.json is the importable ruleset that matches CLAUDE.md's
@@ -245,4 +294,29 @@ test('a draft PR reports its true reason, not a false mid-run change, and still 
       return true;
     });
   }
+});
+
+// Two-layer delegation: numeric App ID below is a test fixture, never a production identity.
+const delegatedFixtureApp=123456;
+const delegatedSecurity=()=>({"id":123,"name":"Main contract","target":"branch","enforcement":"active","conditions":{"ref_name":{"include":["~DEFAULT_BRANCH"],"exclude":[]}},"bypass_actors":[],"rules":[{"type":"deletion"},{"type":"non_fast_forward"},{"type":"pull_request","parameters":{"required_approving_review_count":0,"require_code_owner_review":false,"require_last_push_approval":false,"dismiss_stale_reviews_on_push":true,"required_review_thread_resolution":true,"allowed_merge_methods":["merge","squash","rebase"]}},{"type":"required_status_checks","parameters":{"strict_required_status_checks_policy":true,"required_status_checks":[{"context":"Independent Review Evidence","integration_id":15368},{"context":"Review Gate Unit Tests","integration_id":15368},{"context":"Juss & Co Site Browser Proof","integration_id":15368},{"context":"Repo Reality / exact-head","integration_id":15368}]}}]});
+const delegatedAuthority=()=>({"id":456,"name":"Main Authority Contract","target":"branch","enforcement":"active","conditions":{"ref_name":{"include":["~DEFAULT_BRANCH"],"exclude":[]}},"bypass_actors":[{"actor_type":"User","actor_id":286642846,"bypass_mode":"pull_request"},{"actor_type":"Integration","actor_id":123456,"bypass_mode":"pull_request"}],"rules":[{"type":"pull_request","parameters":{"required_approving_review_count":0,"require_code_owner_review":false,"require_last_push_approval":false,"dismiss_stale_reviews_on_push":true,"required_review_thread_resolution":true,"allowed_merge_methods":["squash"]}}]});
+test('isolated founder and FCR PR-only authority preserves independent mandatory checks',()=>{
+  assert.equal(rulesetDecision([delegatedSecurity(),delegatedAuthority()],{fcrAppId:delegatedFixtureApp}).ok,true);
+  assert.equal(rulesetDecision([delegatedSecurity(),delegatedAuthority()]).ok,false);
+  assert.equal(rulesetDecision([delegatedAuthority()],{fcrAppId:delegatedFixtureApp}).ok,false);
+  assert.equal(rulesetDecision([delegatedSecurity()]).ok,true);
+});
+test('delegation rejects unknown actors, always bypass and critical rules in the delegated layer',()=>{
+  for(const change of [
+    a=>{a.bypass_actors[1].actor_id++;},
+    a=>{a.bypass_actors[1].bypass_mode='always';},
+    a=>{a.bypass_actors.push({actor_type:'RepositoryRole',actor_id:5,bypass_mode:'pull_request'});},
+    a=>{a.rules.push({type:'deletion'});},
+  ]){const a=delegatedAuthority();change(a);assert.equal(rulesetDecision([delegatedSecurity(),a],{fcrAppId:delegatedFixtureApp}).ok,false);}
+});
+test('delegated authority cannot count checks from an untrusted producer or skip thread resolution',()=>{
+  const s=delegatedSecurity();s.rules[3].parameters.required_status_checks[0].integration_id=1;
+  assert.equal(rulesetDecision([s,delegatedAuthority()],{fcrAppId:delegatedFixtureApp}).ok,false);
+  const t=delegatedSecurity();t.rules[2].parameters.required_review_thread_resolution=false;
+  assert.equal(rulesetDecision([t,delegatedAuthority()],{fcrAppId:delegatedFixtureApp}).ok,false);
 });
