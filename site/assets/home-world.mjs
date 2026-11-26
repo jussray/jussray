@@ -3,17 +3,7 @@
 const $ = (s) => document.querySelector(s);
 const root = document.documentElement;
 
-const ATMOS = ['dawn', 'day', 'sunset', 'night'];
-const NAMES = { dawn: 'Dawn', day: 'Daylight', sunset: 'Sunset', night: 'Night' };
-// Opens on Sunset (founder v3 mockups, 2026-11-10); tapping cycles dawn / day / sunset / night.
-let atmo = 'sunset';
-function setAtmo(next) {
-  atmo = next;
-  root.dataset.tod = next;
-  const name = $('#atmoName'); if (name) name.textContent = NAMES[next];
-}
-setAtmo(atmo);
-$('#atmo')?.addEventListener('click', () => setAtmo(ATMOS[(ATMOS.indexOf(atmo) + 1) % ATMOS.length]));
+// Time-of-day and the temporary preview are owned by atmosphere.mjs.
 // The date window under the atmosphere is the live meteorological season (Dec–Feb, Mar–May, Jun–Aug, Sep–Nov).
 { const d = new Date(), m = d.getMonth();
   const sm = m === 11 ? 11 : m < 2 ? 11 : m - (m + 1) % 3;
