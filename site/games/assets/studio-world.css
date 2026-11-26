@@ -205,23 +205,74 @@ html[data-hub-view="home"] .local-environment { display: none; }
 }
 
 /* Sunset light overlays follow the existing lotus and lake. Reduced motion retains the static core. */
-.home-world.studio-world .studio-sky-layer.sky-sunset::after {
+.home-world.studio-world .studio-sky-layer:is(.sky-dawn,.sky-sunset)::after {
   content:""; position:absolute; pointer-events:none; left:50%; top:47%;
   width:clamp(86px,max(9.5vw,16.8svh),190px); aspect-ratio:1;
   transform:translate(-50%,-50%); border-radius:50%;
   background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Cdefs%3E%3CradialGradient%20id%3D%22o%22%3E%3Cstop%20stop-color%3D%22%234420a4%22%20stop-opacity%3D%22.15%22%2F%3E%3Cstop%20offset%3D%22.8%22%20stop-color%3D%22%234044cf%22%20stop-opacity%3D%22.28%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23b9a3ff%22%20stop-opacity%3D%22.6%22%2F%3E%3C%2FradialGradient%3E%3ClinearGradient%20id%3D%22m%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%23fff0b1%22%2F%3E%3Cstop%20offset%3D%22.48%22%20stop-color%3D%22%23f8a4ff%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%238edfff%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2247%22%20fill%3D%22url(%23o)%22%20stroke%3D%22url(%23m)%22%20stroke-width%3D%221.5%22%2F%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22url(%23m)%22%20stroke-width%3D%22.8%22%3E%3Cellipse%20cx%3D%2250%22%20cy%3D%2250%22%20rx%3D%2226%22%20ry%3D%2247%22%2F%3E%3Cellipse%20cx%3D%2250%22%20cy%3D%2250%22%20rx%3D%2247%22%20ry%3D%2223%22%2F%3E%3Cellipse%20cx%3D%2250%22%20cy%3D%2250%22%20rx%3D%2219%22%20ry%3D%2247%22%20transform%3D%22rotate(55%2050%2050)%22%2F%3E%3Cellipse%20cx%3D%2250%22%20cy%3D%2250%22%20rx%3D%2219%22%20ry%3D%2247%22%20transform%3D%22rotate(-55%2050%2050)%22%2F%3E%3Cpath%20d%3D%22M50%203%2083%2021%2096%2050%2083%2079%2050%2097%2017%2079%204%2050%2017%2021Z%20M50%203%2017%2079%2096%2050%2017%2021%2050%2097%2083%2021%204%2050%2083%2079Z%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23fff5d5%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%223%22%20r%3D%222%22%2F%3E%3Ccircle%20cx%3D%2283%22%20cy%3D%2221%22%20r%3D%222%22%2F%3E%3Ccircle%20cx%3D%2296%22%20cy%3D%2250%22%20r%3D%222%22%2F%3E%3Ccircle%20cx%3D%2283%22%20cy%3D%2279%22%20r%3D%222%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2297%22%20r%3D%222%22%2F%3E%3Ccircle%20cx%3D%2217%22%20cy%3D%2279%22%20r%3D%222%22%2F%3E%3Ccircle%20cx%3D%224%22%20cy%3D%2250%22%20r%3D%222%22%2F%3E%3Ccircle%20cx%3D%2217%22%20cy%3D%2221%22%20r%3D%222%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%222%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") center / contain no-repeat;
   filter:drop-shadow(0 0 7px #b080ff) drop-shadow(0 0 13px #f8b6ff);
 }
-.home-world.studio-world .studio-sky-layer.sky-sunset::before {
+.home-world.studio-world .studio-sky-layer:is(.sky-dawn,.sky-sunset)::before {
   content:""; position:absolute; inset:60% 18% 0; pointer-events:none;
   background:repeating-linear-gradient(0deg,transparent 0 8px,#ffd29c36 9px,transparent 10px 15px);
   mask-image:radial-gradient(ellipse at 50% 8%,#0009,transparent 65%);
   opacity:.48; mix-blend-mode:screen;
 }
 @media(prefers-reduced-motion:no-preference){
-  .home-world.studio-world .studio-sky-layer.sky-sunset::after {animation:creation-core-breathe 6s ease-in-out infinite;}
-  .home-world.studio-world .studio-sky-layer.sky-sunset::before {animation:creation-water-light 8s linear infinite;}
+  .home-world.studio-world .studio-sky-layer:is(.sky-dawn,.sky-sunset)::after {animation:creation-core-breathe 6s ease-in-out infinite;}
+  .home-world.studio-world .studio-sky-layer:is(.sky-dawn,.sky-sunset)::before {animation:creation-water-light 8s linear infinite;}
 }
 @keyframes creation-core-breathe {0%,100%{transform:translate(-50%,-50%) scale(1);filter:drop-shadow(0 0 7px #b080ff) drop-shadow(0 0 13px #f8b6ff);}50%{transform:translate(-50%,-53%) scale(1.035);filter:drop-shadow(0 0 12px #b080ff) drop-shadow(0 0 20px #ffe0a1);}}
 @keyframes creation-water-light {from{background-position:0 0;}to{background-position:0 30px;}}
-@media(max-width:760px){.home-world.studio-world .studio-sky-layer.sky-sunset::after {width:clamp(70px,22vw,112px);}}
+@media(max-width:760px){.home-world.studio-world .studio-sky-layer:is(.sky-dawn,.sky-sunset)::after {width:clamp(70px,22vw,112px);}}
+
+/* Source-plate motion: the masked copies sample the same decoded artwork.
+   Keep the architecture fixed; only local foliage and water textures move. */
+.home-world.studio-world .studio-sky-layer .scene-motion-plate {
+  position:absolute; left:50%; top:0; width:max(100vw,178svh); aspect-ratio:1648/928;
+  transform:translateX(-50%); background-image:inherit; background-size:0 0;
+  background-repeat:no-repeat; pointer-events:none;
+}
+.home-world.studio-world .scene-motion {
+  position:absolute; inset:0; background-image:inherit; background-size:100% 100%;
+  background-repeat:no-repeat; pointer-events:none; animation-play-state:paused;
+}
+.home-world.studio-world .scene-blossoms {
+  mask-image:radial-gradient(ellipse 28% 22% at 17% 7%,#000 10%,transparent 91%);
+  transform-origin:4% 4%;
+}
+.home-world.studio-world .scene-falls {
+  mask-image:radial-gradient(ellipse 5% 9% at 74% 45%,#000 15%,transparent 98%),radial-gradient(ellipse 3% 7% at 69.5% 46%,#000 15%,transparent 98%);
+}
+.home-world.studio-world :is(.sky-dawn,.sky-sunset) .scene-falls {
+  mask-image:radial-gradient(ellipse 4% 12% at 82% 50%,#000 10%,transparent 98%),radial-gradient(ellipse 4% 7% at 76% 55%,#000 15%,transparent 98%),radial-gradient(ellipse 5% 5% at 87% 63%,#000 10%,transparent 98%);
+}
+.home-world.studio-world .scene-water {
+  mask-image:radial-gradient(ellipse 24% 12% at 50% 65%,#000 8%,transparent 96%),radial-gradient(ellipse 25% 10% at 50% 95%,#000 5%,transparent 98%);
+}
+.home-world.studio-world .sky-night .scene-water {mask-image:radial-gradient(ellipse 25% 28% at 50% 79%,#000 8%,transparent 98%);}
+.home-world.studio-world :is(.sky-dawn,.sky-sunset) .scene-water {mask-image:radial-gradient(ellipse 25% 18% at 50% 82%,#000 10%,transparent 98%);}
+.home-world.studio-world .studio-sky-layer:is(.sky-dawn,.sky-sunset)::after {top:calc(max(100vw,178svh) * .252);}
+.home-world.studio-world .studio-sky-layer:is(.sky-day,.sky-night)::after {
+  content:"";position:absolute;left:50%;top:calc(max(100vw,178svh) * .262);
+  width:clamp(64px,max(8vw,14svh),150px);aspect-ratio:1;transform:translate(-50%,-50%);
+  border-radius:50%;background:radial-gradient(circle,#ffdcff18,#b29bff28 42%,transparent 72%);
+  pointer-events:none;
+}
+@media(prefers-reduced-motion:no-preference){
+  .home-world.studio-world .scene-blossoms {animation:scene-canopy-sway 9s ease-in-out infinite alternate paused;}
+  .home-world.studio-world .scene-falls {animation:scene-falls-flow 1.4s linear infinite paused;}
+  .home-world.studio-world .scene-water {animation:scene-water-ripple 4s ease-in-out infinite alternate paused;}
+  .home-world.studio-world .studio-sky-layer:is(.sky-day,.sky-night)::after {animation:scene-core-light 5s ease-in-out infinite paused;}
+  html[data-rendered-tod=dawn] .home-world .sky-dawn .scene-motion,
+  html[data-rendered-tod=day] .home-world .sky-day .scene-motion,
+  html[data-rendered-tod=sunset] .home-world .sky-sunset .scene-motion,
+  html[data-rendered-tod=night] .home-world .sky-night .scene-motion,
+  html[data-rendered-tod=day] .home-world .sky-day::after,
+  html[data-rendered-tod=night] .home-world .sky-night::after {animation-play-state:running;}
+}
+@keyframes scene-canopy-sway {from{transform:rotate(-.18deg);}to{transform:rotate(.22deg);}}
+@keyframes scene-falls-flow {0%{transform:translateY(-2px);opacity:.38;}50%{transform:translateY(2px);opacity:.85;}100%{transform:translateY(5px);opacity:.38;}}
+@keyframes scene-water-ripple {from{transform:translateX(-2px) scaleY(1.002);opacity:.7;}to{transform:translateX(2px) scaleY(.998);opacity:.9;}}
+@keyframes scene-core-light {0%,100%{opacity:.45;}50%{opacity:1;}}
+@media(prefers-reduced-motion:reduce){.home-world.studio-world .scene-motion-plate {display:none;}}
