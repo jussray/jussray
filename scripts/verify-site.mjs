@@ -67,20 +67,20 @@ for (const vp of [{n:'desktop',w:1440,h:900},{n:'mobile',w:390,h:844}]) {
   for (const [href,label] of [['/products.html','Our Products'],['/work.html','Our Work']]) {
     const link=page.locator(`main a[href="${href}"]`).filter({has:page.locator('strong',{hasText:new RegExp('^'+label+'$')})});
     say((await link.count())===1,`${vp.n}: ${label} destination remains in the ecosystem panel`);
+    const menu=page.locator('#site-navigation');
+    const button=page.locator('.menu-toggle');
+    say(!(await link.isVisible()),`${vp.n}: duplicate side panel stays out of the reference composition`);
     if (vp.n==='mobile') {
-      const menu=page.locator('#site-navigation');
-      const button=page.locator('.menu-toggle');
-      say(!(await menu.isVisible()) && !(await link.isVisible()),`mobile: ${label} uses collapsed primary navigation rather than the desktop panel`);
+      say(!(await menu.isVisible()),'mobile: primary navigation starts collapsed');
       await button.click();
-      const mobileLink=menu.locator(`a[href="${href}"]`);
-      say(await button.getAttribute('aria-expanded')==='true' && await mobileLink.isVisible(),`mobile: ${label} is visible after opening the menu`);
-      const destination=new URL(href,url).href;
-      await Promise.all([page.waitForURL(destination),mobileLink.click()]);
-      say(page.url()===destination,`mobile: ${label} navigates to the correct page`);
-      await page.goto(url,{waitUntil:'load'});
-    } else {
-      say(await link.isVisible(),`desktop: ${label} remains accessible in the homepage ecosystem panel`);
+      say(await button.getAttribute('aria-expanded')==='true','mobile: navigation opens');
     }
+    const navLink=menu.locator(`a[href="${href}"]`);
+    say(await navLink.isVisible(),`${vp.n}: ${label} remains visible in primary navigation`);
+    const destination=new URL(href,url).href;
+    await Promise.all([page.waitForURL(destination),navLink.click()]);
+    say(page.url()===destination,`${vp.n}: ${label} navigates to its exact destination`);
+    await page.goto(url,{waitUntil:'load'});
   }
   say((await page.locator('.home-bottom-nav').count())===0,`${vp.n}: bottom navigation stays removed`);
   say((await page.locator('.site-header a[href="/portfolio.html"]').count())===1,`${vp.n}: portfolio has a proper page route`);
@@ -111,15 +111,30 @@ for (const vp of [{n:'desktop',w:1440,h:900},{n:'mobile',w:390,h:844}]) {
   // Founder mockup world stage (2026-11-08): crown, headline, ecosystem band from worlds.json, ambience controls.
   await page.waitForFunction(()=>document.querySelectorAll('#ecoTrack .eco-tile').length>0,null,{timeout:5000});
   const worldsData=JSON.parse(readFileSync(join(ROOT,'data/worlds.json'),'utf8')).worlds;
-  say((await page.locator('#ecoTrack .eco-tile').count())===worldsData.length,`${vp.n}: Our Ecosystem band renders every world from worlds.json`);
-  say(JSON.stringify(await page.locator('#ecoTrack .eco-tile small').allTextContents())===JSON.stringify(worldsData.map(w=>w.label)),`${vp.n}: band statuses equal founder-declared labels`);
-  say((await page.locator('#ecoTrack .eco-tile a').evaluateAll(a=>a.map(x=>x.getAttribute('href')))).every(h=>worldsData.some(w=>w.link?.url===h&&(w.st!=='soon'||w.name==="Se'kret Bip"))),`${vp.n}: band links only real destinations with live front doors`);
+  const truth=portfolio.projects.find(p=>p.slug==='truth-weaver'&&p.name==='Truth Weaver Counsel');
+  const expectedWorlds=[...worldsData,...(truth&&!worldsData.some(w=>w.name===truth.name)?[{name:truth.name,label:truth.publicLabel,st:'portfolio',link:{url:'/portfolio.html'}}]:[])];
+  const names=await page.locator('#ecoTrack .eco-tile').evaluateAll(tiles=>tiles.map(e=>e.dataset.name));
+  const referenceOrder=['Founder Control Room','Chief AI','PromptOS',"Se'kret Bip",'SolContinuity','Think Tank','Truth Weaver Counsel','SleepWealth Agent','Juss Beautiful Hair'];
+  say(JSON.stringify(names.slice(0,9))===JSON.stringify(referenceOrder),`${vp.n}: first nine projects follow the reference composition`);
+  say(names.length===expectedWorlds.length&&new Set(names).size===names.length&&expectedWorlds.every(w=>names.includes(w.name)),`${vp.n}: every canonical world remains present, with the portfolio-derived Truth Weaver tile`);
+  const labels=await page.locator('#ecoTrack .eco-tile small').allTextContents();
+  say(names.every((n,i)=>labels[i]===expectedWorlds.find(w=>w.name===n)?.label),`${vp.n}: band statuses equal founder-declared labels`);
+  const links=await page.locator('#ecoTrack .eco-tile a').evaluateAll(a=>a.map(x=>[x.closest('.eco-tile').dataset.name,x.getAttribute('href')]));
+  say(links.every(([n,h])=>expectedWorlds.some(w=>w.name===n&&w.link?.url===h&&(w.st!=='soon'||w.name==="Se'kret Bip"))),`${vp.n}: all destinations retain source identity; portfolio-only Truth Weaver does not claim a live front door`);
   say((await page.locator('#ecoTrack a[href*="storyengine" i]').count())===0 && (await page.locator('#ecoTrack a[href="https://sekretbip.net"]').count())===1,`${vp.n}: StoryEngine stays unlinked; Se'kret Bip links to its founder-confirmed live front door`);
   say(/Creative Technology/.test(await page.locator('#landing-title').innerText())&&/AI-powered product creation/i.test(await page.locator('.subline').innerText()),`${vp.n}: mockup headline and subline render`);
   const bandBox=await page.locator('.eco-band').boundingBox();
   say(bandBox&&bandBox.y+bandBox.height<=vp.h+1,`${vp.n}: Our Ecosystem band is fully visible on the first screen`);
   const perView=await page.evaluate(()=>{const t=document.querySelector('#ecoTrack');const r=t.getBoundingClientRect();return [...t.querySelectorAll('.eco-tile')].filter(e=>{const b=e.getBoundingClientRect();return b.left>=r.left-1&&b.right<=r.right+1}).length});
-  say(vp.n==='mobile'?perView===3:perView>=6,`${vp.n}: ${vp.n==='mobile'?'three':'six or more'} ecosystem tiles per view (${perView})`);
+  say(vp.n==='mobile'?perView===3:perView===9,`${vp.n}: ${vp.n==='mobile'?'three':'nine'} ecosystem tiles per view (${perView})`);
+  if(vp.n==='desktop') {
+    const quote=await page.locator('.founder-quote').boundingBox();
+    const headline=await page.locator('.stage-center').boundingBox();
+    const controls=await page.locator('.stage-controls').boundingBox();
+    say(quote&&headline&&quote.x>=headline.x+headline.width,`desktop: founder quote is on the right of the centered headline`);
+    say(bandBox&&controls&&controls.x+controls.width<=bandBox.x+1,`desktop: ambience is left of the ecosystem platform`);
+    say(bandBox&&Math.abs(bandBox.x+bandBox.width/2-vp.w/2)<=2,`desktop: ecosystem platform centered`);
+  }
   await page.click('#sound');
   say((await page.getAttribute('#sound','aria-checked'))==='true',`${vp.n}: ambient sound toggles on a user gesture`);
   say((await page.textContent('#atmoName'))===await page.evaluate(() => { const h=new Date().getHours(); return h>=5&&h<8?'Dawn':h>=8&&h<17?'Daylight':h>=17&&h<20?'Sunset':'Night'; })&&/\w{3} \d+ – \w{3} \d+/.test(await page.textContent('#seasonWindow')),`${vp.n}: opens on visitor local time with the live season window`);
@@ -610,6 +625,26 @@ for (const vp of [{ n: 'ambience-desktop', w: 1440, h: 900 }, { n: 'ambience-mob
   st = await engine(); const tod = await page.evaluate(() => document.documentElement.dataset.tod);
   say((await page.getAttribute('#sound', 'aria-checked')) === 'true' && st.on && st.scene === tod, `${vp.n}: homepage sound stays on and crossfades as the atmosphere cycles (${st.scene}/${tod})`);
   say(errors.length === 0, `${vp.n}: no console errors${errors.length ? ' — ' + errors.join(' | ') : ''}`);
+  await ctx.close();
+}
+
+// Sunset-only Creation Core light layer and motion accessibility.
+{
+  const ctx=await browser.newContext({timezoneId:'America/New_York',viewport:{width:1440,height:900},reducedMotion:'no-preference'});
+  const page=await ctx.newPage();
+  await page.clock.install({time:new Date('2026-11-25T23:00:00Z')});
+  await page.goto(url,{waitUntil:'load'});
+  await page.waitForFunction(()=>document.documentElement.dataset.renderedTod==='sunset');
+  const layer=page.locator('.studio-sky-layer.sky-sunset');
+  say(await layer.evaluate(el=>{const s=getComputedStyle(el,'::after');return s.backgroundImage.includes('data:image/svg+xml')&&s.animationName==='creation-core-breathe'&&s.pointerEvents==='none'&&parseFloat(s.width)>80;}),'sunset: decorative Creation Core mesh animates');
+  say(await layer.evaluate(el=>getComputedStyle(el,'::before').animationName==='creation-water-light'),'sunset: water light moves independently');
+  say(await layer.locator('.scene-motion').count()===3,'sunset: three source-plate motion regions');
+  say(await layer.locator('.scene-falls').evaluate(e=>getComputedStyle(e).animationName==='scene-falls-flow'&&getComputedStyle(e).animationPlayState==='running'),'sunset: waterfall texture moves');
+  say(await layer.locator('.scene-blossoms').evaluate(e=>getComputedStyle(e).animationName==='scene-canopy-sway'),'sunset: canopy sways independently');
+  say(await page.locator('.sky-night .scene-water').evaluate(e=>getComputedStyle(e).animationPlayState==='paused'),'inactive scene effects are paused');
+  await page.emulateMedia({reducedMotion:'reduce'});
+  say(!(await layer.locator('.scene-motion-plate').isVisible()),'reduced motion disables texture displacement');
+  say(await layer.evaluate(el=>getComputedStyle(el,'::after').animationName==='none'&&getComputedStyle(el,'::after').backgroundImage.includes('data:image/svg+xml')&&getComputedStyle(el,'::before').animationName==='none'),'sunset: reduced motion retains static core without animation');
   await ctx.close();
 }
 
