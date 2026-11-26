@@ -194,7 +194,17 @@ function startLocalTime() {
   if (document.body.classList.contains('studio-world')) {
     const host = document.querySelector('#living-world-scene, .ws-scene, .scene, .page-scene') || document.body;
     const sky = document.createElement('div'); sky.className='studio-sky'; sky.setAttribute('aria-hidden','true');
-    for(const phase of phases){const layer=document.createElement('div');layer.className='studio-sky-layer sky-'+phase;sky.append(layer);}
+    for(const phase of phases){
+      const layer=document.createElement('div');layer.className='studio-sky-layer sky-'+phase;
+      if(document.body.classList.contains('home-world')){
+        const motion=document.createElement('div');motion.className='scene-motion-plate';
+        for(const kind of ['blossoms','falls','water']){
+          const part=document.createElement('div');part.className='scene-motion scene-'+kind;motion.append(part);
+        }
+        layer.append(motion);
+      }
+      sky.append(layer);
+    }
     host.prepend(sky); host.classList.add('studio-sky-host');
     // Keep the last decoded painting until the latest requested one is ready.
     // Load the active phase first; prefetch the remaining three in the background.
