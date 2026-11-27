@@ -1,3 +1,27 @@
+## 2026-11-15 — Standing rule: Claude reviews when Codex stops (Juss: "When ever codex reviews run out you begin reviewing where it left out automatically implement")
+
+- RULE: written into CLAUDE.md "Working with Juss". It changes no merge gate.
+- OBSERVED: the Codex usage limit hit #74 (2026-11-09) and #76 (2026-11-10). Search also matches #67 and #77. Codex never ran on #75 or #79 (#79 is a draft). Codex's last finished review was #78 @37f9251 (2026-11-12).
+- RESULTS (local proof; provider CI on the new heads not yet read back):
+  - #67 → `6419bc7`: the release proof now fails when a `.agents/skills` export drifts from `skills/juss-authored`. Codex-only files are allowed. Tests 6/6; the real repo passes; a deliberate edit fails. Not fixed (low): the config check is self-referential, the dependency check is existence-only, a regex CSS test, and `.claude/CLAUDE.md` is not in the push paths.
+  - #74: no defects; gate and provider tests 48/48. #74 and #77 both append to the end of STATE.md, so whichever merges second needs a one-file conflict fix.
+  - #75 → `ac8c125` (rebased on `f7d63c8`): pages with `#ambience-toggle` (the Opportunity Engine) no longer get a second floating soundscape. The test that locked the duplicate in now asserts against it. truth-decay no longer claims `/TRUTHMODE`; SHA256SUMS updated. verify-site all pass; INVENTORY_OK. Open (PLAUSIBLE): iOS `ctx.resume()` hang or `busy` latch in `ambience.mjs:113-123`.
+  - #76: NOT pushed. Head `a696ac4` carries Juss's `/approve`, and a push would void it. Findings for Juss:
+    - CONFIRMED: Game Hub nav marks Products as `aria-current` and has no Games self-link (`site/games/index.html:603,682`).
+    - Truth copy: "Earn" in the lead with nothing earnable live (`:616`); an always-on unread dot on Notifications, which is "coming soon".
+    - Cosmetic: 3 featured tiles lack `noreferrer`.
+  - #77: docs only; StoryEngine is public, so the content is allowed. Clean merge into main.
+  - #79 → `48e2b64`:
+    - JSON shape is validated before cards are replaced, so a malformed payload keeps the snapshot.
+    - The overlay Source link renders only for an `owner/repo` slug.
+    - site-proof push paths now include `portfolio-snapshot.mjs`.
+    - Snapshot check passes; verify-site 446 ok, including no-JS and outage.
+  - "Cont" round:
+    - #67 → `1abedad`: the release proof now parses imports. A non-stdlib import that doesn't resolve to a shipped sibling fails it, and so does a relative import. The conformance push also triggers on `.claude/CLAUDE.md`. Tests 7/7; a deliberate `import nope` fails.
+    - #75 head is now `05e1739` (another Claude session, on top of my `ac8c125`). It adds `docs/rulesets/main-contract.json`. Reviewed: it matches the CLAUDE.md native contract (main only, 0 approvals, 4 strict checks with Actions integration 15368, thread resolution, no force push or deletion, no bypass). No defects.
+    - Live Production ruleset 26428639 still has bypass actors and covers main, so `rulesetDecision` fails until Juss deletes it or imports the contract.
+  - CONFLICT FOR JUSS: #75 `f7d63c8` (another Claude session, citing Juss "Begin") makes the founder review a `/approve` comment only, with auto-merge removed. #74 still adds squash/rebase auto-merge counting and the CLAUDE.md "auto-merge is review and merge authority, always" rule. Both cannot merge as they are. Also: a `/approve` comment posted through an agent's user token is just as unattributed as an auto-merge event, so comment-only does not close the hole it cites.
+
 ## 2026-11-18 — PR #75 merged with main again (335de6e)
 
 - `main` gained #84 (she/her), #85, #87 and MANIFEST.md, and PR #75 conflicted again. Juss's auto-merge toggle at 23:54 UTC could not run the gate on a conflicted PR.
@@ -910,9 +934,39 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
 - jussray #88 ready for review. Fixed CI: every proof context gets an SYNC-board fixture (`e3e5895`); PR body has Repo Reality sections. 3/4 required checks green; Independent Review Evidence needs Juss's UI action on the final head.
 - 2026-11-21: Founder decision "Min 2-4 for live sync" = board by room size (2, 3, 4+), all 2+ human games eligible, gameplay unchanged (rooms 2-8). SYNC PR #37 (API v2 `boards`); Hub #88 reads `boards`. SYNC look request: Live/Chat source images exist only in a ChatGPT chat (manifest); none in sync-party-game, chat-sync, sync-playtest, loveable-sync. Lovable hero present and marked matched. Waiting on Juss: images or "approve successor visuals".
 
+## 2026-11-11 — StoryEngine "Production Proof CLEARED" alert re-observed: green is a skip, not runtime proof
+- Alert claimed: StoryEngine Production Proof green on `main` b2397272a37e after failing since Oct 29.
+- VERIFIED: `main` = `b2397272a37ed5d987f0b71b2a37dc31c9c84cf5` (Oct 30 merge of PR #152, not a new head). Runs #58–#65 (2026-11-10 23:53–23:58Z) all `success`, all triggered by `railway-app[bot]` via `workflow_run`.
+- VERIFIED (runs #60, #65 job lists): `Authorize production signal` = success; `Verify exact StoryEngine production runtime` = **skipped**. The authorize job wrote `authorized=false` (non-qualifying or unauthorized signal), so no runtime check ran.
+- Meaning: workflow-level green ≠ production verified. No exact-runtime proof exists for this head from these runs.
+- jussray action: none. `worlds.json` StoryEngine stays `building` / no public link (founder fields; front door not proven live).
+- Next gate (StoryEngine repo, not here): a run where `verify-production` actually executes and passes; consider failing or labelling the workflow when verify is skipped so alerts can't read a skip as CLEARED.
+- 2026-11-11 ~02:10Z follow-up (Juss: "do both, monitor first"):
+  - Monitor: DEAD END. The "N:NN cycle — full read / ✅ CLEARED" monitor is not in this account's scheduled-task list and no jussray repo contains its code (code search for its phrasing: none). Likely a local Cowork/Slack task. Its rule must become: CLEARED only when a job named `Production verdict: VERIFIED` exists on the run.
+  - StoryEngine: draft PR jussray/StoryEngine#153, branch `claude/storyengine-production-verdict`, head d78f957. Adds an always() `production-verdict` job whose name is the verdict (VERIFIED / NOT VERIFIED / FAILED). No-op stays green per the existing contract. Contract test 25/25 local. Not provable before merge (workflow_run runs from main only). Founder review + merge pending.
+- 2026-11-11 02:03Z: StoryEngine #153 merged by Juss (UI) → StoryEngine main `c7d0fbf`. Merged while 11/18 PR checks were still queued (incl. Node tests, CodeQL, Runtime promotion gates); 7 completed green/skipped. Codex review did not run (usage limit). Post-merge check-in scheduled (trig via send_later, +60 min): main CI on c7d0fbf + first Production Proof run must show a correctly named `Production verdict:` job. Monitor rule still not applied (monitor location unknown).
+- 2026-11-11 ~02:15Z: StoryEngine main `c7d0fbf` post-merge local proof: `python runtime/founder_truth_gate.py` EXIT 0 (capability-adversarial, capability-contract, control-room-federation, runtime-promotion, header-auth all PASSED; evidence artifacts/founder-truth/c7d0fbf….json, local only). `story-engine` `npm test` 471/471 pass. CI on PR head: 8 green/skipped, 10 still queued (runner backlog), 0 red. Verdict job not yet exercised by a production signal; 03:04Z check-in pending.
+- 2026-11-11 ~02:35Z: GitGuardian re-checked on every open jussray PR (#67 #74 #75 #76 #77) and StoryEngine #149/#150/#151/#153: all success; #148 has no GitGuardian run. Founder-reported GitGuardian failure NOT located in PR checks (likely dashboard/incident or a push outside PRs); awaiting PR number or alert screenshot. Red on #67/#74/#75/#76 is Independent Review Evidence (founder /approve), not secrets. StoryEngine Production Proof runs #66–#74 on main (now 1730f31) all queued; verdict job not yet exercised. Truth receipt for c7d0fbf pushed as StoryEngine branch claude/storyengine-truth-receipt-c7d0fbf (ddb861c), no PR.
+- 2026-11-11 03:05Z post-merge check (StoryEngine main 1730f31, includes #153):
+  - #153 PR-head CI finished: all green/skipped, CodeQL neutral. No red from this change.
+  - Verdict job VERIFIED working on real runs: #66–#68 green with job "Production verdict: NOT VERIFIED (no qualifying signal)" (verify skipped). #69–#75 red with "Production verdict: FAILED (authorization)".
+  - #69–#75 root cause (job log run 42945654095): `production signal is stale at authorization time`. Signal max age is 15 min; GitHub runner backlog started authorize ~16 min after the signal (02:23 → 02:39). Pre-existing control in authorize-signal, not caused by #153. No runtime was verified on any run.
+  - Not changed: widening the 15-min freshness window weakens a security control → founder decision. Options: (a) leave it (runs re-fire on next deploy), (b) wider window, (c) re-run on owner trigger.
+- 2026-11-11 ~16:40Z Juss: "1-3 cont 2 b-c then merge 154".
+  - (b) StoryEngine PR #155 (branch claude/storyengine-signal-window-30m, head ef3dc3d = code f039571 + truth receipt): maxSignalAgeMs 15→30 min; contract test pins 30. Local: truth gate 5/5, npm test 488/488. Awaiting CI + founder merge (not authorized for merge yet).
+  - #154 merged by Claude on Juss's word (squash, ~16:41Z) → StoryEngine main 1a4a581. All 14 checks green on ddb861c at merge.
+  - (c) Literal re-run of #69–#75 cannot pass (signals hours old). Path: the #154 merge triggers a fresh Railway deploy signal; check-in at 17:08Z reads the proof run. Fallback: owner-only manual workflow_dispatch of story-engine-production-signal.yml with the deployed release_sha.
+  - Item 3 (CLEARED monitor) still blocked: location unknown.
+- 2026-11-11 ~16:50Z results:
+  - (c) Manual owner signal (Production Signal run 43061215075, release_sha 1730f31, actor jussray) → Production Proof #78: authorize PASS; "Verify deployed Railway release and persistence witness" PASS (production VERIFIED on 1730f31, witness 55c1f977…); "Validate production browser credentials" FAIL: both STORYENGINE_PRODUCTION_PLAYWRIGHT_API_KEY and STORYENGINE_PRODUCTION_SCOPED_API_KEY are empty in the GitHub `production` environment. Verdict job: "Production verdict: FAILED (runtime proof)". Browser Story→MP4 proof never ran. Next gate: Juss adds both secrets.
+  - #76/#77 on main 1a4a581: NOT VERIFIED (no qualifying signal) — non-success/non-main Railway statuses; #154 (JSON only) likely did not redeploy production.
+  - #155 CI: Node tests / verify-guardrails / verify-story-video-engine exit 124 in scripts/ensure-ffmpeg.sh (apt timeout on azure.archive.ubuntu.com), twice incl. one re-run. Not #155's change; main green on 1730f31 at 02:44Z. Comment posted on #155.
+  - Root cause: ensure-ffmpeg.sh rewrites the Azure mirror only in sources files; Ubuntu 26.04 runners use /etc/apt/apt-mirrors.txt. Fix PR opened: StoryEngine #156 (branch claude/ensure-ffmpeg-mirrorlist, 5297c9c).
+- 2026-11-11 17:25Z: StoryEngine #155 head 622ab58 (30-min window + cherry-picked ensure-ffmpeg mirrorlist fix from #156): all 18 checks green/skipped; Node tests 488/488 in CI. Whether the apt fix or an Azure mirror recovery made ffmpeg install pass is UNKNOWN (install lines not in the log tail read). #156 green but its CI never ran the ffmpeg jobs. Waiting on founder: "merge 155", add the two production Playwright secrets.
+
 ## 2026-11-18 — Adaptive Atmosphere (feat/adaptive-atmosphere-20261118)
 - Founder mockup "Adaptive Atmosphere" (seasons, holidays, personal style) → shared `site/assets/atmosphere.mjs`: visitor panel (Adaptive Theme, Preferred Season, Colour Mood, Visual Intensity, Holiday Themes, Reduce Motion, Theme Preview), prefs kept in localStorage only, sanitized on read; Halloween (Oct 31) added beside Christmas lights and New Year's. Replaces the old "visitors cannot choose a season" rule on Juss's word (2026-11-18).
 - Truth limit: no seasonal or holiday scene paintings exist yet; a season changes particles and the mood glow only, and the panel says so. NEXT: one clean scene plate per season + holiday (7), then wire them per `data-season` / `data-holiday`.
 - Proof (local): tests/atmosphere.test.mjs 5/5, node tests 23/23, scripts/verify-site.mjs 468 ok / 0 FAIL, panel open/choose/persist/Esc on / and /games/ at 1672 and 390.
 
-
+- 2026-11-26: Adaptive Atmosphere conflict reconciliation preserves the newer local clock, regional event and sky rendering implementation; visual preferences are browser-local and overlay the clock's seasonal result. Candidate tests and live rendering require exact-head CI.

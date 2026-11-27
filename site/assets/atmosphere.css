@@ -39,3 +39,7 @@
 .atmo-panel :focus-visible{outline:2px solid #ffd25e;outline-offset:2px}
 html[data-motion=reduced] .world-atmosphere{display:none}
 @media (prefers-reduced-motion:reduce){.atmo-row input::after{transition:none}}
+
+/* Manual reduction supplements, never replaces the OS reduced-motion setting. */
+html[data-motion=reduced] .scene-motion{animation:none!important}
+html[data-motion=reduced] .atmo-row input::after{transition:none}
