@@ -67,6 +67,8 @@ jobs:
         run: node --test scripts/verify-provider-site.test.mjs
       - name: Validate company resource links, public PDFs and status honesty
         run: node --test scripts/public-resources.test.mjs
+      - name: Verify The Edit desktop mobile and print PDF in Chromium
+        run: node scripts/verify-the-edit.mjs
       - name: Verify exact-source site and Games locally in Chromium
         run: node scripts/verify-site.mjs
       - name: Verify Game Hub cinematic mobile controls and existing game boundaries
