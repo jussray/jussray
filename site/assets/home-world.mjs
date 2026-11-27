@@ -82,7 +82,7 @@ async function annotatePublicSourceActivity(track, worlds) {
       shown++;
     }
     if(stamp)stamp.textContent=shown
-      ? 'Public code updates: '+shown+' observed · not a release'
+      ? 'Public code records observed: '+shown+' · not a release'
       : 'No public source updates available · product status unchanged';
   }catch {if(stamp)stamp.textContent='Public code check unavailable · product status unchanged';}
 }
