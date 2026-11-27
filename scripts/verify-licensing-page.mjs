@@ -61,10 +61,15 @@ for (const vp of [
   page.on('requestfailed', (r) => errors.push(`Request failed ${r.url()}: ${r.failure()?.errorText}`));
   page.on('pageerror', (e) => errors.push(String(e)));
   page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
-  const home = await page.goto(base, { waitUntil: 'load' });
+  // Allow asynchronous homepage assets and evidence requests to complete before navigation.
+  const [home, evidence] = await Promise.all([
+    page.goto(base, { waitUntil: 'networkidle' }),
+    page.waitForResponse((r) => new URL(r.url()).pathname === '/api/public-evidence')
+  ]);
+  say(evidence.status() === 200, 'licensing: ' + vp.name + ' offline evidence API responds 200');
   say(home?.status() === 200, 'licensing: ' + vp.name + ' homepage responds 200');
   say((await page.locator('a[href="/licensing.html"]').count()) === 1, 'licensing: ' + vp.name + ' homepage exposes licensing path');
-  const response = await page.goto(base + 'licensing.html', { waitUntil: 'load' });
+  const response = await page.goto(base + 'licensing.html', { waitUntil: 'networkidle' });
   say(response?.status() === 200, 'licensing: ' + vp.name + ' responds 200');
   say((await page.title()) === 'Data & AI Licensing | Juss & Co', 'licensing: ' + vp.name + ' title');
   say((await page.locator('link[rel="canonical"]').getAttribute('href')) === 'https://www.jussco.company/licensing.html', 'licensing: ' + vp.name + ' canonical URL');
@@ -76,8 +81,8 @@ for (const vp of [
       (await page.locator('a[href="/llms.txt"]').count()) === 1 &&
       (await page.locator('a[href="/crawlers.json"]').count()) === 1, 'licensing: ' + vp.name + ' machine-readable policy links');
   say((await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)) <= 0, 'licensing: ' + vp.name + ' no horizontal overflow');
-  say(errors.length === 0, 'licensing: ' + vp.name + ' no console errors' + (errors.length ? ' — ' + errors.join(' | ') : ''));
   await page.screenshot({ path: 'proof/site/licensing-' + vp.name + '.png', fullPage: true });
+  say(errors.length === 0, 'licensing: ' + vp.name + ' no console errors' + (errors.length ? ' — ' + errors.join(' | ') : ''));
   await ctx.close();
 }
 await browser.close();
