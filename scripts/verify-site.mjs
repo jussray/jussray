@@ -222,7 +222,7 @@ say(worlds.worlds.every((world) => {
   return slug && portfolio.featuredWorlds.includes(slug) &&
     (projectBySlug.get(slug) || overlayBySlug.get(slug))?.publicLabel === world.label;
 }), 'portfolio: featured public labels agree with worlds.json');
-say(!projectBySlug.get('storyengine')?.link && !projectBySlug.get('sekret-bip')?.link, 'portfolio: unopened front doors have no public product links');
+say(!projectBySlug.get('storyengine')?.link && projectBySlug.get('sekret-bip')?.link === 'https://sekretbip.net' && projectBySlug.get('sync-party')?.link === 'https://sync.jussco.company/', 'portfolio: public front doors match founder declarations, StoryEngine remains gated');
 say(forbiddenProjectionTokens.every((token) => !projectionText.includes(token)), 'portfolio: internal/private/legacy carriers stay out of public projection');
 say(expectedOS.every((name) => publicStandaloneSystems.includes(name)), 'systems: public standalone technical identities remain represented');
 say(projectBySlug.get('proof-core')?.technicalForm === 'standalone_os_prototype', 'portfolio: Proof Core stays a prototype rather than being promoted to a company');
