@@ -828,13 +828,13 @@ a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-colo
      alt:"A teen girl in a purple hoodie lies on her bed at night, smiling at her phone while a soft cloud companion floats beside her",
      desc:"A safe and kind space to feel, share, and grow, for teens, parents and kids.", tags:["Community","Wellness","AI"],
      tag:"Teen emotional culture.", blurb:"A softer, more honest corner of the internet, with companions who get the 3am brain.",
-     facts:[["Companions","Sy Suhana, Night and Cloud"],["Voice","Cool cousin, trusted older sibling. Never clinical."],["Front door","Public signup still gated (#925)"]],
-     held:"Opening soon · no public link yet"},
+     facts:[["Public site","sekretbip.net"],["Member journeys","Not independently verified by portfolio"]],
+     link:["Visit Se’kret Bip","https://sekretbip.net"]},
     {name:"Founder Control Room", group:"Ideas & systems", st:"building", label:"Building", w:"#3D6BFF", img:"assets/w-fcr.jpg",
      alt:"A founder seen from behind at a desk of glowing monitors, a sunset over mountains and a city beyond the window",
      desc:"A system to turn ideas into products, proof and long-term impact.", tags:["Productivity","AI","Founder tools"],
      tag:"The founder operating environment.", blurb:"Agents propose, the founder approves, and every change leaves a receipt. Same truth, higher outcomes.",
-     facts:[["Merged #900","Cinematic Founder Home, 56 of 56 browser checks"],["Merged #902","Capability market fed from relay receipts"],["Not yet live","API deploy pending, so sign-in is offline"]],
+     facts:[["Public site","foundercontrolroom.org"],["Workspace","Sign-in and execution require separate live verification"]],
      link:["Follow the build","https://github.com/jussray/founder-control-room"]},
     {name:"Chief AI", group:"Ideas & systems", st:"progress", label:"In progress", w:"#5EA8FF", img:"assets/w-chief.jpg",
      alt:"Profile of a woman lit by violet circuitry and light, eyes forward",
@@ -842,23 +842,23 @@ a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-colo
      tag:"Intent → bounded execution → evidence.", blurb:"The intelligence partner that starts with one question: what are you trying to move forward?",
      facts:[["Runtime","Deployed on Cloudflare Workers"],["Merged #142","MCP identity surface and credential membrane"],["Role","Defines intent; Control Room governs the doing"]],
      link:["Follow the build","https://github.com/jussray/chief-ai-machine"]},
-    {name:"Juss Beautiful Hair", group:"People & belonging", st:"progress", label:"Store open · awaiting first order", w:"#FF4FB8", img:"assets/w-jbh.jpg",
+    {name:"Juss Beautiful Hair", group:"People & belonging", st:"progress", label:"Storefront listed · orders unverified", w:"#FF4FB8", img:"assets/w-jbh.jpg",
      alt:"A woman with long curly hair in warm light, hand at her cheek, confident and relaxed",
      desc:"Premium hair for real people. Confidence, culture and care.", tags:["Beauty","Commerce","Community"],
      tag:"Beauty commerce, built to convert.", blurb:"Curated human hair bundles, closures and frontals, shipped to your door.",
-     facts:[["Store","jussbeautifulhair.com"],["Claims audited","Unproven hair claims removed (#115, 29 Sep)"],["Checkout","Exact-head checkout gate passed in a real browser"]],
+     facts:[["Store","jussbeautifulhair.com"],["Orders","Unverified by Juss & Co"],["Checkout","Live purchase-path evidence required"]],
      link:["Shop the store","https://jussbeautifulhair.com"]},
     {name:"StoryEngine", group:"Stories & play", st:"building", label:"Building", w:"#F5C14B", img:"assets/w-story.jpg",
      alt:"Silhouette of a filmmaker behind a camera rig against a violet sunset city",
      desc:"A media engine for real stories. Ideas to impact through content.", tags:["Media","Storytelling","Education"],
      tag:"Narrative, media and cinematic creation.", blurb:"Tools that turn ideas into stories you can watch, read and share.",
-     facts:[["Merged #122","Security fix on main"],["Live server","Waiting on redeploy to the latest main"]],
+     facts:[["Source","Public code exists"],["Deployment","Current runtime requires independent verification"]],
      held:"Coming soon · no public link yet"},
     {name:"Sync Party", group:"Stories & play", st:"live", label:"Live", w:"#3BE3FF", img:"assets/w-sync.jpg",
      alt:"Friends crowd around a tablet, laughing, neon reactions glowing around them",
      desc:"Get in sync. Play together. Real connection in a digital world.", tags:["Social","Games","Community"],
      tag:"Get in sync. Play together.", blurb:"A party game for friends in the same room: answer together and find out who is really in sync.",
-     facts:[["Live","Game runtime deployed 28 Sep; live per founder, 30 Sep"],["Stage","Public link live at sync.jussco.company"]],
+     facts:[["Public site","sync.jussco.company"],["Gameplay","Multiplayer path requires independent proof"]],
      link:["Play SYNC Party","https://sync.jussco.company"]}
   ];
 
@@ -873,7 +873,7 @@ a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-colo
     c.addEventListener("click",function(e){if(e.target.closest("a"))return;toggle(i);});go.addEventListener("click",function(e){e.stopPropagation();toggle(i);});grid.appendChild(c);cards.push(c);
   }
   WORLDS.forEach(function(w,i){renderWorldCard(w,i);});
-  var LIVE = {};
+  var LIVE = {}, PUBLIC_SOURCE = {};
   function validContactEmail(v){return typeof v==="string" && /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(v);}
   function renderProjectContactDirectory(worlds){
     var box=document.getElementById("projectContactDirectory"), ul=document.getElementById("projectContactList");
@@ -897,8 +897,18 @@ a.eco-item:hover,a.eco-item:focus-visible{transform:translateY(-4px);border-colo
     if(!d||!d.worlds)return;
     d.worlds.forEach(function(L){LIVE[L.name]=L;var idx=WORLDS.findIndex(function(w){return w.name===L.name;});if(idx<0&&L.display){var added=worldFromRegistry(L);WORLDS.push(added);idx=WORLDS.length-1;renderWorldCard(added,idx);}if(idx<0)return;var w=WORLDS[idx];if(L.st&&L.label){w.st=L.st;w.label=L.label;var b=cards[idx].querySelector(".badge");b.className="badge s-"+L.st;b.textContent=L.label;}if(L.link&&L.link.url){w.link=[L.link.text||"Open",L.link.url];w.held=null;}else if(L.held){w.held=L.held;w.link=null;}});
     var n=document.querySelector('#filters .chip[data-group=""] .n');if(n)n.textContent=String(WORLDS.length).padStart(2,"0");var worldSummary=document.getElementById("worldSummaryCount");if(worldSummary)worldSummary.textContent=String(WORLDS.length)+" worlds. One shared belief.";
-    if(d.company&&validContactEmail(d.company.email)){var companyMail=document.getElementById("mail");companyMail.textContent=d.company.email;companyMail.href="mailto:"+d.company.email;}renderProjectContactDirectory(d.worlds);if(d.quotes&&d.quotes.length)setQuotes(d.quotes);var stamp=document.getElementById("liveStamp");if(stamp&&d.generatedAt)stamp.textContent="Portfolio record updated "+new Date(d.generatedAt).toUTCString().replace(/:\d\d GMT$/," UTC")+"; product availability requires direct verification.";if(current>=0){var k=current;current=-1;open(k);}
+    if(d.company&&validContactEmail(d.company.email)){var companyMail=document.getElementById("mail");companyMail.textContent=d.company.email;companyMail.href="mailto:"+d.company.email;}renderProjectContactDirectory(d.worlds);if(d.quotes&&d.quotes.length)setQuotes(d.quotes);var stamp=document.getElementById("liveStamp");if(stamp&&d.generatedAt)stamp.textContent="Registry snapshot "+new Date(d.generatedAt).toUTCString().replace(/:\d\d GMT$/," UTC")+"; product availability requires direct verification.";if(current>=0){var k=current;current=-1;open(k);}
   }).catch(function(){var stamp=document.getElementById("liveStamp");if(stamp)stamp.textContent="Portfolio feed unavailable; displayed labels may be outdated. Verify on each product site.";});
+  // Public code is not founder-declared product readiness or order truth.
+  fetch('/api/public-evidence').then(function(r){return r.ok?r.json():null;}).then(function(feed){
+    if(!feed||feed.schema!=="jussco/public-evidence@v1"||!Array.isArray(feed.sources))return;
+    feed.sources.forEach(function(x){
+      if(x&&x.kind==="public_source_commit_only"&&typeof x.name==="string"&&
+         /^[a-f0-9]{40}$/i.test(x.sha||"")&&Number.isFinite(Date.parse(x.committedAt||"")))
+         PUBLIC_SOURCE[x.name]=x;
+    });
+    if(current>=0){var k=current;current=-1;open(k);}
+  }).catch(function(){/* No source observations is not evidence of inactivity. */});
 
 /* ---------- standalone OS registry ---------- */
 var osGrid=document.getElementById("osGrid"), surfaceStrip=document.getElementById("surfaceStrip"), connectorRegistry=null;
@@ -955,10 +965,12 @@ Promise.all([
   window.JC = { nextQuote:function(){ showQuote(qi+1,false); }, quoteIndex:function(){ return qi; }, quoteCount:function(){ return QUOTES.length; } };
   showQuote(0,false);
   function evidenceRows(L){
-    var rows=[]; if(!L || !L.evidence) return rows; var e=L.evidence;
+    var rows=[]; if(!L) return rows; var e=L.evidence||{};
     if(e.mainSha) rows.push(["Main", e.mainSha.slice(0,7)+(e.mainDate?" · "+e.mainDate.slice(0,10):"")]);
     if(e.latestMergedPr) rows.push(["Latest merged", "#"+e.latestMergedPr.number+" "+e.latestMergedPr.title+(e.latestMergedPr.mergedAt?" · "+e.latestMergedPr.mergedAt.slice(0,10):"")]);
     if(e.ci) rows.push(["CI on main", e.ci]);
+    var source=PUBLIC_SOURCE[L.name];
+    if(source&&source.repo===L.repo)rows.push(["Public source · not a release",source.sha.slice(0,7)+" · "+source.committedAt.slice(0,10)]);
     if(L.carriers&&L.carriers.length) rows.push(["Tracked carriers",L.carriers.map(function(x){return x.ref||x.name||x.id||x.platform;}).join(" · ")]);
     return rows;
   }
