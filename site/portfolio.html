@@ -29,6 +29,7 @@
 .map{padding-block:70px 110px;background:radial-gradient(60% 35% at 20% 20%,rgba(139,92,246,.11),transparent 65%),var(--void)}.map-head{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr);gap:34px;align-items:end;margin-bottom:30px}.kicker{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:12px}.map h2{font-family:var(--serif);font-size:clamp(42px,5vw,74px);line-height:.98;margin:0;color:#f7f0df}.map h2 span{color:var(--gold)}.map-copy{color:var(--muted);line-height:1.65;margin:0}.countline{margin-top:14px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#bdb6df}
 .filters{display:flex;gap:8px;flex-wrap:wrap;margin:30px 0 30px}.filter{min-height:42px;border-radius:999px;border:1px solid var(--line);background:rgba(12,10,44,.72);color:var(--muted);padding:8px 14px;cursor:pointer;transition:.2s}.filter:hover,.filter.on{color:#fff;border-color:rgba(59,227,255,.65);box-shadow:0 0 20px rgba(59,227,255,.15)}.filter.on{background:linear-gradient(110deg,rgba(61,107,255,.28),rgba(139,92,246,.24))}
 .projects{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.project{position:relative;min-height:270px;padding:22px;border-radius:18px;border:1px solid var(--line);background:linear-gradient(160deg,rgba(24,20,70,.78),rgba(8,8,29,.94) 64%);overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 45px rgba(0,0,10,.35);transition:transform .25s,border-color .25s,box-shadow .25s}.project:before{content:"";position:absolute;width:180px;height:180px;border-radius:50%;right:-70px;top:-80px;background:radial-gradient(circle,color-mix(in srgb,var(--accent) 38%,transparent),transparent 67%);pointer-events:none}.project:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--accent) 55%,#fff 10%);box-shadow:0 24px 55px rgba(0,0,12,.5),0 0 28px color-mix(in srgb,var(--accent) 17%,transparent)}.project[data-featured="true"]{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--accent) 28%,transparent),0 20px 45px rgba(0,0,10,.35)}.p-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.cat{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}.state{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:#0b0a2a;background:var(--state);padding:5px 8px;border-radius:999px;white-space:nowrap}.project h3{font-family:var(--serif);font-size:28px;line-height:1.04;margin:20px 0 8px;color:#fff}.role{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:#bdb5df;margin-bottom:14px}.desc{color:#aaa4cc;line-height:1.58;font-size:14px;margin:0 0 20px;flex:1}.aliases{font-family:var(--hand);font-size:19px;color:var(--gold);margin:-4px 0 14px}.p-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:auto;padding-top:14px;border-top:1px solid rgba(170,150,255,.13)}.tag{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#807aa8}.open{min-height:40px;display:inline-flex;align-items:center;text-decoration:none;font-weight:700;font-size:12px;color:var(--cyan)}.open:hover{text-decoration:underline}.featuredmark{color:var(--gold)}
+.public-code-note{display:block;margin:0 0 12px;font:500 10px/1.5 var(--mono);letter-spacing:.02em;color:var(--muted)}
 .empty{display:none;padding:36px;border:1px dashed var(--line);border-radius:18px;color:var(--muted);text-align:center}.empty.show{display:block}
 .legend{margin-top:46px;padding:24px;border:1px solid var(--line);border-radius:18px;background:rgba(10,9,38,.62);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}.legend b{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}.legend p{margin:0;color:var(--muted);font-size:13px;line-height:1.55}
 .close{position:relative;overflow:hidden;border-top:1px solid rgba(59,227,255,.26);background:radial-gradient(circle at 50% 100%,rgba(61,107,255,.18),transparent 35%),#06061c;padding-block:75px}.close .in{text-align:center}.close h2{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:clamp(48px,7vw,96px);line-height:.9;margin:0}.close h2 span{display:block;color:var(--gold);font-family:var(--serif);font-style:italic;text-transform:none;font-size:.58em;margin-top:10px}.close p{color:var(--muted);margin:22px auto 28px;max-width:60ch}.back{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:12px 22px;border-radius:12px;background:linear-gradient(100deg,#7c3aed,#4f46e5);color:#fff;text-decoration:none;font-weight:700;box-shadow:0 0 32px rgba(124,58,237,.45)}
@@ -125,16 +126,31 @@
   const stateColor=(label)=>/live/i.test(label)?'#3cf0a0':/opening|prelaunch|building/i.test(label)?'#f5c14b':/progress|active/i.test(label)?'#5ea8ff':/emerging|candidate/i.test(label)?'#c98bff':'#b6aed8';
   const esc=(s)=>String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
   const repoOk=(r)=>typeof r==='string'&&/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(r)&&!r.split('/').some(x=>x==='.'||x==='..');
-  let data=null, active='All';
+  let data=null, active='All', publicActivity=new Map();
+  // Explicit public GitHub carrier mapping; not a product readiness feed.
+  const PUBLIC_SOURCE_FOR_SLUG=new Map([
+    ['sekret-bip','jussray/Sekret-Bip'],
+    ['founder-control-room','jussray/founder-control-room'],
+    ['chief-ai-machine','jussray/chief-ai-machine'],
+    ['juss-beautiful-hair','jussray/jussbeautifulhair-site'],
+    ['storyengine','jussray/StoryEngine'],
+    ['sync-party','jussray/sync-party-game'],
+    ['solcontinuity','jussray/solcontinuity'],
+    ['sleepwealth-agent','jussray/SleepWealth-Agent'],
+    ['think-tank','jussray/THINK-TANK']
+  ]);
   const projects=document.getElementById('projects'), filters=document.getElementById('filters'), countLine=document.getElementById('countLine'), empty=document.getElementById('empty'), worldOverlays=document.getElementById('worldOverlays');
   function render(){
     const list=data.projects.filter(p=>active==='All'||p.category===active);
     projects.innerHTML=list.map((p,i)=>{
       const aliases=(p.aliases||[]).length?`<div class="aliases">also known as ${esc(p.aliases.join(' · '))}</div>`:'';
       const link=p.link?`<a class="open" href="${esc(p.link)}" rel="noopener">Open ↗</a>`:'<span class="tag">No public front door yet</span>';
+      const repo=PUBLIC_SOURCE_FOR_SLUG.get(p.slug);
+      const activity=repo?publicActivity.get(repo):null;
+      const sourceNote=activity?`<small class="public-code-note">Public source: ${esc(activity.committedAt.slice(0,10))} · not a release</small>`:'';
       return `<article class="project" data-slug="${esc(p.slug)}" data-featured="${p.featured?'true':'false'}" style="--accent:${palette[i%palette.length]};--state:${stateColor(p.publicLabel)}">
         <div class="p-top"><span class="cat">${esc(p.category)}</span><span class="state">${esc(p.publicLabel)}</span></div>
-        <h3>${esc(p.name)}</h3>${aliases}<div class="role">${esc(p.role)}</div><p class="desc">${esc(p.description)}</p>
+        <h3>${esc(p.name)}</h3>${aliases}<div class="role">${esc(p.role)}</div><p class="desc">${esc(p.description)}</p>${sourceNote}
         <div class="p-foot"><span class="tag">${p.featured?'<span class="featuredmark">◆ Featured world</span>':esc(p.portfolioStatus)}</span>${link}</div>
       </article>`;
     }).join('');
@@ -153,6 +169,15 @@
     filters.addEventListener('click',e=>{const b=e.target.closest('button[data-category]');if(b)setFilter(b.dataset.category)});
     render();
   }).catch(()=>{countLine.textContent+=' · published snapshot (live data unavailable)';});
+  // Optional, first-party, read-only code observations. Never modify portfolioStatus/publicLabel.
+  fetch('/api/public-evidence').then(r=>r.ok?r.json():null).then(feed=>{
+    if(feed?.schema!=='jussco/public-evidence@v1'||!Array.isArray(feed.sources))return;
+    publicActivity=new Map(feed.sources.filter(item=>item&&item.kind==='public_source_commit_only'&&
+      typeof item.repo==='string'&&/^[0-9a-f]{40}$/i.test(item.sha||'')&&
+      typeof item.committedAt==='string'&&Number.isFinite(Date.parse(item.committedAt))
+    ).map(item=>[item.repo,item]));
+    if(data)render();
+  }).catch(()=>{});
 })();
 </script>
 </body>
