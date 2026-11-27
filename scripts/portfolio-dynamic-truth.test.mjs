@@ -81,3 +81,11 @@ test('automatic release holds on stale or red exact-head checks and verifies the
   assert.ok(workflow.includes('api/public-evidence'));
   assert.doesNotMatch(workflow,/^  pull_request:/m);
 });
+
+test('deep universe cannot display obsolete release, checkout or signup claims',()=>{
+  const universe=read('site/universe.html');
+  for(const outdated of ['Store open · awaiting first order','API deploy pending, so sign-in is offline','Waiting on redeploy to the latest main','Public signup still gated (#925)'])
+    assert.equal(universe.includes(outdated),false,'obsolete claim: '+outdated);
+  assert.match(universe,/Registry snapshot/);
+  assert.match(universe,/api\/public-evidence/);
+});
