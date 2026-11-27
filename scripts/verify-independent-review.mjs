@@ -247,6 +247,12 @@ export async function getRulesEvidence({repo,token,request=fetch}) {
   return details;
 }
 
+export function assertReviewGates(review, governance) {
+  if (review.ok && governance.ok) return;
+  const describe=(label, gate)=>label+'='+ (gate.ok ? 'PASS' : 'FAIL: '+gate.errors.join('; '));
+  throw new Error('GitHub merge authority not verified: '+describe('FOUNDER_REVIEW',review)+'; '+describe('NATIVE_GOVERNANCE',governance));
+}
+
 export async function runReviewGate(env=process.env,request=fetch){
   const repo=env.GITHUB_REPOSITORY;
   const number=Number(env.PR_NUMBER);
@@ -265,7 +271,7 @@ export async function runReviewGate(env=process.env,request=fetch){
     throw new Error('PR head or review authority changed during evaluation; evidence is stale');
   }
   if (latest?.draft!==false) throw new Error('GitHub merge authority not verified: PR must be open and ready for review');
-  if (!result.ok || !rules.ok) throw new Error('GitHub merge authority not verified: '+[...result.errors,...rules.errors].join('; '));
+  assertReviewGates(result,rules);
   console.log('SYSTEMATIC REVIEW POLICY READBACK VERIFIED: '+sha.slice(0,12)+' via '+result.reviewMode+(result.founderReview?' ('+result.founderReview+')':''));
   return {...result,nativeRulesetEnforced:true,releaseAuthorized:false};
 }
