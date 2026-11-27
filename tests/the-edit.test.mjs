@@ -32,3 +32,13 @@ test('ambient scene has subtle motion and respects reduced-motion preference', (
   assert.match(html, /\.scene\s*\{[^}]*animation:\s*scene-drift/s);
   assert.match(html, /@media\s*\(prefers-reduced-motion:reduce\)\s*\{[^}]*\.scene\s*\{[^}]*animation:\s*none/s);
 });
+
+test('editorial has a dedicated printable layout with readable ink and no interactive chrome', () => {
+  assert.match(html, /@page\s*\{[^}]*margin:\s*0\.6in/s);
+  assert.match(html, /@media\s+print\s*\{/);
+  const print = html.split('@media print {')[1].split('</style>')[0];
+  assert.match(print, /\.scene[^{}]*\{[^}]*display:\s*none/s);
+  assert.match(print, /body\s*\{[^}]*color:\s*#17131c/s);
+  assert.match(print, /\.editorial\s*\{[^}]*break-inside:\s*avoid/s);
+  assert.match(html, /Print or save as PDF using your browser/);
+});
