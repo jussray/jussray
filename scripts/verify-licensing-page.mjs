@@ -19,6 +19,17 @@ const types = new Map([
 const server = createServer(async (req, res) => {
   try {
     const raw = new URL(req.url || '/', 'http://127.0.0.1').pathname;
+    // Source-only browser proof uses an explicit empty fixture for the
+    // separate public-evidence Worker. Never treat fixture data as live evidence.
+    if (raw === '/api/public-evidence' && req.method === 'GET') {
+      res.writeHead(200, { 'content-type': 'application/json; charset=utf-8' });
+      res.end(JSON.stringify({
+        schema: 'jussco/public-evidence@v1',
+        limitation: 'Offline licensing browser fixture; no live evidence or release claim.',
+        sources: []
+      }));
+      return;
+    }
     const rel = raw === '/' ? 'index.html' : decodeURIComponent(raw.replace(/^\//, ''));
     const safe = normalize(rel).replace(/^(\.\.(\/|\\|$))+/, '');
     let file = join(SITE, safe);
