@@ -50,15 +50,15 @@ const publicStandaloneSystems = systems.systems.filter((system) => system.public
 const robots = readFileSync(join(ROOT, 'robots.txt'), 'utf8');
 const sitemap = readFileSync(join(ROOT, 'sitemap.xml'), 'utf8');
 const robotsGroup = (agent) => robots.match(new RegExp(`(?:^|\\n)User-agent:\\s*${agent}\\s*\\n([\\s\\S]*?)(?=\\nUser-agent:|\\nSitemap:|$)`, 'i'))?.[1] || '';
-say(/User-agent:\\s*\\*/i.test(robots) && /^\\s*Allow:\\s*\\//mi.test(robotsGroup('*')) && robots.includes('https://www.jussco.company/sitemap.xml'), 'seo: wildcard crawl access and canonical sitemap are declared');
+say(/User-agent:\s*\*/i.test(robots) && /^\s*Allow:\s*\//mi.test(robotsGroup('*')) && robots.includes('https://www.jussco.company/sitemap.xml'), 'seo: wildcard crawl access and canonical sitemap are declared');
 for (const agent of ['Googlebot', 'Bingbot', 'OAI-SearchBot', 'Claude-SearchBot', 'PerplexityBot']) {
   const group = robotsGroup(agent);
-  say(/^\\s*Allow:\\s*\\//mi.test(group) && /ai-input=yes/i.test(group), `seo: ${agent} can crawl and use public pages for answer discovery`);
+  say(/^\s*Allow:\s*\//mi.test(group) && /ai-input=yes/i.test(group), `seo: ${agent} can crawl and use public pages for answer discovery`);
 }
 for (const agent of ['GPTBot', 'ClaudeBot', 'Google-Extended', 'Applebot-Extended', 'CCBot', 'Bytespider', 'Meta-ExternalAgent', 'Amazonbot', '__usage_ai-training']) {
-  say(/^\\s*Disallow:\\s*\\//mi.test(robotsGroup(agent)), `seo: ${agent} is denied`);
+  say(/^\s*Disallow:\s*\//mi.test(robotsGroup(agent)), `seo: ${agent} is denied`);
 }
-say(/Content-Signal:\\s*search=yes,\\s*ai-input=yes,\\s*ai-train=no/i.test(robotsGroup('*')), 'seo: shared content signal permits search/answer input and denies training');
+say(/Content-Signal:\s*search=yes,\s*ai-input=yes,\s*ai-train=no/i.test(robotsGroup('*')), 'seo: shared content signal permits search/answer input and denies training');
 say(['https://www.jussco.company/','https://www.jussco.company/services.html','https://www.jussco.company/work.html','https://www.jussco.company/creative-history.html','https://www.jussco.company/games/'].every((x) => sitemap.includes(`<loc>${x}</loc>`)), 'seo: sitemap lists canonical public pages');
 const expectedOS = ['Truth Weaver', 'Truth Compass', 'Exact Match Engine', 'Living Truth', 'Proof Core'];
 
