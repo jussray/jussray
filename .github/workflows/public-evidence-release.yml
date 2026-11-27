@@ -1,0 +1,90 @@
+name: Juss & Co guarded public-evidence Worker
+on:
+  workflow_run:
+    workflows: ['Juss & Co site browser proof']
+    types: [completed]
+
+permissions:
+  contents: read
+  checks: read
+  statuses: read
+
+concurrency:
+  group: jussco-public-evidence-release
+  cancel-in-progress: false
+
+jobs:
+  publish-public-source-evidence:
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' && github.event.workflow_run.head_branch == 'main' && github.event.workflow_run.head_repository.full_name == github.repository }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: jussco-production
+    env:
+      TARGET_SHA: ${{ github.event.workflow_run.head_sha }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ env.TARGET_SHA }}
+          persist-credentials: false
+      - name: Verify exact current main, complete green checks and Worker changes
+        id: gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$TARGET_SHA"
+          main="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq '.object.sha')"
+          test "$main" = "$TARGET_SHA" || { echo 'BLOCKED: main moved'; exit 1; }
+          gh api "repos/$GITHUB_REPOSITORY/commits/$TARGET_SHA/check-runs?per_page=100" > "$RUNNER_TEMP/checks.json"
+          gh api "repos/$GITHUB_REPOSITORY/commits/$TARGET_SHA/status" > "$RUNNER_TEMP/status.json"
+          python3 - <<'PY'
+          import json, os, sys
+          from pathlib import Path
+          root=Path(os.environ['RUNNER_TEMP'])
+          checks=json.loads((root/'checks.json').read_text())
+          runs=checks.get('check_runs',[])
+          if checks.get('total_count',0)>len(runs) or not runs:
+              sys.exit('BLOCKED: incomplete or missing check evidence')
+          by_name={}
+          for run in sorted(runs,key=lambda x:x.get('started_at') or ''):
+              by_name[run['name']]=run
+          failures=[k for k,v in by_name.items() if v.get('status')!='completed' or v.get('conclusion')!='success']
+          if failures:
+              sys.exit('BLOCKED: non-green exact-head check runs: '+', '.join(failures))
+          status=json.loads((root/'status.json').read_text())
+          if status.get('total_count',0) and status.get('state')!='success':
+              sys.exit('BLOCKED: non-green external commit status contexts')
+          print('Exact-head review clear; source release may proceed.')
+          PY
+          # Avoid unnecessary Cloudflare uploads when public-evidence files did not change.
+          gh api "repos/$GITHUB_REPOSITORY/commits/$TARGET_SHA" --jq '.files[].filename' > "$RUNNER_TEMP/changed-paths.txt"
+          if grep -Eq '^(workers/public-evidence\.mjs|wrangler\.evidence\.jsonc)$' "$RUNNER_TEMP/changed-paths.txt"; then
+            echo 'changed=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'changed=false' >> "$GITHUB_OUTPUT"
+            echo 'Public-evidence Worker unchanged; no deployment necessary.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        if: ${{ steps.gates.outputs.changed == 'true' }}
+        with:
+          node-version: '24'
+      - name: Verify public source contract before deployment
+        if: ${{ steps.gates.outputs.changed == 'true' }}
+        run: node --test scripts/portfolio-dynamic-truth.test.mjs
+      - name: Deploy only the isolated evidence Worker
+        if: ${{ steps.gates.outputs.changed == 'true' }}
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$CLOUDFLARE_ACCOUNT_ID"
+          test -n "$CLOUDFLARE_API_TOKEN"
+          test "$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq '.object.sha')" = "$TARGET_SHA"
+          npx --yes wrangler@4 deploy --config wrangler.evidence.jsonc
+      - name: Record source-only deployment boundary
+        if: ${{ steps.gates.outputs.changed == 'true' }}
+        run: |
+          echo "Public source Worker deployment attempted from exact SHA: $TARGET_SHA" >> "$GITHUB_STEP_SUMMARY"
+          echo 'This does not establish live API reachability or product, order, or customer outcomes.' >> "$GITHUB_STEP_SUMMARY"
