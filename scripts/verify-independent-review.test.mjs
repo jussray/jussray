@@ -320,3 +320,12 @@ test('delegated authority cannot count checks from an untrusted producer or skip
   const t=delegatedSecurity();t.rules[2].parameters.required_review_thread_resolution=false;
   assert.equal(rulesetDecision([t,delegatedAuthority()],{fcrAppId:delegatedFixtureApp}).ok,false);
 });
+
+
+import {assertReviewGates} from './verify-independent-review.mjs';
+const gatePass={ok:true,errors:[]};
+const gateFail={ok:false,errors:['missing evidence']};
+test('founder approval cannot clear governance',()=>assert.throws(()=>assertReviewGates(gatePass,gateFail),/FOUNDER_REVIEW=PASS; NATIVE_GOVERNANCE=FAIL: missing evidence/));
+test('governance cannot clear founder review',()=>assert.throws(()=>assertReviewGates(gateFail,gatePass),/FOUNDER_REVIEW=FAIL: missing evidence; NATIVE_GOVERNANCE=PASS/));
+test('both failures are reported',()=>assert.throws(()=>assertReviewGates(gateFail,gateFail),/FOUNDER_REVIEW=FAIL: missing evidence; NATIVE_GOVERNANCE=FAIL: missing evidence/));
+test('both pass',()=>assert.doesNotThrow(()=>assertReviewGates(gatePass,gatePass)));
