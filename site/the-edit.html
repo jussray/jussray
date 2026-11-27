@@ -69,6 +69,30 @@
       .caption { flex-wrap:wrap; }
     }
     @media (prefers-reduced-motion:reduce) { .scene { animation:none; } html{scroll-behavior:auto;} }
+
+    .print-note { color:#e2d4e4; font-size:12px; line-height:1.5; }
+    @page { size:auto; margin:0.6in; }
+    @media print {
+      :root { color-scheme:light; }
+      html, body { background:#fff; }
+      body { color:#17131c; min-width:0; overflow:visible; font:10pt/1.45 Georgia,serif; }
+      .scene, .skip, .masthead nav, .print-note, .text-link, .bottom a { display:none !important; }
+      .masthead { min-height:0; padding:0 0 10pt; background:none; border-bottom:1pt solid #8c6a26; }
+      .brand strong { font-size:16pt; color:#17131c; }
+      .brand span { color:#594518; border-color:#8c6a26; }
+      .edition { min-height:0; padding:18pt 0 12pt; max-width:none; }
+      .eyebrow { color:#594518; font-size:8pt; }
+      h1 { font-size:42pt; line-height:1; margin:8pt 0; text-shadow:none; }
+      .lead { font-size:12pt; margin:8pt 0; max-width:none; }
+      .underline { margin:10pt 0 14pt; box-shadow:none; background:#8c6a26; }
+      .editorials { max-width:none; margin:0; }
+      .editorial { break-inside:avoid; padding:10pt 0; border-color:#c5b9a1; }
+      .editorial h2 { font-size:20pt; margin:5pt 0 2pt; }
+      .editorial .deck { color:#413346; font-size:12pt; margin:3pt 0 4pt; }
+      .editorial p { color:#17131c; font-size:10pt; line-height:1.45; margin:3pt 0; max-width:none; }
+      .quiet-note { color:#413346; font-size:8pt; margin:8pt 0 0; border-color:#8c6a26; }
+      .bottom { color:#17131c; padding:8pt 0 0; border-color:#8c6a26; font-size:8pt; }
+    }
   </style>
 </head>
 <body>
@@ -106,6 +130,7 @@
         <a class="text-link" href="/portfolio.html">Review the portfolio <span aria-hidden="true">→</span></a>
       </section>
     </div>
+    <p class="print-note">Print or save as PDF using your browser’s print command.</p>
     <p class="quiet-note"><strong>Editorial preview only.</strong> These are evergreen section introductions—not news articles, project status claims, testimonials, or authorized publications. No automatic publishing or real-person story feed is connected.</p>
   </main>
   <footer class="bottom"><span>JUSS &amp; CO. — Turn thoughts into living works.</span><a href="/">Return to the company site</a></footer>
