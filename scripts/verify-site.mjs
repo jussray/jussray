@@ -169,7 +169,8 @@ for (const vp of [{n:'desktop',w:1440,h:900},{n:'mobile',w:390,h:844}]) {
     const res=await page.request.get(url+route);say(res.status()===200,`${vp.n}: ${route} returns 200`);
   }
   await page.goto(url+'products.html',{waitUntil:'load'});
-  say((await page.locator('.feature-card').count())===6,`${vp.n}: all six featured products on product page`);
+  say((await page.locator('.feature-card').count())===7,`${vp.n}: all seven featured products on product page`);
+  say((await page.locator('.feature-card').filter({has: page.getByRole('heading', {name:'StoryEngine'})}).locator('a.action').getAttribute('href'))==='https://storyengine.jussco.company/',`${vp.n}: StoryEngine product card opens the declared limited-access front door`);
    say((await page.locator('.feature-card a[href="/opportunity-engine.html"]').count())===1,`${vp.n}: Opportunity Engine is a discoverable product route`);
   await page.goto(url+'sites.html',{waitUntil:'load'});
   const expectedDestinations=["https://github.com/jussray","https://www.jussco.company/","https://chief.foundercontrolroom.org","https://sync.jussco.company/","https://compass.jussco.company/","https://exactmatch.jussco.company/","https://jussbeautifulhair.com/","https://games.jussco.company/","https://protect.jussco.company/","https://protect2.jussco.company/","https://makevideo.jussco.company/","https://junglejinx.jussco.company/","https://lumora.jussco.company/"];
