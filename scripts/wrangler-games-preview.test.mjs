@@ -23,3 +23,9 @@ test('Games Worker ships byte-identical shared atmosphere assets', () => {
     assert.deepEqual(game, source, name+' must match the canonical company asset');
   }
 });
+
+test('shared brand polish retains visible keyboard focus and wrapping regional controls', () => {
+  const css = readFileSync(new URL('../site/assets/studio-world.css', import.meta.url), 'utf8');
+  assert.match(css, /\.studio-world :is\(a,button,input,select,textarea\):focus-visible\s*\{\s*outline:2px solid #ffd98a/);
+  assert.match(css, /\.studio-world \.local-environment > \* \{max-width:100%; overflow-wrap:anywhere;\}/);
+});
