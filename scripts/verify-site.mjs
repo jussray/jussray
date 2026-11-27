@@ -121,7 +121,7 @@ for (const vp of [{n:'desktop',w:1440,h:900},{n:'mobile',w:390,h:844}]) {
   say(names.every((n,i)=>labels[i]===expectedWorlds.find(w=>w.name===n)?.label),`${vp.n}: band statuses equal founder-declared labels`);
   const links=await page.locator('#ecoTrack .eco-tile a').evaluateAll(a=>a.map(x=>[x.closest('.eco-tile').dataset.name,x.getAttribute('href')]));
   say(links.every(([n,h])=>expectedWorlds.some(w=>w.name===n&&w.link?.url===h&&(w.st!=='soon'||w.name==="Se'kret Bip"))),`${vp.n}: all destinations retain source identity; portfolio-only Truth Weaver does not claim a live front door`);
-  say((await page.locator('#ecoTrack a[href*="storyengine" i]').count())===0 && (await page.locator('#ecoTrack a[href="https://sekretbip.net"]').count())===1,`${vp.n}: StoryEngine stays unlinked; Se'kret Bip links to its founder-confirmed live front door`);
+  say((await page.locator('#ecoTrack a[href="https://storyengine.jussco.company/"]').count())===1 && (await page.locator('#ecoTrack a[href="https://sekretbip.net"]').count())===1,`${vp.n}: StoryEngine limited-access door and Se'kret Bip have declared links`);
   say(/Creative Technology/.test(await page.locator('#landing-title').innerText())&&/AI-powered product creation/i.test(await page.locator('.subline').innerText()),`${vp.n}: mockup headline and subline render`);
   const bandBox=await page.locator('.eco-band').boundingBox();
   say(bandBox&&bandBox.y+bandBox.height<=vp.h+1,`${vp.n}: Our Ecosystem band is fully visible on the first screen`);
@@ -145,7 +145,7 @@ for (const vp of [{n:'desktop',w:1440,h:900},{n:'mobile',w:390,h:844}]) {
   const hrefFor=async(q,name)=>{await page.fill('#home-search-input',q);await page.waitForFunction(n=>[...document.querySelectorAll('#home-search-results a strong')].some(s=>s.textContent===n),name,{timeout:5000});return page.locator('#home-search-results a',{has:page.locator('strong',{hasText:new RegExp('^'+name+'$')})}).first().getAttribute('href');};
   say((await hrefFor('truth compass','Truth Compass'))==='/portfolio.html',`${vp.n}: portfolio-only projects open the portfolio, never a guessed link`);
   say((await hrefFor('lumora','LUMORA'))==='https://games.jussco.company/#lumora-world',`${vp.n}: search reaches Game Hub worlds`);
-  say((await hrefFor('storyengine','StoryEngine'))==='/portfolio.html',`${vp.n}: StoryEngine stays unlinked in search`);
+  say((await hrefFor('storyengine','StoryEngine'))==='https://storyengine.jussco.company/',`${vp.n}: StoryEngine search opens its declared limited-access front door`);
   say((await hrefFor('contact','Contact'))==='/contact.html',`${vp.n}: search reaches site pages`);
   await page.fill('#home-search-input','zzqx-nothing');await page.waitForFunction(()=>/Nothing matches/.test(document.querySelector('#home-search-status').textContent),null,{timeout:5000});
   say((await page.locator('#home-search-results li').count())===0,`${vp.n}: no false search results`);
@@ -169,7 +169,8 @@ for (const vp of [{n:'desktop',w:1440,h:900},{n:'mobile',w:390,h:844}]) {
     const res=await page.request.get(url+route);say(res.status()===200,`${vp.n}: ${route} returns 200`);
   }
   await page.goto(url+'products.html',{waitUntil:'load'});
-  say((await page.locator('.feature-card').count())===6,`${vp.n}: all six featured products on product page`);
+  say((await page.locator('.feature-card').count())===7,`${vp.n}: all seven featured products on product page`);
+  say((await page.locator('.feature-card').filter({has: page.getByRole('heading', {name:'StoryEngine'})}).locator('a.action').getAttribute('href'))==='https://storyengine.jussco.company/',`${vp.n}: StoryEngine product card opens the declared limited-access front door`);
    say((await page.locator('.feature-card a[href="/opportunity-engine.html"]').count())===1,`${vp.n}: Opportunity Engine is a discoverable product route`);
   await page.goto(url+'sites.html',{waitUntil:'load'});
   const expectedDestinations=["https://github.com/jussray","https://www.jussco.company/","https://chief.foundercontrolroom.org","https://sync.jussco.company/","https://compass.jussco.company/","https://exactmatch.jussco.company/","https://jussbeautifulhair.com/","https://games.jussco.company/","https://protect.jussco.company/","https://protect2.jussco.company/","https://makevideo.jussco.company/","https://junglejinx.jussco.company/","https://lumora.jussco.company/"];
@@ -222,7 +223,7 @@ say(worlds.worlds.every((world) => {
   return slug && portfolio.featuredWorlds.includes(slug) &&
     (projectBySlug.get(slug) || overlayBySlug.get(slug))?.publicLabel === world.label;
 }), 'portfolio: featured public labels agree with worlds.json');
-say(!projectBySlug.get('storyengine')?.link && !projectBySlug.get('sekret-bip')?.link, 'portfolio: unopened front doors have no public product links');
+say(projectBySlug.get('storyengine')?.link==='https://storyengine.jussco.company/' && !projectBySlug.get('sekret-bip')?.link, 'portfolio: StoryEngine is linked while unopened products remain held');
 say(forbiddenProjectionTokens.every((token) => !projectionText.includes(token)), 'portfolio: internal/private/legacy carriers stay out of public projection');
 say(expectedOS.every((name) => publicStandaloneSystems.includes(name)), 'systems: public standalone technical identities remain represented');
 say(projectBySlug.get('proof-core')?.technicalForm === 'standalone_os_prototype', 'portfolio: Proof Core stays a prototype rather than being promoted to a company');
@@ -453,7 +454,7 @@ for (const vp of [{ n: 'portfolio-desktop', w: 1440, h: 900 }, { n: 'portfolio-m
   say(['AYURE', 'Truth Weaver Counsel', 'Exact Match Engine', 'Living Truth', 'Proof Core'].every((name) => names.includes(name)), `${vp.n}: reconciled projects are present`);
   say(((await page.textContent('#countLine')) || '').startsWith('20 of 20'), `${vp.n}: portfolio count is data-derived`);
   const story = page.locator('#projects .project', { has: page.locator('h3', { hasText: 'StoryEngine' }) });
-  say((await story.locator('a.open').count()) === 0, `${vp.n}: StoryEngine has no invented front-door link`);
+  say((await story.locator('a.open').getAttribute('href')) === 'https://storyengine.jussco.company/', `${vp.n}: StoryEngine opens its declared front-door link`);
   const sync = page.locator('#projects .project', { has: page.locator('h3', { hasText: 'SYNC Party' }) });
   say((await sync.locator('.state').textContent()) === 'Live', `${vp.n}: Sync Party remains Live`);
   await page.click('button[data-category="Founder software"]'); await page.waitForTimeout(100);

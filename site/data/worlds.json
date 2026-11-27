@@ -145,7 +145,10 @@
       "repo": "jussray/StoryEngine",
       "st": "building",
       "label": "Building",
-      "held": "Coming soon · no public link yet",
+      "link": {
+        "text": "Open StoryEngine (limited access)",
+        "url": "https://storyengine.jussco.company/"
+      },
       "contact": {
         "github": "https://github.com/jussray/StoryEngine",
         "email": "support@jussco.company"
