@@ -60,12 +60,39 @@ function tile(w) {
   const status = document.createElement('small'); status.textContent = w.label || 'Status pending';
   inner.append(badge, name, status); li.append(inner); return li;
 }
+async function annotatePublicSourceActivity(track, worlds) {
+  const stamp=$('#publicSourceStatus');
+  try {
+    const response=await fetch('/api/public-evidence');
+    if(!response.ok)return;
+    const payload=await response.json();
+    if(payload?.schema!=='jussco/public-evidence@v1'||!Array.isArray(payload.sources))return;
+    const byName=new Map(worlds.filter(w=>w&&typeof w.repo==='string').map(w=>[w.name,w.repo]));
+    let shown=0;
+    for(const item of payload.sources) {
+      if(!item||item.kind!=='public_source_commit_only'||!(/^[0-9a-f]{40}$/i).test(item.sha||'')||
+        typeof item.committedAt!=='string'||!Number.isFinite(Date.parse(item.committedAt)))continue;
+      if(byName.get(item.name)!==item.repo)continue;
+      const node=[...track.children].find(li=>li.dataset.name===item.name);
+      if(!node)continue;
+      const status=node.querySelector('small');
+      if(!status)continue;
+      status.title='Public source commit '+item.sha.slice(0,7)+' on '+item.committedAt.slice(0,10)+'; not a release or launch verification';
+      node.dataset.publicSourceSha=item.sha;
+      shown++;
+    }
+    if(stamp)stamp.textContent=shown
+      ? 'Public code updates: '+shown+' observed · not a release'
+      : 'No public source updates available · product status unchanged';
+  }catch {if(stamp)stamp.textContent='Public code check unavailable · product status unchanged';}
+}
 async function ecosystem() {
   const track = $('#ecoTrack'); if (!track) return;
   try {
     const data = await (await fetch('/data/worlds.json', { cache: 'no-cache' })).json();
     const portfolio=await fetch('/data/portfolio.json',{cache:'no-cache'}).then(r=>r.ok?r.json():null).catch(()=>null);
     track.replaceChildren(...referenceWorlds(data.worlds||[],portfolio?.projects||[]).map(tile));
+    void annotatePublicSourceActivity(track,data.worlds||[]);
   } catch {
     track.innerHTML = '<li class="eco-loading">The ecosystem is unavailable right now. <a href="/portfolio.html">Open the portfolio</a>.</li>';
   }
