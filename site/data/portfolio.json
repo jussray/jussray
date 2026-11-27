@@ -88,7 +88,9 @@
     {
       "slug": "truth-weaver",
       "name": "Truth Weaver Counsel",
-      "aliases": ["Truth Weaver"],
+      "aliases": [
+        "Truth Weaver"
+      ],
       "category": "Founder software",
       "role": "Legal knowledge and decision-support module",
       "technicalForm": "standalone_os",
@@ -168,7 +170,9 @@
     {
       "slug": "storyengine",
       "name": "StoryEngine",
-      "aliases": ["L99 StoryEngine"],
+      "aliases": [
+        "L99 StoryEngine"
+      ],
       "category": "Creator software",
       "role": "Core creator software company",
       "portfolioStatus": "active",
@@ -184,7 +188,8 @@
       "portfolioStatus": "active",
       "publicLabel": "Opening soon",
       "featured": true,
-      "description": "A private emotional-growth and self-expression world designed around teen trust and relationship-aware family boundaries."
+      "description": "A private emotional-growth and self-expression world designed around teen trust and relationship-aware family boundaries.",
+      "link": "https://sekretbip.net"
     },
     {
       "slug": "bip-jr",
@@ -200,11 +205,13 @@
     {
       "slug": "juss-beautiful-hair",
       "name": "Juss Beautiful Hair",
-      "aliases": ["JBH"],
+      "aliases": [
+        "JBH"
+      ],
       "category": "Commerce",
       "role": "Core commerce business",
       "portfolioStatus": "active",
-      "publicLabel": "Store open · awaiting first order",
+      "publicLabel": "Storefront listed · orders unverified",
       "featured": true,
       "description": "A real hair-commerce brand with its own catalog, storefront, customer economics and fulfillment truth.",
       "link": "https://jussbeautifulhair.com"
@@ -222,7 +229,10 @@
     {
       "slug": "sweats",
       "name": "SWEATS",
-      "aliases": ["Sweats", "SWEAT"],
+      "aliases": [
+        "Sweats",
+        "SWEAT"
+      ],
       "category": "Commerce",
       "role": "Commerce brand",
       "portfolioStatus": "external",
@@ -248,7 +258,8 @@
       "portfolioStatus": "active",
       "publicLabel": "Live",
       "featured": true,
-      "description": "A social party experience built around matching the vibe, playing together and finding your people."
+      "description": "A social party experience built around matching the vibe, playing together and finding your people.",
+      "link": "https://sync.jussco.company/"
     },
     {
       "slug": "ayure",
