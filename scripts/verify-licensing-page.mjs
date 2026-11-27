@@ -46,6 +46,8 @@ for (const vp of [
   const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height }, isMobile: vp.isMobile, hasTouch: vp.isMobile });
   const page = await ctx.newPage();
   const errors = [];
+  page.on('response', (r) => { if (r.status() >= 400) errors.push(`HTTP ${r.status()} ${r.url()}`); });
+  page.on('requestfailed', (r) => errors.push(`Request failed ${r.url()}: ${r.failure()?.errorText}`));
   page.on('pageerror', (e) => errors.push(String(e)));
   page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
   const home = await page.goto(base, { waitUntil: 'load' });
