@@ -1,23 +1,44 @@
-# Juss & Co public discovery policy.
-# Search and attributed reference are welcome. Commercial AI ingestion,
-# training, bulk extraction, dataset reuse, and derivative use require
-# a separate written license.
-# robots.txt and Content-Signal express use policy; they are not authentication.
+# robots.txt for https://www.jussco.company/
+#
+# Policy: search and answer engines may index and cite public pages.
+# Model-training crawlers are blocked. These are crawler preferences,
+# not authentication, access control, or a guarantee of compliance.
+#
+# The shared __usage_ai-training token is an active individual Internet-Draft,
+# not an adopted RFC. It supplements the explicit crawler rules below.
 
-User-agent: *
-Content-Signal: search=yes, ai-input=no, ai-train=no, use=reference
+# Search and answer crawlers: allowed
+User-agent: Googlebot
 Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=no, use=reference
 
+User-agent: Bingbot
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=no, use=reference
+
+User-agent: OAI-SearchBot
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=no, use=reference
+
+User-agent: Claude-SearchBot
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=no, use=reference
+
+User-agent: PerplexityBot
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=no, use=reference
+
+# Training and extended-use crawlers: blocked
 User-agent: GPTBot
 Disallow: /
 
 User-agent: ClaudeBot
 Disallow: /
 
-User-agent: anthropic-ai
+User-agent: Google-Extended
 Disallow: /
 
-User-agent: Google-Extended
+User-agent: Applebot-Extended
 Disallow: /
 
 User-agent: CCBot
@@ -26,10 +47,19 @@ Disallow: /
 User-agent: Bytespider
 Disallow: /
 
+User-agent: Meta-ExternalAgent
+Disallow: /
+
 User-agent: Amazonbot
 Disallow: /
 
-User-agent: Applebot-Extended
+# Shared AI-training preference (draft signal; not a crawling directive)
+User-agent: __usage_ai-training
 Disallow: /
+
+# All other crawlers
+User-agent: *
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=no, use=reference
 
 Sitemap: https://www.jussco.company/sitemap.xml
