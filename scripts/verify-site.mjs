@@ -17,7 +17,27 @@ const browser = await chromium.launch(); let failed = 0;
 // fixture; the leaderboard checks override it per page (page routes win).
 const SYNC_BOARD_URL = 'https://sync.jussco.company/api/leaderboard';
 const rawNewContext = browser.newContext.bind(browser);
-browser.newContext = async (...args) => { const c = await rawNewContext(...args); await c.route(SYNC_BOARD_URL, (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ version: 'sync-leaderboard-v2', brackets: ['2', '3', '4+'], size: 25, boards: { '2': [], '3': [], '4+': [] }, entries: [] }) })); return c; }; const say = (ok, m) => { console.log(`${ok ? 'ok ' : 'FAIL'} ${m}`); if (!ok) failed++; };
+browser.newContext = async (...args) => {
+  const c = await rawNewContext(...args);
+  // The evidence API is a separate Cloudflare Worker, not part of the local static server.
+  // Explicitly fulfill it so source-only Playwright cannot hit production or report 404.
+  await c.route('**/api/public-evidence', (r) => r.fulfill({
+    status: 200, contentType: 'application/json',
+    body: JSON.stringify({
+      schema: 'jussco/public-evidence@v1', observedAt: '2026-11-26T00:00:00Z',
+      limitation: 'Offline synthetic public_source_commit_only test fixture; not a release.',
+      sources: [{ name: "Se'kret Bip", repo: 'jussray/Sekret-Bip',
+        sha: 'a'.repeat(40), committedAt: '2026-11-26T00:00:00Z',
+        kind: 'public_source_commit_only' }]
+    })
+  }));
+  await c.route(SYNC_BOARD_URL, (r) => r.fulfill({
+    status: 200, contentType: 'application/json',
+    body: JSON.stringify({version:'sync-leaderboard-v2', brackets:['2','3','4+'], size:25,
+      boards:{'2':[],'3':[],'4+':[]}, entries:[]})
+  }));
+  return c;
+}; const say = (ok, m) => { console.log(`${ok ? 'ok ' : 'FAIL'} ${m}`); if (!ok) failed++; };
 
 const projectSlugs = portfolio.projects.map((project) => project.slug);
 const featuredSlugs = portfolio.projects.filter((project) => project.featured).map((project) => project.slug).sort();
