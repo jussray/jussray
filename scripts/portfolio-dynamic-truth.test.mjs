@@ -96,3 +96,10 @@ test('CI validates the canonical Wrangler file without breaking readFileSync arg
   assert.ok(workflow.includes("readFileSync('wrangler.jsonc','utf8')"));
   assert.equal(workflow.includes("readFileSync('wrangler.jsonc', 'wrangler.evidence.jsonc'"),false);
 });
+
+test('offline Chromium proof supplies deterministic public-evidence endpoint without reaching production',()=>{
+  const proof=read('scripts/verify-site.mjs');
+  assert.match(proof,/\.route\(['"]\*\*\/api\/public-evidence['"]/);
+  assert.match(proof,/jussco\/public-evidence@v1/);
+  assert.match(proof,/public_source_commit_only/);
+});
