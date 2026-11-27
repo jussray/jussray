@@ -1,7 +1,8 @@
 name: Juss & Co site browser proof
 on:
   push:
-    branches: [main]
+    # Run source-only proof on the isolated recovery branch without opening a PR.
+    branches: [main, 'fix/review-governance-diagnostics-20261127']
     paths: ['site/**', 'scripts/verify-site.mjs', 'scripts/portfolio-snapshot.mjs', 'scripts/portfolio-dynamic-truth.test.mjs', 'scripts/verify-approved-stories.mjs', 'scripts/licensable-assets.test.mjs', 'scripts/verify-licensing-page.mjs', 'scripts/conversion-tracking.test.mjs', 'scripts/conversion-receiver.test.mjs', 'scripts/conversion-client-first-party.test.mjs', 'scripts/wrangler-runtime-truth.test.mjs', 'scripts/wrangler-games-preview.test.mjs', 'wrangler.games.jsonc', 'scripts/site-proof-boundary.test.mjs', 'scripts/public-resources.test.mjs', 'scripts/verify-public-entrances.mjs', 'scripts/verify-public-entrances.test.mjs', 'scripts/verify-independent-review.mjs', 'scripts/verify-independent-review.test.mjs', 'tests/jussco-github-webhook.test.mjs', 'tests/atmosphere.test.mjs', 'tools/worlds-patch-executor/**', 'wrangler.jsonc', 'wrangler.evidence.jsonc', 'workers/**', 'wrangler.conversions.example.jsonc', '.github/workflows/site-proof.yml']
   pull_request:
   workflow_dispatch:
