@@ -44,6 +44,17 @@ for (const vp of [
   { name: 'mobile', width: 390, height: 844, isMobile: true }
 ]) {
   const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height }, isMobile: vp.isMobile, hasTouch: vp.isMobile });
+  // Match the main-site offline fixture; the separate Worker is not served here.
+  await ctx.route('**/api/public-evidence', (r) => r.fulfill({
+    status: 200, contentType: 'application/json',
+    body: JSON.stringify({
+      schema: 'jussco/public-evidence@v1', observedAt: '2026-11-26T00:00:00Z',
+      limitation: 'Offline synthetic public_source_commit_only test fixture; not a release.',
+      sources: [{ name: "Se'kret Bip", repo: 'jussray/Sekret-Bip',
+        sha: 'a'.repeat(40), committedAt: '2026-11-26T00:00:00Z',
+        kind: 'public_source_commit_only' }]
+    })
+  }));
   const page = await ctx.newPage();
   const errors = [];
   page.on('response', (r) => { if (r.status() >= 400) errors.push(`HTTP ${r.status()} ${r.url()}`); });
