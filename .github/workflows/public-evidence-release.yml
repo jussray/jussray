@@ -87,6 +87,27 @@ jobs:
           test -n "$CLOUDFLARE_API_TOKEN"
           test "$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq '.object.sha')" = "$TARGET_SHA"
           npx --yes wrangler@4 deploy --config wrangler.evidence.jsonc
+      - name: Independently read public API response after deployment
+        if: ${{ steps.gates.outputs.changed == 'true' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --retry 2 --max-time 20 \
+            -H 'Accept: application/json' \
+            'https://www.jussco.company/api/public-evidence' \
+            -o "$RUNNER_TEMP/evidence-public.json"
+          python3 - <<'PY'
+          import json,os,sys
+          from pathlib import Path
+          data=json.loads((Path(os.environ['RUNNER_TEMP'])/'evidence-public.json').read_text())
+          if data.get('schema')!='jussco/public-evidence@v1' or not isinstance(data.get('sources'),list):
+              sys.exit('BLOCKED: public API returned invalid schema')
+          allowed={'name','repo','sha','committedAt','kind'}
+          for item in data['sources']:
+              if set(item)!=allowed or item.get('kind')!='public_source_commit_only':
+                  sys.exit('BLOCKED: public API contained unsupported fields or claims')
+          print('OBSERVED: live first-party public API schema; not proof of app launch or checkout')
+          PY
       - name: Record source-only deployment boundary
         if: ${{ steps.gates.outputs.changed == 'true' }}
         run: |
