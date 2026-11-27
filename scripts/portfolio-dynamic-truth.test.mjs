@@ -53,7 +53,10 @@ test('newer portfolio identity map and founder declared homepage agree on storef
   assert.equal(project.publicLabel,world.label);
   assert.doesNotMatch(JSON.stringify({world,project}),/awaiting first order/i);
   const html=read('site/portfolio.html');
-  assert.match(html,/data-slug="juss-beautiful-hair"[\\s\\S]*?Storefront listed · orders unverified/);
+  const start=html.indexOf('data-slug="juss-beautiful-hair"');
+  assert.ok(start>0);
+  const card=html.slice(start,html.indexOf('</article>',start));
+  assert.ok(card.includes('Storefront listed · orders unverified'));
 });
 
 test('public source observations do not overwrite founder status or runtime claims',()=>{
