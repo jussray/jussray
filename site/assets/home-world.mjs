@@ -3,17 +3,7 @@
 const $ = (s) => document.querySelector(s);
 const root = document.documentElement;
 
-const ATMOS = ['dawn', 'day', 'sunset', 'night'];
-const NAMES = { dawn: 'Dawn', day: 'Daylight', sunset: 'Sunset', night: 'Night' };
-// Opens on Sunset (founder v3 mockups, 2026-11-10); tapping cycles dawn / day / sunset / night.
-let atmo = 'sunset';
-function setAtmo(next) {
-  atmo = next;
-  root.dataset.tod = next;
-  const name = $('#atmoName'); if (name) name.textContent = NAMES[next];
-}
-setAtmo(atmo);
-$('#atmo')?.addEventListener('click', () => setAtmo(ATMOS[(ATMOS.indexOf(atmo) + 1) % ATMOS.length]));
+// Time-of-day and the temporary preview are owned by atmosphere.mjs.
 // The date window under the atmosphere is the live meteorological season (Dec–Feb, Mar–May, Jun–Aug, Sep–Nov).
 { const d = new Date(), m = d.getMonth();
   const sm = m === 11 ? 11 : m < 2 ? 11 : m - (m + 1) % 3;
@@ -43,7 +33,16 @@ soundBtn?.addEventListener('click', async () => {
   if (!(await m.setAmbience(next))) soundBtn.setAttribute('aria-checked', 'false');
 });
 
-const BADGE = { "Se'kret Bip": 'SK' }; // founder mockup badge
+const BADGE = { "Se'kret Bip": 'SK', "SolContinuity": 'SOL', "Juss Beautiful Hair": 'JBH' }; // reference presentation labels
+const REFERENCE_ORDER=['Founder Control Room','Chief AI','PromptOS',"Se'kret Bip",'SolContinuity','Think Tank','Truth Weaver Counsel','SleepWealth Agent','Juss Beautiful Hair'];
+const TILE_LABELS={'SolContinuity':'SOL','Truth Weaver Counsel':'Truth Weaver','SleepWealth Agent':'SleepWealth','Juss Beautiful Hair':'JBH'};
+function referenceWorlds(worlds,portfolio){
+  const all=[...worlds];
+  const truth=portfolio.find(p=>p.slug==='truth-weaver'&&p.name==='Truth Weaver Counsel'&&typeof p.publicLabel==='string'&&p.publicLabel);
+  if(truth&&!all.some(w=>w.name===truth.name))all.push({name:truth.name,label:truth.publicLabel,st:'portfolio',link:{url:'/portfolio.html',text:'View portfolio'}});
+  const rank=name=>{const i=REFERENCE_ORDER.indexOf(name);return i<0?REFERENCE_ORDER.length:i;};
+  return all.sort((a,b)=>rank(a.name)-rank(b.name));
+}
 const BADGE_ART = { "Se'kret Bip": "bip", "Founder Control Room": "fcr", "Chief AI": "chief", "Juss Beautiful Hair": "jbh", "StoryEngine": "story", "Sync Party": "sync" };
 // Hidden tab: the shared ambience engine (ambience.mjs) fades and suspends itself.
 const initials = (name) => BADGE[name] || name.replace(/[’']/g, '').split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
@@ -52,12 +51,12 @@ const initials = (name) => BADGE[name] || name.replace(/[’']/g, '').split(/\s+
 const LIVE_FRONT_DOORS = new Set(["Se'kret Bip"]);
 const linkable = (w) => w.link?.url && (w.st !== 'soon' || LIVE_FRONT_DOORS.has(w.name));
 function tile(w) {
-  const li = document.createElement('li'); li.className = 'eco-tile'; li.dataset.st = w.st || '';
+  const li = document.createElement('li'); li.className = 'eco-tile'; li.dataset.st = w.st || ''; li.dataset.name=w.name;
   const inner = document.createElement(linkable(w) ? 'a' : 'div');
   if (linkable(w)) { inner.href = w.link.url; if (/^https?:/.test(w.link.url)) inner.rel = 'noopener noreferrer'; inner.setAttribute('aria-label', `${w.name}: ${w.label || ''}. ${w.link.text || 'Visit'}`); }
   const badge = document.createElement('span'); badge.className = 'eco-badge'; badge.setAttribute('aria-hidden', 'true'); badge.textContent = initials(w.name);
   if (BADGE_ART[w.name]) { const img = document.createElement("img"); img.src = `/assets/w-${BADGE_ART[w.name]}.jpg`; img.alt = ""; img.loading = "lazy"; badge.replaceChildren(img); }
-  const name = document.createElement('strong'); name.textContent = w.name;
+  const name = document.createElement('strong'); name.textContent = TILE_LABELS[w.name] || w.name;
   const status = document.createElement('small'); status.textContent = w.label || 'Status pending';
   inner.append(badge, name, status); li.append(inner); return li;
 }
@@ -65,7 +64,8 @@ async function ecosystem() {
   const track = $('#ecoTrack'); if (!track) return;
   try {
     const data = await (await fetch('/data/worlds.json', { cache: 'no-cache' })).json();
-    track.replaceChildren(...(data.worlds || []).map(tile));
+    const portfolio=await fetch('/data/portfolio.json',{cache:'no-cache'}).then(r=>r.ok?r.json():null).catch(()=>null);
+    track.replaceChildren(...referenceWorlds(data.worlds||[],portfolio?.projects||[]).map(tile));
   } catch {
     track.innerHTML = '<li class="eco-loading">The ecosystem is unavailable right now. <a href="/portfolio.html">Open the portfolio</a>.</li>';
   }
@@ -114,7 +114,7 @@ async function buildIndex() {
   async function filter() {
     const raw = field.value.trim(), q = norm(raw); let n = 0;
     const tiles = [...document.querySelectorAll('#ecoTrack .eco-tile')];
-    const hits = q ? tiles.filter((li) => norm(li.textContent).includes(q)) : tiles;
+    const hits = q ? tiles.filter((li) => norm((li.dataset.name||'')+' '+li.textContent).includes(q)) : tiles;
     n = q ? hits.length : 0;
     // Narrow the band only when something in it matches; never leave it empty.
     tiles.forEach((li) => { li.hidden = q && hits.length > 0 && !hits.includes(li); });

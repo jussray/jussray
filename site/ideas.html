@@ -201,8 +201,9 @@ textarea#goal{min-height:64px;height:64px;border-radius:999px;padding:18px 26px 
 </style>
 <link rel="stylesheet" href="/assets/world-shell.css">
 <script src="/assets/world-shell.js" defer></script>
+<link rel="stylesheet" href="/assets/studio-world.css">
 </head>
-<body data-atmo="sunset">
+<body data-atmo="sunset" class="studio-world">
 <a class="skip" href="#controls">Skip to controls</a>
 <div class="scene" aria-hidden="true">
   <div class="art day"></div><div class="art night"></div><div class="art sunset"></div><div class="tint"></div>
@@ -387,14 +388,7 @@ textarea#goal{min-height:64px;height:64px;border-radius:999px;padding:18px 26px 
     }, 450);
   });
 
-  /* Atmosphere: follows local time, cycles on tap. */
-  const ATMOS = ['dawn', 'day', 'sunset', 'night'];
-  const NAMES = { dawn: 'Dawn', day: 'Daylight', sunset: 'Sunset', night: 'Night' };
-  const h = new Date().getHours();
-  let atmo = h >= 5 && h < 8 ? 'dawn' : h >= 8 && h < 17 ? 'day' : h >= 17 && h < 20 ? 'sunset' : 'night';
-  const setAtmo = (a, manual) => { atmo = a; document.body.dataset.atmo = a; $('#atmoName').textContent = NAMES[a]; $('#atmoHint').textContent = manual ? 'Chosen by you · tap to change' : 'Matches your local time · tap to change'; };
-  setAtmo(atmo, false);
-  $('#atmo').addEventListener('click', () => setAtmo(ATMOS[(ATMOS.indexOf(atmo) + 1) % ATMOS.length], true));
+  /* Time-of-day is owned by atmosphere.mjs. */
 
   /* Ambient sound: generated pad, off by default, starts only on a user gesture. */
   let ctx, gain;
