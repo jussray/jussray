@@ -49,7 +49,10 @@ const projectionText = JSON.stringify(portfolio);
 const publicStandaloneSystems = systems.systems.filter((system) => system.public && system.kind === 'standalone_os').map((system) => system.name);
 const robots = readFileSync(join(ROOT, 'robots.txt'), 'utf8');
 const sitemap = readFileSync(join(ROOT, 'sitemap.xml'), 'utf8');
-const robotsGroup = (agent) => robots.match(new RegExp(`(?:^|\\n)User-agent:\\s*${agent}\\s*\\n([\\s\\S]*?)(?=\\nUser-agent:|\\nSitemap:|$)`, 'i'))?.[1] || '';
+const robotsGroup = (agent) => {
+  const token = agent === '*' ? '\\*' : agent;
+  return robots.match(new RegExp(`(?:^|\\n)User-agent:\\s*${token}\\s*\\n([\\s\\S]*?)(?=\\nUser-agent:|\\nSitemap:|$)`, 'i'))?.[1] || '';
+};
 say(/User-agent:\s*\*/i.test(robots) && /^\s*Allow:\s*\//mi.test(robotsGroup('*')) && robots.includes('https://www.jussco.company/sitemap.xml'), 'seo: wildcard crawl access and canonical sitemap are declared');
 for (const agent of ['Googlebot', 'Bingbot', 'OAI-SearchBot', 'Claude-SearchBot', 'PerplexityBot']) {
   const group = robotsGroup(agent);
