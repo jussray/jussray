@@ -47,7 +47,20 @@ for (const vp of [
   const page = await ctx.newPage();
   const errors = [];
   page.on('pageerror', (e) => errors.push(String(e)));
-  page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
+  // Keep console failures blocking; include the response path so a generic
+  // Chromium "Failed to load resource" error has an actionable source.
+  page.on('console', (m) => {
+    if (m.type() !== 'error') return;
+    const location = m.location();
+    let source = '';
+    try { if (location.url) { const u = new URL(location.url); source = ' [' + u.origin + u.pathname + ']'; } } catch {}
+    errors.push(m.text() + source);
+  });
+  page.on('response', (response) => {
+    if (response.status() < 400) return;
+    const u = new URL(response.url());
+    errors.push('HTTP ' + response.status() + ' ' + u.origin + u.pathname);
+  });
   const home = await page.goto(base, { waitUntil: 'load' });
   say(home?.status() === 200, 'licensing: ' + vp.name + ' homepage responds 200');
   say((await page.locator('a[href="/licensing.html"]').count()) === 1, 'licensing: ' + vp.name + ' homepage exposes licensing path');
