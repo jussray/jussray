@@ -89,3 +89,10 @@ test('deep universe cannot display obsolete release, checkout or signup claims',
   assert.match(universe,/Registry snapshot/);
   assert.match(universe,/api\/public-evidence/);
 });
+
+test('CI validates the canonical Wrangler file without breaking readFileSync arguments',()=>{
+  const workflow=read('.github/workflows/site-proof.yml');
+  assert.ok(workflow.includes("'wrangler.evidence.jsonc'"));
+  assert.ok(workflow.includes("readFileSync('wrangler.jsonc','utf8')"));
+  assert.equal(workflow.includes("readFileSync('wrangler.jsonc', 'wrangler.evidence.jsonc'"),false);
+});
