@@ -45,6 +45,10 @@ jobs:
           runs=checks.get('check_runs',[])
           if checks.get('total_count',0)>len(runs) or not runs:
               sys.exit('BLOCKED: incomplete or missing check evidence')
+          own='/actions/runs/'+os.environ['GITHUB_RUN_ID']+'/'
+          runs=[r for r in runs if own not in (r.get('details_url') or '')]
+          if not runs:
+              sys.exit('BLOCKED: no independent exact-head check evidence')
           by_name={}
           for run in sorted(runs,key=lambda x:x.get('started_at') or ''):
               by_name[run['name']]=run
