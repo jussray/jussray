@@ -70,3 +70,14 @@ test('public source observations do not overwrite founder status or runtime clai
   assert.ok(deployment.routes.every(r=>r.pattern.includes('/api/public-evidence')));
   assert.ok(!deployment.routes.some(r=>r.custom_domain));
 });
+
+test('automatic release holds on stale or red exact-head checks and verifies the public API',()=>{
+  const workflow=read('.github/workflows/public-evidence-release.yml');
+  assert.ok(workflow.includes('workflow_run.head_sha'));
+  assert.ok(workflow.includes('jussco-production'));
+  assert.ok(workflow.includes('check-runs?per_page=100'));
+  assert.ok(workflow.includes("status')!='completed'"));
+  assert.ok(workflow.includes('CLOUDFLARE_API_TOKEN'));
+  assert.ok(workflow.includes('api/public-evidence'));
+  assert.doesNotMatch(workflow,/^  pull_request:/m);
+});
