@@ -964,3 +964,9 @@ Labels: VERIFIED (seen: run/log/diff) · INFERRED · UNKNOWN · BLOCKED.
   - Root cause: ensure-ffmpeg.sh rewrites the Azure mirror only in sources files; Ubuntu 26.04 runners use /etc/apt/apt-mirrors.txt. Fix PR opened: StoryEngine #156 (branch claude/ensure-ffmpeg-mirrorlist, 5297c9c).
 - 2026-11-11 17:25Z: StoryEngine #155 head 622ab58 (30-min window + cherry-picked ensure-ffmpeg mirrorlist fix from #156): all 18 checks green/skipped; Node tests 488/488 in CI. Whether the apt fix or an Azure mirror recovery made ffmpeg install pass is UNKNOWN (install lines not in the log tail read). #156 green but its CI never ran the ffmpeg jobs. Waiting on founder: "merge 155", add the two production Playwright secrets.
 
+## 2026-11-18 — Adaptive Atmosphere (feat/adaptive-atmosphere-20261118)
+- Founder mockup "Adaptive Atmosphere" (seasons, holidays, personal style) → shared `site/assets/atmosphere.mjs`: visitor panel (Adaptive Theme, Preferred Season, Colour Mood, Visual Intensity, Holiday Themes, Reduce Motion, Theme Preview), prefs kept in localStorage only, sanitized on read; Halloween (Oct 31) added beside Christmas lights and New Year's. Replaces the old "visitors cannot choose a season" rule on Juss's word (2026-11-18).
+- Truth limit: no seasonal or holiday scene paintings exist yet; a season changes particles and the mood glow only, and the panel says so. NEXT: one clean scene plate per season + holiday (7), then wire them per `data-season` / `data-holiday`.
+- Proof (local): tests/atmosphere.test.mjs 5/5, node tests 23/23, scripts/verify-site.mjs 468 ok / 0 FAIL, panel open/choose/persist/Esc on / and /games/ at 1672 and 390.
+
+- 2026-11-26: Adaptive Atmosphere conflict reconciliation preserves the newer local clock, regional event and sky rendering implementation; visual preferences are browser-local and overlay the clock's seasonal result. Candidate tests and live rendering require exact-head CI.

@@ -80,3 +80,35 @@ test('sky holds the prior painting until the requested replacement loads',()=>{
   sky.loaded('dawn'); assert.deepEqual(displayed,['day','dawn']);
   sky.request('night'); assert.deepEqual(displayed,['day','dawn','night']);
 });
+
+import { resolveAtmosphere, cleanPrefs, DEFAULT_PREFS } from '../site/assets/atmosphere.mjs';
+test('Halloween runs on Oct 31 only', () => {
+  assert.equal(holidayFor(day(10,31)), 'halloween');
+  assert.equal(holidayFor(day(10,30)), '');
+  assert.equal(holidayFor(day(11,1)), '');
+});
+test('visitor preferences resolve the atmosphere (founder, 2026-11-18)', () => {
+  const oct31 = day(10,31);
+  assert.deepEqual(['season','holiday'].map(k => resolveAtmosphere(DEFAULT_PREFS, oct31, 'America/New_York')[k]), ['autumn','halloween']);
+  assert.equal(resolveAtmosphere({ ...DEFAULT_PREFS, season: 'winter' }, oct31, 'America/New_York').season, 'winter');
+  assert.equal(resolveAtmosphere({ ...DEFAULT_PREFS, holidays: false }, oct31, 'America/New_York').holiday, '');
+  assert.equal(resolveAtmosphere({ ...DEFAULT_PREFS, adaptive: false }, oct31, 'America/New_York').holiday, '');
+  assert.equal(resolveAtmosphere({ ...DEFAULT_PREFS, intensity: 40 }, oct31).intensity, 0.4);
+});
+test('tampered stored preferences fall back to safe defaults', () => {
+  assert.deepEqual(cleanPrefs({ season: '<script>', mood: 'x', intensity: 999, adaptive: 'yes' }), { ...DEFAULT_PREFS, intensity: 100 });
+  assert.deepEqual(cleanPrefs(null), { ...DEFAULT_PREFS });
+});
+
+
+test('manual visual preferences preserve the regional clock result and do not invent holidays',()=>{
+  const date=new Date('2026-11-26T18:00:00Z');
+  const auto={season:'autumn',holiday:'thanksgiving'};
+  assert.equal(resolveAtmosphere(DEFAULT_PREFS,date,'America/New_York',auto).holiday,'thanksgiving');
+  assert.equal(resolveAtmosphere({...DEFAULT_PREFS,season:'winter'},date,'America/New_York',auto).season,'winter');
+  assert.equal(resolveAtmosphere({...DEFAULT_PREFS,holidays:false},date,'America/New_York',auto).holiday,'');
+  assert.equal(resolveAtmosphere(DEFAULT_PREFS,date,'Asia/Tokyo',{season:'autumn',holiday:''}).holiday,'');
+  assert.equal(resolveAtmosphere({...DEFAULT_PREFS,reduceMotion:true,intensity:0},date,'America/New_York',auto).reduceMotion,true);
+  assert.equal(regionalEvent(new Date(2026,9,31),'US'),'halloween');
+  assert.equal(regionalEvent(new Date(2026,9,31),'JP'),'');
+});

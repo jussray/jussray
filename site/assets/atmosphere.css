@@ -13,3 +13,33 @@
 @keyframes amb-eq{0%,100%{height:4px}50%{height:14px}}
 @media (max-width:640px){.amb-float{padding:0 12px}.amb-text{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}}
 @media (prefers-reduced-motion:reduce){.amb-float[aria-pressed="true"] .amb-bars i{animation:none;height:10px}}
+/* Adaptive Atmosphere panel (founder mockup 2026-11-18) */
+.atmo-settings-btn{display:inline-flex;align-items:center;gap:6px;min-height:44px;margin-top:8px;padding:6px 14px;border:1px solid rgba(255,214,140,.38);border-radius:14px;background:rgba(20,12,44,.55);color:#fff2dc;font:600 13px/1 inherit;cursor:pointer;backdrop-filter:blur(10px)}
+.atmo-settings-btn svg{width:16px;height:16px;fill:#ffd25e}
+.atmo-panel{position:fixed;inset:0;z-index:200;display:flex;justify-content:flex-end;background:rgba(8,4,20,.45)}
+.atmo-panel[hidden]{display:none}
+.atmo-sheet{width:min(380px,100%);height:100%;overflow:auto;padding:26px 22px;background:linear-gradient(180deg,rgba(46,30,82,.94),rgba(22,14,44,.96));color:#f6ecff;border-left:1px solid rgba(255,255,255,.14);box-shadow:-20px 0 60px rgba(0,0,0,.45);font-family:inherit}
+.atmo-head{display:flex;align-items:center;justify-content:space-between}.atmo-head h2{margin:0;font-size:24px;font-family:"Playfair Display",Georgia,serif}
+.atmo-x{width:44px;height:44px;border:0;border-radius:12px;background:rgba(255,255,255,.08);color:inherit;font-size:24px;cursor:pointer}
+.atmo-lede{margin:10px 0 6px;color:#d9c9e6;font-size:14px;line-height:1.5}.atmo-now{margin:0 0 14px;color:#ffd98a;font-size:13px}
+.atmo-row,.atmo-field{display:flex;gap:12px;margin:0 0 12px;padding:14px;border:1px solid rgba(255,255,255,.12);border-radius:16px;background:rgba(255,255,255,.05)}
+.atmo-row{align-items:center;justify-content:space-between;cursor:pointer}.atmo-row span{display:flex;flex-direction:column;gap:3px}.atmo-row small,.atmo-note{color:#cdbbe0;font-size:12px}
+.atmo-field{flex-direction:column}.atmo-field legend{padding:0;margin-bottom:8px}
+.atmo-field select{min-height:44px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:#241640;color:inherit;padding:0 10px;font:inherit}
+.atmo-row input[type=checkbox]{appearance:none;width:46px;height:26px;flex:none;border-radius:20px;background:rgba(255,255,255,.22);position:relative;cursor:pointer;transition:background .2s}
+.atmo-row input[type=checkbox]::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s}
+.atmo-row input[type=checkbox]:checked{background:#9d6bff}.atmo-row input[type=checkbox]:checked::after{transform:translateX(20px)}
+.atmo-row input:disabled{opacity:.4}.atmo-field input[type=range]{width:100%;min-height:44px;accent-color:#b48bff}
+.atmo-moods,.atmo-previews{display:flex;gap:10px;flex-wrap:wrap}
+.atmo-mood{width:44px;height:44px;border-radius:50%;border:2px solid transparent;cursor:pointer}
+.atmo-mood[aria-pressed=true]{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.25)}
+.atmo-mood[data-mood=violet]{background:#9d6bff}.atmo-mood[data-mood=rose]{background:#ff6f9a}.atmo-mood[data-mood=amber]{background:#ffb347}.atmo-mood[data-mood=emerald]{background:#3fcf98}.atmo-mood[data-mood=sky]{background:#5aa8ff}
+.atmo-preview{min-height:44px;padding:0 12px;border-radius:12px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);color:inherit;font:600 13px inherit;cursor:pointer}
+.atmo-preview[aria-pressed=true]{border-color:#ffd25e;background:rgba(255,210,94,.16)}
+.atmo-panel :focus-visible{outline:2px solid #ffd25e;outline-offset:2px}
+html[data-motion=reduced] .world-atmosphere{display:none}
+@media (prefers-reduced-motion:reduce){.atmo-row input::after{transition:none}}
+
+/* Manual reduction supplements, never replaces the OS reduced-motion setting. */
+html[data-motion=reduced] .scene-motion{animation:none!important}
+html[data-motion=reduced] .atmo-row input::after{transition:none}

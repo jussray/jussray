@@ -1,5 +1,11 @@
-/* Shared visual atmosphere; public visitors cannot choose a season. */
+/* Shared atmosphere: local time owns the environment; visitor preferences override visual styling only. */
 const southernZones = /^(Australia\/|Pacific\/(Auckland|Chatham)|America\/(Argentina\/|Buenos_Aires|Santiago|Montevideo)|Africa\/(Johannesburg|Maseru|Mbabane))/;
+export const SEASONS = ['spring', 'summer', 'autumn', 'winter'];
+export const MOODS = ['violet', 'rose', 'amber', 'emerald', 'sky'];
+export const DEFAULT_PREFS = Object.freeze({ adaptive: true, season: 'auto', mood: 'violet', intensity: 70, holidays: true, reduceMotion: false });
+const KEY = 'jc-atmosphere-v1';
+const LABEL = { spring: 'Spring', summer: 'Summer', autumn: 'Autumn', winter: 'Winter', halloween: 'Halloween', 'winter-lights': 'Christmas', 'new-year': "New Year's" };
+
 export function seasonFor(date = new Date(), zone = Intl.DateTimeFormat().resolvedOptions().timeZone || '') {
   const month = zone ? Number(new Intl.DateTimeFormat('en-US',{timeZone:zone,month:'numeric',calendar:'gregory'}).format(date))-1 : date.getMonth();
   let index = month === 11 || month < 2 ? 0 : month < 5 ? 1 : month < 8 ? 2 : 3;
@@ -8,11 +14,43 @@ export function seasonFor(date = new Date(), zone = Intl.DateTimeFormat().resolv
 }
 export function holidayFor(date = new Date()) {
   const m = date.getMonth() + 1, d = date.getDate();
+  if (m === 10 && d === 31) return 'halloween';
   if (m === 12 && d >= 20 && d <= 26) return 'winter-lights';
   if (m === 12 && d >= 31 || m === 1 && d === 1) return 'new-year';
   return '';
 }
 
+/* Turns stored preferences into what the page shows. Bad or tampered values fall back to defaults. */
+export function cleanPrefs(raw) {
+  const p = { ...DEFAULT_PREFS };
+  if (raw && typeof raw === 'object') {
+    if (typeof raw.adaptive === 'boolean') p.adaptive = raw.adaptive;
+    if (raw.season === 'auto' || SEASONS.includes(raw.season)) p.season = raw.season;
+    if (MOODS.includes(raw.mood)) p.mood = raw.mood;
+    if (Number.isFinite(raw.intensity)) p.intensity = Math.min(100, Math.max(0, Math.round(raw.intensity)));
+    if (typeof raw.holidays === 'boolean') p.holidays = raw.holidays;
+    if (typeof raw.reduceMotion === 'boolean') p.reduceMotion = raw.reduceMotion;
+  }
+  return p;
+}
+export function resolveAtmosphere(prefs = DEFAULT_PREFS, date = new Date(), zone = '', automatic = {}) {
+  const p = cleanPrefs(prefs);
+  const season = p.season === 'auto' ? (automatic.season ?? seasonFor(date, zone)) : p.season;
+  const holiday = p.adaptive && p.holidays ? (automatic.holiday ?? holidayFor(date)) : '';
+  return { season, holiday, mood: p.mood, intensity: p.intensity / 100, reduceMotion: p.reduceMotion, label: LABEL[holiday || season] || holiday || season };
+}
+function loadPrefs() { try { return cleanPrefs(JSON.parse(localStorage.getItem(KEY) || 'null')); } catch { return { ...DEFAULT_PREFS }; } }
+function savePrefs(p) { try { localStorage.setItem(KEY, JSON.stringify(p)); } catch { /* private window: keep the choice for this visit only */ } }
+
+const COLORS = {
+  spring: 'rgba(255,204,224,A)', summer: 'rgba(255,222,141,A)', autumn: 'rgba(255,170,80,A)', winter: 'rgba(239,247,255,A)',
+  halloween: ['rgba(255,140,40,A)', 'rgba(170,110,255,A)'], 'winter-lights': ['rgba(255,226,157,A)', 'rgba(255,90,90,A)', 'rgba(120,220,140,A)'],
+  'new-year': ['rgba(255,226,157,A)', 'rgba(255,120,220,A)', 'rgba(120,200,255,A)']
+};
+const MOOD_GLOW = { violet: '150,95,255', rose: '255,95,150', amber: '255,170,60', emerald: '60,200,140', sky: '80,160,255' };
+
+
+let visitorPrefs = loadPrefs();
 export function timePhase(date = new Date(), zone) {
   const h = zone ? Number(new Intl.DateTimeFormat('en-GB', {timeZone:zone,hour:'numeric',hourCycle:'h23'}).format(date)) : date.getHours();
   return h >= 5 && h < 8 ? 'dawn' : h >= 8 && h < 17 ? 'day' : h >= 17 && h < 20 ? 'sunset' : 'night';
@@ -34,6 +72,7 @@ export function solarPhase(date, coords) {
 export function regionalEvent(date, region) {
   const m=date.getMonth()+1,d=date.getDate();
   if(m===1&&d===1||m===12&&d===31)return 'new-year';
+  if (m===10&&d===31&&['US','CA','GB','IE','AU','NZ'].includes(region)) return 'halloween';
   if (region==='US'&&m===7&&d===4) return 'independence-day';
   if (region==='CA'&&m===7&&d===1) return 'canada-day';
   if (region==='FR'&&m===7&&d===14) return 'national-day';
@@ -143,15 +182,18 @@ function startLocalTime() {
     lastMinute = signature;
     let season = seasonFor(date, zone);
     if (coords) { const m = date.getMonth(), idx = m===11||m<2?0:m<5?1:m<8?2:3; season = ['winter','spring','summer','autumn'][(idx+(coords.latitude<0?2:0))%4]; }
-    root.dataset.season = season;
-    const event = regionalEvent(date, region);
-    if (event) root.dataset.holiday = event; else delete root.dataset.holiday;
+    const visual = resolveAtmosphere(visitorPrefs, date, zone, {season, holiday: regionalEvent(date, region)});
+    root.dataset.season = visual.season;
+    if (visual.holiday) root.dataset.holiday = visual.holiday; else delete root.dataset.holiday;
+    root.dataset.mood = visual.mood;
+    root.style.setProperty('--atmo-intensity', String(visual.intensity));
+    if (visual.reduceMotion) root.dataset.motion = 'reduced'; else delete root.dataset.motion;
     clock.dateTime = date.toISOString();
     clock.textContent = formatLocalDateTime(date, locale);
     const m=date.getMonth(), sm=m===11||m<2?11:m-(m+1)%3;
     const from=new Date(date.getFullYear()-(m<2?1:0),sm,1), to=new Date(from.getFullYear(),from.getMonth()+3,0);
     const fmt = new Intl.DateTimeFormat(locale,{month:'short',day:'numeric'});
-    for (const el of document.querySelectorAll('#seasonWindow,#season-window')) { el.textContent=fmt.format(from)+' – '+fmt.format(to); el.lang=locale; }
+    for (const el of document.querySelectorAll('#seasonWindow,#season-window')) { el.textContent=visitorPrefs.season==='auto'?fmt.format(from)+' – '+fmt.format(to):'Visual preview: '+LABEL[visitorPrefs.season]; el.lang=visitorPrefs.season==='auto'?locale:'en'; }
   }
   function apply(phase) {
     if (root.dataset.tod !== phase) root.dataset.tod = phase;
@@ -165,6 +207,7 @@ function startLocalTime() {
     toggle.title = unavailable ? labels[7] : labels[4];
   }
   const sync = () => { const date = new Date(); updateEnvironment(date); apply(state.read(date)); };
+  document.addEventListener('atmosphere:preferences', () => { lastMinute=''; sync(); });
   for (const button of document.querySelectorAll('#atmo, #atmo-cycle')) {
     button.title = labels[8];
     for (const el of button.querySelectorAll('small')) if (el.textContent.trim().toLowerCase()==='current atmosphere') localize(el, labels[9]);
@@ -243,6 +286,11 @@ export function startAtmosphere() {
   const scene = homeStage || document.body;
   scene.append(canvas);
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const still = () => reduced.matches || visitorPrefs.reduceMotion;
+  let prefs = visitorPrefs;
+  const currentVisual = () => resolveAtmosphere(visitorPrefs, new Date(), '', {season: root.dataset.season, holiday: root.dataset.holiday || ''});
+  let state = currentVisual();
+  function visualOpacity() { canvas.style.opacity = visitorPrefs.intensity === 0 ? '0' : String(.2 + visitorPrefs.intensity * .0055); }
   let width = 0, height = 0, particles = [], lights = [], frame = 0, last = 0;
   function resize() {
     width = scene.clientWidth;
@@ -251,8 +299,9 @@ export function startAtmosphere() {
     canvas.width = Math.round(width * ratio); canvas.height = Math.round(height * ratio);
     canvas.style.width = width + 'px'; canvas.style.height = height + 'px';
     context.setTransform(ratio, 0, 0, ratio, 0, 0);
-    const count = Math.min(width < 700 ? 12 : 22, Math.max(8, Math.floor(width / 65)));
-    particles = Array.from({length: count}, () => ({x: Math.random()*width,y:Math.random()*height,r:1.5+Math.random()*3,s:.25+Math.random()*.55, phase:Math.random()*6.28}));
+    const baseCount = Math.min(width < 700 ? 12 : 22, Math.max(8, Math.floor(width / 65)));
+    const count = Math.round(baseCount * (.35 + visitorPrefs.intensity / 100));
+    particles = Array.from({length: count}, (_,i) => ({x: Math.random()*width,y:Math.random()*height,r:1.5+Math.random()*3,s:.25+Math.random()*.55, phase:Math.random()*6.28,tone:i}));
     // Time-of-day layer, kept small: stars and fireflies, sunset embers, water glints, dawn mist.
     lights = Array.from({length: width < 700 ? 14 : 26}, () => ({x: Math.random()*width, y: Math.random()*height, u: Math.random(), v: Math.random(), phase: Math.random()*6.28}));
   }
@@ -304,16 +353,21 @@ export function startAtmosphere() {
   function environment() { /* Local clock owns the environment state independently of animation. */ }
   function tick(time) {
     frame = 0;
-    if (document.hidden || reduced.matches) return;
+    if (document.hidden || still()) return;
     frame = requestAnimationFrame(tick);
     if (time - last < 40) return;
     last = time; environment(); context.clearRect(0,0,width,height);
     const season = root.dataset.season, holiday = root.dataset.holiday;
+    const rgb = MOOD_GLOW[visitorPrefs.mood];
+    const tint = context.createRadialGradient(width/2,height*.45,Math.min(width,height)*.25,width/2,height*.45,Math.max(width,height)*.75);
+    tint.addColorStop(0,`rgba(${rgb},0)`); tint.addColorStop(1,`rgba(${rgb},${visitorPrefs.intensity/1000})`);
+    context.fillStyle=tint; context.fillRect(0,0,width,height);
     for (const p of particles) {
       p.y += p.s; p.x += Math.sin(time/1800+p.phase)*.27;
       if (p.y > height+10) {p.y=-10; p.x=Math.random()*width;}
       if (p.x < -10) p.x=width+10; else if (p.x>width+10) p.x=-10;
-      context.fillStyle = holiday && p.r < 3 ? 'rgba(255,226,157,.65)' : season === 'winter' ? 'rgba(239,247,255,.6)' : season === 'spring' ? 'rgba(255,204,224,.5)' : season === 'summer' ? 'rgba(255,222,141,.32)' : 'rgba(255,178,91,.5)';
+      const colors = COLORS[holiday] || COLORS[season] || COLORS.autumn;
+      context.fillStyle = (Array.isArray(colors)?colors[p.tone%colors.length]:colors).replace('A',holiday?.length?'.65':season==='summer'?'.32':'.55');
       context.beginPath();
       if (season === 'autumn' || season === 'spring') context.ellipse(p.x,p.y,p.r,p.r*.48,time/2500+p.phase,0,Math.PI*2);
       else context.arc(p.x,p.y,p.r*(season === 'summer' ? .45 : .7),0,Math.PI*2);
@@ -324,8 +378,78 @@ export function startAtmosphere() {
   function sync() {
     cancelAnimationFrame(frame); frame = 0; context.clearRect(0,0,width,height);
     environment();
-    if (!document.hidden && !reduced.matches) frame = requestAnimationFrame(tick);
+    visualOpacity();
+    if (!document.hidden && !still()) frame = requestAnimationFrame(tick);
   }
+  function update(next) {
+    visitorPrefs = cleanPrefs({...visitorPrefs,...next}); prefs = visitorPrefs; savePrefs(visitorPrefs);
+    document.dispatchEvent(new CustomEvent('atmosphere:preferences'));
+    resize(); sync(); render();
+  }
+  /* Settings panel: opened by any [data-atmo-settings] control, or the button added beside the atmosphere card. */
+  if (!document.querySelector('link[href$="/assets/atmosphere.css"]')) {
+    const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = '/assets/atmosphere.css'; document.head.append(css);
+  }
+  const panel = document.createElement('div');
+  panel.className = 'atmo-panel'; panel.hidden = true;
+  panel.setAttribute('role', 'dialog'); panel.setAttribute('aria-modal', 'true'); panel.setAttribute('aria-labelledby', 'atmoPanelTitle');
+  panel.innerHTML = `<div class="atmo-sheet">
+  <div class="atmo-head"><h2 id="atmoPanelTitle">Adaptive Atmosphere</h2><button type="button" class="atmo-x" data-close aria-label="Close">×</button></div>
+  <p class="atmo-lede">A living experience that adapts on its own to the season and the holidays, and to your own style.</p>
+  <p class="atmo-now" aria-live="polite"></p>
+  <label class="atmo-row"><span><b>Adaptive Theme</b><small>Change with the season and holidays automatically</small></span><input type="checkbox" role="switch" data-k="adaptive"></label>
+  <label class="atmo-field"><b>Preferred Season</b><select data-k="season"><option value="auto">Auto (Recommended)</option><option value="spring">Spring</option><option value="summer">Summer</option><option value="autumn">Autumn</option><option value="winter">Winter</option></select></label>
+  <fieldset class="atmo-field"><legend><b>Colour Mood</b></legend><div class="atmo-moods">${MOODS.map(m => `<button type="button" class="atmo-mood" data-mood="${m}" aria-label="${m[0].toUpperCase()+m.slice(1)}" aria-pressed="false"></button>`).join('')}</div></fieldset>
+  <label class="atmo-field"><b>Visual Intensity</b><input type="range" min="0" max="100" step="5" data-k="intensity"></label>
+  <label class="atmo-row"><span><b>Holiday Themes</b><small>Regional holidays and seasonal events</small></span><input type="checkbox" role="switch" data-k="holidays"></label>
+  <label class="atmo-row"><span><b>Reduce Motion</b><small>Stills the falling petals, leaves and snow</small></span><input type="checkbox" role="switch" data-k="reduceMotion"></label>
+  <fieldset class="atmo-field"><legend><b>Theme Preview</b></legend><div class="atmo-previews">${SEASONS.map(s => `<button type="button" class="atmo-preview" data-season="${s}" aria-pressed="false">${LABEL[s]}</button>`).join('')}</div></fieldset>
+  <p class="atmo-note">The daylight scene follows the local clock or optional daylight mode. Season changes affect visual particles and glow. Your choices stay in this browser only.</p>
+</div>`;
+  document.body.append(panel);
+  const $ = (s) => panel.querySelector(s);
+  let opener = null;
+  function render() {
+    prefs = visitorPrefs; state = currentVisual();
+    $('[data-k=adaptive]').checked = prefs.adaptive;
+    $('[data-k=season]').value = prefs.season;
+    $('[data-k=intensity]').value = String(prefs.intensity);
+    $('[data-k=holidays]').checked = prefs.holidays;
+    $('[data-k=holidays]').disabled = !prefs.adaptive;
+    $('[data-k=reduceMotion]').checked = prefs.reduceMotion;
+    panel.querySelectorAll('.atmo-mood').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mood === prefs.mood)));
+    panel.querySelectorAll('.atmo-preview').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.season === state.season)));
+    $('.atmo-now').textContent = `Now showing: ${state.label}${prefs.season === 'auto' ? ' (automatic)' : ' (your choice)'}`;
+  }
+  panel.addEventListener('change', (e) => {
+    const k = e.target.dataset.k; if (!k) return;
+    update({ [k]: e.target.type === 'checkbox' ? e.target.checked : k === 'intensity' ? Number(e.target.value) : e.target.value });
+  });
+  panel.addEventListener('click', (e) => {
+    if (e.target === panel || e.target.closest('[data-close]')) return close();
+    const mood = e.target.closest('.atmo-mood'); if (mood) return update({ mood: mood.dataset.mood });
+    const prev = e.target.closest('.atmo-preview'); if (prev) return update({ season: prev.dataset.season });
+  });
+  panel.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { e.preventDefault(); close(); return; }
+    if (e.key !== 'Tab') return;
+    const items = [...panel.querySelectorAll('button:not([disabled]),input:not([disabled]),select:not([disabled])')];
+    const first=items[0], last=items.at(-1);
+    if (e.shiftKey && document.activeElement===first) { e.preventDefault(); last?.focus(); }
+    else if (!e.shiftKey && document.activeElement===last) { e.preventDefault(); first?.focus(); }
+  });
+  function open(from) { opener = from || document.activeElement; render(); panel.hidden = false; $('[data-k=adaptive]').focus(); }
+  function close() { panel.hidden = true; if (opener && opener.focus) opener.focus(); }
+  document.addEventListener('click', (e) => { const t = e.target.closest('[data-atmo-settings]'); if (t) { e.preventDefault(); open(t); } });
+  const card = document.querySelector('#atmo, #atmo-cycle, [data-atmo-card], .local-environment');
+  if (card && !document.querySelector('[data-atmo-settings]')) {
+    const btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'atmo-settings-btn'; btn.dataset.atmoSettings = '';
+    btn.setAttribute('aria-label', 'Adaptive Atmosphere settings'); btn.setAttribute('aria-haspopup', 'dialog');
+    btn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l1.8 5.4L19 9l-5.2 1.6L12 16l-1.8-5.4L5 9l5.2-1.6z"/></svg><span>Adaptive</span>';
+    card.insertAdjacentElement('afterend', btn);
+  }
+
   resize(); environment(); sync();
   addEventListener('resize', resize, {passive:true});
   document.addEventListener('visibilitychange', sync);
