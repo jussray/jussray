@@ -85,6 +85,31 @@ export function createTimeState(resolve = timePhase) {
     return next;
   }};
 }
+export function bindPageLifecycle(onResume, onPause, doc = document, page = window) {
+  let pageActive = true, running = false, disposed = false;
+  function sync() {
+    if (disposed) return;
+    const next = pageActive && !doc.hidden;
+    if (next === running) return;
+    running = next;
+    if (running) onResume(); else onPause();
+  }
+  function hide() { pageActive = false; sync(); }
+  function show() { pageActive = true; sync(); }
+  doc.addEventListener('visibilitychange', sync);
+  page.addEventListener('pagehide', hide);
+  page.addEventListener('pageshow', show);
+  sync();
+  return () => {
+    if (disposed) return;
+    disposed = true;
+    doc.removeEventListener('visibilitychange', sync);
+    page.removeEventListener('pagehide', hide);
+    page.removeEventListener('pageshow', show);
+    if (running) { running = false; onPause(); }
+  };
+}
+
 // Device locale is a preference, not proof of a country. Coordinates are optional,
 // retained in memory only, and never transmitted or persisted by this module.
 function startLocalTime() {
@@ -225,11 +250,18 @@ function startLocalTime() {
     const preload=()=>phases.forEach(load);
     if(typeof requestIdleCallback==='function')requestIdleCallback(preload,{timeout:3000});else setTimeout(preload,1000);
   }
+  // Calendar and local time are independent of motion. Pause hidden-page polling
+  // and resume immediately on visibility or BFCache restoration.
   sync();
-  setInterval(sync, 1000);
-  document.addEventListener('visibilitychange', sync);
-  addEventListener('pageshow', sync);
-  addEventListener('focus', sync);
+  let timer = null;
+  bindPageLifecycle(() => {
+    sync();
+    timer = setInterval(sync, 1000);
+  }, () => {
+    clearInterval(timer);
+    timer = null;
+  });
+  addEventListener('focus', () => { if (!document.hidden) sync(); });
 }
 
 export function startAtmosphere() {
@@ -244,6 +276,7 @@ export function startAtmosphere() {
   scene.append(canvas);
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let width = 0, height = 0, particles = [], lights = [], frame = 0, last = 0;
+  let pageVisible = false;
   function resize() {
     width = scene.clientWidth;
     height = homeStage ? homeStage.clientHeight : innerHeight;
@@ -301,13 +334,12 @@ export function startAtmosphere() {
       }
     });
   }
-  function environment() { /* Local clock owns the environment state independently of animation. */ }
   function tick(time) {
     frame = 0;
-    if (document.hidden || reduced.matches) return;
+    if (!pageVisible || document.hidden || reduced.matches) return;
     frame = requestAnimationFrame(tick);
     if (time - last < 40) return;
-    last = time; environment(); context.clearRect(0,0,width,height);
+    last = time; context.clearRect(0,0,width,height);
     const season = root.dataset.season, holiday = root.dataset.holiday;
     for (const p of particles) {
       p.y += p.s; p.x += Math.sin(time/1800+p.phase)*.27;
@@ -322,14 +354,24 @@ export function startAtmosphere() {
     drawLights(time);
   }
   function sync() {
-    cancelAnimationFrame(frame); frame = 0; context.clearRect(0,0,width,height);
-    environment();
-    if (!document.hidden && !reduced.matches) frame = requestAnimationFrame(tick);
+    cancelAnimationFrame(frame); frame = 0; last = 0;
+    context.clearRect(0,0,width,height);
+    if (pageVisible && !reduced.matches) frame = requestAnimationFrame(tick);
   }
-  resize(); environment(); sync();
+  resize();
+  const disposeLifecycle = bindPageLifecycle(() => {
+    pageVisible = true; resize(); sync();
+  }, () => {
+    pageVisible = false; sync();
+  });
   addEventListener('resize', resize, {passive:true});
-  document.addEventListener('visibilitychange', sync);
   if (reduced.addEventListener) reduced.addEventListener('change',sync); else reduced.addListener(sync);
+  return () => {
+    disposeLifecycle();
+    removeEventListener('resize', resize);
+    if (reduced.removeEventListener) reduced.removeEventListener('change',sync); else reduced.removeListener(sync);
+    canvas.remove();
+  };
 }
 if (typeof document !== 'undefined') {
   const start = () => { startLocalTime(); startAtmosphere(); import('./ambience.mjs').then((m) => m.mountAmbienceControl()).catch(() => {}); };
