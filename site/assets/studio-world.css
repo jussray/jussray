@@ -276,3 +276,26 @@ html[data-hub-view="home"] .local-environment { display: none; }
 @keyframes scene-water-ripple {from{transform:translateX(-2px) scaleY(1.002);opacity:.7;}to{transform:translateX(2px) scaleY(.998);opacity:.9;}}
 @keyframes scene-core-light {0%,100%{opacity:.45;}50%{opacity:1;}}
 @media(prefers-reduced-motion:reduce){.home-world.studio-world .scene-motion-plate {display:none;}}
+
+/* Final brand refinement: preserve scene detail and accessible keyboard focus. */
+.studio-world :is(.glass-intro,.text-panel,.route-card,.feature-card,.directory-card) {
+  background:linear-gradient(155deg,#21152e70,#10091e52);
+  border-color:#ffdfae70;
+  box-shadow:0 6px 20px #08041830,inset 0 1px #ffdfae18;
+  overflow-wrap:anywhere;
+}
+.studio-world.home-world :is(.founder-quote,.ctl-card,.atmo-btn) {
+  background:linear-gradient(150deg,#34234359,#17122670);
+  backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+}
+.studio-world.home-world .eco-tile > :is(a,div) {
+  background:linear-gradient(170deg,#48256c88,#16132899);
+}
+.studio-world :is(a,button,input,select,textarea):focus-visible {
+  outline:2px solid #ffd98a; outline-offset:3px;
+}
+.studio-world .local-environment > * {max-width:100%; overflow-wrap:anywhere;}
+@media(max-width:760px) {
+  .studio-world .local-environment {gap:.4rem .65rem; padding-inline:.75rem;}
+  .studio-world .local-environment button {white-space:normal;}
+}

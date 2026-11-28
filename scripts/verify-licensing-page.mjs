@@ -19,17 +19,6 @@ const types = new Map([
 const server = createServer(async (req, res) => {
   try {
     const raw = new URL(req.url || '/', 'http://127.0.0.1').pathname;
-    // Source-only browser proof uses an explicit empty fixture for the
-    // separate public-evidence Worker. Never treat fixture data as live evidence.
-    if (raw === '/api/public-evidence' && req.method === 'GET') {
-      res.writeHead(200, { 'content-type': 'application/json; charset=utf-8' });
-      res.end(JSON.stringify({
-        schema: 'jussco/public-evidence@v1',
-        limitation: 'Offline licensing browser fixture; no live evidence or release claim.',
-        sources: []
-      }));
-      return;
-    }
     const rel = raw === '/' ? 'index.html' : decodeURIComponent(raw.replace(/^\//, ''));
     const safe = normalize(rel).replace(/^(\.\.(\/|\\|$))+/, '');
     let file = join(SITE, safe);
@@ -55,27 +44,32 @@ for (const vp of [
   { name: 'mobile', width: 390, height: 844, isMobile: true }
 ]) {
   const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height }, isMobile: vp.isMobile, hasTouch: vp.isMobile });
+  // Match the main-site offline fixture; the separate Worker is not served here.
+  await ctx.route('**/api/public-evidence', (r) => r.fulfill({
+    status: 200, contentType: 'application/json',
+    body: JSON.stringify({
+      schema: 'jussco/public-evidence@v1', observedAt: '2026-11-26T00:00:00Z',
+      limitation: 'Offline synthetic public_source_commit_only test fixture; not a release.',
+      sources: [{ name: "Se'kret Bip", repo: 'jussray/Sekret-Bip',
+        sha: 'a'.repeat(40), committedAt: '2026-11-26T00:00:00Z',
+        kind: 'public_source_commit_only' }]
+    })
+  }));
   const page = await ctx.newPage();
   const errors = [];
+  page.on('response', (r) => { if (r.status() >= 400) errors.push(`HTTP ${r.status()} ${r.url()}`); });
+  page.on('requestfailed', (r) => errors.push(`Request failed ${r.url()}: ${r.failure()?.errorText}`));
   page.on('pageerror', (e) => errors.push(String(e)));
-  // Keep console failures blocking; include the response path so a generic
-  // Chromium "Failed to load resource" error has an actionable source.
-  page.on('console', (m) => {
-    if (m.type() !== 'error') return;
-    const location = m.location();
-    let source = '';
-    try { if (location.url) { const u = new URL(location.url); source = ' [' + u.origin + u.pathname + ']'; } } catch {}
-    errors.push(m.text() + source);
-  });
-  page.on('response', (response) => {
-    if (response.status() < 400) return;
-    const u = new URL(response.url());
-    errors.push('HTTP ' + response.status() + ' ' + u.origin + u.pathname);
-  });
-  const home = await page.goto(base, { waitUntil: 'load' });
+  page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
+  // Allow asynchronous homepage assets and evidence requests to complete before navigation.
+  const [home, evidence] = await Promise.all([
+    page.goto(base, { waitUntil: 'networkidle' }),
+    page.waitForResponse((r) => new URL(r.url()).pathname === '/api/public-evidence')
+  ]);
+  say(evidence.status() === 200, 'licensing: ' + vp.name + ' offline evidence API responds 200');
   say(home?.status() === 200, 'licensing: ' + vp.name + ' homepage responds 200');
   say((await page.locator('a[href="/licensing.html"]').count()) === 1, 'licensing: ' + vp.name + ' homepage exposes licensing path');
-  const response = await page.goto(base + 'licensing.html', { waitUntil: 'load' });
+  const response = await page.goto(base + 'licensing.html', { waitUntil: 'networkidle' });
   say(response?.status() === 200, 'licensing: ' + vp.name + ' responds 200');
   say((await page.title()) === 'Data & AI Licensing | Juss & Co', 'licensing: ' + vp.name + ' title');
   say((await page.locator('link[rel="canonical"]').getAttribute('href')) === 'https://www.jussco.company/licensing.html', 'licensing: ' + vp.name + ' canonical URL');
@@ -87,8 +81,8 @@ for (const vp of [
       (await page.locator('a[href="/llms.txt"]').count()) === 1 &&
       (await page.locator('a[href="/crawlers.json"]').count()) === 1, 'licensing: ' + vp.name + ' machine-readable policy links');
   say((await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)) <= 0, 'licensing: ' + vp.name + ' no horizontal overflow');
-  say(errors.length === 0, 'licensing: ' + vp.name + ' no console errors' + (errors.length ? ' — ' + errors.join(' | ') : ''));
   await page.screenshot({ path: 'proof/site/licensing-' + vp.name + '.png', fullPage: true });
+  say(errors.length === 0, 'licensing: ' + vp.name + ' no console errors' + (errors.length ? ' — ' + errors.join(' | ') : ''));
   await ctx.close();
 }
 await browser.close();
