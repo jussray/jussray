@@ -82,7 +82,33 @@ export function rulesetDecision(rulesets, {fcrAppId=FCR_BYPASS_APP_ID}={}) {
     !(r?.conditions?.ref_name?.exclude||[]).some(n=>n==='~DEFAULT_BRANCH'||n==='~ALL'||n==='refs/heads/main');
   const active=rulesets.filter(protectsMain);
   if (!active.length) errors.push('No active ruleset actually protects main');
-  if (active.some(r=>!Array.isArray(r.bypass_actors))) errors.push('Missing bypass actor readback');
+  // A redacted actor list is not an empty list and cannot establish enforcement.
+  // Inspect configured rules separately, without confusing presence with effectiveness.
+  if (active.some(r=>!Array.isArray(r.bypass_actors))) {
+    errors.push('UNKNOWN: Missing bypass actor readback; non-bypassable enforcement cannot be verified');
+    const configured=active.flatMap(r=>Array.isArray(r.rules)?r.rules:[]);
+    const incomplete=active.some(r=>!Array.isArray(r.rules));
+    if (incomplete) {
+      errors.push('UNKNOWN: Incomplete configured rule inventory');
+      return {ok:false,errors};
+    }
+    const pr=configured.filter(r=>r.type==='pull_request');
+    if (!pr.some(r=>r.parameters?.required_review_thread_resolution===true))
+      errors.push('FAIL: Missing configured PR rule with resolved review threads');
+    if (pr.some(r=>![0,1].includes(r.parameters?.required_approving_review_count)))
+      errors.push('FAIL: Configured approval count must be 0 or 1');
+    const status=configured.filter(r=>r.type==='required_status_checks');
+    if (!status.some(r=>r.parameters?.strict_required_status_checks_policy===true))
+      errors.push('FAIL: Missing configured strict status check policy');
+    const contexts=new Set(status.flatMap(r=>r.parameters?.required_status_checks||[]).map(c=>c.context));
+    for (const required of ['Independent Review Evidence','Review Gate Unit Tests','Juss & Co Site Browser Proof','Repo Reality / exact-head'])
+      if (!contexts.has(required)) errors.push('FAIL: Missing required systematic review check: '+required);
+    if (!configured.some(r=>r.type==='non_fast_forward')) errors.push('FAIL: Missing configured force-push protection');
+    if (!configured.some(r=>r.type==='deletion')) errors.push('FAIL: Missing configured deletion protection');
+    if (active.some(r=>Array.isArray(r.bypass_actors)&&r.bypass_actors.length>0&&!authorityLayerValid(r,fcrAppId)))
+      errors.push('FAIL: Main ruleset has unverified or overbroad bypass actors requiring authority review');
+    return {ok:false,errors};
+  }
   const delegated = active.filter(r=>Array.isArray(r.bypass_actors) && r.bypass_actors.length>0);
   if (delegated.length>1 || delegated.some(r=>!authorityLayerValid(r,fcrAppId)))
     errors.push('Main ruleset has unverified or overbroad bypass actors requiring authority review');
@@ -247,6 +273,12 @@ export async function getRulesEvidence({repo,token,request=fetch}) {
   return details;
 }
 
+export function assertReviewGates(review, governance) {
+  if (review.ok && governance.ok) return;
+  const describe=(label, gate)=>label+'='+ (gate.ok ? 'PASS' : 'FAIL: '+gate.errors.join('; '));
+  throw new Error('GitHub merge authority not verified: '+describe('FOUNDER_REVIEW',review)+'; '+describe('NATIVE_GOVERNANCE',governance));
+}
+
 export async function runReviewGate(env=process.env,request=fetch){
   const repo=env.GITHUB_REPOSITORY;
   const number=Number(env.PR_NUMBER);
@@ -265,7 +297,7 @@ export async function runReviewGate(env=process.env,request=fetch){
     throw new Error('PR head or review authority changed during evaluation; evidence is stale');
   }
   if (latest?.draft!==false) throw new Error('GitHub merge authority not verified: PR must be open and ready for review');
-  if (!result.ok || !rules.ok) throw new Error('GitHub merge authority not verified: '+[...result.errors,...rules.errors].join('; '));
+  assertReviewGates(result,rules);
   console.log('SYSTEMATIC REVIEW POLICY READBACK VERIFIED: '+sha.slice(0,12)+' via '+result.reviewMode+(result.founderReview?' ('+result.founderReview+')':''));
   return {...result,nativeRulesetEnforced:true,releaseAuthorized:false};
 }

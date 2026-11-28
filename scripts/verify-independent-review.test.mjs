@@ -320,3 +320,40 @@ test('delegated authority cannot count checks from an untrusted producer or skip
   const t=delegatedSecurity();t.rules[2].parameters.required_review_thread_resolution=false;
   assert.equal(rulesetDecision([t,delegatedAuthority()],{fcrAppId:delegatedFixtureApp}).ok,false);
 });
+
+
+import {assertReviewGates} from './verify-independent-review.mjs';
+const gatePass={ok:true,errors:[]};
+const gateFail={ok:false,errors:['missing evidence']};
+test('founder approval cannot clear governance',()=>assert.throws(()=>assertReviewGates(gatePass,gateFail),/FOUNDER_REVIEW=PASS; NATIVE_GOVERNANCE=FAIL: missing evidence/));
+test('governance cannot clear founder review',()=>assert.throws(()=>assertReviewGates(gateFail,gatePass),/FOUNDER_REVIEW=FAIL: missing evidence; NATIVE_GOVERNANCE=PASS/));
+test('both failures are reported',()=>assert.throws(()=>assertReviewGates(gateFail,gateFail),/FOUNDER_REVIEW=FAIL: missing evidence; NATIVE_GOVERNANCE=FAIL: missing evidence/));
+test('both pass',()=>assert.doesNotThrow(()=>assertReviewGates(gatePass,gatePass)));
+
+
+test('redacted bypass actors are unknown, not proof that configured rules are absent',()=>{
+  const redacted=structuredClone(enforcedRule);
+  delete redacted.bypass_actors;
+  const result=rulesetDecision([redacted]);
+  assert.equal(result.ok,false);
+  assert.match(result.errors.join('; '),/UNKNOWN:.*bypass actor readback/);
+  assert.doesNotMatch(result.errors.join('; '),/Missing protected PR rule|Required checks are not strict|Missing required systematic review check|does not prevent force pushes and deletion/);
+});
+test('redacted bypass evidence still reports genuinely absent configured checks and force-push rule',()=>{
+  const redacted=structuredClone(enforcedRule);
+  delete redacted.bypass_actors;
+  redacted.rules=redacted.rules.filter(r=>r.type!=='non_fast_forward');
+  redacted.rules.find(r=>r.type==='required_status_checks').parameters.required_status_checks=[];
+  const result=rulesetDecision([redacted]);
+  assert.equal(result.ok,false);
+  assert.match(result.errors.join('; '),/FAIL:.*Missing required systematic review check: Independent Review Evidence/);
+  assert.match(result.errors.join('; '),/FAIL:.*Missing configured force-push protection/);
+  assert.doesNotMatch(result.errors.join('; '),/Missing configured deletion protection/);
+});
+test('known broad bypass remains a blocking governance violation',()=>{
+  const rule=structuredClone(enforcedRule);
+  rule.bypass_actors=[{actor_type:'RepositoryRole',actor_id:5,bypass_mode:'always'}];
+  const result=rulesetDecision([rule]);
+  assert.equal(result.ok,false);
+  assert.match(result.errors.join('; '),/overbroad bypass actors/);
+});
