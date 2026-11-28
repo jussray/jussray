@@ -593,7 +593,7 @@ header nav a[aria-current="page"]{background:linear-gradient(180deg,#ffe2a3,#f5b
 </style>
 <link rel="stylesheet" href="/assets/studio-world.css">
 </head>
-<body class="studio-world">
+<body id="home" class="studio-world">
 <p id="hub-toast" role="status" aria-live="polite" hidden></p><svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><linearGradient id="gold-g" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff0b8"/><stop offset=".55" stop-color="#f5c14b"/><stop offset="1" stop-color="#c7862a"/></linearGradient><filter id="neon" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs></svg>
 <a class="skip-link" href="#main">Skip to Game Hub content</a>
 <div id="living-world-scene" aria-hidden="true"><div class="tod-art"></div></div>
@@ -773,7 +773,10 @@ header nav a[aria-current="page"]{background:linear-gradient(180deg,#ffe2a3,#f5b
     if(view==='details'){
       collapseGames(false);
       if(oldView!==view)requestAnimationFrame(()=>document.getElementById(mobile.matches&&id==='games'?'main':id)?.scrollIntoView({block:'start',behavior:'auto'}));
-    }else if(mobile.matches){collapseGames(true);closeHub();}
+    }else{
+      if(mobile.matches){collapseGames(true);closeHub();}
+      if(id==='home'&&oldView==='details')requestAnimationFrame(()=>scrollTo({top:0,behavior:'instant'}));
+    }
   }
   addEventListener('hashchange',syncHubView);
   // A direct link to #games on a phone opens the details view at its top (featured, hub, ambience, then worlds).

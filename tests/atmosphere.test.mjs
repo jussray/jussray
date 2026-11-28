@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { seasonFor, holidayFor, timePhase, createTimeState, solarPhase, regionalEvent, formatLocalDateTime, localizedPhrase, resolveVisitorLocale, regionForZone, createSkyState } from '../site/assets/atmosphere.mjs';
+import { readFileSync } from 'node:fs';
+import { seasonFor, holidayFor, timePhase, createTimeState, solarPhase, regionalEvent, formatLocalDateTime, localizedPhrase, resolveVisitorLocale, regionForZone, createSkyState, bindPageLifecycle } from '../site/assets/atmosphere.mjs';
 const day = (month, date = 15) => new Date(2026, month - 1, date, 12);
 test('seasons change by local calendar month and southern hemisphere', () => {
   assert.deepEqual([1,4,7,10].map(m => seasonFor(day(m), 'America/New_York')), ['winter','spring','summer','autumn']);
@@ -79,4 +80,36 @@ test('sky holds the prior painting until the requested replacement loads',()=>{
   assert.deepEqual(displayed,['day']);
   sky.loaded('dawn'); assert.deepEqual(displayed,['day','dawn']);
   sky.request('night'); assert.deepEqual(displayed,['day','dawn','night']);
+});
+
+test('visibility and page lifecycle pause and resume exactly once, even on BFCache return', () => {
+  const doc = new EventTarget(); doc.hidden = false;
+  const page = new EventTarget(); const calls = [];
+  const dispose = bindPageLifecycle(() => calls.push('start'), () => calls.push('stop'), doc, page);
+  assert.deepEqual(calls, ['start']);
+  doc.hidden = true; doc.dispatchEvent(new Event('visibilitychange'));
+  page.dispatchEvent(new Event('pagehide'));
+  doc.hidden = false; doc.dispatchEvent(new Event('visibilitychange'));
+  assert.deepEqual(calls, ['start', 'stop']);
+  page.dispatchEvent(new Event('pageshow')); page.dispatchEvent(new Event('pageshow'));
+  assert.deepEqual(calls, ['start', 'stop', 'start']);
+  dispose(); dispose(); page.dispatchEvent(new Event('pageshow'));
+  assert.deepEqual(calls, ['start', 'stop', 'start', 'stop']);
+});
+test('initially hidden documents wait for visibility before starting', () => {
+  const doc = new EventTarget(); doc.hidden = true;
+  const page = new EventTarget(); let starts = 0, stops = 0;
+  const dispose = bindPageLifecycle(() => starts++, () => stops++, doc, page);
+  assert.equal(starts, 0);
+  doc.hidden = false; doc.dispatchEvent(new Event('visibilitychange'));
+  assert.equal(starts, 1);
+  page.dispatchEvent(new Event('pagehide'));
+  dispose(); assert.equal(stops, 1);
+});
+test('website and Game Hub ship identical atmosphere modules and a real home target', () => {
+  const website = readFileSync(new URL('../site/assets/atmosphere.mjs', import.meta.url));
+  const hub = readFileSync(new URL('../site/games/assets/atmosphere.mjs', import.meta.url));
+  assert.deepEqual(website, hub);
+  const html = readFileSync(new URL('../site/games/index.html', import.meta.url), 'utf8');
+  assert.equal((html.match(/\bid="home"/g) || []).length, 1);
 });

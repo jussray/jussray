@@ -771,7 +771,12 @@ for (const [mode, vp] of [['loaded', { width: 1440, height: 900 }], ['loaded', {
   say((await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)) <= 0, `${tag}: no horizontal overflow`);
   say(errors.length === 0, `${tag}: no JS errors`);
   if (mode === 'loaded') { await page.goto(url + 'games/index.html', { waitUntil: 'load' }); say(!(await page.locator('#leaderboards').isVisible()), `${tag}: home stage stays as drawn, board hidden until opened`); await page.goto(url + 'games/index.html#leaderboards', { waitUntil: 'load' }); await page.waitForFunction(() => !/Loading/.test(document.getElementById('sync-lb-status').textContent), null, { timeout: 5000 }); }
-  if (mode === 'loaded') await page.locator('#leaderboards').screenshot({ path: `proof/site/games-leaderboards-${vp.width}.png` });
+  if (mode === 'loaded') {
+    await page.locator('#leaderboards').screenshot({ path: `proof/site/games-leaderboards-${vp.width}.png` });
+    await page.keyboard.press('Escape');
+    await page.waitForFunction(() => location.hash === '#home' && document.documentElement.dataset.hubView === 'home' && scrollY < 2);
+    say(await page.locator('#home').count() === 1 && !(await page.locator('#leaderboards').isVisible()), `${tag}: Escape resolves to the real home target`);
+  }
   await ctx.close();
 }
 
